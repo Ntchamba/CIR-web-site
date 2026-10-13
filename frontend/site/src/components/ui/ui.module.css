@@ -1,0 +1,62 @@
+/* Petits éléments partagés : statut, chargement, erreur, champs, « bientôt disponible ». */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge::before { content: ''; width: 6px; height: 6px; border-radius: 3px; background: currentColor; }
+.nouvelle { background: var(--st-nouvelle-f); color: var(--st-nouvelle-t); }
+.negociation { background: var(--st-negociation-f); color: var(--st-negociation-t); }
+.contrat { background: var(--st-contrat-f); color: var(--st-contrat-t); }
+.travaux { background: var(--st-travaux-f); color: var(--st-travaux-t); }
+.terminee { background: var(--st-terminee-f); color: var(--st-terminee-t); }
+.annulee { background: var(--st-annulee-f); color: var(--st-annulee-t); }
+
+.chargement { display: flex; align-items: center; justify-content: center; padding: 48px 16px; color: var(--encre-2); gap: 12px; }
+.chargementPlein { min-height: 60vh; }
+.roue {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--filet); border-top-color: var(--bleu);
+  animation: tourne 0.8s linear infinite;
+}
+@keyframes tourne { to { transform: rotate(360deg); } }
+
+.erreur {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 16px 20px; border-radius: var(--rayon); background: #fff4f1; border: 1px solid #ffd2c6; color: #8c2e17;
+}
+.erreur button { border: 0; background: none; color: var(--bleu); font-weight: 600; text-decoration: underline; padding: 8px 0; }
+
+.champ { display: flex; flex-direction: column; gap: 6px; font-size: 15px; font-weight: 500; }
+.champ input, .champ select, .champ textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--champ);
+  border-radius: var(--rayon-s);
+  background: var(--blanc);
+  font-weight: 400;
+}
+.champ textarea { padding: 12px 14px; min-height: 120px; resize: vertical; }
+.champ input:focus, .champ select:focus, .champ textarea:focus { outline: 2px solid var(--bleu); outline-offset: 0; border-color: var(--bleu); }
+.aide { font-size: 13px; font-weight: 400; color: var(--encre-2); }
+.erreurChamp { font-size: 13px; font-weight: 500; color: #a8361b; }
+
+.bientot {
+  display: flex; flex-direction: column; gap: 8px; padding: 20px; border-radius: var(--rayon);
+  border: 1.5px dashed var(--champ); background: rgba(255, 255, 255, 0.7);
+}
+.bientot strong { font-family: var(--police-titre); font-weight: 500; font-size: 18px; }
+.bientotPastille {
+  align-self: flex-start; padding: 3px 10px; border-radius: 12px; background: var(--fond-2);
+  font-family: var(--police-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--encre-2);
+}
+
+.vide { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 48px 16px; text-align: center; color: var(--encre-2); }
+.vide strong { font-family: var(--police-titre); font-weight: 500; font-size: 22px; color: var(--encre); }

@@ -1,0 +1,54 @@
+.bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 26px;
+  border: 1px solid transparent;
+  border-radius: var(--pastille);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background var(--transition), color var(--transition), border-color var(--transition),
+    transform var(--transition);
+}
+.bouton:active { transform: translateY(1px); }
+.bouton:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.plein { background: var(--bleu); color: var(--blanc); }
+.plein:hover { background: var(--bleu-fonce); color: var(--blanc); }
+
+.contour { background: var(--blanc); color: var(--encre); border-color: var(--champ); }
+.contour:hover { border-color: var(--encre); color: var(--encre); }
+
+.clair { background: var(--blanc); color: var(--encre); box-shadow: var(--ombre); }
+.clair:hover { color: var(--bleu); }
+
+.sombre { background: var(--encre); color: var(--blanc); }
+.sombre:hover { background: #163b4d; color: var(--blanc); }
+
+.texte {
+  min-height: 44px;
+  padding: 0;
+  background: none;
+  color: var(--bleu);
+  letter-spacing: 0.12em;
+}
+.texte:hover { color: var(--bleu-fonce); text-decoration: underline; }
+
+.petit { min-height: 40px; padding: 0 18px; font-size: 12px; }
+.large { width: 100%; }
+
+.roue {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: tourne 0.7s linear infinite;
+}
+@keyframes tourne { to { transform: rotate(360deg); } }

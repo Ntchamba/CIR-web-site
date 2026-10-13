@@ -1,0 +1,12 @@
+.page { min-height: 100vh; display: flex; flex-direction: column; }
+.contenu { flex: 1 0 auto; }
+.sousEntete { padding-top: var(--hauteur-entete); }
+@media (max-width: 900px) {
+  .sousEntete { padding-top: 64px; }
+}
+
+.evitement {
+  position: absolute; left: 16px; top: -60px; z-index: 100;
+  padding: 10px 16px; border-radius: var(--rayon-s); background: var(--encre); color: var(--blanc);
+}
+.evitement:focus { top: 12px; color: var(--blanc); }

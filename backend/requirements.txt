@@ -1,0 +1,13 @@
+# Back-end CIR : dépendances Python (installer avec : pip install -r requirements.txt)
+Django>=5.2,<5.3                     # LTS, maintenue jusqu'en avril 2028
+djangorestframework>=3.15,<4         # API REST (JSON)
+djangorestframework-simplejwt>=5.3,<6  # Authentification par jetons JWT
+django-cors-headers>=4.4,<5          # Autorise le site et le dashboard à appeler l'API
+django-filter>=24.3                  # Filtres des listes (famille, statut…)
+channels>=4.1,<5                     # Messagerie instantanée (WebSocket)
+daphne>=4.1,<5                       # Serveur ASGI (HTTP + WebSocket)
+channels-redis>=4.2,<5               # Canal partagé entre serveurs en production
+psycopg[binary]>=3.2,<4              # Pilote PostgreSQL
+Pillow>=10.4                         # Traitement des images envoyées (WebP)
+python-dotenv>=1.0                   # Lecture du fichier .env
+whitenoise>=6.7                      # Fichiers statiques en production

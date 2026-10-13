@@ -1,0 +1,9 @@
+.liste { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+.carte {
+  display: flex; flex-direction: column; gap: 8px; padding: 0 0 20px; color: var(--encre); text-decoration: none;
+  border-bottom: 1px solid var(--filet);
+}
+.carte:hover { color: var(--encre); }
+.carte img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; margin-bottom: 6px; }
+.carte strong { font-family: var(--police-titre); font-weight: 500; font-size: 21px; }
+.texte { color: var(--encre-2); }

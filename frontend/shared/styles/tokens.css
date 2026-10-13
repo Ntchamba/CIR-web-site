@@ -1,0 +1,43 @@
+/* Charte du CIR : couleurs, polices, espacements communs au site et au dashboard. */
+:root {
+  /* Couleurs */
+  --encre: #0e2a38;          /* texte principal, fonds sombres */
+  --encre-2: #2f4a57;        /* texte secondaire */
+  --encre-3: #7c919c;        /* texte discret, indications */
+  --bleu: #1177a8;           /* actions, liens */
+  --bleu-fonce: #0b5c85;
+  --corail: #ff6d4c;         /* accent, élément actif */
+  --fond: #f3f7f9;           /* fond clair */
+  --fond-2: #eef3f6;
+  --blanc: #ffffff;
+  --filet: #d5e0e6;          /* bordures */
+  --filet-2: #e6edf1;
+  --champ: #8fa5b0;          /* bordure des champs de formulaire */
+
+  /* Statuts des commandes : fond / texte */
+  --st-nouvelle-f: #ffe6df;     --st-nouvelle-t: #a8361b;
+  --st-negociation-f: #fff1d1;  --st-negociation-t: #7a5200;
+  --st-contrat-f: #e1eff7;      --st-contrat-t: #0b5c85;
+  --st-travaux-f: #e4e9fb;      --st-travaux-t: #33449a;
+  --st-terminee-f: #e0f2e8;     --st-terminee-t: #1f6b43;
+  --st-annulee-f: #eceff1;      --st-annulee-t: #55636d;
+
+  /* Polices */
+  --police-titre: 'Lora Variable', 'Lora', Georgia, 'Times New Roman', serif;
+  --police-texte: 'Figtree Variable', 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --police-mono: 'DM Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  /* Formes */
+  --rayon-s: 8px;
+  --rayon: 14px;
+  --rayon-l: 20px;
+  --pastille: 999px;
+  --ombre: 0 8px 24px rgba(8, 24, 32, 0.12);
+  --ombre-forte: 0 16px 48px rgba(8, 24, 32, 0.25);
+
+  /* Mise en page */
+  --largeur-max: 1200px;
+  --gouttiere: clamp(16px, 4vw, 56px);
+  --hauteur-entete: 88px;
+  --transition: 180ms ease;
+}

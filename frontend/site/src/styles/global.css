@@ -1,0 +1,77 @@
+/* Styles généraux du site public. */
+
+/* Fond de toutes les pages : la maison de la fin de la vidéo, floutée, sous un voile blanc. */
+.fond-maison {
+  background:
+    linear-gradient(rgba(243, 247, 249, 0.8), rgba(243, 247, 249, 0.8)),
+    url('/media/accueil/fond-maison-desktop.webp') center top / 100% auto repeat-y,
+    var(--fond);
+}
+@media (max-width: 768px) {
+  .fond-maison {
+    background:
+      linear-gradient(rgba(243, 247, 249, 0.8), rgba(243, 247, 249, 0.8)),
+      url('/media/accueil/fond-maison-mobile.webp') center top / 100% auto repeat-y,
+      var(--fond);
+  }
+}
+
+.conteneur {
+  width: 100%;
+  max-width: var(--largeur-max);
+  margin-inline: auto;
+  padding-inline: var(--gouttiere);
+}
+
+.section { padding-block: clamp(56px, 8vw, 96px); }
+
+.entete-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  margin-bottom: clamp(28px, 4vw, 44px);
+}
+.entete-section .surtitre {
+  font-family: var(--police-titre);
+  font-style: italic;
+  font-size: 17px;
+  color: var(--bleu);
+}
+.entete-section h2 {
+  font-size: clamp(30px, 4vw, 42px);
+  font-weight: 400;
+}
+
+.titre-page {
+  font-family: var(--police-titre);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(36px, 5vw, 46px);
+  color: var(--bleu);
+}
+
+.lien-souligne {
+  display: inline-block;
+  padding: 12px 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Grille de vignettes carrées (catalogue, produits à la une) */
+.grille-vignettes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: clamp(20px, 3vw, 32px);
+}
+@media (max-width: 520px) {
+  .grille-vignettes { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+}
+
+/* Place réservée à la barre d'onglets sur téléphone */
+@media (max-width: 900px) {
+  body { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+}
