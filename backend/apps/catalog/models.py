@@ -105,3 +105,15 @@ class Caracteristique(models.Model):
 
     class Meta:
         ordering = ["ordre", "id"]
+
+
+class Couche(models.Model):
+    """Plan de coupe (BF-06) : couches du revêtement, de la surface (ordre 0) jusqu'au support."""
+
+    produit = models.ForeignKey(Produit, on_delete=models.CASCADE, related_name="couches")
+    nom = models.CharField(max_length=80)
+    epaisseur = models.CharField("épaisseur", max_length=40, blank=True)
+    ordre = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ["ordre", "id"]

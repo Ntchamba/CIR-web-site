@@ -11,6 +11,7 @@ const VIDE = {
   pour_maison: true, pour_industrie: false, pour_entreprise: false, pour_exterieur: false,
   durabilite: '', beaute: '', confort: '', mise_en_oeuvre: '', en_ligne: false, a_la_une: false, est_nouveau: false,
   caracteristiques: [{ libelle: 'Épaisseur', valeur: '' }, { libelle: 'Séchage', valeur: '' }],
+  couches: [],
 };
 const USAGES = [['pour_maison', 'Maison'], ['pour_industrie', 'Industrie'], ['pour_entreprise', 'Entreprise'], ['pour_exterieur', 'Extérieur']];
 const UNITES = [['m2', 'FCFA / m²'], ['kg', 'FCFA / kg'], ['pose', 'FCFA / m², pose comprise']];
@@ -48,7 +49,8 @@ export default function TiroirProduit({ produit, familles, onFermer, onEnregistr
   async function enregistrer() {
     setEnvoi(true); setErreur(null);
     const corps = { ...form, prix: form.prix === '' ? null : form.prix,
-      caracteristiques: form.caracteristiques.filter((c) => c.libelle && c.valeur) };
+      caracteristiques: form.caracteristiques.filter((c) => c.libelle && c.valeur),
+      couches: form.couches.filter((c) => c.nom) };
     delete corps.images; delete corps.vignette;
     try {
       const enregistre = produit
@@ -63,6 +65,9 @@ export default function TiroirProduit({ produit, familles, onFermer, onEnregistr
 
   const caracteristique = (i, cle, valeur) => setForm({ ...form,
     caracteristiques: form.caracteristiques.map((c, j) => (j === i ? { ...c, [cle]: valeur } : c)) });
+
+  const couche = (i, cle, valeur) => setForm({ ...form,
+    couches: form.couches.map((c, j) => (j === i ? { ...c, [cle]: valeur } : c)) });
 
   return (
     <Tiroir titre={produit ? `Modifier : ${produit.nom}` : 'Ajouter un produit'} onFermer={onFermer}
@@ -129,6 +134,22 @@ export default function TiroirProduit({ produit, familles, onFermer, onEnregistr
         ))}
         <button type="button" className="bouton secondaire petit" style={{ alignSelf: 'flex-start' }}
           onClick={() => setForm({ ...form, caracteristiques: [...form.caracteristiques, { libelle: '', valeur: '' }] })}>Ajouter une ligne</button>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <span style={{ fontWeight: 500, fontSize: 14 }}>Plan de coupe</span>
+        <span className="discret" style={{ fontSize: 13 }}>Les couches du revêtement, de la surface vers le béton. Le support en béton est ajouté automatiquement.</span>
+        {form.couches.map((c, i) => (
+          <div key={i} className="champs-ligne" style={{ alignItems: 'flex-end' }}>
+            <Champ libelle={`Couche ${i + 1}`} placeholder={i === 0 ? 'Finition YD-500' : 'Primaire YD-103'} value={c.nom}
+              onChange={(e) => couche(i, 'nom', e.target.value)} />
+            <Champ libelle="Épaisseur" placeholder="0,5 mm" value={c.epaisseur} onChange={(e) => couche(i, 'epaisseur', e.target.value)} />
+            <button type="button" className="bouton-icone" style={{ flex: '0 0 40px' }} aria-label={`Retirer la couche ${i + 1}`}
+              onClick={() => setForm({ ...form, couches: form.couches.filter((_, j) => j !== i) })}><Icone nom="corbeille" taille={15} /></button>
+          </div>
+        ))}
+        <button type="button" className="bouton secondaire petit" style={{ alignSelf: 'flex-start' }}
+          onClick={() => setForm({ ...form, couches: [...form.couches, { nom: '', epaisseur: '' }] })}>Ajouter une couche</button>
       </div>
 
       <div style={{ padding: 16, borderRadius: 12, background: 'var(--fond)', display: 'flex', flexDirection: 'column', gap: 14 }}>

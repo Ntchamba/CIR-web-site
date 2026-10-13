@@ -57,7 +57,7 @@ class ProduitsView(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return (Produit.objects.filter(en_ligne=True).select_related("famille")
-                .prefetch_related("images", "caracteristiques"))
+                .prefetch_related("images", "caracteristiques", "couches"))
 
     def get_serializer_class(self):
         return ProduitDetailSerializer if self.action == "retrieve" else ProduitListeSerializer
@@ -81,7 +81,7 @@ class ProduitsAdminView(viewsets.ModelViewSet):
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
     def get_queryset(self):
-        return Produit.objects.select_related("famille").prefetch_related("images", "caracteristiques")
+        return Produit.objects.select_related("famille").prefetch_related("images", "caracteristiques", "couches")
 
     @action(detail=False)
     def resume(self, request):

@@ -1,4 +1,5 @@
-// BF-06 : ce que le produit apporte (durabilité, beauté, confort) et ses caractéristiques.
+// BF-06 : ce que le produit apporte (durabilité, beauté, confort), ses caractéristiques et son plan de coupe.
+import PlanCoupe from './PlanCoupe.jsx';
 import styles from './Produit.module.css';
 
 const APPORTS = [['durabilite', 'Durabilité'], ['beaute', 'Beauté'], ['confort', 'Confort']];
@@ -29,6 +30,8 @@ export default function FicheTechnique({ produit }) {
         {produit.caracteristiques.map((c) => <div key={c.id}><dt>{c.libelle}</dt><dd>{c.valeur}</dd></div>)}
         {produit.mise_en_oeuvre && <div><dt>Mise en œuvre</dt><dd>{produit.mise_en_oeuvre}</dd></div>}
       </dl>
+
+      {produit.couches?.length > 0 && <PlanCoupe couches={produit.couches} />}
     </section>
   );
 }

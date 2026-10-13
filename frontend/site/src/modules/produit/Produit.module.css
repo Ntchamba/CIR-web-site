@@ -79,6 +79,19 @@
 .caracteristiques div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--filet-2); }
 .caracteristiques dt { color: var(--encre-2); }
 .caracteristiques dd { margin: 0; font-weight: 500; text-align: right; }
+.coupe { max-width: 760px; margin: 40px auto 0; }
+.coupe figcaption { font-family: var(--police-titre); font-size: 21px; margin-bottom: 12px; text-align: center; }
+.coupe ol { list-style: none; margin: 0; padding: 0; border-radius: var(--rayon); overflow: hidden; border: 1px solid var(--filet); }
+.coupe li {
+  display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 48px; padding: 10px 20px;
+  background: color-mix(in srgb, var(--bleu) calc(100% - var(--niveau) * 22%), var(--fond));
+  color: var(--blanc); font-weight: 500;
+}
+.coupe li:first-child { background: var(--corail); }
+.epaisseur { font-family: var(--police-mono); font-size: 13px; opacity: 0.9; }
+.coupe .support {
+  color: var(--encre-2); background: repeating-linear-gradient(45deg, var(--fond-2), var(--fond-2) 6px, var(--filet) 6px, var(--filet) 12px);
+}
 .suite { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding-block: 32px 96px; }
 
 @media (max-width: 900px) {
