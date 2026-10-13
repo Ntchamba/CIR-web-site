@@ -1,0 +1,23 @@
+.page { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.visuel {
+  position: relative; padding: 48px 56px; color: var(--blanc);
+  background: radial-gradient(120% 90% at 0% 0%, #1d4a5f 0%, var(--encre) 60%);
+  display: flex; flex-direction: column; justify-content: space-between; gap: 40px;
+}
+.visuel img { width: 48px; height: 48px; border-radius: 12px; }
+.visuel p { max-width: 520px; color: #d7e5ec; }
+.slogan { font-family: var(--police-titre); font-style: italic; font-size: clamp(34px, 4vw, 44px); line-height: 1.2; color: var(--blanc) !important; margin-bottom: 14px; }
+.cote { display: flex; align-items: center; justify-content: center; padding: 48px 24px; }
+.formulaire { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 18px; }
+.formulaire h1 { font-size: 34px; }
+.reserve {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 16px;
+  background: #e1eff7; color: #0b5c85; font-size: 13px; font-weight: 600;
+}
+.code { padding: 12px 14px; border: 1.5px dashed var(--champ); border-radius: 10px; display: flex; flex-direction: column; font-size: 14px; }
+.code small { color: var(--encre-2); }
+.note { padding-top: 16px; border-top: 1px solid var(--filet); font-size: 13px; color: var(--encre-2); }
+@media (max-width: 860px) {
+  .page { grid-template-columns: 1fr; }
+  .visuel { padding: 28px 20px; gap: 16px; }
+}
