@@ -1,0 +1,51 @@
+# ------------------------------------------------------------
+# CIR : fichiers à ne jamais versionner
+# ------------------------------------------------------------
+
+# --- Secrets et configuration locale ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# --- Python / Django (backend) ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+backend/db.sqlite3
+backend/db.sqlite3-journal
+backend/media/
+backend/staticfiles/
+
+# --- Node / React (frontend) ---
+node_modules/
+frontend/*/dist/
+frontend/*/.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.tsbuildinfo
+
+# --- Éditeurs et système ---
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Journaux et fichiers temporaires ---
+*.log
+logs/
+tmp/
