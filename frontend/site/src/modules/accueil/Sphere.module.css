@@ -1,0 +1,35 @@
+.cadre {
+  --echelle: 0.82;
+  position: relative;
+  width: calc(760px * var(--echelle));
+  height: calc(760px * var(--echelle));
+  flex-shrink: 0;
+}
+.centre { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform: scale(var(--echelle)); }
+.perspective { position: absolute; inset: 0; width: 0; height: 0; perspective: 1400px; }
+.globe {
+  position: relative; width: 0; height: 0; transform-style: preserve-3d;
+  transform: rotateX(-12deg);
+  animation: tourne 40s linear infinite;
+}
+.globe:hover, .globe:focus-within { animation-play-state: paused; }
+.anneau { position: absolute; inset: 0; width: 0; height: 0; transform-style: preserve-3d; }
+.tuile { position: absolute; inset: 0; width: 0; height: 0; display: block; transform-style: preserve-3d; }
+.tuile img {
+  position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none;
+  object-fit: cover; border-radius: 6px; cursor: pointer;
+  box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28);
+  transition: scale 0.25s ease, box-shadow 0.25s ease;
+}
+.tuile:hover img, .tuile:focus-visible img { scale: 1.3; box-shadow: 0 18px 44px rgba(8, 24, 32, 0.5); }
+.tuile:focus-visible { outline: none; }
+
+@keyframes tourne {
+  from { transform: rotateX(-12deg) rotateY(0deg); }
+  to { transform: rotateX(-12deg) rotateY(360deg); }
+}
+@media (prefers-reduced-motion: reduce) { .globe { animation: none; } }
+
+@media (max-width: 1180px) { .cadre { --echelle: 0.66; } }
+@media (max-width: 900px) { .cadre { --echelle: 0.5; } }
+@media (max-width: 400px) { .cadre { --echelle: 0.44; } }

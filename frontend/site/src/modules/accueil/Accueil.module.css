@@ -1,0 +1,65 @@
+/* Haut de page : vidéo + sphère */
+.hero { position: relative; overflow: hidden; background: var(--encre); color: var(--blanc); min-height: min(100svh, 860px); }
+.video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.voileHero {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(8, 24, 32, 0.68) 0%, rgba(8, 24, 32, 0.55) 24%, rgba(8, 24, 32, 0.2) 36%, rgba(8, 24, 32, 0) 44%),
+    linear-gradient(180deg, rgba(8, 24, 32, 0.5) 0%, rgba(8, 24, 32, 0) 15%);
+}
+.heroContenu {
+  position: relative;
+  max-width: 1320px;
+  min-height: inherit;
+  margin: 0 auto;
+  padding: calc(var(--hauteur-entete) + 8px) var(--gouttiere) 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.heroTexte { flex: 1 1 380px; display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }
+.heroTexte h1 {
+  font-size: clamp(52px, 7vw, 76px); line-height: 1; font-weight: 600; letter-spacing: -0.01em;
+  text-shadow: 0 1px 2px rgba(8, 24, 32, 0.6), 0 2px 24px rgba(8, 24, 32, 0.7);
+}
+.heroTexte h1 span { color: var(--corail); }
+.heroTexte p {
+  max-width: 400px; font-size: 20px; line-height: 1.45; font-weight: 500;
+  text-shadow: 0 1px 2px rgba(8, 24, 32, 0.7), 0 2px 18px rgba(8, 24, 32, 0.8);
+}
+.boutonHero {
+  display: inline-flex; align-items: center; gap: 14px; padding: 6px 22px 6px 6px;
+  border-radius: 32px; background: var(--blanc); box-shadow: 0 8px 24px rgba(8, 24, 32, 0.3);
+  font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--encre); text-decoration: none;
+}
+.boutonHero:hover { color: var(--bleu); }
+.rond { width: 44px; height: 44px; border-radius: 22px; background: var(--bleu); color: var(--blanc); display: flex; align-items: center; justify-content: center; }
+
+/* Sections */
+.suite { display: flex; justify-content: center; margin-top: 28px; }
+.bandeClaire { background: rgba(255, 255, 255, 0.5); }
+.realisations { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+.realisations figure { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.realisations img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+.realisations figcaption { display: flex; flex-direction: column; text-align: center; }
+.realisations strong { font-family: var(--police-titre); font-weight: 400; font-size: 18px; }
+.realisations span { font-size: 14px; color: var(--encre-2); }
+
+.temoignages { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; }
+.temoignages blockquote { margin: 0; display: flex; flex-direction: column; gap: 12px; text-align: center; }
+.temoignages p { font-family: var(--police-titre); font-style: italic; font-size: 19px; line-height: 1.5; }
+.temoignages footer { font-size: 14px; color: var(--encre-2); }
+
+@media (max-width: 900px) {
+  .hero { min-height: 0; }
+  .heroContenu { flex-direction: column; align-items: stretch; padding: 96px var(--gouttiere) 24px; gap: 8px; }
+  .heroTexte { flex: none; }
+  .heroTexte p { font-size: 18px; }
+  .heroContenu > :last-child { align-self: center; }
+  .voileHero {
+    background: linear-gradient(180deg, rgba(8, 24, 32, 0.62) 0%, rgba(8, 24, 32, 0.5) 40%,
+      rgba(8, 24, 32, 0.15) 47%, rgba(8, 24, 32, 0) 52%);
+  }
+  .realisations { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+}
