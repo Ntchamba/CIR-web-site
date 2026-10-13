@@ -118,6 +118,12 @@ class MembreEquipeSerializer(serializers.ModelSerializer):
         password_validation.validate_password(mot_de_passe)
         return User.objects.create_user(password=mot_de_passe, is_staff=True, **validated_data)
 
+    def validate(self, attrs):
+        demandeur = self.context["request"].user
+        if self.instance == demandeur and (attrs.get("is_active") is False or attrs.get("is_superuser") is False):
+            raise serializers.ValidationError({"detail": "Vous ne pouvez pas retirer votre propre accès."})
+        return attrs
+
     def update(self, instance, validated_data):
         mot_de_passe = validated_data.pop("password", None)
         instance = super().update(instance, validated_data)

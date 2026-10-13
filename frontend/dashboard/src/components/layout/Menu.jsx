@@ -16,6 +16,7 @@ const PILOTAGE = [
   { vers: '/clients', libelle: 'Clients', icone: 'clients' },
   { vers: '/contenus', libelle: 'Contenus du site', icone: 'realisations' },
 ];
+const EQUIPE = { vers: '/equipe', libelle: 'Équipe', icone: 'clients' };
 const A_VENIR = [
   { vers: '/paiements', libelle: 'Paiements', icone: 'banque' },
   { vers: '/appels', libelle: 'Appels', icone: 'tel' },
@@ -37,7 +38,7 @@ export default function Menu() {
       </NavLink>
 
       <span className="menu-section">Pilotage</span>
-      {PILOTAGE.map((l) => (
+      {[...PILOTAGE, ...(utilisateur?.is_superuser ? [EQUIPE] : [])].map((l) => (
         <NavLink key={l.vers} to={l.vers} end={l.fin} className={classe}>
           <Icone nom={l.icone} taille={19} />
           <span className="libelle">{l.libelle}</span>

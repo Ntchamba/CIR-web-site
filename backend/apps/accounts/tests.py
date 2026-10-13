@@ -34,3 +34,19 @@ class ComptesTests(APITestCase):
         User.objects.create_user("c@test.cm", "Bon-Mot-De-Passe-1", nom_complet="C")
         r = self.client.post("/api/admin/comptes/connexion/", {"email": "c@test.cm", "password": "Bon-Mot-De-Passe-1"})
         self.assertEqual(r.status_code, 400)
+
+    def test_equipe_super_administrateur(self):
+        chef = User.objects.create_superuser("chef@test.cm", "Bon-Mot-De-Passe-1", nom_complet="Chef")
+        membre = User.objects.create_user("membre@test.cm", "Bon-Mot-De-Passe-1", nom_complet="Membre", is_staff=True)
+        self.client.force_authenticate(membre)
+        self.assertEqual(self.client.get("/api/admin/comptes/equipe/").status_code, 403)
+
+        self.client.force_authenticate(chef)
+        r = self.client.post("/api/admin/comptes/equipe/", {"email": "nouveau@test.cm", "nom_complet": "Nouveau",
+                                                             "password": "Un-Mot-De-Passe-Solide"}, format="json")
+        self.assertEqual(r.status_code, 201, r.data)
+        self.assertTrue(User.objects.get(email="nouveau@test.cm").is_staff)
+        r = self.client.patch(f"/api/admin/comptes/equipe/{membre.id}/", {"is_active": False}, format="json")
+        self.assertEqual(r.status_code, 200)
+        r = self.client.patch(f"/api/admin/comptes/equipe/{chef.id}/", {"is_active": False}, format="json")
+        self.assertEqual(r.status_code, 400)  # on ne retire pas son propre accès

@@ -15,6 +15,7 @@ const DemandesPage = lazy(() => import('./modules/demandes/DemandesPage.jsx'));
 const CataloguePage = lazy(() => import('./modules/catalogue/CataloguePage.jsx'));
 const ClientsPage = lazy(() => import('./modules/clients/ClientsPage.jsx'));
 const ContenusPage = lazy(() => import('./modules/contenus/ContenusPage.jsx'));
+const EquipePage = lazy(() => import('./modules/equipe/EquipePage.jsx'));
 const PaiementsPage = lazy(() => import('./modules/paiements/PaiementsPage.jsx'));
 const AppelsPage = lazy(() => import('./modules/appels/AppelsPage.jsx'));
 
@@ -37,6 +38,7 @@ export default function App() {
                 <Route path="clients" element={<ClientsPage />} />
                 <Route path="clients/:id" element={<ClientsPage />} />
                 <Route path="contenus" element={<ContenusPage />} />
+                <Route path="equipe" element={<EquipePage />} />
                 <Route path="paiements" element={<PaiementsPage />} />
                 <Route path="appels" element={<AppelsPage />} />
                 <Route path="*" element={<Navigate to="/" replace />} />

@@ -37,7 +37,7 @@ front-end.
 | BF-14 | Gestion du catalogue | `catalog` | — | `catalogue` |
 | BF-15 | Gestion des contenus | `site_content`, `showcase`, `news` | `accueil` | `contenus` |
 | BF-16 | Gestion des commandes | `orders` | — | `commandes` |
-| BF-17 | Gestion des utilisateurs | `accounts` | — | `clients` |
+| BF-17 | Gestion des utilisateurs | `accounts` | — | `clients`, `equipe` |
 | — | Messagerie instantanée | `messaging` | `messagerie` | `messagerie` |
 | — | Statistiques | `dashboard` | — | `tableau-de-bord` |
 | **À venir** | E-mails (Gmail) | `notifications` | — | — |
