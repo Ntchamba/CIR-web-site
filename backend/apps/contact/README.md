@@ -1,0 +1,21 @@
+# Module `contact` (back-end)
+
+**Vague 2, Commande** · Besoins : BF-11, BF-13
+
+Formulaire de contact et « être rappelé », suivi des demandes par le client.
+
+## Fichiers
+
+Gabarit commun : models.py, serializers.py, views.py, views_admin.py, urls.py, urls_admin.py, services.py, permissions.py, admin.py, migrations/, tests/ (test_models.py, test_api.py, test_services.py)
+
+Fichiers propres au module :
+
+- (aucun)
+
+## Tâches (agent `backend`, vérifiées par `backend-testeur`)
+
+- [ ] Modèles et migrations
+- [ ] Règles métier dans `services.py` (jamais dans les vues)
+- [ ] API publique `/api/contact/` et API équipe `/api/admin/contact/`
+- [ ] Permissions
+- [ ] Tests unitaires et d'API (écrits et lancés par `backend-testeur`)
