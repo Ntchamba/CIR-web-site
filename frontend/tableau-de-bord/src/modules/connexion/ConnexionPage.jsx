@@ -39,8 +39,10 @@ export default function ConnexionPage() {
       await seConnecter(form.email.trim(), form.mot_de_passe);
       naviguer(suite, { replace: true });
     } catch (err) {
-      setErreurs(erreursChamps(err));
-      setErreur(err);
+      const champs = erreursChamps(err);
+      setErreurs(champs);
+      // Message général si l'erreur ne concerne aucun champ du formulaire (refus, réseau, serveur…).
+      if (!Object.keys(champs).some((cle) => cle in form)) setErreur(err);
       setEnvoi(false);
     }
   }
