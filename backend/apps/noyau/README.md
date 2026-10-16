@@ -18,8 +18,9 @@ Fichiers propres au module :
 
 ## Tâches (agent `backend`, vérifiées par `backend-testeur`)
 
-- [ ] Modèles et migrations
-- [ ] Règles métier dans `services.py` (jamais dans les vues)
-- [ ] API publique `/api/noyau/` et API équipe `/api/admin/noyau/`
-- [ ] Permissions
+- [x] Modèles et migrations (aucun modèle : module utilitaire)
+- [x] Utilitaires : `pagination.py`, `images.py` (WebP), `permissions.py` (pas de `services.py` nécessaire)
+- [x] API publique : `GET /api/sante/` (`sante.py`) ; pas d'API équipe pour ce module
+- [x] Permissions (`EstEquipe`, `EstSuperAdmin`, `LectureSeule`)
+- [ ] `sitemap.py` (plan du site : quand catalogue, vitrine et actualités existeront)
 - [ ] Tests unitaires et d'API (écrits et lancés par `backend-testeur`)

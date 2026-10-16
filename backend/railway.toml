@@ -1,0 +1,13 @@
+# Service Railway du back-end CIR (racine du service : /backend, fichier de config : /backend/railway.toml)
+[build]
+builder = "RAILPACK"
+
+[deploy]
+# Migrations appliquées avant la mise en service de chaque déploiement
+preDeployCommand = ["python manage.py migrate --noinput"]
+# collectstatic au démarrage : le conteneur de pré-déploiement ne partage pas ses fichiers
+startCommand = "python manage.py collectstatic --noinput && daphne -b 0.0.0.0 -p ${PORT:-8000} config.asgi:application"
+healthcheckPath = "/api/sante/"
+healthcheckTimeout = 120
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
