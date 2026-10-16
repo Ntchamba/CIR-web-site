@@ -20,7 +20,7 @@
   color: var(--encre-2);
 }
 .colonne { display: flex; flex-direction: column; gap: 2px; }
-.colonne a { display: inline-flex; align-items: center; min-height: 36px; color: var(--encre); text-decoration: none; }
+.colonne a { display: inline-flex; align-items: center; min-height: var(--cible-tactile); color: var(--encre); text-decoration: none; }
 .colonne a:hover { color: var(--bleu); text-decoration: underline; }
 .partenaire { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
 .partenaire img { width: 56px; height: auto; }
