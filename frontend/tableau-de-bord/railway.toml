@@ -1,0 +1,19 @@
+# Service Railway du tableau de bord (admin.revelation-sarl.com) : build Vite, puis service statique avec `serve`.
+# L'application importe ../partage, d'où un Dockerfile construit depuis la racine du dépôt.
+# Réglages du service sur Railway :
+#   - Root directory : (vide, racine du dépôt)
+#   - Config file path : frontend/tableau-de-bord/railway.toml
+#   - Watch paths : /frontend/tableau-de-bord/**  et  /frontend/partage/**
+#   - Variable : VITE_API_URL = adresse publique du back-end (lue au moment du build)
+# Côté back-end, ajouter https://admin.revelation-sarl.com aux origines CORS autorisées.
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "frontend/tableau-de-bord/Dockerfile"
+watchPatterns = ["frontend/tableau-de-bord/**", "frontend/partage/**"]
+
+[deploy]
+healthcheckPath = "/"
+healthcheckTimeout = 60
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5

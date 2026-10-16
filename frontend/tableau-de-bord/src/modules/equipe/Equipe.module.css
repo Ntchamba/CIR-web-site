@@ -1,0 +1,33 @@
+.page { max-width: 1200px; display: grid; gap: var(--esp-5); }
+
+.entete { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--esp-4); }
+
+.succes {
+  padding: var(--esp-3) var(--esp-4); border-radius: var(--rayon-s);
+  background: var(--succes-fond); color: var(--succes); font-weight: 600;
+}
+
+.formulaire { display: grid; gap: var(--esp-4); }
+.titreFormulaire { font-family: var(--police-titre); font-size: 22px; font-weight: 500; }
+.grille { display: grid; gap: var(--esp-4); grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.actionsFormulaire { display: flex; flex-wrap: wrap; gap: var(--esp-3); }
+
+.tableau { padding: 0; overflow-x: auto; }
+.tableau table { width: 100%; border-collapse: collapse; min-width: 760px; }
+.tableau th, .tableau td { padding: var(--esp-3) var(--esp-4); text-align: left; vertical-align: middle; }
+.tableau th {
+  font-size: 13px; font-weight: 600; color: var(--encre-3);
+  border-bottom: 1px solid var(--filet); background: var(--fond-2);
+}
+.tableau tbody tr + tr td { border-top: 1px solid var(--filet-2); }
+
+.secondaire { display: block; color: var(--encre-3); font-size: 14px; }
+.moi { color: var(--encre-3); font-size: 14px; }
+.inactif td { color: var(--encre-3); }
+
+.statut { display: inline-block; padding: 2px 10px; border-radius: var(--pastille); font-size: 13px; font-weight: 600; }
+.statutActif { background: var(--succes-fond); color: var(--succes); }
+.statutInactif { background: var(--st-annulee-f); color: var(--st-annulee-t); }
+
+.actions { text-align: right; white-space: nowrap; }
+.confirmation { display: inline-flex; gap: var(--esp-2); }

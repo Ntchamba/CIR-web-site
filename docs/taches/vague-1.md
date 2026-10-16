@@ -24,3 +24,9 @@ Chaque paire travaille dans sa propre fenêtre de contexte : l'agent code, puis 
 
 
 Une branche et une pull request par vague (ou par module si la vague est grande), vers `prototype-2`.
+
+## Note de la vague 0
+
+- `optimiser_champ_image` (module `noyau`) lève `ImageInvalide` (une `ValueError`) au-delà de 10 Mo ou
+  40 mégapixels, ou pour un fichier illisible. Les sérialiseurs qui reçoivent des images (catalogue, vitrine,
+  actualités) doivent la transformer en erreur de validation 400.

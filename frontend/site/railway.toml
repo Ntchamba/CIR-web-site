@@ -1,0 +1,18 @@
+# Service Railway du site public (revelation-sarl.com) : build Vite, puis service statique avec `serve`.
+# Le site importe ../partage, d'où un Dockerfile construit depuis la racine du dépôt.
+# Réglages du service sur Railway :
+#   - Root directory : (vide, racine du dépôt)
+#   - Config file path : frontend/site/railway.toml
+#   - Watch paths : /frontend/site/**  et  /frontend/partage/**
+#   - Variable : VITE_API_URL = adresse publique du back-end (lue au moment du build)
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "frontend/site/Dockerfile"
+watchPatterns = ["frontend/site/**", "frontend/partage/**"]
+
+[deploy]
+healthcheckPath = "/"
+healthcheckTimeout = 60
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5

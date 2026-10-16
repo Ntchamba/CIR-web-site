@@ -1,0 +1,62 @@
+/* Charte du CIR : couleurs, polices, formes et espacements communs au site et au tableau de bord.
+   Les polices Lora et Figtree sont auto-hébergées (@fontsource) : chaque application les importe
+   dans son main.jsx (voir frontend/partage/README.md). */
+:root {
+  /* Couleurs */
+  --encre: #0e2a38;          /* texte principal, fonds sombres */
+  --encre-2: #2f4a57;        /* texte secondaire */
+  --encre-3: #5f7682;        /* texte discret (contraste AA sur fond clair) */
+  --bleu: #1177a8;           /* actions, liens */
+  --bleu-fonce: #0b5c85;
+  --corail: #ff6d4c;         /* accent, élément actif */
+  --corail-fonce: #d9472a;
+  --fond: #f3f7f9;           /* fond clair */
+  --fond-2: #eef3f6;
+  --blanc: #ffffff;
+  --filet: #d5e0e6;          /* bordures */
+  --filet-2: #e6edf1;
+  --champ: #8fa5b0;          /* bordure des champs de formulaire */
+  --succes: #1f6b43;
+  --succes-fond: #e0f2e8;
+  --danger: #a8361b;
+  --danger-fond: #fff4f1;
+  --danger-filet: #ffd2c6;
+
+  /* Statuts des commandes : fond / texte */
+  --st-nouvelle-f: #ffe6df;     --st-nouvelle-t: #a8361b;
+  --st-negociation-f: #fff1d1;  --st-negociation-t: #7a5200;
+  --st-contrat-f: #e1eff7;      --st-contrat-t: #0b5c85;
+  --st-travaux-f: #e4e9fb;      --st-travaux-t: #33449a;
+  --st-terminee-f: #e0f2e8;     --st-terminee-t: #1f6b43;
+  --st-annulee-f: #eceff1;      --st-annulee-t: #55636d;
+
+  /* Polices */
+  --police-titre: 'Lora Variable', 'Lora', Georgia, 'Times New Roman', serif;
+  --police-texte: 'Figtree Variable', 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Formes */
+  --rayon-s: 8px;
+  --rayon: 14px;
+  --rayon-l: 20px;
+  --pastille: 999px;
+  --ombre: 0 8px 24px rgba(8, 24, 32, 0.12);
+  --ombre-forte: 0 16px 48px rgba(8, 24, 32, 0.25);
+
+  /* Espacements */
+  --esp-1: 4px;
+  --esp-2: 8px;
+  --esp-3: 12px;
+  --esp-4: 16px;
+  --esp-5: 24px;
+  --esp-6: 32px;
+  --esp-7: 48px;
+
+  /* Mise en page */
+  --largeur-max: 1200px;
+  --gouttiere: clamp(16px, 4vw, 56px);
+  --hauteur-entete: 76px;
+  --hauteur-entete-mobile: 60px;
+  --hauteur-onglets: 62px;
+  --cible-tactile: 44px;
+  --transition: 180ms ease;
+}

@@ -1,0 +1,23 @@
+/* Styles généraux du site public (après jetons.css et base.css de frontend/partage). */
+
+.conteneur {
+  width: 100%;
+  max-width: var(--largeur-max);
+  margin-inline: auto;
+  padding-inline: var(--gouttiere);
+}
+
+.section { padding-block: clamp(40px, 7vw, 88px); }
+
+.titre-page {
+  font-family: var(--police-titre);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(32px, 5vw, 44px);
+  color: var(--bleu);
+}
+
+/* Place réservée à la barre d'onglets sur téléphone */
+@media (max-width: 900px) {
+  body { padding-bottom: calc(var(--hauteur-onglets) + env(safe-area-inset-bottom)); }
+}

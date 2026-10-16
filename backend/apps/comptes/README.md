@@ -16,8 +16,8 @@ Fichiers propres au module :
 
 ## Tâches (agent `backend`, vérifiées par `backend-testeur`)
 
-- [ ] Modèles et migrations
-- [ ] Règles métier dans `services.py` (jamais dans les vues)
-- [ ] API publique `/api/comptes/` et API équipe `/api/admin/comptes/`
-- [ ] Permissions
-- [ ] Tests unitaires et d'API (écrits et lancés par `backend-testeur`)
+- [x] Modèles et migrations
+- [x] Règles métier dans `services.py` (jamais dans les vues)
+- [x] API publique `/api/comptes/` et API équipe `/api/admin/comptes/`
+- [x] Permissions
+- [x] Tests unitaires et d'API (écrits et lancés par `backend-testeur`)

@@ -1,0 +1,50 @@
+/* Module compte : connexion, inscription, profil. */
+.page { display: flex; justify-content: center; }
+
+.carte {
+  width: 100%;
+  padding: clamp(20px, 4vw, 32px);
+  border-radius: var(--rayon-l);
+  background: var(--blanc);
+  border: 1px solid var(--filet);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.page .carte { max-width: 480px; }
+.page .carteLarge { max-width: 640px; }
+.carte h2 { font-size: 22px; }
+
+.intro { color: var(--encre-2); }
+.champs { display: flex; flex-direction: column; gap: 16px; }
+.groupe {
+  margin: 0; padding: 18px;
+  border: 1px solid var(--filet); border-radius: var(--rayon);
+  display: flex; flex-direction: column; gap: 14px;
+}
+.groupe legend { padding: 0 6px; font-family: var(--police-titre); font-size: 18px; }
+.aide { font-size: 14px; color: var(--encre-2); }
+.bascule { text-align: center; color: var(--encre-2); }
+.bascule a { display: inline-flex; align-items: center; min-height: var(--cible-tactile); font-weight: 600; }
+
+/* Profil */
+.titreProfil { margin-bottom: 28px; }
+.profil { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 28px; align-items: start; }
+.identite { display: flex; align-items: center; gap: 16px; }
+.initiales {
+  flex-shrink: 0;
+  width: 60px; height: 60px; border-radius: 30px; background: var(--fond-2); color: var(--bleu);
+  display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 20px;
+}
+.email { color: var(--encre-2); word-break: break-all; }
+.ok { color: var(--succes); font-weight: 600; }
+.manque { color: var(--danger); font-weight: 600; }
+.adresseLigne { color: var(--encre-2); }
+.liens { display: flex; flex-direction: column; align-items: flex-start; }
+
+@media (max-width: 900px) {
+  .profil { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .groupe { padding: 14px; }
+}
