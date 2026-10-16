@@ -8,7 +8,7 @@ import { appels, page, rendre, simulerApi } from '@/test/api-simulee.jsx';
 
 import { modifierAccueil } from '../api.js';
 import { versFormulaireAccueil } from '../SectionAccueil.jsx';
-import { etatBandeau } from '../useContenus.js';
+import { dateDuJour, etatBandeau } from '../useContenus.js';
 import { validerBandeau } from './TiroirBandeau.jsx';
 
 // Réponse réelle de GET /api/admin/contenus/accueil/ après la migration de données.
@@ -18,9 +18,9 @@ const ACCUEIL_REEL = {
   email: '', adresse: 'Total Nkolmbong, Douala', modifie_le: '2026-10-16T11:28:38.172776+01:00', traductions: {},
   langues_incompletes: [],
 };
-// Bandeau réel : les dates saisies « YYYY-MM-DD » reviennent en date-heure du fuseau Africa/Douala.
+// Bandeau réel : DateField (migration contenus 0003), dates entières « YYYY-MM-DD », fin incluse.
 const BANDEAU_REEL = {
-  id: 1, texte: 'Promo', lien: '/catalogue', actif: true, debut: '2026-10-01T00:00:00+01:00', fin: '2026-10-31T00:00:00+01:00',
+  id: 1, texte: 'Promo', lien: '/catalogue', actif: true, debut: '2026-10-01', fin: '2026-10-31',
   ordre: 0, traductions: {}, langues_incompletes: ['en', 'zh', 'de', 'ja'],
 };
 const PHOTO_REELLE = (id, ordre, extra = {}) => ({
@@ -114,7 +114,7 @@ describe('SectionAccueil (format réel)', () => {
 });
 
 describe('Bandeaux (format réel)', () => {
-  it('ouvre un bandeau réel : les dates ISO du serveur deviennent YYYY-MM-DD', async () => {
+  it('ouvre un bandeau réel : dates YYYY-MM-DD lues et renvoyées telles quelles', async () => {
     const simule = simulerApi([
       ['GET', '/contenus/bandeaux/', [BANDEAU_REEL]],
       ['PATCH', '/contenus/bandeaux/1/', (u, o) => ({ ...BANDEAU_REEL, ...JSON.parse(o.body) })],
@@ -139,12 +139,49 @@ describe('Bandeaux (format réel)', () => {
     expect(etatBandeau({ ...BANDEAU_REEL, actif: false }, new Date(2026, 9, 15))).toBe('inactif');
   });
 
-  // Back-end (services.bandeaux_actifs) : affiché si debut <= maintenant < fin ; une fin saisie « 2026-10-31 »
-  // est enregistrée à 2026-10-31 00:00 (Africa/Douala) : le bandeau n'est donc plus affiché le 31 octobre.
-  it('annonce le même état que le site le jour de la fin (« Du 1er au 31 octobre », le 31 à 10 h)', () => {
-    const maintenant = new Date('2026-10-31T10:00:00+01:00');
-    const afficheParLeSite = new Date(BANDEAU_REEL.debut) <= maintenant && maintenant < new Date(BANDEAU_REEL.fin);
-    expect(etatBandeau(BANDEAU_REEL, maintenant) === 'actif').toBe(afficheParLeSite);
+  // Back-end (services.bandeaux_actifs) : affiché si debut <= aujourd'hui (Africa/Douala) <= fin.
+  it('le jour de la fin, le bandeau est annoncé « Affiché » (fin incluse, comme sur le site)', () => {
+    expect(etatBandeau(BANDEAU_REEL, new Date(2026, 9, 31, 22, 30))).toBe('actif');
+    expect(etatBandeau(BANDEAU_REEL, new Date(2026, 9, 1, 0, 5))).toBe('actif');
+    expect(etatBandeau({ ...BANDEAU_REEL, debut: '2026-10-31', fin: '2026-10-31' }, new Date(2026, 9, 31, 12))).toBe('actif');
+    expect(etatBandeau(BANDEAU_REEL, new Date(2026, 10, 1, 0, 1))).toBe('expire');
+  });
+
+  it('fin == début accepté (un seul jour), fin avant début refusée ; lien avec espace refusé', () => {
+    expect(validerBandeau({ texte: 'Promo', lien: '', debut: '2026-10-31', fin: '2026-10-31' })).toEqual({});
+    expect(validerBandeau({ texte: 'Promo', lien: '/cata logue', debut: '', fin: '' })).toHaveProperty('lien');
+    expect(validerBandeau({ texte: 'Promo', lien: '/a\\b', debut: '', fin: '' })).toHaveProperty('lien');
+    expect(validerBandeau({ texte: 'Promo', lien: '/catalogue?famille=sols', debut: '', fin: '' })).toEqual({});
+  });
+
+  it('dateDuJour : « YYYY-MM-DD » à minuit local, sans décalage de fuseau', () => {
+    const d = dateDuJour('2026-10-31');
+    expect([d.getFullYear(), d.getMonth(), d.getDate(), d.getHours()]).toEqual([2026, 9, 31, 0]);
+    expect(dateDuJour(null)).toBeNull();
+  });
+
+  it('crée un bandeau d’un seul jour : dates envoyées en YYYY-MM-DD', async () => {
+    const simule = simulerApi([
+      ['GET', '/contenus/bandeaux/', []],
+      ['POST', '/api/admin/contenus/bandeaux/', (u, o) => ({ ...BANDEAU_REEL, id: 2, ...JSON.parse(o.body) })],
+    ]);
+    rendre('/contenus/bandeaux');
+    const u = userEvent.setup();
+    await u.click(await screen.findByRole('button', { name: 'Nouveau bandeau' }));
+    const tiroir = screen.getByRole('dialog', { name: 'Nouveau bandeau' });
+    await u.type(within(tiroir).getByLabelText(/^Texte/), 'Journée portes ouvertes');
+    await u.type(within(tiroir).getByLabelText('Début (facultatif)'), '2026-11-14');
+    await u.type(within(tiroir).getByLabelText('Fin (facultative)'), '2026-11-14');
+    await u.click(within(tiroir).getByRole('button', { name: 'Enregistrer' }));
+    await waitFor(() => expect(appels(simule, 'POST', '/contenus/bandeaux/')).toHaveLength(1));
+    expect(JSON.parse(appels(simule, 'POST', '/contenus/bandeaux/')[0][1].body))
+      .toMatchObject({ texte: 'Journée portes ouvertes', debut: '2026-11-14', fin: '2026-11-14', lien: '' });
+    const ligne = (await screen.findByRole('button', { name: 'Journée portes ouvertes' })).closest('tr');
+    // Période affichée : même jour au début et à la fin (aucun décalage de fuseau).
+    const periode = within(ligne).getByText(/^Du /).textContent;
+    const [, debut, fin] = periode.match(/^Du (.+) au (.+)$/);
+    expect(debut).toBe(fin);
+    expect(debut).toMatch(/14/);
   });
 
   it('refuse un lien « //exemple.cm » (pas un chemin du site)', () => {

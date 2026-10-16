@@ -277,3 +277,50 @@ class DonneesDeReferenceTests(TestCase):
         self.assertEqual(Produit.objects.get(reference="YD-306W").famille.nom, "Époxy sans solvant")
         call_command("charger_catalogue_reference", stdout=StringIO())
         self.assertEqual((Famille.objects.count(), Produit.objects.count()), (9, 9))
+
+
+class RechercheTraductionsTests(APITestCase):
+    def setUp(self):
+        famille = Famille.objects.create(nom="Finitions", traductions={"de": {"nom": "Deckschichten"}})
+        self.produit = Produit.objects.create(
+            famille=famille, nom="Sol", accroche="Brillant",
+            traductions={"zh": {"nom": "自流平地坪"}, "ja": {"accroche": "光沢"}, "en": {"dosage": "secret"}})
+
+    def test_valeurs_traduites_en_chinois_japonais_et_famille(self):
+        for mot in ("自流平", "光沢", "deckschicht"):
+            with self.subTest(mot=mot):
+                self.assertEqual(self.client.get(f"{URL}produits/", {"search": mot}).data["count"], 1)
+
+    def test_champs_non_cherches_et_cles(self):
+        for mot in ("secret", "zh", "accroche"):
+            with self.subTest(mot=mot):
+                self.assertEqual(self.client.get(f"{URL}produits/", {"search": mot}).data["count"], 0)
+
+    def test_recherche_de_l_equipe_et_produit_hors_ligne(self):
+        Produit.objects.filter(pk=self.produit.pk).update(en_ligne=False)
+        self.assertEqual(self.client.get(f"{URL}produits/", {"search": "自流平"}).data["count"], 0)
+        self.client.force_authenticate(creer_membre())
+        self.assertEqual(self.client.get(f"{URL_ADMIN}produits/", {"search": "自流平"}).data["count"], 1)
+
+
+class RemplacementDesignTests(MediasTemporairesMixin, APITestCase):
+    def test_ancienne_image_effacee_apres_remplacement_reussi(self):
+        from pathlib import Path
+        from unittest import mock
+
+        from apps.noyau.images import ImageInvalide
+        self.client.force_authenticate(creer_membre())
+        produit = Produit.objects.create(famille=Famille.objects.create(nom="F"), nom="Sol")
+        r = self.client.post(f"{URL_ADMIN}produits/{produit.id}/designs/", {"nom": "Gris", "image": image_png()},
+                             format="multipart")
+        design = Design.objects.get(pk=r.data["id"])
+        ancienne = Path(design.image.path)
+        with mock.patch("apps.noyau.medias.optimiser_champ_image", side_effect=ImageInvalide("Trop lourde")):
+            r = self.client.patch(f"{URL_ADMIN}designs/{design.id}/", {"image": image_png("b.png")}, format="multipart")
+        self.assertEqual(r.status_code, 400)
+        self.assertTrue(ancienne.exists())
+        r = self.client.patch(f"{URL_ADMIN}designs/{design.id}/", {"image": image_png("c.png")}, format="multipart")
+        self.assertEqual(r.status_code, 200, r.content)
+        self.assertFalse(ancienne.exists())
+        design.refresh_from_db()
+        self.assertTrue(Path(design.image.path).exists())

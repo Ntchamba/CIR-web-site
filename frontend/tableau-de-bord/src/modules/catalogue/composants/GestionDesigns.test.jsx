@@ -99,6 +99,25 @@ describe('GestionDesigns', () => {
     expect(JSON.parse(appels(simule, 'PATCH', '/designs/3/')[1][1].body)).toEqual({ nom: 'Gris clair', couleur: '#AABBCC', traductions: {} });
   });
 
+  it("retire l'image d'un design : PATCH JSON { image: null } sur designs/<id>/", async () => {
+    const avecImage = design(3, { image: 'http://testserver/media/catalogue/designs/a.webp' });
+    const simule = simulerApi([['PATCH', '/api/admin/catalogue/designs/3/', (u, o) => ({ ...avecImage, ...JSON.parse(o.body) })]]);
+    const u = userEvent.setup();
+    render(<Gestion initiaux={[avecImage]} />);
+    // Formulaire d'ajout : pas de « Retirer » (aucune image existante).
+    expect(screen.queryByRole('button', { name: "Retirer l'image" })).toBeNull();
+    await u.click(screen.getByRole('button', { name: 'Modifier Gris béton' }));
+    await u.click(screen.getByRole('button', { name: "Retirer l'image" }));
+    expect(screen.getAllByText('Aucune image').length).toBeGreaterThan(0);
+    await u.click(screen.getByRole('button', { name: 'Enregistrer' }));
+    await waitFor(() => expect(appels(simule, 'PATCH', '/designs/3/')).toHaveLength(1));
+    const options = appels(simule, 'PATCH', '/designs/3/')[0][1];
+    expect(options.body).not.toBeInstanceOf(FormData);
+    expect(JSON.parse(options.body)).toEqual({ nom: 'Gris béton', couleur: '#AABBCC', traductions: {}, image: null });
+    const ligne = (await screen.findByRole('button', { name: 'Modifier Gris béton' })).closest('li');
+    expect(ligne.querySelector('img')).toBeNull();
+  });
+
   it('supprime un design après confirmation (DELETE designs/<id>/)', async () => {
     const simule = simulerApi([['DELETE', '/api/admin/catalogue/designs/3/', () => reponse(204, null)]]);
     const u = userEvent.setup();

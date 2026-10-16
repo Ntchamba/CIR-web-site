@@ -3,7 +3,7 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { appels, page, rendre, simulerApi } from '@/test/api-simulee.jsx';
+import { appels, page, rendre, reponse, simulerApi } from '@/test/api-simulee.jsx';
 
 import { TEXTES_PRODUIT, validerProduit, versDonnees, versFormulaire } from './TiroirProduit.jsx';
 
@@ -100,5 +100,38 @@ describe('TiroirProduit (fiche ouverte)', () => {
     expect(options.body).not.toBeInstanceOf(FormData);
     expect(JSON.parse(options.body)).toMatchObject({ prix: null, unite_prix: 'kg', famille: 1 });
     expect(await within(tiroir).findByText('Modifications enregistrées.', { selector: 'p:not([role])' })).toBeInTheDocument();
+  });
+
+  it("affiche l'erreur du serveur sur une ligne de caractéristique (liste imbriquée)", async () => {
+    simulerApi([
+      ['GET', '/catalogue/familles/', FAMILLES],
+      ['GET', /\/catalogue\/produits\/1\/$/, PRODUIT_REEL],
+      ['GET', '/catalogue/produits/', page([PRODUIT_REEL])],
+      ['PATCH', '/catalogue/produits/1/', () => reponse(400, { caracteristiques: [{}, { libelle: ['Assurez-vous que ce champ comporte au plus 120 caractères.'] }] })],
+    ]);
+    rendre('/catalogue');
+    const u = userEvent.setup();
+    await u.click(await screen.findByRole('button', { name: 'Sol autolissant' }));
+    const tiroir = await screen.findByRole('dialog', { name: 'Sol autolissant' });
+    await within(tiroir).findByDisplayValue('12500');
+    await u.click(within(tiroir).getByRole('button', { name: 'Enregistrer' }));
+    expect(await within(tiroir).findByText('Assurez-vous que ce champ comporte au plus 120 caractères.')).toBeInTheDocument();
+  });
+
+  it('recharge les familles (nombre de produits) après la création d’un produit', async () => {
+    const simule = simulerApi([
+      ['GET', '/catalogue/familles/', FAMILLES],
+      ['GET', '/catalogue/produits/', page([])],
+      ['POST', '/catalogue/produits/', { ...PRODUIT_REEL, id: 2, nom: 'Primaire' }],
+    ]);
+    rendre('/catalogue');
+    const u = userEvent.setup();
+    await u.click(await screen.findByRole('button', { name: 'Nouveau produit' }));
+    const tiroir = screen.getByRole('dialog', { name: 'Nouveau produit' });
+    await waitFor(() => expect(appels(simule, 'GET', '/catalogue/familles/')).toHaveLength(1));
+    await u.type(within(tiroir).getByLabelText(/^Nom/), 'Primaire');
+    await u.selectOptions(within(tiroir).getByLabelText(/^Famille/), '1');
+    await u.click(within(tiroir).getByRole('button', { name: 'Créer le produit' }));
+    await waitFor(() => expect(appels(simule, 'GET', '/catalogue/familles/')).toHaveLength(2));
   });
 });

@@ -276,3 +276,77 @@ class EquipeComplementsTests(MediasTemporairesMixin, APITestCase):
         rep = self.client.patch(f"{URL_ADMIN}realisations/{r.id}/", {"traductions": {"en": {"ville": "x"}}},
                                 format="json")
         self.assertEqual(rep.status_code, 400)  # la ville ne se traduit pas
+
+
+class CorrectionsRelectureTests(MediasTemporairesMixin, APITestCase):
+    """Seconde relecture : remplacement de fichiers, ville du témoignage, Demo.clean(), jeton sur « miens »."""
+
+    def setUp(self):
+        super().setUp()
+        self.membre = creer_membre()
+
+    def test_remplacement_de_la_photo_apres_efface_l_ancienne_seulement_si_reussi(self):
+        self.client.force_authenticate(self.membre)
+        r = self.client.post(f"{URL_ADMIN}realisations/", {"titre": "Salon", "type_chantier": "maison",
+                                                           "image_apres": image_png()}, format="multipart")
+        realisation = Realisation.objects.get(pk=r.data["id"])
+        ancienne = Path(realisation.image_apres.path)
+        with mock.patch("apps.noyau.medias.optimiser_champ_image", side_effect=ImageInvalide("Trop lourde")):
+            r = self.client.patch(f"{URL_ADMIN}realisations/{realisation.id}/", {"image_apres": image_png("b.png")},
+                                  format="multipart")
+        self.assertEqual(r.status_code, 400)
+        self.assertTrue(ancienne.exists())
+        r = self.client.patch(f"{URL_ADMIN}realisations/{realisation.id}/", {"image_apres": image_png("c.png")},
+                              format="multipart")
+        self.assertEqual(r.status_code, 200, r.content)
+        realisation.refresh_from_db()
+        self.assertFalse(ancienne.exists())
+        self.assertTrue(Path(realisation.image_apres.path).exists())
+
+    def test_suppression_efface_les_fichiers(self):
+        self.client.force_authenticate(self.membre)
+        r = self.client.post(f"{URL_ADMIN}demos/", {"titre": "Pose", "video": video_mp4(), "miniature": image_png()},
+                             format="multipart")
+        demo = Demo.objects.get(pk=r.data["id"])
+        chemins = [Path(demo.video.path), Path(demo.miniature.path)]
+        self.assertTrue(all(c.exists() for c in chemins))
+        self.assertEqual(self.client.delete(f"{URL_ADMIN}demos/{demo.id}/").status_code, 204)
+        self.assertFalse(any(c.exists() for c in chemins))
+
+    def test_retirer_la_video_quand_un_lien_existe(self):
+        self.client.force_authenticate(self.membre)
+        r = self.client.post(f"{URL_ADMIN}demos/", {"titre": "Pose", "video": video_mp4(),
+                                                    "lien": "https://youtu.be/dQw4w9WgXcQ"}, format="multipart")
+        chemin = Path(Demo.objects.get(pk=r.data["id"]).video.path)
+        r = self.client.patch(f"{URL_ADMIN}demos/{r.data['id']}/", {"video": None}, format="json")
+        self.assertEqual(r.status_code, 200, r.content)
+        self.assertIsNone(r.data["video"])
+        self.assertFalse(chemin.exists())
+
+    def test_ville_du_temoignage_controlee(self):
+        self.client.force_authenticate(creer_client())
+        for ville in ("www.spam.cm", "moi@exemple.cm", "699811635 Douala"):
+            with self.subTest(ville=ville):
+                r = self.client.post(f"{URL}temoignages/", {"texte": TEXTE, "note": 4, "ville": ville}, format="json")
+                self.assertEqual(r.status_code, 400, r.content)
+                self.assertIn("ville", r.data)
+        r = self.client.post(f"{URL}temoignages/", {"texte": TEXTE, "note": 4, "ville": "  Douala   Akwa "},
+                             format="json")
+        self.assertEqual((r.status_code, r.data["ville"]), (201, "Douala Akwa"))
+
+    def test_jeton_lu_pour_mes_temoignages_et_le_depot(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer jeton-perime")
+        self.assertEqual(self.client.get(f"{URL}temoignages/miens/").status_code, 401)
+        self.assertEqual(self.client.post(f"{URL}temoignages/", {"texte": TEXTE, "note": 4},
+                                          format="json").status_code, 401)
+        self.client.credentials()
+        self.assertEqual(self.client.get(f"{URL}temoignages/").status_code, 200)
+
+    def test_demo_clean_dans_l_administration(self):
+        from django.core.exceptions import ValidationError as ErreurModele
+        for demo, champ in ((Demo(titre="Sans rien"), "video"),
+                            (Demo(titre="Mauvais lien", lien="https://exemple.com/video"), "lien")):
+            with self.subTest(champ=champ), self.assertRaises(ErreurModele) as contexte:
+                demo.full_clean()
+            self.assertIn(champ, contexte.exception.message_dict)
+        Demo(titre="Bon", lien="https://vimeo.com/76979871").full_clean()
