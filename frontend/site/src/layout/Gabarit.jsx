@@ -1,0 +1,29 @@
+// Gabarit commun : lien d'évitement, en-tête, contenu de la page, pied de page, barre d'onglets mobile.
+import { useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router';
+
+import BarreOnglets from './BarreOnglets.jsx';
+import Entete from './Entete.jsx';
+import PiedDePage from './PiedDePage.jsx';
+import styles from './Gabarit.module.css';
+
+export default function Gabarit() {
+  const { pathname } = useLocation();
+
+  // Haut de page à chaque changement de page.
+  useEffect(() => {
+    if (typeof window.scrollTo === 'function') window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return (
+    <div className={styles.page}>
+      <a href="#contenu" className={styles.evitement}>Aller au contenu</a>
+      <Entete />
+      <main id="contenu" className={styles.contenu} tabIndex={-1}>
+        <Outlet />
+      </main>
+      <PiedDePage />
+      <BarreOnglets />
+    </div>
+  );
+}

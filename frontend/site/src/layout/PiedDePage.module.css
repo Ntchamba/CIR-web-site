@@ -1,0 +1,36 @@
+.pied {
+  background: var(--blanc);
+  border-top: 1px solid var(--filet);
+  font-size: 15px;
+}
+.grille {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.3fr 1.2fr;
+  gap: 32px 48px;
+  padding-block: 48px 28px;
+}
+.marque { display: flex; gap: 14px; align-items: flex-start; }
+.marque img { width: 44px; height: 44px; border-radius: 11px; object-fit: cover; flex-shrink: 0; }
+.marque strong { font-family: var(--police-titre); font-weight: 500; font-size: 18px; display: block; margin-bottom: 6px; }
+.marque p { color: var(--encre-2); max-width: 340px; }
+.etiquette {
+  margin-bottom: 4px;
+  font-family: var(--police-texte);
+  font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--encre-2);
+}
+.colonne { display: flex; flex-direction: column; gap: 2px; }
+.colonne a { display: inline-flex; align-items: center; min-height: 36px; color: var(--encre); text-decoration: none; }
+.colonne a:hover { color: var(--bleu); text-decoration: underline; }
+.partenaire { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.partenaire img { width: 56px; height: auto; }
+.partenaire p { font-size: 14px; color: var(--encre-2); }
+.bas { padding-block: 16px 24px; border-top: 1px solid var(--filet-2); font-size: 13px; color: var(--encre-2); }
+
+@media (max-width: 900px) {
+  .grille { grid-template-columns: 1fr 1fr; }
+  .marque { grid-column: 1 / -1; }
+}
+@media (max-width: 520px) {
+  .grille { grid-template-columns: 1fr; }
+}

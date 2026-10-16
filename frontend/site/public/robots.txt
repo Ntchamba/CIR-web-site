@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /compte
+Disallow: /commandes
+Disallow: /messagerie

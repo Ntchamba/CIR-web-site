@@ -1,0 +1,93 @@
+/* Composants de base partagés : bouton, champ, chargement, état vide, erreur. */
+
+/* --- Bouton --- */
+.bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 26px;
+  border: 1px solid transparent;
+  border-radius: var(--pastille);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background var(--transition), color var(--transition), border-color var(--transition),
+    transform var(--transition);
+}
+.bouton:active { transform: translateY(1px); }
+.bouton:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.plein { background: var(--bleu); color: var(--blanc); }
+.plein:hover { background: var(--bleu-fonce); color: var(--blanc); }
+.contour { background: var(--blanc); color: var(--encre); border-color: var(--champ); }
+.contour:hover { border-color: var(--encre); color: var(--encre); }
+.sombre { background: var(--encre); color: var(--blanc); }
+.sombre:hover { background: #163b4d; color: var(--blanc); }
+.texte { min-height: var(--cible-tactile); padding: 0; background: none; color: var(--bleu); }
+.texte:hover { color: var(--bleu-fonce); text-decoration: underline; }
+
+.petit { min-height: var(--cible-tactile); padding: 0 18px; font-size: 12px; }
+.large { width: 100%; }
+
+.roueBouton {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid currentColor; border-right-color: transparent;
+  animation: tourne 0.7s linear infinite;
+}
+
+/* --- Champ --- */
+.champ { display: flex; flex-direction: column; gap: 6px; font-size: 15px; font-weight: 500; }
+.champ input, .champ select, .champ textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--champ);
+  border-radius: var(--rayon-s);
+  background: var(--blanc);
+  font-weight: 400;
+}
+.champ textarea { padding: 12px 14px; min-height: 120px; resize: vertical; }
+.champ input:focus, .champ select:focus, .champ textarea:focus {
+  outline: 2px solid var(--bleu); outline-offset: 0; border-color: var(--bleu);
+}
+.champ input[aria-invalid='true'], .champ select[aria-invalid='true'], .champ textarea[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+.champ input:read-only { background: var(--fond-2); color: var(--encre-2); }
+.obligatoire { color: var(--danger); }
+.aide { font-size: 13px; font-weight: 400; color: var(--encre-2); }
+.erreurChamp { font-size: 13px; font-weight: 500; color: var(--danger); }
+
+/* --- Chargement --- */
+.chargement { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 48px 16px; color: var(--encre-2); }
+.chargementPlein { min-height: 60vh; }
+.roue {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--filet); border-top-color: var(--bleu);
+  animation: tourne 0.8s linear infinite;
+}
+@keyframes tourne { to { transform: rotate(360deg); } }
+
+/* --- Erreur --- */
+.erreur {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 18px; border-radius: var(--rayon);
+  background: var(--danger-fond); border: 1px solid var(--danger-filet); color: #8c2e17;
+}
+.erreur button {
+  min-height: var(--cible-tactile); padding: 0 4px; border: 0; background: none;
+  color: var(--bleu); font-weight: 600; text-decoration: underline;
+}
+
+/* --- État vide --- */
+.vide {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  padding: 48px 16px; text-align: center; color: var(--encre-2);
+}
+.videTitre { font-size: 24px; color: var(--encre); }
+.vide p { max-width: 520px; }

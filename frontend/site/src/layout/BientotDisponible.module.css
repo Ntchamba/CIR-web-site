@@ -1,0 +1,13 @@
+.carte {
+  margin-top: 28px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 28px 20px;
+  border: 1.5px dashed var(--champ);
+  border-radius: var(--rayon-l);
+  background: rgba(255, 255, 255, 0.7);
+}
+.pastille {
+  padding: 4px 12px; border-radius: var(--pastille); background: var(--fond-2);
+  font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--encre-2);
+}
+.retour { display: inline-flex; align-items: center; min-height: var(--cible-tactile); }
