@@ -359,3 +359,12 @@ describe('jetons et rafraîchissement', () => {
     expect(abonne).toHaveBeenCalledWith({ acces: 'A', rafraichissement: 'R' });
   });
 });
+
+describe('premierMessage : listes imbriquées', () => {
+  it("saute les lignes sans erreur d'une liste imbriquée", () => {
+    const donnees = { caracteristiques: [{}, { libelle: ['Ce champ est obligatoire.'] }] };
+    expect(premierMessage(donnees)).toBe('Ce champ est obligatoire.');
+    expect(erreursChamps(new ErreurApi(400, donnees))).toEqual({ caracteristiques: 'Ce champ est obligatoire.' });
+    expect(premierMessage([{}, []])).toBe('');
+  });
+});

@@ -3,6 +3,7 @@
 Les témoignages ne sont pas traduits : les mots du client restent tels quels, avec leur langue d'écriture.
 """
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
 from django.utils import timezone
@@ -13,6 +14,8 @@ from apps.noyau.images import TAILLES, ImagesOptimiseesMixin
 from apps.noyau.langues import LANGUE_PAR_DEFAUT, Langue
 from apps.noyau.slugs import slug_unique
 from apps.noyau.traductions import TraductionsMixin, champ_traductions
+
+from .videos import adresse_integration
 
 
 class Realisation(TraductionsMixin, ImagesOptimiseesMixin, models.Model):
@@ -78,6 +81,14 @@ class Demo(TraductionsMixin, ImagesOptimiseesMixin, models.Model):
 
     def __str__(self):
         return self.titre
+
+    def clean(self):
+        """Même règle que l'API (administration Django comprise) : lien YouTube ou Vimeo, vidéo ou lien."""
+        super().clean()
+        if self.lien and not adresse_integration(self.lien):
+            raise ValidationError({"lien": _("Le lien doit mener à une vidéo YouTube ou Vimeo.")})
+        if not self.video and not self.lien:
+            raise ValidationError({"video": _("Envoyez une vidéo ou indiquez un lien YouTube ou Vimeo.")})
 
 
 class StatutTemoignage(models.TextChoices):

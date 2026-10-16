@@ -320,3 +320,7 @@ msgstr "Die Bewertung muss zwischen 1 und 5 liegen."
 #: apps/vitrine/services.py:143
 msgid "Le lien doit mener à une vidéo YouTube ou Vimeo."
 msgstr "Der Link muss zu einem YouTube- oder Vimeo-Video führen."
+
+#: apps/vitrine/moderation.py
+msgid "La ville ne doit contenir ni lien, ni adresse e-mail, ni numéro de téléphone."
+msgstr "Die Stadt darf weder einen Link noch eine E-Mail-Adresse noch eine Telefonnummer enthalten."

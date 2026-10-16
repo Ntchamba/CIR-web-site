@@ -2,6 +2,8 @@
 
 Tant que l'équipe n'a rien saisi, les valeurs sont vides : le site affiche alors ses propres textes par défaut.
 """
+import re
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -47,9 +49,15 @@ class ContenuAccueil(TraductionsMixin, ImagesOptimiseesMixin, models.Model):
         return contenu
 
 
+_CHEMIN_INTERNE = re.compile(r"^/(?!/)[^\s\\]*$")
+
+
 def lien_interne(valeur):
-    """Lien d'un bandeau : chemin interne au site (« /catalogue »), jamais une autre adresse."""
-    if valeur and (not valeur.startswith("/") or valeur.startswith("//") or "\\" in valeur):
+    """Lien d'un bandeau : chemin interne au site (« /catalogue »), jamais une autre adresse.
+
+    Refuse « //hote », les barres obliques inversées, les espaces et les caractères de contrôle.
+    """
+    if valeur and (not _CHEMIN_INTERNE.match(valeur) or any(ord(c) < 32 or ord(c) == 127 for c in valeur)):
         raise ValidationError(_("Le lien doit être un chemin du site commençant par « / »."))
 
 

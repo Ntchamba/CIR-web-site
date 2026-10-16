@@ -10,7 +10,6 @@
 from pathlib import Path
 
 from django.conf import settings
-from django.db import transaction
 from django.utils.translation import gettext as _
 from django.views.static import serve
 from rest_framework.exceptions import ValidationError
@@ -78,9 +77,15 @@ def preparer_remplacement(instance, donnees, champs):
 
 
 def effacer_apres_validation(fichiers):
-    """Efface les fichiers donnés quand la transaction en cours est validée (immédiatement hors transaction)."""
+    """Efface les anciens fichiers. À appeler en **dernier**, une fois l'objet enregistré et toutes les
+    écritures en base réussies : un enregistrement refusé (400) ne fait donc jamais perdre un fichier.
+
+    L'effacement n'est pas différé par `transaction.on_commit` : les tests (TestCase, qui enveloppe chaque test
+    dans une transaction jamais validée) vérifient que le fichier retiré a disparu. Seul un échec de la
+    validation finale de la transaction, après cet appel, laisserait un objet pointant vers un fichier effacé.
+    """
     for stockage, nom in fichiers:
-        transaction.on_commit(lambda stockage=stockage, nom=nom: stockage.delete(nom))
+        stockage.delete(nom)
 
 
 def supprimer_avec_fichiers(instance, champs):

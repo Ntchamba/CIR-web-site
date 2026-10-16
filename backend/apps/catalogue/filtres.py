@@ -6,21 +6,36 @@
 import django_filters
 from django.db.models import Q
 
+from apps.noyau.langues import AUTRES_LANGUES
+
 from .models import Produit, Usage
+
+# Champs cherchés, en français et dans chaque traduction (valeurs du JSON `traductions`, jamais ses clés)
+CHAMPS_RECHERCHE = ("nom", "accroche")
 
 VRAI = ("1", "true", "vrai", "oui")
 FAUX = ("0", "false", "faux", "non")
 
 
+def _q_traductions(prefixe, champs, mot):
+    """Condition « le mot figure dans une traduction » : traductions__en__nom__icontains, etc."""
+    condition = Q()
+    for langue in AUTRES_LANGUES:
+        for champ in champs:
+            condition |= Q(**{f"{prefixe}traductions__{langue}__{champ}__icontains": mot})
+    return condition
+
+
 def rechercher_produits(queryset, texte):
-    """Recherche dans la référence, le nom, l'accroche, la famille et les textes traduits."""
+    """Recherche dans la référence, le nom, l'accroche, la famille et leurs traductions."""
     texte = " ".join(str(texte or "").split())
     if not texte:
         return queryset
     for mot in texte.split(" ")[:5]:
         queryset = queryset.filter(
             Q(reference__icontains=mot) | Q(nom__icontains=mot) | Q(accroche__icontains=mot)
-            | Q(famille__nom__icontains=mot) | Q(traductions__icontains=mot)
+            | Q(famille__nom__icontains=mot) | _q_traductions("", CHAMPS_RECHERCHE, mot)
+            | _q_traductions("famille__", ("nom",), mot)
         )
     return queryset
 

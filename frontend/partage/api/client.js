@@ -40,7 +40,14 @@ export function messageParStatut(statut) {
 export function premierMessage(donnees) {
   if (donnees === null || donnees === undefined) return '';
   if (typeof donnees === 'string') return donnees;
-  if (Array.isArray(donnees)) return donnees.length ? premierMessage(donnees[0]) : '';
+  if (Array.isArray(donnees)) {
+    // Erreurs d'une liste imbriquée (ex. [{}, {"libelle": ["…"]}]) : premier message non vide.
+    for (const element of donnees) {
+      const message = premierMessage(element);
+      if (message) return message;
+    }
+    return '';
+  }
   if (typeof donnees === 'object') {
     if (donnees.detail) return premierMessage(donnees.detail);
     if (donnees.non_field_errors) return premierMessage(donnees.non_field_errors);

@@ -1,7 +1,5 @@
 """Règles métier de la vitrine. Les vues et sérialiseurs ne font qu'appeler ces fonctions."""
-import re
 from datetime import timedelta
-from urllib.parse import parse_qs, urlparse
 
 from django.db import transaction
 from django.utils import timezone
@@ -14,14 +12,9 @@ from apps.noyau.medias import effacer_apres_validation, enregistrer_avec_images,
 
 from . import moderation
 from .models import Demo, Realisation, StatutTemoignage, Temoignage
+from .videos import adresse_integration  # noqa: F401 (réexport : utilisé par les sérialiseurs)
 
 QUOTA_TEMOIGNAGES_PAR_JOUR = 5
-
-_ID_YOUTUBE = re.compile(r"^[A-Za-z0-9_-]{11}$")
-_ID_VIMEO = re.compile(r"^\d{4,12}$")
-HOTES_YOUTUBE = {"youtube.com", "www.youtube.com", "m.youtube.com", "youtube-nocookie.com",
-                 "www.youtube-nocookie.com"}
-HOTES_VIMEO = {"vimeo.com", "www.vimeo.com", "player.vimeo.com"}
 
 
 def _texte(valeur):
@@ -32,39 +25,6 @@ def _appliquer(instance, donnees, exclus=()):
     for champ, valeur in donnees.items():
         if champ not in exclus:
             setattr(instance, champ, valeur)
-
-
-# --- Vidéos : adresse d'intégration YouTube ou Vimeo ---
-
-def adresse_integration(lien):
-    """Adresse à placer dans une iframe : youtube-nocookie.com/embed/… ou player.vimeo.com/video/….
-
-    Renvoie None si le lien n'est ni une vidéo YouTube ni une vidéo Vimeo reconnue.
-    """
-    if not lien:
-        return None
-    adresse = urlparse(str(lien).strip())
-    if adresse.scheme not in ("http", "https"):
-        return None
-    hote = (adresse.hostname or "").lower()
-    morceaux = [m for m in adresse.path.split("/") if m]
-    identifiant = None
-    if hote in HOTES_YOUTUBE:
-        if morceaux[:1] == ["watch"]:
-            identifiant = (parse_qs(adresse.query).get("v") or [None])[0]
-        elif len(morceaux) >= 2 and morceaux[0] in ("embed", "shorts", "live", "v"):
-            identifiant = morceaux[1]
-        if identifiant and _ID_YOUTUBE.match(identifiant):
-            return f"https://www.youtube-nocookie.com/embed/{identifiant}"
-        return None
-    if hote == "youtu.be":
-        identifiant = morceaux[0] if morceaux else None
-        return f"https://www.youtube-nocookie.com/embed/{identifiant}" if identifiant and _ID_YOUTUBE.match(
-            identifiant) else None
-    if hote in HOTES_VIMEO:
-        numeros = [m for m in morceaux if _ID_VIMEO.match(m)]
-        return f"https://player.vimeo.com/video/{numeros[-1]}" if numeros else None
-    return None
 
 
 # --- Lecture ---
@@ -162,12 +122,13 @@ def deposer_temoignage(utilisateur, *, texte, note, ville="", type_chantier=""):
         raise Throttled(detail=_("Vous avez déjà déposé %(nombre)s témoignages aujourd'hui. Réessayez demain.")
                         % {"nombre": QUOTA_TEMOIGNAGES_PAR_JOUR})
     texte = moderation.verifier_texte(texte)
+    ville = moderation.verifier_ville(ville)
     if not isinstance(note, int) or isinstance(note, bool) or not 1 <= note <= 5:
         raise ValidationError({"note": [_("La note doit être comprise entre 1 et 5.")]})
     return Temoignage.objects.create(
         auteur=utilisateur,
         nom_affiche=_texte(utilisateur.nom_complet)[:150],
-        ville=_texte(ville)[:80],
+        ville=ville[:80],
         type_chantier=type_chantier or "",
         texte=texte,
         note=note,

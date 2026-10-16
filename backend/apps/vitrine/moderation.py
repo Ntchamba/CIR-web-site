@@ -49,6 +49,15 @@ def verifier_texte(texte):
     return texte
 
 
+def verifier_ville(ville):
+    """La ville d'un témoignage : texte court, sans lien, adresse e-mail ni numéro de téléphone."""
+    ville = " ".join(str(ville or "").split())
+    if _EMAIL.search(ville) or _LIEN.search(ville) or _TELEPHONE.search(ville):
+        raise ValidationError({"ville": [_("La ville ne doit contenir ni lien, ni adresse e-mail, ni numéro de "
+                                           "téléphone.")]})
+    return ville
+
+
 def publier(temoignage, moderateur):
     """Publie un témoignage (en attente ou refusé auparavant)."""
     temoignage.statut = StatutTemoignage.PUBLIE

@@ -42,6 +42,14 @@ class TemoignageViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets
 
     filter_backends = []
 
+    def initialize_request(self, request, *args, **kwargs):
+        """Liste publique : sans authentification (un jeton périmé ne doit pas bloquer, 401) ;
+        le jeton reste lu pour le dépôt et « mes témoignages »."""
+        requete = super().initialize_request(request, *args, **kwargs)
+        if self.action == "list":
+            requete.authenticators = ()
+        return requete
+
     def get_permissions(self):
         if self.action == "create":
             return [EstClientConnecte()]
