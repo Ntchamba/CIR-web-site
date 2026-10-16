@@ -174,3 +174,34 @@ describe('useDonnees', () => {
     await waitFor(() => expect(result.current.donnees).toEqual({ ok: 1 }));
   });
 });
+
+describe('useDonnees (corrections) : changement de dépendance', () => {
+  it('autre slug : l’ancienne donnée disparaît aussitôt ; langue seule : elle reste', async () => {
+    const enCours = [];
+    const charger = vi.fn(() => {
+      const d = differee();
+      enCours.push(d);
+      return d.promesse;
+    });
+    const { result, rerender } = renderHook(({ slug }) => useDonnees(charger, [slug]), { initialProps: { slug: 'a' } });
+    await waitFor(() => expect(enCours).toHaveLength(1));
+    await act(async () => enCours[0].resoudre('A'));
+    expect(result.current.donnees).toBe('A');
+
+    rerender({ slug: 'b' });
+    await waitFor(() => expect(enCours).toHaveLength(2));
+    expect(result.current.donnees).toBeNull();
+    expect(result.current.chargement).toBe(true);
+    await act(async () => enCours[1].resoudre('B'));
+    expect(result.current.donnees).toBe('B');
+
+    await act(() => changerLangue('en'));
+    await waitFor(() => expect(enCours).toHaveLength(3));
+    expect(result.current.donnees).toBe('B');
+    await act(async () => enCours[2].resoudre('B-en'));
+
+    rerender({ slug: 'c' }); // après un changement de langue, un changement de slug vide toujours
+    await waitFor(() => expect(enCours).toHaveLength(4));
+    expect(result.current.donnees).toBeNull();
+  });
+});

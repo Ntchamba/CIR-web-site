@@ -123,3 +123,21 @@ describe('Catalogue : fonctions et carte', () => {
     }
   });
 });
+
+describe('Pied de page (correction) : ville pas en double', () => {
+  it('adresse contenant « Douala » : ville non répétée ; autre adresse : ville ajoutée', async () => {
+    const { default: PiedDePage } = await import('@/layout/PiedDePage.jsx');
+    const { AuthProvider } = await import('@/modules/compte/AuthContext.jsx');
+    simulerApi({ 'GET /api/contenus/accueil/': reponse(200, { coordonnees: { telephones: [], whatsapp: '', email: '', adresse: '' } }) });
+    const { unmount } = render(<MemoryRouter><AuthProvider><PiedDePage /></AuthProvider></MemoryRouter>);
+    const adresse = await screen.findByText('Total Nkolmbong, Douala');
+    expect(adresse.closest('address')).not.toHaveTextContent('Douala, Cameroun');
+    unmount();
+    const { oublierContenusAccueil } = await import('@/layout/contenus.js');
+    oublierContenusAccueil();
+    simulerApi({ 'GET /api/contenus/accueil/': reponse(200, { coordonnees: { telephones: [], whatsapp: '', email: '', adresse: 'Rue 12, Bonabéri' } }) });
+    render(<MemoryRouter><AuthProvider><PiedDePage /></AuthProvider></MemoryRouter>);
+    const autre = await screen.findByText('Rue 12, Bonabéri');
+    expect(autre.closest('address')).toHaveTextContent('Douala, Cameroun');
+  });
+});

@@ -150,3 +150,85 @@ describe('Hero et Partenaire', () => {
     expect(screen.getByRole('img', { name: 'Jiuye' })).toBeInTheDocument(); // nom propre jamais traduit
   });
 });
+
+describe('Sphere (corrections) : pause, focus, faces arrière', () => {
+  const cinq = () => [photo(1), photo(2), photo(3), photo(4), photo(5)];
+
+  it('bouton Pause / Lecture traduit, aria-pressed, placé après la liste dans l’ordre du clavier', async () => {
+    const { container } = avecRouteur(<Sphere photos={cinq()} />);
+    const u = userEvent.setup();
+    const bouton = screen.getByRole('button', { name: 'Mettre en pause la sphère' });
+    expect(bouton).toHaveAttribute('aria-pressed', 'false');
+    const globe = screen.getByRole('list');
+    expect(globe.compareDocumentPosition(bouton) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(globe).not.toHaveClass('globeArrete');
+    await u.click(bouton);
+    expect(screen.getByRole('button', { name: 'Relancer la sphère' })).toHaveAttribute('aria-pressed', 'true');
+    expect(globe).toHaveClass('globeArrete');
+    await u.click(bouton);
+    expect(bouton).toHaveAttribute('aria-pressed', 'false');
+    expect(globe).not.toHaveClass('globeArrete');
+    expect(container.querySelectorAll('button')).toHaveLength(1);
+  });
+
+  it('libellé du bouton dans la langue choisie', async () => {
+    await changerLangue('en');
+    avecRouteur(<Sphere photos={cinq()} />);
+    expect(await screen.findByRole('button', { name: 'Pause the sphere' })).toBeInTheDocument();
+  });
+
+  it('photo focalisée au clavier : la sphère tourne pour la placer face au visiteur, puis repart', async () => {
+    avecRouteur(<><Sphere photos={cinq()} /><a href="#apres">Après</a></>);
+    const u = userEvent.setup();
+    const globe = screen.getByRole('list');
+    const liens = within(globe).getAllByRole('link');
+    await u.tab();
+    expect(liens[0]).toHaveFocus();
+    expect(globe).toHaveClass('globeCible');
+    expect(globe.style.getPropertyValue('--cible')).toBe('0deg');
+    await u.tab();
+    expect(globe.style.getPropertyValue('--cible')).toBe(`${-positions(5)[1].angle}deg`);
+    await u.tab(); await u.tab(); await u.tab(); // dernière photo
+    await u.tab(); // bouton pause : focus sorti de la liste
+    expect(screen.getByRole('button', { name: /pause/i })).toHaveFocus();
+    expect(globe).not.toHaveClass('globeCible');
+    expect(globe.style.getPropertyValue('--cible')).toBe('');
+  });
+
+  it('CSS : faces arrière masquées, rotation vers la cible sans transition en mouvement réduit', () => {
+    expect(cssAccueil).toMatch(/\.tuile a\s*\{[^}]*backface-visibility:\s*hidden/);
+    expect(cssAccueil).toMatch(/\.globeArrete\s*\{\s*animation-play-state:\s*paused/);
+    expect(cssAccueil).toMatch(/\.globeCible\s*\{[^}]*animation:\s*none/);
+    expect(cssAccueil).toMatch(/prefers-reduced-motion: reduce\)\s*\{[^@]*\.globeCible\s*\{\s*transition:\s*none/);
+  });
+
+  it('mouvement réduit : pas de bouton pause (rien ne bouge)', () => {
+    simulerMouvementReduit();
+    avecRouteur(<Sphere photos={cinq()} />);
+    expect(screen.queryByRole('button')).toBeNull();
+  });
+});
+
+describe('Bandeaux (corrections) : espaces refusés', () => {
+  it('tabulation, retour à la ligne, espace : jamais un lien', () => {
+    avecRouteur(<Bandeaux bandeaux={[
+      { id: 1, texte: 'Tab', lien: '/\t/exemple.com' },
+      { id: 2, texte: 'Ligne', lien: '/\n/exemple.com' },
+      { id: 3, texte: 'Espace', lien: '/ /exemple.com' },
+      { id: 4, texte: 'Bon', lien: '/realisations?type=maison' },
+    ]} />);
+    expect(screen.getAllByRole('link')).toHaveLength(1);
+    expect(screen.getByRole('link', { name: 'Bon' })).toHaveAttribute('href', '/realisations?type=maison');
+  });
+});
+
+describe('Hero (corrections) : pas de texte par défaut remplacé', () => {
+  it('contenus pas encore reçus : titre et accroche masqués mais présents ; prêts : visibles', () => {
+    const { rerender } = avecRouteur(<Hero contenu={{}} pret={false} />);
+    const h1 = screen.getByRole('heading', { level: 1, hidden: true });
+    expect(h1).toHaveClass('enAttente');
+    expect(cssAccueil).toMatch(/\.enAttente\s*\{\s*visibility:\s*hidden/);
+    rerender(<MemoryRouter><Hero contenu={{ titre: 'Titre équipe' }} pret /></MemoryRouter>);
+    expect(screen.getByRole('heading', { level: 1, name: 'Titre équipe' })).not.toHaveClass('enAttente');
+  });
+});

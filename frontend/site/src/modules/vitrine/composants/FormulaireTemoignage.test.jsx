@@ -234,3 +234,21 @@ describe('Requêtes publiques de la vitrine', () => {
     }
   });
 });
+
+describe('lienHttps (corrections)', () => {
+  it('seulement https ; javascript:, data:, http:, relatif ou vide refusés', async () => {
+    const { lienHttps } = await import('../regles.js');
+    expect(lienHttps('https://vimeo.com/1')).toBe('https://vimeo.com/1');
+    for (const l of ['javascript:alert(1)', 'JAVASCRIPT:alert(1)', 'data:text/html,<b>x</b>', 'http://vimeo.com/1', '/relatif', '', null, undefined]) {
+      expect(lienHttps(l)).toBeNull();
+    }
+  });
+
+  it('démo avec un lien non https : aucun lien affiché', async () => {
+    api({ demos: [{ id: 1, titre: 'Piège lien', description: '', video: null, lien: 'javascript:alert(1)', integration: null, miniature: null, duree: '' }] });
+    const { container } = rendre();
+    await screen.findByText('Piège lien');
+    expect(container.querySelector('a[href^="javascript"]')).toBeNull();
+    expect(screen.queryByRole('link', { name: /Piège lien/ })).toBeNull();
+  });
+});
