@@ -10,6 +10,7 @@
 from pathlib import Path
 
 from django.conf import settings
+from django.db import transaction
 from django.utils.translation import gettext as _
 from django.views.static import serve
 from rest_framework.exceptions import ValidationError
@@ -55,6 +56,39 @@ def enregistrer_avec_images(instance):
     preparer_images(instance)
     instance.save()
     return instance
+
+
+def preparer_remplacement(instance, donnees, champs):
+    """Prépare le remplacement ou le retrait de fichiers d'un objet (sans rien effacer).
+
+    Pour chaque champ de `champs` présent dans `donnees` : une valeur vide (null ou "") devient "" (fichier
+    retiré). Renvoie la liste des anciens fichiers à effacer, à passer à `effacer_apres_validation` une fois
+    l'enregistrement réussi : un enregistrement refusé ne fait jamais perdre un fichier.
+    """
+    anciens = []
+    for champ in champs:
+        if champ not in donnees:
+            continue
+        if not donnees[champ]:
+            donnees[champ] = ""
+        ancien = getattr(instance, champ)
+        if ancien and ancien.name:
+            anciens.append((ancien.storage, ancien.name))
+    return anciens
+
+
+def effacer_apres_validation(fichiers):
+    """Efface les fichiers donnés quand la transaction en cours est validée (immédiatement hors transaction)."""
+    for stockage, nom in fichiers:
+        transaction.on_commit(lambda stockage=stockage, nom=nom: stockage.delete(nom))
+
+
+def supprimer_avec_fichiers(instance, champs):
+    """Supprime l'objet, puis ses fichiers (seulement si la suppression en base a réussi)."""
+    fichiers = [(f.storage, f.name) for f in (getattr(instance, c) for c in champs) if f and f.name]
+    instance.delete()
+    for stockage, nom in fichiers:
+        stockage.delete(nom)
 
 
 def _entete(fichier, longueur=16):
