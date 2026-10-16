@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 
 import { api } from '@/app/api.js';
 
-import { AuthProvider, MESSAGE_ACCES_REFUSE, useAuth } from './AuthContext.jsx';
+import { AuthProvider, messageAccesRefuse, useAuth } from './AuthContext.jsx';
 
 const MEMBRE = { id: 2, email: 'm@cir.cm', nom_complet: 'Jean Mbarga', role: 'membre', est_equipe: true };
 const SUPER_ADMIN = { id: 1, email: 'a@cir.cm', nom_complet: 'Awa Nana', role: 'super_admin', est_equipe: true };
@@ -124,7 +124,8 @@ describe('AuthProvider : connexion', () => {
     });
     expect(erreur?.name).toBe('ErreurApi');
     expect(erreur.statut).toBe(403);
-    expect(erreur.message).toBe(MESSAGE_ACCES_REFUSE);
+    expect(erreur.message).toBe(messageAccesRefuse());
+    expect(erreur.message).toBe("Ce compte n'a pas accès au tableau de bord.");
     expect(localStorage.getItem('cir-tdb.jetons')).toBeNull();
     expect(etat()).toBe('pret|personne|-');
   });

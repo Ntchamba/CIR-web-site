@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 from django.utils import timezone
 
+from apps.noyau.langues import LANGUE_PAR_DEFAUT, Langue
+
 from .adresses import adresse_est_complete
 from .roles import Role, est_role_equipe
 
@@ -43,6 +45,9 @@ class Utilisateur(AbstractBaseUser, PermissionsMixin):
     ville = models.CharField(max_length=80, blank=True)
     quartier = models.CharField(max_length=80, blank=True)
     rue_ou_repere = models.CharField("rue ou repère", max_length=200, blank=True)
+
+    # Langue préférée : celle des e-mails et des échanges avec l'équipe (code court : fr, en, zh, de, ja)
+    langue = models.CharField(max_length=5, choices=Langue.choices, default=LANGUE_PAR_DEFAUT)
 
     is_active = models.BooleanField("actif", default=True)
     # Calculé à partir du rôle (accès à l'administration Django) : ne pas modifier à la main.

@@ -23,4 +23,15 @@ Chaque paire travaille dans sa propre fenêtre de contexte : l'agent code, puis 
 - [x] Tests Vitest (testeur)
 
 
+## Complément : multilingue (16 octobre 2026, fiche `docs/decisions/7-multilingue.md`)
+- [x] `frontend/partage/i18n/` : moteur de traduction (5 langues, chargement à la demande, pluriels, `?lang=`),
+  `ChoixLangue`, client API (`Accept-Language`, erreurs traduites), `format.js` selon la langue, polices CJK
+- [x] Site : tous les textes traduits (en-tête, pied de page, onglets, module `compte`), choix de la langue
+  dans l'en-tête et le pied de page, langue enregistrée dans le compte du client
+- [x] Tableau de bord : tous les textes traduits (coque, menu, connexion, équipe, clients), langue du client
+  sur sa fiche
+- [x] Back-end : `LocaleMiddleware`, messages traduits (`locale/`), `compiler_traductions`, champ
+  `Utilisateur.langue` (migration 0002), outils de traduction du contenu (`apps/noyau/traductions.py`)
+- [x] Tests : fichiers de langue complets, changement de langue, API dans chaque langue
+
 Une branche et une pull request par vague (ou par module si la vague est grande), vers `prototype-2`.

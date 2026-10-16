@@ -1,8 +1,10 @@
-// En-tête : bouton du menu (téléphone), personne connectée et son rôle, déconnexion.
+// En-tête : bouton du menu (téléphone), personne connectée et son rôle, choix de la langue, déconnexion.
 import { useNavigate } from 'react-router';
 
+import ChoixLangue from '@partage/ui/ChoixLangue.jsx';
 import Icone from '@partage/ui/Icone.jsx';
 
+import { useTraduction } from '@/i18n/index.js';
 import { useAuth } from '@/modules/connexion/AuthContext.jsx';
 import { libelleRole } from '@/modules/connexion/roles.js';
 
@@ -14,7 +16,8 @@ export function initiales(nom) {
 }
 
 export default function Entete({ idMenu, menuOuvert, basculerMenu }) {
-  const { utilisateur, seDeconnecter } = useAuth();
+  const { t } = useTraduction();
+  const { utilisateur, seDeconnecter, retenirLangue } = useAuth();
   const naviguer = useNavigate();
 
   async function deconnecter() {
@@ -26,7 +29,7 @@ export default function Entete({ idMenu, menuOuvert, basculerMenu }) {
     <header className={styles.entete}>
       <button type="button" className={styles.boutonMenu} onClick={basculerMenu}
         aria-expanded={menuOuvert} aria-controls={idMenu}
-        aria-label={menuOuvert ? 'Fermer le menu' : 'Ouvrir le menu'}>
+        aria-label={menuOuvert ? t('coque.fermerMenu') : t('coque.ouvrirMenu')}>
         <Icone nom={menuOuvert ? 'fermer' : 'menu'} taille={22} />
       </button>
       <div className={styles.moi}>
@@ -36,9 +39,10 @@ export default function Entete({ idMenu, menuOuvert, basculerMenu }) {
           <small>{libelleRole(utilisateur?.role)}</small>
         </span>
       </div>
+      <ChoixLangue className={styles.langue} surChangement={retenirLangue} />
       <button type="button" className={styles.sortie} onClick={deconnecter}>
         <Icone nom="sortie" taille={20} />
-        <span>Se déconnecter</span>
+        <span>{t('coque.seDeconnecter')}</span>
       </button>
     </header>
   );

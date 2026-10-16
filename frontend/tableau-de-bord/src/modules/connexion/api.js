@@ -11,5 +11,8 @@ export const connexion = (email, motDePasse) =>
 /** Profil de la personne connectée (sert à restaurer la session au rechargement). */
 export const moi = () => api.get('/api/comptes/moi/');
 
+/** Modifie le profil de la personne connectée (ici : sa langue préférée). → profil mis à jour. */
+export const modifierMoi = (donnees) => api.patch('/api/comptes/moi/', donnees);
+
 /** Liste noire du jeton de rafraîchissement, puis effacement des jetons locaux. */
 export const deconnexion = () => api.deconnecter();

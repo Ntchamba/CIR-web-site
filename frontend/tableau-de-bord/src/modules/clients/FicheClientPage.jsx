@@ -9,6 +9,10 @@ import MessageErreur from '@partage/ui/MessageErreur.jsx';
 import { date, dateHeure } from '@partage/utils/format.js';
 import usePageMeta from '@partage/utils/usePageMeta.js';
 
+import { infosLangue } from '@partage/i18n/langues.js';
+
+import { useTraduction } from '@/i18n/index.js';
+
 import PastilleAdresse from './composants/PastilleAdresse.jsx';
 import { useFicheClient } from './useClients.js';
 import styles from './Clients.module.css';
@@ -23,24 +27,25 @@ function Info({ libelle, children }) {
 }
 
 export default function FicheClientPage() {
+  const { t } = useTraduction();
   const { id } = useParams();
   const { state } = useLocation();
   const retour = typeof state?.retour === 'string' && state.retour.startsWith('/clients') ? state.retour : '/clients';
   const { client, chargement, erreur, recharger } = useFicheClient(id);
-  usePageMeta(client?.nom_complet || 'Fiche client');
+  usePageMeta(client?.nom_complet || t('fiche.meta'));
 
   const lienRetour = (
     <Link to={retour} className={styles.retour}>
-      <Icone nom="retour" taille={18} /> Retour à la liste des clients
+      <Icone nom="retour" taille={18} /> {t('fiche.retour')}
     </Link>
   );
 
-  if (chargement) return <Chargement texte="Chargement de la fiche…" />;
+  if (chargement) return <Chargement texte={t('fiche.chargement')} />;
   if (erreur?.statut === 404) {
     return (
-      <EtatVide titre="Client introuvable" niveau={1}
-        action={<Bouton as={Link} to="/clients" variante="contour">Retour à la liste des clients</Bouton>}>
-        Ce compte n'existe pas ou n'est pas un compte client.
+      <EtatVide titre={t('fiche.introuvable')} niveau={1}
+        action={<Bouton as={Link} to="/clients" variante="contour">{t('fiche.retour')}</Bouton>}>
+        {t('fiche.introuvableTexte')}
       </EtatVide>
     );
   }
@@ -53,43 +58,44 @@ export default function FicheClientPage() {
         <h1 className="titre-page">{client.nom_complet || client.email}</h1>
         <div className={styles.pastilles}>
           <PastilleAdresse complete={client.adresse_complete} />
-          {client.actif === false && <span className={`${styles.pastille} ${styles.neutre}`}>Compte désactivé</span>}
+          {client.actif === false && <span className={`${styles.pastille} ${styles.neutre}`}>{t('clients.compteDesactive')}</span>}
         </div>
       </div>
 
       <div className={styles.cartes}>
         <section className="carte" aria-labelledby="titre-coordonnees">
-          <h2 id="titre-coordonnees" className={styles.titreCarte}>Coordonnées</h2>
+          <h2 id="titre-coordonnees" className={styles.titreCarte}>{t('fiche.coordonnees')}</h2>
           <dl className={styles.infos}>
-            <Info libelle="E-mail">{client.email && <a href={`mailto:${client.email}`}>{client.email}</a>}</Info>
-            <Info libelle="Téléphone">{client.telephone && <a href={`tel:${client.telephone.replace(/\s+/g, '')}`}>{client.telephone}</a>}</Info>
+            <Info libelle={t('fiche.email')}>{client.email && <a href={`mailto:${client.email}`}>{client.email}</a>}</Info>
+            <Info libelle={t('fiche.telephone')}>{client.telephone && <a href={`tel:${client.telephone.replace(/\s+/g, '')}`}>{client.telephone}</a>}</Info>
           </dl>
         </section>
 
         <section className="carte" aria-labelledby="titre-adresse">
-          <h2 id="titre-adresse" className={styles.titreCarte}>Adresse</h2>
+          <h2 id="titre-adresse" className={styles.titreCarte}>{t('fiche.adresse')}</h2>
           <dl className={styles.infos}>
-            <Info libelle="Ville">{client.ville}</Info>
-            <Info libelle="Quartier">{client.quartier}</Info>
-            <Info libelle="Rue ou repère">{client.rue_ou_repere}</Info>
+            <Info libelle={t('fiche.ville')}>{client.ville}</Info>
+            <Info libelle={t('fiche.quartier')}>{client.quartier}</Info>
+            <Info libelle={t('fiche.rueOuRepere')}>{client.rue_ou_repere}</Info>
           </dl>
           {!client.adresse_complete && (
-            <p className={styles.note}>Le client devra compléter son adresse avant de pouvoir commander.</p>
+            <p className={styles.note}>{t('fiche.adresseACompleter')}</p>
           )}
         </section>
 
         <section className="carte" aria-labelledby="titre-compte">
-          <h2 id="titre-compte" className={styles.titreCarte}>Compte</h2>
+          <h2 id="titre-compte" className={styles.titreCarte}>{t('fiche.compte')}</h2>
           <dl className={styles.infos}>
-            <Info libelle="Inscrit le">{client.date_inscription && date(client.date_inscription)}</Info>
-            <Info libelle="Dernière connexion">
-              {client.derniere_connexion ? dateHeure(client.derniere_connexion) : 'Jamais'}
+            <Info libelle={t('fiche.inscritLe')}>{client.date_inscription && date(client.date_inscription)}</Info>
+            <Info libelle={t('fiche.derniereConnexion')}>
+              {client.derniere_connexion ? dateHeure(client.derniere_connexion) : t('fiche.jamais')}
             </Info>
-            <Info libelle="Statut">{client.actif === false ? 'Désactivé' : 'Actif'}</Info>
+            <Info libelle={t('fiche.statut')}>{client.actif === false ? t('fiche.desactive') : t('fiche.actif')}</Info>
+            <Info libelle={t('fiche.langue')}>{client.langue && infosLangue(client.langue).nom}</Info>
           </dl>
         </section>
       </div>
-      <p className={styles.note}>Les commandes et les échanges de ce client apparaîtront ici dans une prochaine version.</p>
+      <p className={styles.note}>{t('fiche.aVenir')}</p>
     </div>
   );
 }

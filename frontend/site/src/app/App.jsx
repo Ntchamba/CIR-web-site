@@ -2,13 +2,14 @@
 // (ou par un MemoryRouter dans les tests).
 import { configurerPageMeta } from '@partage/utils/usePageMeta.js';
 
+import { t } from '@/i18n/index.js';
 import { AuthProvider } from '@/modules/compte/AuthContext.jsx';
 
 import RoutesSite from './routes.jsx';
 
 configurerPageMeta({
-  suffixe: ' | CIR, sols en résine époxy',
-  titreParDefaut: 'CIR : revêtements de sol en résine époxy à Douala',
+  suffixe: () => t('meta.suffixe'),
+  titreParDefaut: () => t('meta.titreParDefaut'),
 });
 
 export default function App() {

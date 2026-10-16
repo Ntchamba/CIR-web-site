@@ -59,6 +59,8 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    # Langue de chaque réponse d'après l'en-tête Accept-Language envoyé par le site et le tableau de bord
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -96,7 +98,17 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-LANGUAGE_CODE = "fr-fr"
+# Multilingue (fiche de décision 7) : français (référence), anglais, chinois simplifié, allemand, japonais.
+# Les messages de l'API sont traduits dans backend/locale/ (python manage.py compiler_traductions).
+LANGUAGE_CODE = "fr"
+LANGUAGES = [
+    ("fr", "Français"),
+    ("en", "English"),
+    ("zh-hans", "中文"),
+    ("de", "Deutsch"),
+    ("ja", "日本語"),
+]
+LOCALE_PATHS = [BASE_DIR / "locale"]
 TIME_ZONE = "Africa/Douala"
 USE_I18N = True
 USE_TZ = True

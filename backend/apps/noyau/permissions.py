@@ -1,4 +1,5 @@
 """Permissions communes à toutes les API du CIR."""
+from django.utils.translation import gettext_lazy as _
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 
@@ -9,7 +10,7 @@ def _connecte(request):
 class EstEquipe(BasePermission):
     """Réservé aux membres de l'équipe (rôle « membre » ou « super_admin ») : API du tableau de bord."""
 
-    message = "Accès réservé à l'équipe du CIR."
+    message = _("Accès réservé à l'équipe du CIR.")
 
     def has_permission(self, request, view):
         return _connecte(request) and getattr(request.user, "est_equipe", False)
@@ -18,7 +19,7 @@ class EstEquipe(BasePermission):
 class EstSuperAdmin(BasePermission):
     """Réservé aux super-administrateurs (gestion des comptes de l'équipe, BF-17)."""
 
-    message = "Accès réservé aux super-administrateurs."
+    message = _("Accès réservé aux super-administrateurs.")
 
     def has_permission(self, request, view):
         return _connecte(request) and getattr(request.user, "est_super_admin", False)

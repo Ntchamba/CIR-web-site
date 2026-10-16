@@ -41,6 +41,8 @@
 .actif, .actif:hover { border-bottom-color: var(--corail); }
 
 .actions { display: flex; align-items: center; gap: 8px; }
+.langue { color: var(--encre-2); }
+.langue:hover { color: var(--encre); }
 .boutonRond {
   width: var(--cible-tactile); height: var(--cible-tactile);
   display: none; align-items: center; justify-content: center;
@@ -77,6 +79,12 @@
   .boutonRond { display: inline-flex; }
   .logo img { width: 40px; height: 40px; border-radius: 10px; }
   .connexion { padding: 0 16px; font-size: 12px; }
+}
+/* Petit téléphone : le choix de langue se réduit au globe (nom de la langue lu par les lecteurs d'écran ;
+   le pied de page garde la liste complète). */
+@media (max-width: 480px) {
+  .langue select { width: var(--cible-tactile); padding: 0; border-color: var(--filet); color: transparent; }
+  .langue svg { left: 50%; transform: translateX(-50%); }
 }
 @media (max-width: 420px) {
   .compte span { display: none; }

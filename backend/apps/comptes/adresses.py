@@ -1,8 +1,14 @@
 """Adresse du client : ville, quartier, rue ou repère (obligatoire pour commander, BF-08 / BNF-01)."""
+from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 
 CHAMPS_ADRESSE = ("ville", "quartier", "rue_ou_repere")
-LIBELLES = {"ville": "La ville", "quartier": "Le quartier", "rue_ou_repere": "La rue ou un repère"}
+# Messages complets (et non « {libellé} est obligatoire ») : l'accord se fait différemment selon la langue.
+MESSAGES_MANQUANT = {
+    "ville": _("La ville est obligatoire."),
+    "quartier": _("Le quartier est obligatoire."),
+    "rue_ou_repere": _("La rue ou un repère est obligatoire."),
+}
 
 
 def nettoyer(valeur):
@@ -25,7 +31,7 @@ def valider_adresse(donnees, partielle=False):
             continue
         valeur = nettoyer(donnees.get(champ))
         if not valeur:
-            erreurs[champ] = [f"{LIBELLES[champ]} est obligatoire."]
+            erreurs[champ] = [MESSAGES_MANQUANT[champ]]
         propres[champ] = valeur
     if erreurs:
         raise ValidationError(erreurs)

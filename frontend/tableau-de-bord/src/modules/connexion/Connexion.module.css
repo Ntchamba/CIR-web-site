@@ -28,3 +28,4 @@
 .intro { margin: var(--esp-2) 0 var(--esp-5); color: var(--encre-3); }
 
 .champs { display: grid; gap: var(--esp-4); }
+.langue { align-self: center; margin-top: var(--esp-5); color: var(--encre-2); }

@@ -17,6 +17,10 @@ npm run build                # dist/
 Le code commun (client API, composants, jetons de style) vient de `frontend/partage/` via l’alias `@partage`.
 Jetons de session rangés sous `localStorage["cir-tdb.jetons"]`, séparés de ceux du site.
 
+Multilingue (fr, en, zh, de, ja) : textes dans `src/i18n/`, choix de la langue dans l'en-tête et sur la page de
+connexion (`localStorage["cir-tdb.langue"]`), langue enregistrée dans le compte du membre connecté, langue
+préférée du client affichée sur sa fiche. Voir `frontend/partage/README.md` et `docs/decisions/7-multilingue.md`.
+
 ## Vague 0 : socle (agent `tableau-de-bord`, vérifié par `tableau-de-bord-testeur`)
 
 - [x] Application Vite + React séparée du site (port 5174), routes chargées à la demande

@@ -7,6 +7,7 @@ from io import BytesIO
 from pathlib import Path
 
 from django.core.files.base import ContentFile
+from django.utils.translation import gettext as _
 from PIL import Image, ImageOps
 
 # Largeurs usuelles (en pixels) selon l'usage de l'image
@@ -42,14 +43,14 @@ def convertir_en_webp(source, largeur_max=LARGEUR_MAX, qualite=QUALITE,
     pixels, avant de décoder l'image (protection contre les « bombes de décompression »).
     """
     if taille_en_octets(source) > octets_max:
-        raise ImageInvalide(f"Image trop lourde (maximum {octets_max / (1024 * 1024):g} Mo).")
+        raise ImageInvalide(_("Image trop lourde (maximum %(mo)s Mo).") % {"mo": f"{octets_max / (1024 * 1024):g}"})
     try:
         ouverte = Image.open(source)
     except Exception as erreur:  # noqa: BLE001 - tout fichier illisible est refusé de la même façon
-        raise ImageInvalide("Fichier image illisible.") from erreur
+        raise ImageInvalide(_("Fichier image illisible.")) from erreur
     with ouverte:
         if ouverte.width * ouverte.height > pixels_max:
-            raise ImageInvalide("Image trop grande (nombre de pixels).")
+            raise ImageInvalide(_("Image trop grande (nombre de pixels)."))
         image = ImageOps.exif_transpose(ouverte)
         if image.mode not in ("RGB", "RGBA"):
             transparente = "A" in image.getbands() or image.has_transparency_data

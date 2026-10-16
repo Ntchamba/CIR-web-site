@@ -5,7 +5,8 @@
  * - sur une réponse 401, renouvelle le jeton d'accès avec le jeton de rafraîchissement
  *   (une seule demande à la fois, partagée par les requêtes en attente), puis rejoue la requête une fois ;
  * - si le renouvellement échoue, efface les jetons (les abonnés sont prévenus : déconnexion) ;
- * - transforme toute erreur en `ErreurApi` dont le `message` est lisible, en français.
+ * - transforme toute erreur en `ErreurApi` dont le `message` est lisible, dans la langue de l'interface ;
+ * - envoie la langue de l'interface (Accept-Language) : le back-end répond dans cette langue.
  *
  * Jetons rangés dans localStorage sous « <cleStockage>.jetons » : { acces, rafraichissement }.
  *
@@ -16,6 +17,8 @@
  *   await api.deconnecter();
  */
 
+import { langueApi, t } from '../i18n/i18n.js';
+
 /** Chemins de l'API des comptes (champs en français : mot_de_passe, acces, rafraichissement). */
 export const CHEMINS = {
   connexion: '/api/comptes/connexion/',
@@ -25,18 +28,12 @@ export const CHEMINS = {
 };
 export const CHEMIN_RAFRAICHIR = CHEMINS.rafraichir;
 
-/** Messages par défaut, selon le code HTTP (0 = pas de réponse du serveur). */
+/** Messages par défaut, selon le code HTTP (0 = pas de réponse du serveur), dans la langue de l'interface. */
 export function messageParStatut(statut) {
-  if (statut === 0) return 'Connexion au serveur impossible. Vérifiez votre accès à Internet et réessayez.';
-  if (statut === 400) return 'Certaines informations sont incorrectes. Vérifiez le formulaire.';
-  if (statut === 401) return 'Votre session a expiré. Reconnectez-vous.';
-  if (statut === 403) return "Vous n'avez pas accès à cette action.";
-  if (statut === 404) return 'Élément introuvable.';
-  if (statut === 413) return 'Le fichier envoyé est trop volumineux.';
-  if (statut === 429) return 'Trop de tentatives. Réessayez dans quelques minutes.';
-  if (statut === 501) return 'Bientôt disponible.';
-  if (statut >= 500) return 'Le serveur rencontre un problème. Réessayez dans un instant.';
-  return 'Une erreur est survenue. Réessayez.';
+  if (statut === 0) return t('erreurs.reseau');
+  if ([400, 401, 403, 404, 413, 429, 501].includes(statut)) return t(`erreurs.s${statut}`);
+  if (statut >= 500) return t('erreurs.s5xx');
+  return t('erreurs.defaut');
 }
 
 /** Premier message d'erreur trouvé dans une réponse Django REST Framework (chaîne, liste ou objet). */
@@ -59,7 +56,7 @@ export class ErreurApi extends Error {
    * @param {*} donnees corps de la réponse (JSON) s'il y en a un
    */
   constructor(statut, donnees = null) {
-    // Les réponses 5xx de Django peuvent contenir des détails techniques en anglais : message générique.
+    // Les réponses 5xx de Django peuvent contenir des détails techniques : message générique.
     const message = statut >= 500 || statut === 0 ? '' : premierMessage(donnees);
     super(message || messageParStatut(statut));
     this.name = 'ErreurApi';
@@ -138,7 +135,7 @@ export function creerClientApi({
     if (!jetons?.rafraichissement) return Promise.resolve(false);
     rafraichissementEnCours ??= appeler(url(cheminRafraichir), {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'Accept-Language': langueApi() },
       body: JSON.stringify({ rafraichissement: jetons.rafraichissement }),
     })
       .then(async (reponse) => {
@@ -159,7 +156,7 @@ export function creerClientApi({
   }
 
   async function requete(chemin, { methode = 'GET', corps, formulaire, auth = true, signal, entetes: extra } = {}, rejeu = false) {
-    const entetes = { Accept: 'application/json', ...extra };
+    const entetes = { Accept: 'application/json', 'Accept-Language': langueApi(), ...extra };
     const jetons = auth ? lireJetons() : null;
     if (jetons?.acces) entetes.Authorization = `Bearer ${jetons.acces}`;
     let body;

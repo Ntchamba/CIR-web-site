@@ -9,6 +9,9 @@ React 19 + Vite + react-router 7. Adresse : revelation-sarl.com. Vague 0 : agent
 - [x] Module `compte` (voir son README)
 - [x] Vitest + Testing Library (`npm test`), test de fumée `src/test/fumee.test.jsx`
 - [x] `railway.toml`, `Dockerfile`, `.env.example`
+- [x] Multilingue (fr, en, zh, de, ja) : textes dans `src/i18n/`, choix de la langue dans l'en-tête et le pied
+  de page, `?lang=en` dans une adresse partagée, langue enregistrée dans le compte du client connecté
+  (voir `frontend/partage/README.md` et `docs/decisions/7-multilingue.md`)
 
 ## Commandes
 
@@ -35,11 +38,13 @@ npm start                    # sert dist/ (serve -s), port $PORT ou 3000
 
 ## API utilisée (back-end Django, base `VITE_API_URL`)
 
-- `POST /api/comptes/inscription/` `{email, mot_de_passe, nom_complet, telephone?, ville, quartier, rue_ou_repere}` → `{utilisateur, acces, rafraichissement}`
+Toutes les requêtes envoient `Accept-Language` (langue de l'interface) : les messages d'erreur reviennent traduits.
+
+- `POST /api/comptes/inscription/` `{email, mot_de_passe, nom_complet, telephone?, ville, quartier, rue_ou_repere, langue}` → `{utilisateur, acces, rafraichissement}`
 - `POST /api/comptes/connexion/` `{email, mot_de_passe}` → `{acces, rafraichissement, utilisateur}`
 - `POST /api/comptes/connexion/rafraichir/` `{rafraichissement}` → `{acces, rafraichissement}`
 - `POST /api/comptes/deconnexion/` `{rafraichissement}` (liste noire)
-- `GET/PATCH /api/comptes/moi/` → `{id, email, nom_complet, telephone, role, est_equipe, ville, quartier, rue_ou_repere, adresse_complete (booléen), adresse_formatee, date_inscription}` ; e-mail et rôle non modifiables
+- `GET/PATCH /api/comptes/moi/` → `{id, email, nom_complet, telephone, role, est_equipe, langue, ville, quartier, rue_ou_repere, adresse_complete (booléen), adresse_formatee, date_inscription}` ; e-mail et rôle non modifiables
 
 ## Déploiement Railway
 

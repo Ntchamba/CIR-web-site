@@ -1,4 +1,6 @@
 // Règles de l'adresse du client : ville, quartier et rue ou repère sont obligatoires pour commander.
+import { t } from '@/i18n/index.js';
+
 export const CHAMPS_ADRESSE = ['ville', 'quartier', 'rue_ou_repere'];
 
 export const ADRESSE_VIDE = { ville: '', quartier: '', rue_ou_repere: '' };
@@ -20,10 +22,10 @@ export function adresseComplete(source) {
 /** Erreurs de saisie de l'adresse : { champ: message }. */
 export function validerAdresse(adresse) {
   const erreurs = {};
-  if (!String(adresse?.ville ?? '').trim()) erreurs.ville = 'Indiquez votre ville.';
-  if (!String(adresse?.quartier ?? '').trim()) erreurs.quartier = 'Indiquez votre quartier.';
+  if (!String(adresse?.ville ?? '').trim()) erreurs.ville = t('compte.validation.villeVide');
+  if (!String(adresse?.quartier ?? '').trim()) erreurs.quartier = t('compte.validation.quartierVide');
   if (!String(adresse?.rue_ou_repere ?? '').trim()) {
-    erreurs.rue_ou_repere = 'Indiquez une rue ou un repère connu.';
+    erreurs.rue_ou_repere = t('compte.validation.rueVide');
   }
   return erreurs;
 }

@@ -60,3 +60,16 @@
   --cible-tactile: 44px;
   --transition: 180ms ease;
 }
+
+/* Chinois et japonais : Lora et Figtree n'ont pas ces caractères. Les lettres latines gardent la charte,
+   les idéogrammes viennent des polices du système (aucun téléchargement de police supplémentaire). */
+:root:lang(zh) {
+  --police-titre: 'Lora Variable', 'Lora', 'Songti SC', 'Noto Serif SC', 'Source Han Serif SC', SimSun, serif;
+  --police-texte: 'Figtree Variable', 'Figtree', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+    'Noto Sans SC', 'Source Han Sans SC', sans-serif;
+}
+:root:lang(ja) {
+  --police-titre: 'Lora Variable', 'Lora', 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif;
+  --police-texte: 'Figtree Variable', 'Figtree', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic',
+    Meiryo, 'Noto Sans JP', sans-serif;
+}

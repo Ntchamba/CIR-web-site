@@ -25,7 +25,10 @@
 .partenaire { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
 .partenaire img { width: 56px; height: auto; }
 .partenaire p { font-size: 14px; color: var(--encre-2); }
-.bas { padding-block: 16px 24px; border-top: 1px solid var(--filet-2); font-size: 13px; color: var(--encre-2); }
+.bas {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px;
+  padding-block: 16px 24px; border-top: 1px solid var(--filet-2); font-size: 13px; color: var(--encre-2);
+}
 
 @media (max-width: 900px) {
   .grille { grid-template-columns: 1fr 1fr; }

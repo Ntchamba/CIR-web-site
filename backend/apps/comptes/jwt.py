@@ -1,4 +1,5 @@
 """Jetons JWT d'accès et de rafraîchissement (simplejwt), enrichis du nom et du rôle."""
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -19,7 +20,7 @@ def jetons_pour(utilisateur):
 class ConnexionSerializer(TokenObtainPairSerializer):
     """Entrée : {"email", "mot_de_passe"}. Sortie : {"acces", "rafraichissement", "utilisateur"}."""
 
-    default_error_messages = {"no_active_account": "E-mail ou mot de passe incorrect."}
+    default_error_messages = {"no_active_account": _("E-mail ou mot de passe incorrect.")}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -51,4 +52,4 @@ class ConnexionSerializer(TokenObtainPairSerializer):
 class ConnexionEquipeSerializer(ConnexionSerializer):
     def verifier_acces(self, utilisateur):
         if not utilisateur.est_equipe:
-            raise serializers.ValidationError({"detail": "Ce compte n'a pas accès au tableau de bord."})
+            raise serializers.ValidationError({"detail": _("Ce compte n'a pas accès au tableau de bord.")})

@@ -8,13 +8,18 @@ import Champ from '@partage/ui/Champ.jsx';
 import MessageErreur from '@partage/ui/MessageErreur.jsx';
 import usePageMeta from '@partage/utils/usePageMeta.js';
 
+import ChoixLangue from '@partage/ui/ChoixLangue.jsx';
+
+import { useTraduction } from '@/i18n/index.js';
+
 import { useAuth } from './AuthContext.jsx';
 import { cheminDeSuite } from './suite.js';
 import { validerConnexion } from './validation.js';
 import styles from './Connexion.module.css';
 
 export default function ConnexionPage() {
-  usePageMeta('Connexion', "Connexion au tableau de bord réservé à l'équipe du CIR.");
+  const { t } = useTraduction();
+  usePageMeta(t('connexion.meta'), t('connexion.description'));
   const { utilisateur, pret, seConnecter } = useAuth();
   const [parametres] = useSearchParams();
   const suite = cheminDeSuite(parametres);
@@ -52,18 +57,19 @@ export default function ConnexionPage() {
       <div className={styles.carte}>
         <div className={styles.marque}>
           <img src="/media/marque/logo-cir.webp" alt="" width="48" height="48" />
-          <span><strong>CIR</strong> Tableau de bord</span>
+          <span><strong>CIR</strong> {t('connexion.marque')}</span>
         </div>
-        <h1 className="titre-page">Connexion</h1>
-        <p className={styles.intro}>Espace réservé à l'équipe du Complexe Industriel Révélation.</p>
+        <h1 className="titre-page">{t('connexion.titre')}</h1>
+        <p className={styles.intro}>{t('connexion.intro')}</p>
         <form onSubmit={envoyer} className={styles.champs} noValidate>
-          <Champ libelle="E-mail" name="email" type="email" value={form.email} onChange={changer}
+          <Champ libelle={t('connexion.email')} name="email" type="email" value={form.email} onChange={changer}
             erreur={erreurs.email} autoComplete="username" inputMode="email" required />
-          <Champ libelle="Mot de passe" name="mot_de_passe" type="password" value={form.mot_de_passe}
+          <Champ libelle={t('connexion.motDePasse')} name="mot_de_passe" type="password" value={form.mot_de_passe}
             onChange={changer} erreur={erreurs.mot_de_passe} autoComplete="current-password" required />
           <MessageErreur erreur={erreur} />
-          <Bouton type="submit" chargement={envoi} taille="large">Se connecter</Bouton>
+          <Bouton type="submit" chargement={envoi} taille="large">{t('connexion.bouton')}</Bouton>
         </form>
+        <ChoixLangue className={styles.langue} />
       </div>
     </main>
   );

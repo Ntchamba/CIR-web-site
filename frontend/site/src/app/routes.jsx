@@ -13,28 +13,23 @@ const ConnexionPage = lazy(() => import('@/modules/compte/ConnexionPage.jsx'));
 const InscriptionPage = lazy(() => import('@/modules/compte/InscriptionPage.jsx'));
 const ProfilPage = lazy(() => import('@/modules/compte/ProfilPage.jsx'));
 
-/** Pages des modules des vagues suivantes : simple « Bientôt disponible » en attendant. */
-const A_VENIR = [
-  { chemin: 'catalogue', titre: 'Catalogue', texte: 'Le catalogue des revêtements en résine époxy arrive bientôt.' },
-  { chemin: 'realisations', titre: 'Réalisations', texte: 'Nos chantiers en photos arrivent bientôt.' },
-];
+/** Pages des modules des vagues suivantes : simple « Bientôt disponible » en attendant (textes : pages.<page>). */
+const A_VENIR = ['catalogue', 'realisations'];
 
 export default function RoutesSite() {
   return (
     <Suspense fallback={<Chargement plein />}>
       <Routes>
         <Route element={<Gabarit />}>
-          <Route index element={<BientotDisponible titre="Accueil"
-            texte="Le CIR pose des revêtements de sol en résine époxy pour la maison, l'industrie et l'entreprise. La nouvelle vitrine arrive bientôt." />} />
-          {A_VENIR.map((p) => (
-            <Route key={p.chemin} path={p.chemin} element={<BientotDisponible titre={p.titre} texte={p.texte} />} />
+          <Route index element={<BientotDisponible page="accueil" />} />
+          {A_VENIR.map((page) => (
+            <Route key={page} path={page} element={<BientotDisponible page={page} />} />
           ))}
           <Route path="connexion" element={<ConnexionPage />} />
           <Route path="inscription" element={<InscriptionPage />} />
           <Route element={<RouteProtegee />}>
             <Route path="compte" element={<ProfilPage />} />
-            <Route path="commandes" element={<BientotDisponible titre="Mes commandes"
-              texte="Le suivi de vos commandes arrive bientôt." />} />
+            <Route path="commandes" element={<BientotDisponible page="commandes" />} />
           </Route>
           <Route path="*" element={<PageIntrouvable />} />
         </Route>

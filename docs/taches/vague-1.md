@@ -25,6 +25,18 @@ Chaque paire travaille dans sa propre fenêtre de contexte : l'agent code, puis 
 
 Une branche et une pull request par vague (ou par module si la vague est grande), vers `prototype-2`.
 
+## Multilingue (s'applique aux quatre modules)
+
+- Chaque modèle dont le texte s'affiche sur le site (nom, description, légende, titre, texte…) utilise
+  `TraductionsMixin` + `traductions = champ_traductions()` (`apps/noyau/traductions.py`) : le français dans
+  les champs habituels, les autres langues dans `traductions`.
+- API publique : `SerialiseurTraduitMixin` (textes dans la langue de la requête, français en secours).
+  API du tableau de bord : `SerialiseurTraductionsAdminMixin` (champ `traductions` modifiable et contrôlé,
+  `langues_incompletes` renvoyé).
+- Tableau de bord : formulaires avec un onglet par langue (français obligatoire, autres facultatives) et une
+  pastille « traductions à compléter ». Site : aucun texte en dur, tout passe par `t()`.
+- Les prix, surfaces et dates passent par `@partage/utils/format.js` (formats de la langue choisie).
+
 ## Note de la vague 0
 
 - `optimiser_champ_image` (module `noyau`) lève `ImageInvalide` (une `ValueError`) au-delà de 10 Mo ou

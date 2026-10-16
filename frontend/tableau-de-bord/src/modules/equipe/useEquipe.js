@@ -1,10 +1,12 @@
 // État de la page Équipe : chargement de la liste, ajout, désactivation et réactivation d'un membre.
 import { useCallback, useEffect, useState } from 'react';
 
+import { localeIntl } from '@/i18n/index.js';
+
 import * as equipeApi from './api.js';
 
 const trierParNom = (liste) =>
-  [...liste].sort((a, b) => String(a.nom_complet).localeCompare(String(b.nom_complet), 'fr'));
+  [...liste].sort((a, b) => String(a.nom_complet).localeCompare(String(b.nom_complet), localeIntl()));
 
 export default function useEquipe() {
   const [membres, setMembres] = useState([]);

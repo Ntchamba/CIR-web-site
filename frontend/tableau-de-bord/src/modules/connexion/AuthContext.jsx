@@ -1,15 +1,18 @@
 // Session de l'équipe : personne connectée, connexion, déconnexion. Les comptes clients sont refusés
 // par le serveur à la connexion, et écartés ici si une ancienne session client traîne dans le navigateur.
+// La langue choisie dans l'interface est gardée dans le compte du membre.
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import { api, ErreurApi } from '@/app/api.js';
+import { t } from '@/i18n/index.js';
 
 import * as comptes from './api.js';
 import { estEquipe, estSuperAdmin } from './roles.js';
 
 export const AuthContext = createContext(null);
 
-export const MESSAGE_ACCES_REFUSE = "Ce compte n'a pas accès au tableau de bord.";
+/** Message affiché à un compte client qui tente d'ouvrir le tableau de bord (langue courante). */
+export const messageAccesRefuse = () => t('connexion.accesRefuse');
 
 export function AuthProvider({ children }) {
   const [utilisateur, setUtilisateur] = useState(null);
@@ -57,7 +60,7 @@ export function AuthProvider({ children }) {
     if (!estEquipe(u)) {
       // Double sécurité : le serveur refuse déjà les clients sur cette route.
       api.jetons.effacer();
-      throw new ErreurApi(403, { detail: MESSAGE_ACCES_REFUSE });
+      throw new ErreurApi(403, { detail: messageAccesRefuse() });
     }
     setUtilisateur(u);
     return u;
@@ -72,6 +75,16 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  /** Langue choisie dans l'interface, enregistrée dans le compte (sans effet hors connexion, échec ignoré). */
+  const retenirLangue = useCallback(async (langue) => {
+    if (!utilisateur || utilisateur.langue === langue) return;
+    try {
+      setUtilisateur(await comptes.modifierMoi({ langue }));
+    } catch {
+      /* la langue de l'interface change quand même */
+    }
+  }, [utilisateur]);
+
   const valeur = useMemo(
     () => ({
       utilisateur,
@@ -80,8 +93,9 @@ export function AuthProvider({ children }) {
       superAdmin: estSuperAdmin(utilisateur),
       seConnecter,
       seDeconnecter,
+      retenirLangue,
     }),
-    [utilisateur, pret, seConnecter, seDeconnecter],
+    [utilisateur, pret, seConnecter, seDeconnecter, retenirLangue],
   );
   return <AuthContext.Provider value={valeur}>{children}</AuthContext.Provider>;
 }

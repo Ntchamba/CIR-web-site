@@ -6,7 +6,8 @@ import Bouton from '@partage/ui/Bouton.jsx';
 import Champ from '@partage/ui/Champ.jsx';
 import MessageErreur from '@partage/ui/MessageErreur.jsx';
 
-import { OPTIONS_ROLES_EQUIPE, ROLES } from '@/modules/connexion/roles.js';
+import { t, useTraduction } from '@/i18n/index.js';
+import { optionsRolesEquipe, ROLES } from '@/modules/connexion/roles.js';
 
 import styles from '../Equipe.module.css';
 
@@ -16,14 +17,15 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 /** Contrôles de saisie avant l'envoi (le serveur vérifie aussi la solidité du mot de passe). */
 export function validerMembre(form) {
   const erreurs = {};
-  if (!form.nom_complet.trim()) erreurs.nom_complet = 'Indiquez le nom complet.';
-  if (!form.email.trim()) erreurs.email = "Indiquez l'e-mail.";
-  else if (!EMAIL.test(form.email.trim())) erreurs.email = "Cet e-mail n'est pas valide.";
-  if (form.mot_de_passe.length < 8) erreurs.mot_de_passe = 'Au moins 8 caractères.';
+  if (!form.nom_complet.trim()) erreurs.nom_complet = t('validation.nomMembreVide');
+  if (!form.email.trim()) erreurs.email = t('validation.emailMembreVide');
+  else if (!EMAIL.test(form.email.trim())) erreurs.email = t('validation.emailInvalide');
+  if (form.mot_de_passe.length < 8) erreurs.mot_de_passe = t('validation.motDePasseCourt');
   return erreurs;
 }
 
 export default function FormulaireMembre({ ajouter, annuler, surAjout }) {
+  useTraduction(); // redessine le formulaire au changement de langue
   const [form, setForm] = useState(VIDE);
   const [erreurs, setErreurs] = useState({});
   const [erreur, setErreur] = useState(null);
@@ -59,24 +61,24 @@ export default function FormulaireMembre({ ajouter, annuler, surAjout }) {
 
   return (
     <form className={`carte ${styles.formulaire}`} onSubmit={envoyer} noValidate aria-labelledby="titre-ajout">
-      <h2 id="titre-ajout" className={styles.titreFormulaire}>Ajouter un membre</h2>
+      <h2 id="titre-ajout" className={styles.titreFormulaire}>{t('equipe.formulaire.titre')}</h2>
       <div className={styles.grille}>
-        <Champ libelle="Nom complet" name="nom_complet" value={form.nom_complet} onChange={changer}
+        <Champ libelle={t('equipe.formulaire.nomComplet')} name="nom_complet" value={form.nom_complet} onChange={changer}
           erreur={erreurs.nom_complet} autoComplete="off" required />
-        <Champ libelle="E-mail" name="email" type="email" value={form.email} onChange={changer}
+        <Champ libelle={t('equipe.formulaire.email')} name="email" type="email" value={form.email} onChange={changer}
           erreur={erreurs.email} autoComplete="off" inputMode="email" required />
-        <Champ libelle="Téléphone" name="telephone" type="tel" value={form.telephone} onChange={changer}
+        <Champ libelle={t('equipe.formulaire.telephone')} name="telephone" type="tel" value={form.telephone} onChange={changer}
           erreur={erreurs.telephone} autoComplete="off" inputMode="tel" />
-        <Champ libelle="Rôle" name="role" value={form.role} onChange={changer} erreur={erreurs.role}
-          options={OPTIONS_ROLES_EQUIPE} />
-        <Champ libelle="Mot de passe provisoire" name="mot_de_passe" type="password" value={form.mot_de_passe}
+        <Champ libelle={t('equipe.formulaire.role')} name="role" value={form.role} onChange={changer} erreur={erreurs.role}
+          options={optionsRolesEquipe()} />
+        <Champ libelle={t('equipe.formulaire.motDePasse')} name="mot_de_passe" type="password" value={form.mot_de_passe}
           onChange={changer} erreur={erreurs.mot_de_passe} autoComplete="new-password"
-          aide="Au moins 8 caractères. À transmettre au membre, qui pourra le changer." required />
+          aide={t('equipe.formulaire.aideMotDePasse')} required />
       </div>
       <MessageErreur erreur={erreur} />
       <div className={styles.actionsFormulaire}>
-        <Bouton type="submit" chargement={envoi}>Ajouter le membre</Bouton>
-        <Bouton variante="texte" onClick={annuler}>Annuler</Bouton>
+        <Bouton type="submit" chargement={envoi}>{t('equipe.formulaire.bouton')}</Bouton>
+        <Bouton variante="texte" onClick={annuler}>{t('equipe.formulaire.annuler')}</Bouton>
       </div>
     </form>
   );

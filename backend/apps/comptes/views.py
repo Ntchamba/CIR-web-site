@@ -1,5 +1,6 @@
 """API publique des comptes (/api/comptes/) : inscription, connexion, profil."""
 from django.conf import settings
+from django.utils.translation import gettext as _
 from rest_framework import generics, status
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -49,7 +50,7 @@ class ConnexionView(generics.GenericAPIView):
         cle = services.cle_connexion(request.data.get("email", ""))
         cle_ip = services.cle_connexion_ip(adresse_ip(request))
         if services.connexion_bloquee(cle) or services.connexion_bloquee(cle_ip, settings.CONNEXION_ESSAIS_MAX_IP):
-            return Response({"detail": "Trop d'essais incorrects. Réessayez dans 15 minutes."},
+            return Response({"detail": _("Trop d'essais incorrects. Réessayez dans 15 minutes.")},
                             status=status.HTTP_429_TOO_MANY_REQUESTS)
         serializer = self.get_serializer(data=request.data)
         try:
@@ -57,7 +58,7 @@ class ConnexionView(generics.GenericAPIView):
         except AuthenticationFailed:
             services.enregistrer_echec_connexion(cle)
             services.enregistrer_echec_connexion(cle_ip)
-            return Response({"detail": "E-mail ou mot de passe incorrect."}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"detail": _("E-mail ou mot de passe incorrect.")}, status=status.HTTP_401_UNAUTHORIZED)
         except ValidationError as erreur:
             detail = erreur.detail.get("detail") if isinstance(erreur.detail, dict) else None
             if detail is None:  # champs manquants : pas compté comme un essai

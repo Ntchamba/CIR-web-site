@@ -2,12 +2,15 @@
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router';
 
+import { useTraduction } from '@/i18n/index.js';
+
 import BarreOnglets from './BarreOnglets.jsx';
 import Entete from './Entete.jsx';
 import PiedDePage from './PiedDePage.jsx';
 import styles from './Gabarit.module.css';
 
 export default function Gabarit() {
+  const { t } = useTraduction();
   const { pathname } = useLocation();
 
   // Haut de page à chaque changement de page.
@@ -17,7 +20,7 @@ export default function Gabarit() {
 
   return (
     <div className={styles.page}>
-      <a href="#contenu" className={styles.evitement}>Aller au contenu</a>
+      <a href="#contenu" className={styles.evitement}>{t('nav.allerAuContenu')}</a>
       <Entete />
       <main id="contenu" className={styles.contenu} tabIndex={-1}>
         <Outlet />

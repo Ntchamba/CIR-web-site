@@ -30,7 +30,7 @@ export default function RoutesTableauDeBord() {
             <Route path="equipe" element={<RouteEquipe superAdmin><EquipePage /></RouteEquipe>} />
             {MODULES_A_VENIR.map((m) => (
               <Route key={m.chemin} path={m.chemin.slice(1)}
-                element={<BientotDisponible titre={m.libelle} texte={m.texte} />} />
+                element={<BientotDisponible module={m.module} />} />
             ))}
             <Route path="*" element={<PageIntrouvable />} />
           </Route>

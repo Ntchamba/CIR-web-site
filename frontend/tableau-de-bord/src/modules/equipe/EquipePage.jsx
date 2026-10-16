@@ -7,6 +7,7 @@ import EtatVide from '@partage/ui/EtatVide.jsx';
 import MessageErreur from '@partage/ui/MessageErreur.jsx';
 import usePageMeta from '@partage/utils/usePageMeta.js';
 
+import { useTraduction } from '@/i18n/index.js';
 import { useAuth } from '@/modules/connexion/AuthContext.jsx';
 
 import FormulaireMembre from './composants/FormulaireMembre.jsx';
@@ -15,7 +16,8 @@ import useEquipe from './useEquipe.js';
 import styles from './Equipe.module.css';
 
 export default function EquipePage() {
-  usePageMeta('Équipe');
+  const { t } = useTraduction();
+  usePageMeta(t('equipe.titre'));
   const { utilisateur, superAdmin } = useAuth();
   const { membres, chargement, erreur, recharger, ajouter, desactiver, reactiver } = useEquipe();
   const [formulaire, setFormulaire] = useState(false);
@@ -26,11 +28,11 @@ export default function EquipePage() {
     <div className={styles.page}>
       <div className={styles.entete}>
         <div>
-          <h1 className="titre-page">Équipe</h1>
-          <p className="sous-titre-page">Les personnes qui ont accès au tableau de bord.</p>
+          <h1 className="titre-page">{t('equipe.titre')}</h1>
+          <p className="sous-titre-page">{t('equipe.sousTitre')}</p>
         </div>
         {superAdmin && !formulaire && (
-          <Bouton onClick={() => { setFormulaire(true); setAnnonce(''); }}>Ajouter un membre</Bouton>
+          <Bouton onClick={() => { setFormulaire(true); setAnnonce(''); }}>{t('equipe.ajouter')}</Bouton>
         )}
       </div>
 
@@ -39,29 +41,29 @@ export default function EquipePage() {
 
       {superAdmin && formulaire && (
         <FormulaireMembre ajouter={ajouter} annuler={() => setFormulaire(false)}
-          surAjout={(m) => { setFormulaire(false); setAnnonce(`${m.nom_complet} a été ajouté à l'équipe.`); }} />
+          surAjout={(m) => { setFormulaire(false); setAnnonce(t('equipe.ajoute', { nom: m.nom_complet })); }} />
       )}
 
       <MessageErreur erreur={erreurAction} />
 
       {chargement ? (
-        <Chargement texte="Chargement de l'équipe…" />
+        <Chargement texte={t('equipe.chargement')} />
       ) : erreur ? (
         <MessageErreur erreur={erreur} reessayer={recharger} />
       ) : membres.length === 0 ? (
-        <EtatVide titre="Aucun membre pour l'instant">Ajoutez le premier membre de l'équipe.</EtatVide>
+        <EtatVide titre={t('equipe.vide')}>{t('equipe.videTexte')}</EtatVide>
       ) : (
         <div className={`carte ${styles.tableau}`}>
           <table>
-            <caption className="visuellement-cache">Membres de l'équipe</caption>
+            <caption className="visuellement-cache">{t('equipe.legende')}</caption>
             <thead>
               <tr>
-                <th scope="col">Membre</th>
-                <th scope="col">Téléphone</th>
-                <th scope="col">Rôle</th>
-                <th scope="col">Statut</th>
-                <th scope="col">Dernière connexion</th>
-                {superAdmin && <th scope="col"><span className="visuellement-cache">Actions</span></th>}
+                <th scope="col">{t('equipe.colonnes.membre')}</th>
+                <th scope="col">{t('equipe.colonnes.telephone')}</th>
+                <th scope="col">{t('equipe.colonnes.role')}</th>
+                <th scope="col">{t('equipe.colonnes.statut')}</th>
+                <th scope="col">{t('equipe.colonnes.derniereConnexion')}</th>
+                {superAdmin && <th scope="col"><span className="visuellement-cache">{t('equipe.colonnes.actions')}</span></th>}
               </tr>
             </thead>
             <tbody>

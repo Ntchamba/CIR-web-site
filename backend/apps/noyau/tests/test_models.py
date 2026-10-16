@@ -31,7 +31,8 @@ class NoyauSansModeleTests(SimpleTestCase):
         self.assertEqual(settings.AUTH_USER_MODEL, "comptes.Utilisateur")
 
     def test_langue_et_fuseau(self):
-        self.assertEqual(settings.LANGUAGE_CODE, "fr-fr")
+        self.assertEqual(settings.LANGUAGE_CODE, "fr")
+        self.assertEqual([code for code, _ in settings.LANGUAGES], ["fr", "en", "zh-hans", "de", "ja"])
         self.assertEqual(settings.TIME_ZONE, "Africa/Douala")
 
     def test_blocage_connexion_configure(self):

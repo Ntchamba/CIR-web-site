@@ -18,6 +18,15 @@ python manage.py runserver           # http://127.0.0.1:8000 (ASGI via daphne)
 
 Tests : `python manage.py test`. Vérification : `curl http://127.0.0.1:8000/api/sante/`.
 
+## Langues (fiche `docs/decisions/7-multilingue.md`)
+
+- L'API répond dans la langue de l'en-tête `Accept-Language` (`fr` par défaut, `en`, `zh-hans`, `de`, `ja`) :
+  `LocaleMiddleware`, messages de Django et DRF déjà traduits, messages du CIR dans `locale/*/LC_MESSAGES/django.po`.
+- Après avoir ajouté ou modifié un message `_("…")` : le traduire dans les quatre `.po`, puis
+  `python manage.py compiler_traductions` (sans gettext ; `--verifier` pour contrôler seulement).
+- `apps/noyau/langues.py` : codes courts (`fr, en, zh, de, ja`) ↔ codes Django (`zh-hans`), `langue_active()`.
+- `apps/noyau/traductions.py` : traduction du contenu saisi par l'équipe (champ JSON `traductions`), voir son en-tête.
+
 ## Réglages
 
 - `config/settings/dev.py` (par défaut pour `manage.py`) : SQLite, DEBUG.
@@ -30,13 +39,13 @@ Tests : `python manage.py test`. Vérification : `curl http://127.0.0.1:8000/api
 | Méthode | Route | Accès |
 |---|---|---|
 | GET | `/api/sante/` | public |
-| POST | `/api/comptes/inscription/` | public : `email, mot_de_passe, nom_complet, telephone?, ville, quartier, rue_ou_repere` → `{utilisateur, acces, rafraichissement}` |
+| POST | `/api/comptes/inscription/` | public : `email, mot_de_passe, nom_complet, telephone?, ville, quartier, rue_ou_repere, langue?` (défaut : langue de la requête) → `{utilisateur, acces, rafraichissement}` |
 | POST | `/api/comptes/connexion/` | public : `email, mot_de_passe` → `{acces, rafraichissement, utilisateur}` ; blocage 15 min après 5 échecs |
 | POST | `/api/comptes/connexion/rafraichir/` | `rafraichissement` → `{acces, rafraichissement}` |
 | POST | `/api/comptes/deconnexion/` | `rafraichissement` (mis en liste noire) |
-| GET, PATCH, PUT | `/api/comptes/moi/` | connecté (nom, téléphone, adresse modifiables) |
+| GET, PATCH, PUT | `/api/comptes/moi/` | connecté (nom, téléphone, adresse, `langue` modifiables) |
 | POST | `/api/admin/comptes/connexion/` | connexion du tableau de bord (refusée aux clients, 403) |
-| GET, POST | `/api/admin/comptes/equipe/` | super-admin : liste, ajout (`email, nom_complet, mot_de_passe, telephone?, role?`) |
+| GET, POST | `/api/admin/comptes/equipe/` | super-admin : liste, ajout (`email, nom_complet, mot_de_passe, telephone?, role?, langue?`) |
 | GET | `/api/admin/comptes/equipe/<id>/` | super-admin |
 | POST | `/api/admin/comptes/equipe/<id>/desactiver/` et `/reactiver/` | super-admin |
 | GET | `/api/admin/comptes/clients/` et `/<id>/` | équipe ; `?search=`, `?ville=`, `?is_active=`, `?adresse_complete=1/0`, `?taille=` |

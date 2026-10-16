@@ -2,7 +2,7 @@
 // et clé de stockage des jetons propre au tableau de bord.
 import { api } from '@/app/api.js';
 
-import { estEquipe, estSuperAdmin, libelleRole, OPTIONS_ROLES_EQUIPE, ROLES } from './roles.js';
+import { estEquipe, estSuperAdmin, libelleRole, optionsRolesEquipe, ROLES } from './roles.js';
 import { cheminDeSuite } from './suite.js';
 import { validerConnexion } from './validation.js';
 
@@ -81,7 +81,7 @@ describe('rôles', () => {
   });
 
   it("ne propose que les rôles de l'équipe à l'ajout (valeurs du back-end)", () => {
-    expect(OPTIONS_ROLES_EQUIPE.map(([v]) => v)).toEqual(['membre', 'super_admin']);
+    expect(optionsRolesEquipe()).toEqual([['membre', "Membre de l'équipe"], ['super_admin', 'Super-administrateur']]);
     expect(libelleRole('super_admin')).toBe('Super-administrateur');
     expect(libelleRole('inconnu')).toBe('inconnu');
     expect(libelleRole(undefined)).toBe('');

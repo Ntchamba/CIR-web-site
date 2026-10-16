@@ -8,13 +8,16 @@ import Champ from '@partage/ui/Champ.jsx';
 import MessageErreur from '@partage/ui/MessageErreur.jsx';
 import usePageMeta from '@partage/utils/usePageMeta.js';
 
+import { useTraduction } from '@/i18n/index.js';
+
 import { useAuth } from './AuthContext.jsx';
 import { cheminDeSuite } from './suite.js';
 import { validerConnexion } from './validation.js';
 import styles from './Compte.module.css';
 
 export default function ConnexionPage() {
-  usePageMeta('Se connecter', 'Connectez-vous à votre compte CIR pour commander et suivre vos travaux.');
+  const { t } = useTraduction();
+  usePageMeta(t('compte.connexion.titre'), t('compte.connexion.description'));
   const { utilisateur, pret, seConnecter } = useAuth();
   const [parametres] = useSearchParams();
   const suite = cheminDeSuite(parametres);
@@ -48,20 +51,20 @@ export default function ConnexionPage() {
   return (
     <div className={`conteneur section ${styles.page}`}>
       <div className={styles.carte}>
-        <h1 className="titre-page">Se connecter</h1>
-        <p className={styles.intro}>Accédez à vos commandes et au suivi de vos travaux.</p>
+        <h1 className="titre-page">{t('compte.connexion.titre')}</h1>
+        <p className={styles.intro}>{t('compte.connexion.intro')}</p>
         <form onSubmit={envoyer} className={styles.champs} noValidate>
-          <Champ libelle="E-mail" name="email" type="email" value={form.email} onChange={changer}
+          <Champ libelle={t('compte.champs.email')} name="email" type="email" value={form.email} onChange={changer}
             erreur={erreurs.email} autoComplete="email" inputMode="email" required />
-          <Champ libelle="Mot de passe" name="mot_de_passe" type="password" value={form.mot_de_passe} onChange={changer}
+          <Champ libelle={t('compte.champs.motDePasse')} name="mot_de_passe" type="password" value={form.mot_de_passe} onChange={changer}
             erreur={erreurs.mot_de_passe} autoComplete="current-password" required />
           <MessageErreur erreur={erreur} />
-          <Bouton type="submit" chargement={envoi} taille="large">Se connecter</Bouton>
+          <Bouton type="submit" chargement={envoi} taille="large">{t('compte.connexion.bouton')}</Bouton>
         </form>
         <p className={styles.bascule}>
-          Pas encore de compte ?{' '}
+          {t('compte.connexion.pasDeCompte')}{' '}
           <Link to={`/inscription${parametres.get('suite') ? `?suite=${encodeURIComponent(suite)}` : ''}`}>
-            Créer un compte
+            {t('compte.connexion.creer')}
           </Link>
         </p>
       </div>

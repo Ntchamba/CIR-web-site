@@ -73,6 +73,9 @@
   background: var(--blanc); color: var(--encre-2); font: inherit; cursor: pointer;
 }
 .sortie:hover { border-color: var(--corail); color: var(--corail-fonce); }
+.langue { flex-shrink: 0; color: var(--encre-2); }
+.langue select { border-color: var(--filet); border-radius: var(--rayon-s); }
+.langue select:hover { border-color: var(--encre-2); }
 
 .contenu { flex: 1 0 auto; padding: clamp(20px, 3vw, 36px) clamp(16px, 3vw, 32px); outline: none; }
 
@@ -93,4 +96,5 @@
 @media (max-width: 560px) {
   .identite small { display: none; }
   .sortie span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .langue select { padding: 0 10px 0 32px; font-size: 13px; }
 }

@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router';
 
+import { useTraduction } from '@/i18n/index.js';
+
 import Entete from './Entete.jsx';
 import MenuLateral from './MenuLateral.jsx';
 import styles from './Coque.module.css';
@@ -9,6 +11,7 @@ import styles from './Coque.module.css';
 const ID_MENU = 'menu-tableau-de-bord';
 
 export default function Coque() {
+  const { t } = useTraduction();
   const [menuOuvert, setMenuOuvert] = useState(false);
   const { pathname } = useLocation();
 
@@ -23,7 +26,7 @@ export default function Coque() {
 
   return (
     <div className={styles.coque}>
-      <a href="#contenu" className={styles.evitement}>Aller au contenu</a>
+      <a href="#contenu" className={styles.evitement}>{t('coque.allerAuContenu')}</a>
       <MenuLateral id={ID_MENU} ouvert={menuOuvert} surNavigation={() => setMenuOuvert(false)} />
       {menuOuvert && <div className={styles.voile} onClick={() => setMenuOuvert(false)} aria-hidden="true" />}
       <div className={styles.principal}>

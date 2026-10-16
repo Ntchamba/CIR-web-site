@@ -1,0 +1,119 @@
+# Messages de l'API CIR : 日本語. Langue source : français (dans le code).
+# Après modification : python manage.py compiler_traductions
+msgid ""
+msgstr ""
+"Project-Id-Version: CIR\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: apps/comptes/adresses.py:10
+msgid "La rue ou un repère est obligatoire."
+msgstr "通りまたは目印は必須です。"
+
+#: apps/comptes/adresses.py:8
+msgid "La ville est obligatoire."
+msgstr "都市は必須です。"
+
+#: apps/comptes/adresses.py:9
+msgid "Le quartier est obligatoire."
+msgstr "地区は必須です。"
+
+#: apps/comptes/jwt.py:23
+#: apps/comptes/views.py:61
+msgid "E-mail ou mot de passe incorrect."
+msgstr "メールアドレスまたはパスワードが正しくありません。"
+
+#: apps/comptes/jwt.py:55
+msgid "Ce compte n'a pas accès au tableau de bord."
+msgstr "このアカウントには管理画面へのアクセス権がありません。"
+
+#: apps/comptes/roles.py:7
+msgid "Client"
+msgstr "顧客"
+
+#: apps/comptes/roles.py:8
+msgid "Membre de l'équipe"
+msgstr "チームメンバー"
+
+#: apps/comptes/roles.py:9
+msgid "Super-administrateur"
+msgstr "スーパー管理者"
+
+#: apps/comptes/services.py:114
+#: apps/noyau/permissions.py:22
+msgid "Accès réservé aux super-administrateurs."
+msgstr "スーパー管理者のみアクセスできます。"
+
+#: apps/comptes/services.py:122
+msgid "Rôle invalide pour un membre de l'équipe."
+msgstr "チームメンバーとして無効な役割です。"
+
+#: apps/comptes/services.py:137
+#: apps/comptes/services.py:152
+msgid "Ce compte n'appartient pas à l'équipe."
+msgstr "このアカウントはチームに属していません。"
+
+#: apps/comptes/services.py:139
+msgid "Vous ne pouvez pas retirer votre propre accès."
+msgstr "ご自身のアクセス権を取り消すことはできません。"
+
+#: apps/comptes/services.py:143
+msgid "Il doit rester au moins un super-administrateur actif."
+msgstr "有効なスーパー管理者を少なくとも 1 名残す必要があります。"
+
+#: apps/comptes/services.py:28
+#: apps/comptes/services.py:59
+msgid "Un compte existe déjà avec cette adresse e-mail."
+msgstr "このメールアドレスのアカウントはすでに存在します。"
+
+#: apps/comptes/services.py:42
+msgid "Le nom complet est obligatoire."
+msgstr "氏名は必須です。"
+
+#: apps/comptes/services.py:49
+msgid "Langue non prise en charge."
+msgstr "対応していない言語です。"
+
+#: apps/comptes/views.py:53
+msgid "Trop d'essais incorrects. Réessayez dans 15 minutes."
+msgstr "誤った試行が多すぎます。15 分後にもう一度お試しください。"
+
+#: apps/noyau/images.py:46
+#, python-format
+msgid "Image trop lourde (maximum %(mo)s Mo)."
+msgstr "画像のサイズが大きすぎます（最大 %(mo)s MB）。"
+
+#: apps/noyau/images.py:50
+msgid "Fichier image illisible."
+msgstr "画像ファイルを読み込めません。"
+
+#: apps/noyau/images.py:53
+msgid "Image trop grande (nombre de pixels)."
+msgstr "画像の解像度が大きすぎます（ピクセル数）。"
+
+#: apps/noyau/permissions.py:13
+msgid "Accès réservé à l'équipe du CIR."
+msgstr "CIR チームのみアクセスできます。"
+
+#: apps/noyau/traductions.py:70
+#: apps/noyau/traductions.py:76
+msgid "Les traductions doivent être un objet {langue: {champ: texte}}."
+msgstr "翻訳は {langue: {champ: texte}} 形式のオブジェクトである必要があります。"
+
+#: apps/noyau/traductions.py:74
+#, python-format
+msgid "Langue non prise en charge : %(langue)s."
+msgstr "対応していない言語です：%(langue)s。"
+
+#: apps/noyau/traductions.py:80
+#, python-format
+msgid "Ce champ ne se traduit pas : %(champ)s."
+msgstr "このフィールドは翻訳できません：%(champ)s。"
+
+#: apps/noyau/traductions.py:84
+#, python-format
+msgid "Une traduction doit être un texte (%(champ)s)."
+msgstr "翻訳はテキストである必要があります（%(champ)s）。"

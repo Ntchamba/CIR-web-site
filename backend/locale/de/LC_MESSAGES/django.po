@@ -1,0 +1,119 @@
+# Messages de l'API CIR : Deutsch. Langue source : français (dans le code).
+# Après modification : python manage.py compiler_traductions
+msgid ""
+msgstr ""
+"Project-Id-Version: CIR\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: apps/comptes/adresses.py:10
+msgid "La rue ou un repère est obligatoire."
+msgstr "Eine Straße oder ein Orientierungspunkt ist erforderlich."
+
+#: apps/comptes/adresses.py:8
+msgid "La ville est obligatoire."
+msgstr "Die Stadt ist erforderlich."
+
+#: apps/comptes/adresses.py:9
+msgid "Le quartier est obligatoire."
+msgstr "Das Stadtviertel ist erforderlich."
+
+#: apps/comptes/jwt.py:23
+#: apps/comptes/views.py:61
+msgid "E-mail ou mot de passe incorrect."
+msgstr "E-Mail-Adresse oder Passwort falsch."
+
+#: apps/comptes/jwt.py:55
+msgid "Ce compte n'a pas accès au tableau de bord."
+msgstr "Dieses Konto hat keinen Zugriff auf das Dashboard."
+
+#: apps/comptes/roles.py:7
+msgid "Client"
+msgstr "Kunde"
+
+#: apps/comptes/roles.py:8
+msgid "Membre de l'équipe"
+msgstr "Teammitglied"
+
+#: apps/comptes/roles.py:9
+msgid "Super-administrateur"
+msgstr "Super-Administrator"
+
+#: apps/comptes/services.py:114
+#: apps/noyau/permissions.py:22
+msgid "Accès réservé aux super-administrateurs."
+msgstr "Zugriff nur für Super-Administratoren."
+
+#: apps/comptes/services.py:122
+msgid "Rôle invalide pour un membre de l'équipe."
+msgstr "Ungültige Rolle für ein Teammitglied."
+
+#: apps/comptes/services.py:137
+#: apps/comptes/services.py:152
+msgid "Ce compte n'appartient pas à l'équipe."
+msgstr "Dieses Konto gehört nicht zum Team."
+
+#: apps/comptes/services.py:139
+msgid "Vous ne pouvez pas retirer votre propre accès."
+msgstr "Sie können Ihren eigenen Zugriff nicht entziehen."
+
+#: apps/comptes/services.py:143
+msgid "Il doit rester au moins un super-administrateur actif."
+msgstr "Es muss mindestens ein aktiver Super-Administrator verbleiben."
+
+#: apps/comptes/services.py:28
+#: apps/comptes/services.py:59
+msgid "Un compte existe déjà avec cette adresse e-mail."
+msgstr "Mit dieser E-Mail-Adresse existiert bereits ein Konto."
+
+#: apps/comptes/services.py:42
+msgid "Le nom complet est obligatoire."
+msgstr "Der vollständige Name ist erforderlich."
+
+#: apps/comptes/services.py:49
+msgid "Langue non prise en charge."
+msgstr "Nicht unterstützte Sprache."
+
+#: apps/comptes/views.py:53
+msgid "Trop d'essais incorrects. Réessayez dans 15 minutes."
+msgstr "Zu viele Fehlversuche. Versuchen Sie es in 15 Minuten erneut."
+
+#: apps/noyau/images.py:46
+#, python-format
+msgid "Image trop lourde (maximum %(mo)s Mo)."
+msgstr "Bild zu groß (maximal %(mo)s MB)."
+
+#: apps/noyau/images.py:50
+msgid "Fichier image illisible."
+msgstr "Bilddatei nicht lesbar."
+
+#: apps/noyau/images.py:53
+msgid "Image trop grande (nombre de pixels)."
+msgstr "Bild zu groß (Anzahl der Pixel)."
+
+#: apps/noyau/permissions.py:13
+msgid "Accès réservé à l'équipe du CIR."
+msgstr "Zugriff nur für das CIR-Team."
+
+#: apps/noyau/traductions.py:70
+#: apps/noyau/traductions.py:76
+msgid "Les traductions doivent être un objet {langue: {champ: texte}}."
+msgstr "Übersetzungen müssen ein Objekt {langue: {champ: texte}} sein."
+
+#: apps/noyau/traductions.py:74
+#, python-format
+msgid "Langue non prise en charge : %(langue)s."
+msgstr "Nicht unterstützte Sprache: %(langue)s."
+
+#: apps/noyau/traductions.py:80
+#, python-format
+msgid "Ce champ ne se traduit pas : %(champ)s."
+msgstr "Dieses Feld ist nicht übersetzbar: %(champ)s."
+
+#: apps/noyau/traductions.py:84
+#, python-format
+msgid "Une traduction doit être un texte (%(champ)s)."
+msgstr "Eine Übersetzung muss ein Text sein (%(champ)s)."

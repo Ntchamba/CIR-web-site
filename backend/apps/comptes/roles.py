@@ -1,11 +1,12 @@
 """Rôles des comptes : client (site public), membre et super-administrateur (équipe du CIR)."""
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class Role(models.TextChoices):
-    CLIENT = "client", "Client"
-    MEMBRE = "membre", "Membre de l'équipe"
-    SUPER_ADMIN = "super_admin", "Super-administrateur"
+    CLIENT = "client", _("Client")
+    MEMBRE = "membre", _("Membre de l'équipe")
+    SUPER_ADMIN = "super_admin", _("Super-administrateur")
 
 
 ROLES_EQUIPE = (Role.MEMBRE, Role.SUPER_ADMIN)

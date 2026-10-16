@@ -87,8 +87,10 @@ describe('InscriptionPage', () => {
       ville: 'Douala',
       quartier: 'Bonapriso',
       rue_ou_repere: 'Près de la pharmacie',
+      langue: 'fr', // langue de l'interface, gardée dans le compte (e-mails)
     });
     expect(init.headers.Authorization).toBeUndefined();
+    expect(init.headers['Accept-Language']).toBe('fr');
     expect(JSON.parse(localStorage.getItem(CLE_JETONS))).toEqual({ acces: 'A1', rafraichissement: 'R1' });
     // une seule requête : pas de connexion supplémentaire
     expect(fetch).toHaveBeenCalledTimes(1);

@@ -29,7 +29,7 @@ class UtilisateurAdmin(UserAdmin):
     readonly_fields = ["date_inscription", "last_login"]
     fieldsets = [
         (None, {"fields": ["email", "password"]}),
-        ("Identité", {"fields": ["nom_complet", "telephone", "role"]}),
+        ("Identité", {"fields": ["nom_complet", "telephone", "role", "langue"]}),
         ("Adresse", {"fields": ["ville", "quartier", "rue_ou_repere"]}),
         ("Accès", {"fields": ["is_active"]}),
         ("Dates", {"fields": ["date_inscription", "last_login"]}),

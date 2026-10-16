@@ -14,6 +14,7 @@ const TRACES = {
   coche: 'M5 12l5 5 9-10',
   carte: 'M12 21s-7-6-7-11a7 7 0 1 1 14 0c0 5-7 11-7 11zM12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
   sortie: 'M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10',
+  langue: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3.5 9h17M3.5 15h17M12 3c-2.4 2.6-3.6 5.6-3.6 9s1.2 6.4 3.6 9c2.4-2.6 3.6-5.6 3.6-9S14.4 5.6 12 3z',
 };
 
 export const NOMS_ICONES = Object.keys(TRACES);

@@ -1,6 +1,8 @@
 """Sérialiseurs des comptes : mise en forme et contrôle de forme. Les règles sont dans services.py."""
 from rest_framework import serializers
 
+from apps.noyau.langues import Langue
+
 from . import services
 from .models import Utilisateur
 from .roles import ROLES_EQUIPE, Role
@@ -16,7 +18,7 @@ class UtilisateurSerializer(serializers.ModelSerializer):
     class Meta:
         model = Utilisateur
         fields = [
-            "id", "email", "nom_complet", "telephone", "role", "est_equipe",
+            "id", "email", "nom_complet", "telephone", "role", "est_equipe", "langue",
             "ville", "quartier", "rue_ou_repere", "adresse_complete", "adresse_formatee", "date_inscription",
         ]
         read_only_fields = ["id", "email", "role", "date_inscription"]
@@ -33,6 +35,8 @@ class InscriptionSerializer(serializers.Serializer):
     ville = serializers.CharField(max_length=80)
     quartier = serializers.CharField(max_length=80)
     rue_ou_repere = serializers.CharField(max_length=200)
+    # Facultatif : sinon la langue de la requête (Accept-Language)
+    langue = serializers.ChoiceField(choices=Langue.choices, required=False)
 
     def create(self, validated_data):
         return services.inscrire_client(**validated_data)
@@ -48,7 +52,7 @@ class MembreEquipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Utilisateur
-        fields = ["id", "email", "nom_complet", "telephone", "role", "actif", "mot_de_passe",
+        fields = ["id", "email", "nom_complet", "telephone", "role", "langue", "actif", "mot_de_passe",
                   "date_inscription", "derniere_connexion"]
         read_only_fields = ["id", "date_inscription"]
         extra_kwargs = {"email": {"validators": []}}  # unicité contrôlée par services.py
@@ -64,7 +68,7 @@ class ClientListeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Utilisateur
         fields = ["id", "email", "nom_complet", "telephone", "ville", "quartier", "adresse_complete",
-                  "actif", "date_inscription"]
+                  "langue", "actif", "date_inscription"]
         read_only_fields = fields
 
 

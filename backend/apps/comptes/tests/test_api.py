@@ -247,7 +247,7 @@ class MoiApiTests(Base):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(set(r.data), {
             "id", "email", "nom_complet", "telephone", "role", "est_equipe", "ville", "quartier",
-            "rue_ou_repere", "adresse_complete", "adresse_formatee", "date_inscription",
+            "rue_ou_repere", "adresse_complete", "adresse_formatee", "date_inscription", "langue",
         })
 
     def test_modification_partielle(self):
@@ -365,7 +365,7 @@ class EquipeApiTests(EquipeBase):
         self.assertEqual([m["nom_complet"] for m in r.data["results"]], ["Admin", "Membre"])
         for m in r.data["results"]:
             self.assert_sans_champs_sensibles(m)
-            self.assertEqual(set(m), {"id", "email", "nom_complet", "telephone", "role", "actif",
+            self.assertEqual(set(m), {"id", "email", "nom_complet", "telephone", "role", "langue", "actif",
                                       "date_inscription", "derniere_connexion"})
         self.assertEqual(self.client.get(f"{URL_EQUIPE}{self.client_cir.pk}/").status_code, 404)
 

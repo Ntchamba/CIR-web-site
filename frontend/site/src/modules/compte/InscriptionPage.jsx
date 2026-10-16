@@ -8,6 +8,8 @@ import Champ from '@partage/ui/Champ.jsx';
 import MessageErreur from '@partage/ui/MessageErreur.jsx';
 import usePageMeta from '@partage/utils/usePageMeta.js';
 
+import { useTraduction } from '@/i18n/index.js';
+
 import { ADRESSE_VIDE } from './adresse.js';
 import { useAuth } from './AuthContext.jsx';
 import FormulaireAdresse from './FormulaireAdresse.jsx';
@@ -18,7 +20,8 @@ import styles from './Compte.module.css';
 const FORMULAIRE_VIDE = { nom_complet: '', email: '', telephone: '', mot_de_passe: '', ...ADRESSE_VIDE };
 
 export default function InscriptionPage() {
-  usePageMeta('Créer un compte', 'Créez votre compte CIR pour commander vos revêtements de sol en résine époxy.');
+  const { t } = useTraduction();
+  usePageMeta(t('compte.inscription.titre'), t('compte.inscription.description'));
   const { utilisateur, pret, sInscrire } = useAuth();
   const [parametres] = useSearchParams();
   const suite = cheminDeSuite(parametres);
@@ -39,7 +42,7 @@ export default function InscriptionPage() {
     setErreurs(locales);
     setErreur(null);
     if (Object.keys(locales).length) {
-      setErreur('Certaines informations manquent ou sont incorrectes. Vérifiez le formulaire.');
+      setErreur(t('compte.inscription.incomplet'));
       return;
     }
     setEnvoi(true);
@@ -61,36 +64,36 @@ export default function InscriptionPage() {
   return (
     <div className={`conteneur section ${styles.page}`}>
       <div className={`${styles.carte} ${styles.carteLarge}`}>
-        <h1 className="titre-page">Créer un compte</h1>
-        <p className={styles.intro}>Votre compte permet de commander et de suivre vos travaux.</p>
+        <h1 className="titre-page">{t('compte.inscription.titre')}</h1>
+        <p className={styles.intro}>{t('compte.inscription.intro')}</p>
         <form onSubmit={envoyer} className={styles.champs} noValidate>
           <fieldset className={styles.groupe}>
-            <legend>Vos coordonnées</legend>
-            <Champ libelle="Nom complet" name="nom_complet" value={form.nom_complet} onChange={changer}
+            <legend>{t('compte.inscription.coordonnees')}</legend>
+            <Champ libelle={t('compte.champs.nomComplet')} name="nom_complet" value={form.nom_complet} onChange={changer}
               erreur={erreurs.nom_complet} autoComplete="name" required />
-            <Champ libelle="E-mail" name="email" type="email" value={form.email} onChange={changer}
+            <Champ libelle={t('compte.champs.email')} name="email" type="email" value={form.email} onChange={changer}
               erreur={erreurs.email} autoComplete="email" inputMode="email" required />
-            <Champ libelle="Téléphone" name="telephone" type="tel" value={form.telephone} onChange={changer}
-              erreur={erreurs.telephone} autoComplete="tel" placeholder="+237 6XX XX XX XX"
-              aide="Facultatif, mais utile pour que notre équipe vous rappelle." />
-            <Champ libelle="Mot de passe" name="mot_de_passe" type="password" value={form.mot_de_passe}
+            <Champ libelle={t('compte.champs.telephone')} name="telephone" type="tel" value={form.telephone} onChange={changer}
+              erreur={erreurs.telephone} autoComplete="tel" placeholder={t('compte.exemples.telephone')}
+              aide={t('compte.aides.telephone')} />
+            <Champ libelle={t('compte.champs.motDePasse')} name="mot_de_passe" type="password" value={form.mot_de_passe}
               onChange={changer} erreur={erreurs.mot_de_passe} autoComplete="new-password"
-              aide="8 caractères au moins, pas uniquement des chiffres." required />
+              aide={t('compte.aides.motDePasse')} required />
           </fieldset>
 
           <fieldset className={styles.groupe}>
-            <legend>Votre adresse</legend>
-            <p className={styles.aide}>Elle est nécessaire pour commander et pour la venue de notre équipe.</p>
+            <legend>{t('compte.inscription.adresse')}</legend>
+            <p className={styles.aide}>{t('compte.inscription.adresseAide')}</p>
             <FormulaireAdresse valeur={adresse} onChange={changerAdresse} erreurs={erreurs} />
           </fieldset>
 
           <MessageErreur erreur={erreur} />
-          <Bouton type="submit" chargement={envoi} taille="large">Créer mon compte</Bouton>
+          <Bouton type="submit" chargement={envoi} taille="large">{t('compte.inscription.bouton')}</Bouton>
         </form>
         <p className={styles.bascule}>
-          Déjà un compte ?{' '}
+          {t('compte.inscription.dejaUnCompte')}{' '}
           <Link to={`/connexion${parametres.get('suite') ? `?suite=${encodeURIComponent(suite)}` : ''}`}>
-            Se connecter
+            {t('compte.inscription.seConnecter')}
           </Link>
         </p>
       </div>
