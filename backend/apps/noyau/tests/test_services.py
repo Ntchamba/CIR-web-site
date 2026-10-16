@@ -1,6 +1,7 @@
 """Tests des utilitaires du noyau : conversion WebP, permissions, pagination."""
 from io import BytesIO
 from types import SimpleNamespace
+from unittest import mock
 
 from django.contrib.auth.models import AnonymousUser
 from django.test import SimpleTestCase
@@ -237,3 +238,86 @@ class PaginationTests(SimpleTestCase):
     def test_reglage_par_defaut_de_l_api(self):
         from django.conf import settings
         self.assertEqual(settings.REST_FRAMEWORK["DEFAULT_PAGINATION_CLASS"], "apps.noyau.pagination.PaginationStandard")
+
+
+class LimitesImagesTests(SimpleTestCase):
+    """Fichiers trop lourds, trop grands en pixels ou illisibles : refusés avant décodage (ImageInvalide)."""
+
+    def test_limites_par_defaut(self):
+        self.assertEqual(images.OCTETS_MAX, 10 * 1024 * 1024)
+        self.assertEqual(images.PIXELS_MAX, 40_000_000)
+        self.assertTrue(issubclass(images.ImageInvalide, ValueError))
+
+    def test_fichier_trop_lourd(self):
+        source = image_en_octets(taille=(100, 100))
+        with self.assertRaises(images.ImageInvalide) as ctx:
+            convertir_en_webp(source, octets_max=len(source.getvalue()) - 1)
+        self.assertIn("lourde", str(ctx.exception))
+
+    def test_fichier_a_la_limite_accepte(self):
+        source = image_en_octets(taille=(100, 100))
+        convertir_en_webp(source, octets_max=len(source.getvalue()))
+
+    def test_taille_lue_sans_deplacer_la_position(self):
+        source = image_en_octets()
+        source.seek(3)
+        self.assertEqual(images.taille_en_octets(source), len(source.getvalue()))
+        self.assertEqual(source.tell(), 3)
+
+    def test_taille_d_un_fichier_envoye_et_d_un_chemin(self):
+        import os
+        import tempfile
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        envoi = SimpleUploadedFile("photo.png", image_en_octets().getvalue(), content_type="image/png")
+        self.assertEqual(images.taille_en_octets(envoi), envoi.size)
+        with self.assertRaises(images.ImageInvalide):
+            convertir_en_webp(envoi, octets_max=10)
+        with tempfile.TemporaryDirectory() as dossier:
+            chemin = os.path.join(dossier, "photo.png")
+            with open(chemin, "wb") as f:
+                f.write(image_en_octets().getvalue())
+            self.assertEqual(images.taille_en_octets(chemin), os.path.getsize(chemin))
+            with self.assertRaises(images.ImageInvalide):
+                convertir_en_webp(chemin, octets_max=10)
+
+    def test_trop_de_pixels_refuse_avant_decodage(self):
+        source = image_en_octets(taille=(200, 100))
+        with mock.patch.object(Image.Image, "load", side_effect=AssertionError("décodé")), \
+                self.assertRaises(images.ImageInvalide) as ctx:
+            convertir_en_webp(source, pixels_max=200 * 100 - 1)
+        self.assertIn("pixels", str(ctx.exception))
+        convertir_en_webp(image_en_octets(taille=(200, 100)), pixels_max=200 * 100)
+
+    def test_bombe_de_decompression_refusee(self):
+        """En-tête PNG annonçant 20000 x 20000 px dans un fichier minuscule."""
+        import struct
+        import zlib
+        def bloc(type_, donnees):
+            return struct.pack(">I", len(donnees)) + type_ + donnees + struct.pack(">I", zlib.crc32(type_ + donnees))
+        png = b"\x89PNG\r\n\x1a\n" + bloc(b"IHDR", struct.pack(">IIBBBBB", 20000, 20000, 8, 2, 0, 0, 0)) \
+            + bloc(b"IDAT", zlib.compress(b"")) + bloc(b"IEND", b"")
+        with self.assertRaises(images.ImageInvalide):
+            convertir_en_webp(BytesIO(png))
+
+    def test_fichier_illisible(self):
+        with self.assertRaises(images.ImageInvalide) as ctx:
+            convertir_en_webp(BytesIO(b"pas une image"))
+        self.assertIn("illisible", str(ctx.exception))
+
+    def test_palette_sans_transparence_en_rgb(self):
+        tampon = BytesIO()
+        Image.new("RGB", (20, 20), "red").convert("P").save(tampon, "PNG")
+        tampon.seek(0)
+        self.assertEqual(ouvrir(convertir_en_webp(tampon)).mode, "RGB")
+
+    def test_gif_transparent_en_rgba(self):
+        tampon = BytesIO()
+        Image.new("RGBA", (20, 20), (0, 0, 0, 0)).convert("P").save(tampon, "GIF", transparency=0)
+        tampon.seek(0)
+        self.assertEqual(ouvrir(convertir_en_webp(tampon)).mode, "RGBA")
+
+    def test_optimiser_champ_propage_le_refus(self):
+        champ = ChampFactice(b"pas une image")
+        with self.assertRaises(images.ImageInvalide):
+            optimiser_champ_image(champ)
+        self.assertEqual(champ.enregistrements, [])

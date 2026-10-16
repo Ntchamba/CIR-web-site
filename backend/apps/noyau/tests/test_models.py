@@ -11,11 +11,14 @@ from django.test import SimpleTestCase
 BACKEND = Path(settings.BASE_DIR)
 
 
-def charger_prod(**env):
+CODE_PROD = "import config.settings.prod as p; print(p.DEBUG, p.DATABASES['default']['ENGINE'], p.SECURE_SSL_REDIRECT)"
+
+
+def charger_prod(code=CODE_PROD, **env):
     """Importe config.settings.prod dans un sous-processus avec l'environnement donné."""
-    environnement = {k: v for k, v in os.environ.items() if not k.startswith(("DJANGO_", "DATABASE_URL"))}
+    environnement = {k: v for k, v in os.environ.items()
+                     if not k.startswith(("DJANGO_", "DATABASE_URL", "CORS_"))}
     environnement.update(env)
-    code = "import config.settings.prod as p; print(p.DEBUG, p.DATABASES['default']['ENGINE'], p.SECURE_SSL_REDIRECT)"
     return subprocess.run([sys.executable, "-c", code], cwd=BACKEND, env=environnement,
                           capture_output=True, text=True)
 
@@ -61,3 +64,38 @@ class ReglagesProductionTests(SimpleTestCase):
         r = charger_prod(DJANGO_SECRET_KEY=self.CLE, DATABASE_URL="postgres://u:p@h:5432/b", DJANGO_DEBUG="1")
         self.assertEqual(r.returncode, 0, r.stderr)
         self.assertEqual(r.stdout.split(), ["False", "django.db.backends.postgresql", "True"])
+
+    def lire_prod(self, expression, **env):
+        env = {"DJANGO_SECRET_KEY": self.CLE, "DATABASE_URL": "postgres://u:p@h:5432/b", **env}
+        r = charger_prod(f"import json, config.settings.prod as p; print(json.dumps({expression}))", **env)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        import json
+        return json.loads(r.stdout)
+
+    def test_origines_cors_et_csrf_par_defaut(self):
+        cors, csrf = self.lire_prod("[p.CORS_ALLOWED_ORIGINS, p.CSRF_TRUSTED_ORIGINS]")
+        attendues = {"https://revelation-sarl.com", "https://www.revelation-sarl.com",
+                     "https://admin.revelation-sarl.com"}
+        self.assertEqual(set(cors), attendues)
+        self.assertTrue(attendues <= set(csrf))
+        self.assertIn("https://api.revelation-sarl.com", csrf)
+        self.assertTrue(all(o.startswith("https://") for o in cors + csrf))
+        self.assertFalse(any("localhost" in o for o in cors + csrf))
+
+    def test_origines_remplacables_par_l_environnement(self):
+        cors, csrf = self.lire_prod("[p.CORS_ALLOWED_ORIGINS, p.CSRF_TRUSTED_ORIGINS]",
+                                    CORS_ALLOWED_ORIGINS="https://a.cm, https://b.cm",
+                                    DJANGO_CSRF_TRUSTED_ORIGINS="https://c.cm")
+        self.assertEqual(cors, ["https://a.cm", "https://b.cm"])
+        self.assertEqual(csrf, ["https://c.cm"])
+
+    def test_un_proxy_de_confiance_en_production(self):
+        self.assertEqual(self.lire_prod("p.REST_FRAMEWORK['NUM_PROXIES']"), 1)
+        self.assertEqual(self.lire_prod("p.REST_FRAMEWORK['NUM_PROXIES']", DJANGO_NOMBRE_PROXIES="2"), 2)
+        # le reste de la configuration DRF est conservé
+        self.assertEqual(self.lire_prod("p.REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']"), {"inscription": "20/hour"})
+
+
+class ProxysDeveloppementTests(SimpleTestCase):
+    def test_aucun_proxy_de_confiance_hors_production(self):
+        self.assertEqual(settings.REST_FRAMEWORK["NUM_PROXIES"], 0)

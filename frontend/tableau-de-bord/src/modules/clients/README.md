@@ -17,4 +17,4 @@ Tâches :
 - [x] Pagination (24 par page, celle du back-end)
 - [x] Fiche client en lecture (coordonnées, adresse, activité du compte)
 - [ ] Commandes et échanges du client sur la fiche (vagues suivantes)
-- [ ] Tests Vitest + Testing Library (agent `tableau-de-bord-testeur`)
+- [x] Tests Vitest + Testing Library (agent `tableau-de-bord-testeur`)

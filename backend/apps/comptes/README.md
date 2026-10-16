@@ -20,4 +20,4 @@ Fichiers propres au module :
 - [x] Règles métier dans `services.py` (jamais dans les vues)
 - [x] API publique `/api/comptes/` et API équipe `/api/admin/comptes/`
 - [x] Permissions
-- [ ] Tests unitaires et d'API (écrits et lancés par `backend-testeur`)
+- [x] Tests unitaires et d'API (écrits et lancés par `backend-testeur`)

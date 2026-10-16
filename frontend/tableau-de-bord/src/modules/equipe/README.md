@@ -19,4 +19,4 @@ Tâches :
       pas de bouton pour se retirer soi-même ; erreurs du serveur (ex. « Il doit rester au moins un
       super-administrateur actif. ») affichées en clair
 - [x] Page et entrée de menu réservées au super-administrateur (l’API `/equipe/` l’est aussi)
-- [ ] Tests Vitest + Testing Library (agent `tableau-de-bord-testeur`)
+- [x] Tests Vitest + Testing Library (agent `tableau-de-bord-testeur`)

@@ -19,4 +19,4 @@ Tâches :
 - [x] Contexte d’authentification : session restaurée au rechargement, compte non-équipe écarté, déconnexion
       (liste noire du jeton) même si le serveur est injoignable, déconnexion suivie entre onglets
 - [x] Route réservée à l’équipe (renvoi vers `/connexion?suite=…`) et variante super-administrateur
-- [ ] Tests Vitest + Testing Library (agent `tableau-de-bord-testeur`)
+- [x] Tests Vitest + Testing Library (agent `tableau-de-bord-testeur`)

@@ -13,7 +13,7 @@ Gabarit commun : <Module>Page.jsx, composants/, api.js, use<Module>.js, <Module>
 - [x] `api.js` (appels), `adresse.js` (règles d'adresse, `adresseComplete`, `prenomDe`, `initialesDe`),
   `validation.js` (contrôles avant envoi), `suite.js` (`cheminDeSuite` : redirections internes seulement),
   `Compte.module.css`
-- [ ] Tests Vitest + Testing Library (agent `site-testeur`)
+- [x] Tests Vitest + Testing Library (agent `site-testeur`)
 
 Le serveur revérifie tout (adresse, mot de passe, unicité de l'e-mail) ; ses erreurs par champ s'affichent
 sous le champ concerné.

@@ -28,7 +28,7 @@ Jetons de session rangés sous `localStorage["cir-tdb.jetons"]`, séparés de ce
 - [x] `railway.toml`, `Dockerfile` (contexte : racine du dépôt), `.env.example`
 - [x] Aucune indexation : `public/robots.txt` (`Disallow: /`), `<meta name="robots" content="noindex">`,
       en-tête `X-Robots-Tag: noindex` servi par `serve` (`public/serve.json`)
-- [ ] Suite de tests complète (testeur)
+- [x] Suite de tests complète (testeur)
 
 ## Déploiement (Railway)
 

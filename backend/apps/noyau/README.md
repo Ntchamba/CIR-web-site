@@ -23,4 +23,4 @@ Fichiers propres au module :
 - [x] API publique : `GET /api/sante/` (`sante.py`) ; pas d'API équipe pour ce module
 - [x] Permissions (`EstEquipe`, `EstSuperAdmin`, `LectureSeule`)
 - [ ] `sitemap.py` (plan du site : quand catalogue, vitrine et actualités existeront)
-- [ ] Tests unitaires et d'API (écrits et lancés par `backend-testeur`)
+- [x] Tests unitaires et d'API (écrits et lancés par `backend-testeur`)

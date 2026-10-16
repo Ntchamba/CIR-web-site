@@ -262,3 +262,49 @@ class JetonsTests(TestCase):
         self.assertEqual((acces["role"], acces["nom_complet"]), ("membre", "Membre"))
         self.assertEqual(str(acces["user_id"]), str(u.pk))
         self.assertEqual(RefreshToken(jetons["rafraichissement"])["role"], "membre")
+
+
+class DoublonConcurrentTests(TestCase):
+    """Deux inscriptions simultanées : la seconde passe le contrôle préalable puis heurte l'unicité en base."""
+
+    def setUp(self):
+        self.admin = Utilisateur.objects.create_superuser("admin@cir.cm", MDP, nom_complet="Admin")
+        Utilisateur.objects.create_user("awa@exemple.cm", MDP, nom_complet="Awa")
+
+    def test_inscription_concurrente_donne_une_erreur_sur_l_email(self):
+        from unittest import mock
+        with mock.patch.object(services, "verifier_email_disponible", side_effect=services.normaliser_email):
+            with self.assertRaises(ValidationError) as ctx:
+                inscrire(email="AWA@exemple.cm")
+        self.assertIn("email", ctx.exception.detail)
+        self.assertEqual(Utilisateur.objects.filter(email="awa@exemple.cm").count(), 1)
+        # la transaction reste utilisable après l'erreur
+        self.assertTrue(Utilisateur.objects.filter(email="admin@cir.cm").exists())
+
+    def test_ajout_de_membre_concurrent(self):
+        from unittest import mock
+        with mock.patch.object(services, "verifier_email_disponible", side_effect=services.normaliser_email):
+            with self.assertRaises(ValidationError) as ctx:
+                services.ajouter_membre(self.admin, email="awa@exemple.cm", mot_de_passe=MDP, nom_complet="X")
+        self.assertIn("email", ctx.exception.detail)
+        self.assertEqual(Utilisateur.objects.get(email="awa@exemple.cm").role, Role.CLIENT)
+
+
+class CleConnexionTests(TestCase):
+    def setUp(self):
+        cache.clear()
+
+    def test_cle_par_email_sans_ip(self):
+        self.assertEqual(services.cle_connexion(" A@B.cm "), "cir:connexion:a@b.cm")
+        self.assertEqual(services.cle_connexion_ip("1.2.3.4"), "cir:connexion-ip:1.2.3.4")
+        self.assertNotEqual(services.cle_connexion("x"), services.cle_connexion_ip("x"))
+
+    def test_seuil_specifique(self):
+        cle = services.cle_connexion_ip("1.2.3.4")
+        for _ in range(5):
+            services.enregistrer_echec_connexion(cle)
+        self.assertTrue(services.connexion_bloquee(cle))
+        self.assertFalse(services.connexion_bloquee(cle, 20))
+        for _ in range(15):
+            services.enregistrer_echec_connexion(cle)
+        self.assertTrue(services.connexion_bloquee(cle, 20))

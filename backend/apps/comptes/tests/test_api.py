@@ -539,3 +539,113 @@ class ClientsApiTests(EquipeBase):
         self.assertEqual(self.client.delete(url).status_code, 405)
         self.client_cir.refresh_from_db()
         self.assertEqual(self.client_cir.role, Role.CLIENT)
+
+
+# --- Corrections de sécurité (commit 00623fb) ---
+
+class AdresseIpTests(APITestCase):
+    def ip(self, **meta):
+        from rest_framework.request import Request
+        from rest_framework.test import APIRequestFactory
+        from apps.comptes.views import adresse_ip
+        return adresse_ip(Request(APIRequestFactory().get("/", **meta)))
+
+    def test_sans_proxy_x_forwarded_for_ignore(self):
+        self.assertEqual(self.ip(REMOTE_ADDR="9.9.9.9", HTTP_X_FORWARDED_FOR="1.1.1.1"), "9.9.9.9")
+
+    def test_un_proxy_prend_la_valeur_ajoutee_par_le_proxy(self):
+        from django.conf import settings
+        from django.test import override_settings
+        with override_settings(REST_FRAMEWORK={**settings.REST_FRAMEWORK, "NUM_PROXIES": 1}):
+            self.assertEqual(self.ip(REMOTE_ADDR="10.0.0.1", HTTP_X_FORWARDED_FOR="6.6.6.6, 41.202.1.2"),
+                             "41.202.1.2")
+            self.assertEqual(self.ip(REMOTE_ADDR="10.0.0.1", HTTP_X_FORWARDED_FOR="41.202.1.2"), "41.202.1.2")
+
+
+class CompteurIpApiTests(Base):
+    def setUp(self):
+        super().setUp()
+        self.u = Utilisateur.objects.create_user("awa@exemple.cm", MDP, nom_complet="Awa")
+
+    def test_vingt_echecs_sur_des_comptes_differents_bloquent_l_adresse(self):
+        for i in range(19):
+            self.assertEqual(self.connecter(f"inconnu{i}@exemple.cm", "faux").status_code, 401)
+        self.assertEqual(self.connecter("awa@exemple.cm").status_code, 200)  # 19 échecs : encore permis
+        self.connecter("inconnu19@exemple.cm", "faux")
+        r = self.connecter("awa@exemple.cm")
+        self.assertEqual(r.status_code, 429)
+        # une autre adresse n'est pas concernée
+        self.assertEqual(self.connecter("awa@exemple.cm", REMOTE_ADDR="10.9.9.9").status_code, 200)
+
+    def test_succes_ne_remet_pas_le_compteur_ip_a_zero(self):
+        for i in range(10):
+            self.connecter(f"a{i}@exemple.cm", "faux")
+        self.assertEqual(self.connecter("awa@exemple.cm").status_code, 200)
+        for i in range(10):
+            self.connecter(f"b{i}@exemple.cm", "faux")
+        self.assertEqual(self.connecter("awa@exemple.cm").status_code, 429)
+
+    def test_blocage_par_email_quelle_que_soit_l_adresse(self):
+        for i in range(5):
+            self.connecter("awa@exemple.cm", "faux", REMOTE_ADDR=f"10.0.0.{i}")
+        self.assertEqual(self.connecter("awa@exemple.cm", REMOTE_ADDR="10.0.0.99").status_code, 429)
+
+    def test_blocage_partage_entre_site_et_tableau_de_bord(self):
+        membre = Utilisateur.objects.create_user("m@cir.cm", MDP, nom_complet="M", role=Role.MEMBRE)
+        for _ in range(3):
+            self.connecter("m@cir.cm", "faux")
+        for _ in range(2):
+            self.connecter("m@cir.cm", "faux", url=URL_CONNEXION_EQUIPE)
+        self.assertEqual(self.connecter(membre.email, url=URL_CONNEXION_EQUIPE).status_code, 429)
+        self.assertEqual(self.connecter(membre.email).status_code, 429)
+
+    def test_derriere_un_proxy_x_forwarded_for_falsifie_sans_effet(self):
+        from django.conf import settings
+        from django.test import override_settings
+        with override_settings(REST_FRAMEWORK={**settings.REST_FRAMEWORK, "NUM_PROXIES": 1}):
+            for i in range(20):
+                self.connecter(f"x{i}@exemple.cm", "faux", HTTP_X_FORWARDED_FOR=f"6.6.6.{i}, 41.202.1.2")
+            r = self.connecter("awa@exemple.cm", HTTP_X_FORWARDED_FOR="7.7.7.7, 41.202.1.2")
+            self.assertEqual(r.status_code, 429)
+            r = self.connecter("awa@exemple.cm", HTTP_X_FORWARDED_FOR="41.202.1.3")
+            self.assertEqual(r.status_code, 200)
+
+
+class InscriptionCorrectionsApiTests(Base):
+    def test_vieux_jeton_n_empeche_pas_l_inscription(self):
+        self.authentifier("jeton.expire.invalide")
+        r = self.client.post(URL_INSCRIPTION, INSCRIPTION, format="json")
+        self.assertEqual(r.status_code, 201, r.content)
+
+    def test_doublon_concurrent_400_et_non_500(self):
+        from unittest import mock
+        from apps.comptes import services
+        Utilisateur.objects.create_user("awa@exemple.cm", MDP, nom_complet="Awa")
+        with mock.patch.object(services, "verifier_email_disponible", side_effect=services.normaliser_email):
+            r = self.client.post(URL_INSCRIPTION, INSCRIPTION, format="json")
+        self.assertEqual(r.status_code, 400, r.content)
+        self.assertIn("email", r.data)
+
+    def test_quota_derriere_un_proxy(self):
+        from django.conf import settings
+        from django.test import override_settings
+        with override_settings(REST_FRAMEWORK={**settings.REST_FRAMEWORK, "NUM_PROXIES": 1}):
+            for i in range(20):
+                self.client.post(URL_INSCRIPTION, {**INSCRIPTION, "email": f"u{i}@exemple.cm"}, format="json",
+                                 HTTP_X_FORWARDED_FOR=f"6.6.6.{i}, 41.202.1.2")
+            r = self.client.post(URL_INSCRIPTION, {**INSCRIPTION, "email": "u20@exemple.cm"}, format="json",
+                                 HTTP_X_FORWARDED_FOR="7.7.7.7, 41.202.1.2")
+            self.assertEqual(r.status_code, 429)
+            r = self.client.post(URL_INSCRIPTION, {**INSCRIPTION, "email": "u21@exemple.cm"}, format="json",
+                                 HTTP_X_FORWARDED_FOR="41.202.1.3")
+            self.assertEqual(r.status_code, 201)
+
+
+class FiltreVilleApiTests(EquipeBase):
+    def test_ville_insensible_a_la_casse_et_exacte(self):
+        Utilisateur.objects.create_user("y@exemple.cm", MDP, nom_complet="Y", ville="Douala-Bassa")
+        self.client.force_authenticate(self.membre)
+        for valeur in ("douala", " DOUALA ", "Douala"):
+            r = self.client.get(URL_CLIENTS, {"ville": valeur})
+            self.assertEqual([c["email"] for c in r.data["results"]], ["c@exemple.cm"], valeur)
+        self.assertEqual(self.client.get(URL_CLIENTS, {"ville": "  "}).data["count"], 2)
