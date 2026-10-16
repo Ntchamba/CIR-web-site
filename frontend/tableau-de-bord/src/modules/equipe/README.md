@@ -4,8 +4,19 @@
 
 Gabarit commun : <Module>Page.jsx, composants/, api.js, use<Module>.js, <Module>.module.css
 
-Fichiers prévus :
+Fichiers :
 
-- `EquipePage.jsx`
+- `EquipePage.jsx` : liste des membres, ajout, désactivation / réactivation
+- `composants/FormulaireMembre.jsx` : ajout (nom, e-mail, téléphone, rôle, mot de passe provisoire)
+- `composants/LigneMembre.jsx` : une ligne du tableau, retrait d’accès avec confirmation
+- `useEquipe.js`, `api.js` (`/api/admin/comptes/equipe/`, `<id>/desactiver/`, `<id>/reactiver/`), `Equipe.module.css`
 
-Tâches : agent `tableau-de-bord`, vérifiées par `tableau-de-bord-testeur` (tests Vitest + Testing Library).
+Tâches :
+
+- [x] Liste des membres (rôle, statut, dernière connexion)
+- [x] Ajout d’un membre, erreurs du serveur affichées sous les champs, en français
+- [x] Désactivation (avec confirmation) et réactivation, visibles seulement pour un super-administrateur ;
+      pas de bouton pour se retirer soi-même ; erreurs du serveur (ex. « Il doit rester au moins un
+      super-administrateur actif. ») affichées en clair
+- [x] Page et entrée de menu réservées au super-administrateur (l’API `/equipe/` l’est aussi)
+- [ ] Tests Vitest + Testing Library (agent `tableau-de-bord-testeur`)

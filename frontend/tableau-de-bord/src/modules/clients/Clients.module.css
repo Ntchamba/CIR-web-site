@@ -1,0 +1,43 @@
+.page { max-width: 1200px; display: grid; gap: var(--esp-5); }
+
+.filtres {
+  display: grid; gap: var(--esp-4); align-items: end;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto;
+}
+@media (max-width: 720px) { .filtres { grid-template-columns: 1fr; } }
+.effacer { justify-self: start; }
+
+.compte { color: var(--encre-3); font-size: 14px; }
+
+.tableau { padding: 0; overflow-x: auto; }
+.tableau table { width: 100%; border-collapse: collapse; min-width: 720px; }
+.tableau th, .tableau td { padding: var(--esp-3) var(--esp-4); text-align: left; vertical-align: middle; }
+.tableau th {
+  font-size: 13px; font-weight: 600; color: var(--encre-3);
+  border-bottom: 1px solid var(--filet); background: var(--fond-2);
+}
+.tableau tbody tr + tr td { border-top: 1px solid var(--filet-2); }
+.tableau tbody tr:hover td { background: var(--fond); }
+
+.nom { font-weight: 600; color: var(--bleu); }
+.secondaire { display: block; color: var(--encre-3); font-size: 14px; }
+.inactif td { color: var(--encre-3); }
+
+.pastille { display: inline-block; padding: 2px 10px; border-radius: var(--pastille); font-size: 13px; font-weight: 600; white-space: nowrap; }
+.ok { background: var(--succes-fond); color: var(--succes); }
+.attention { background: var(--st-negociation-f); color: var(--st-negociation-t); }
+.neutre { background: var(--st-annulee-f); color: var(--st-annulee-t); }
+
+.pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--esp-4); color: var(--encre-2); }
+
+.retour { display: inline-flex; align-items: center; gap: var(--esp-2); min-height: var(--cible-tactile); color: var(--bleu); font-weight: 600; }
+
+.enteteFiche { display: grid; gap: var(--esp-3); }
+.pastilles { display: flex; flex-wrap: wrap; gap: var(--esp-2); }
+
+.cartes { display: grid; gap: var(--esp-4); grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.titreCarte { font-family: var(--police-titre); font-size: 20px; font-weight: 500; margin-bottom: var(--esp-4); }
+.infos { display: grid; gap: var(--esp-3); margin: 0; }
+.info dt { font-size: 13px; color: var(--encre-3); }
+.info dd { margin: 0; font-weight: 500; overflow-wrap: anywhere; }
+.note { margin-top: var(--esp-3); color: var(--encre-3); font-size: 14px; }

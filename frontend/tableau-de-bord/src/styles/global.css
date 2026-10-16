@@ -1,0 +1,20 @@
+/* Styles généraux du tableau de bord (après jetons.css et base.css de frontend/partage). */
+
+body { background: var(--fond); color: var(--encre); }
+
+.titre-page {
+  font-family: var(--police-titre);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(26px, 4vw, 34px);
+  color: var(--encre);
+}
+
+.sous-titre-page { margin-top: var(--esp-1); color: var(--encre-3); }
+
+.carte {
+  background: var(--blanc);
+  border: 1px solid var(--filet-2);
+  border-radius: var(--rayon);
+  padding: var(--esp-5);
+}

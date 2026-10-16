@@ -1,0 +1,96 @@
+/* Coque : menu latéral sombre à gauche, en-tête blanc, contenu sur fond clair. */
+.coque { min-height: 100vh; display: flex; }
+
+.evitement {
+  position: absolute; left: 16px; top: -80px; z-index: 100;
+  padding: 10px 16px; border-radius: var(--rayon-s); background: var(--corail); color: var(--encre);
+}
+.evitement:focus { top: 12px; }
+
+/* --- Menu latéral --- */
+.menu {
+  position: sticky; top: 0;
+  flex: 0 0 260px; width: 260px; height: 100vh; overflow-y: auto;
+  padding: var(--esp-4) var(--esp-3) var(--esp-6);
+  background: var(--encre); color: #c9d7de;
+}
+.logo {
+  display: flex; align-items: center; gap: var(--esp-3);
+  padding: var(--esp-2); margin-bottom: var(--esp-4);
+  color: var(--blanc); text-decoration: none;
+}
+.logo img { border-radius: var(--rayon-s); background: var(--blanc); }
+.logo span { display: flex; flex-direction: column; line-height: 1.2; }
+.logo strong { font-family: var(--police-titre); font-size: 20px; }
+.logo small { color: #9fb4bf; font-size: 13px; }
+
+.section {
+  margin: var(--esp-4) var(--esp-3) var(--esp-2);
+  font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #8aa2ae;
+}
+.liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+
+.lien {
+  display: flex; align-items: center; gap: var(--esp-3);
+  min-height: var(--cible-tactile); padding: 0 var(--esp-3);
+  border-radius: var(--rayon-s); color: inherit; text-decoration: none;
+  transition: background var(--transition), color var(--transition);
+}
+.lien:hover { background: rgba(255, 255, 255, 0.07); color: var(--blanc); }
+.actif { background: rgba(255, 109, 76, 0.16); color: var(--blanc); box-shadow: inset 3px 0 0 var(--corail); }
+
+.bientot {
+  margin-left: auto; padding: 2px 8px; border-radius: var(--pastille);
+  background: rgba(255, 255, 255, 0.08); color: #9fb4bf; font-size: 11px; white-space: nowrap;
+}
+
+/* --- Zone principale --- */
+.principal { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+
+.entete {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; gap: var(--esp-4);
+  min-height: 64px; padding: 0 clamp(16px, 3vw, 32px);
+  background: var(--blanc); border-bottom: 1px solid var(--filet-2);
+}
+.boutonMenu {
+  display: none; align-items: center; justify-content: center;
+  width: var(--cible-tactile); height: var(--cible-tactile);
+  border: 0; border-radius: var(--rayon-s); background: none; color: var(--encre); cursor: pointer;
+}
+.moi { margin-left: auto; display: flex; align-items: center; gap: var(--esp-3); min-width: 0; }
+.avatar {
+  display: grid; place-items: center; flex: 0 0 38px; width: 38px; height: 38px;
+  border-radius: 50%; background: var(--bleu); color: var(--blanc); font-weight: 600; font-size: 14px;
+}
+.identite { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+.identite strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.identite small { color: var(--encre-3); font-size: 13px; }
+.sortie {
+  display: inline-flex; align-items: center; gap: var(--esp-2);
+  min-height: var(--cible-tactile); padding: 0 var(--esp-3);
+  border: 1px solid var(--filet); border-radius: var(--rayon-s);
+  background: var(--blanc); color: var(--encre-2); font: inherit; cursor: pointer;
+}
+.sortie:hover { border-color: var(--corail); color: var(--corail-fonce); }
+
+.contenu { flex: 1 0 auto; padding: clamp(20px, 3vw, 36px) clamp(16px, 3vw, 32px); outline: none; }
+
+.voile { display: none; }
+
+/* --- Téléphone et tablette : menu en tiroir --- */
+@media (max-width: 960px) {
+  .menu {
+    position: fixed; inset: 0 auto 0 0; z-index: 30;
+    transform: translateX(-100%); visibility: hidden; /* fermé : hors de la page et hors du clavier */
+    transition: transform var(--transition), visibility 0s linear 180ms;
+    box-shadow: var(--ombre-forte);
+  }
+  .menuOuvert { transform: none; visibility: visible; transition-delay: 0s; }
+  .voile { display: block; position: fixed; inset: 0; z-index: 20; background: rgba(8, 24, 32, 0.45); }
+  .boutonMenu { display: inline-flex; }
+}
+@media (max-width: 560px) {
+  .identite small { display: none; }
+  .sortie span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+}

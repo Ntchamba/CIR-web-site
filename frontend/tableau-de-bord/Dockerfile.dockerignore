@@ -1,0 +1,8 @@
+# Fichiers exclus du contexte Docker (contexte = racine du dépôt ; lu par BuildKit à côté du Dockerfile).
+**/node_modules
+**/dist
+**/.env
+**/.env.*
+!**/.env.example
+.git
+backend
