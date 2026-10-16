@@ -15,6 +15,7 @@ import { USAGES } from '@/modules/catalogue/usages.js';
 import { envoyerTemoignage } from '../api.js';
 import { TEXTE_MAX, TEXTE_MIN, validerTemoignage } from '../regles.js';
 import { useMesTemoignages } from '../useVitrine.js';
+import { attributLang } from './Temoignages.jsx';
 import styles from '../Vitrine.module.css';
 
 const VIDE = { texte: '', note: '', ville: '', type_chantier: '' };
@@ -32,7 +33,7 @@ function MesTemoignages({ etat }) {
             <span className={`${styles.statut} ${styles[`statut_${tm.statut}`] || ''}`}>
               {t(`vitrine.formulaire.statuts.${tm.statut}`)}
             </span>
-            <span className={styles.extrait}>{tm.texte}</span>
+            <span className={styles.extrait} lang={attributLang(tm.langue)}>{tm.texte}</span>
             {tm.statut === 'refuse' && tm.motif_refus && (
               <span className={styles.motif}>{t('vitrine.formulaire.motif', { motif: tm.motif_refus })}</span>
             )}

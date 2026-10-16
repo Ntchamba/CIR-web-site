@@ -149,6 +149,8 @@ export default {
       photo: 'Sol en résine époxy',
       voirProduit: 'Voir le produit {nom}',
       voirCatalogue: '{alt} : voir le catalogue',
+      pause: 'Mettre en pause la sphère',
+      lecture: 'Relancer la sphère',
     },
     usages: {
       surtitre: 'Pour chaque usage',

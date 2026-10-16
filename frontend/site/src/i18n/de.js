@@ -148,6 +148,8 @@ export default {
       photo: 'Epoxidharzboden',
       voirProduit: 'Produkt {nom} ansehen',
       voirCatalogue: '{alt}: Katalog ansehen',
+      pause: 'Kugel anhalten',
+      lecture: 'Kugel abspielen',
     },
     usages: {
       surtitre: 'Für jeden Einsatz',

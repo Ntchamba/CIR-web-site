@@ -148,6 +148,8 @@ export default {
       photo: '环氧树脂地坪',
       voirProduit: '查看产品 {nom}',
       voirCatalogue: '{alt}：查看产品目录',
+      pause: '暂停旋转',
+      lecture: '继续旋转',
     },
     usages: {
       surtitre: '适用于各种场合',

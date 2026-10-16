@@ -17,6 +17,15 @@ export function validerTemoignage({ texte = '', note }) {
   return erreurs;
 }
 
+/** Lien externe affichable : seulement en https (jamais javascript:, data:, http:) ; sinon null. */
+export function lienHttps(lien) {
+  try {
+    return new URL(lien).protocol === 'https:' ? lien : null;
+  } catch {
+    return null;
+  }
+}
+
 const HOTES_INTEGRATION = ['www.youtube-nocookie.com', 'youtube-nocookie.com', 'player.vimeo.com'];
 
 /** Adresse d'intégration sûre (https, YouTube sans cookie ou Vimeo), avec lecture automatique ; sinon null. */

@@ -148,6 +148,8 @@ export default {
       photo: 'エポキシ樹脂の床',
       voirProduit: '製品 {nom} を見る',
       voirCatalogue: '{alt}：カタログを見る',
+      pause: '回転を一時停止',
+      lecture: '回転を再開',
     },
     usages: {
       surtitre: '用途に合わせて',

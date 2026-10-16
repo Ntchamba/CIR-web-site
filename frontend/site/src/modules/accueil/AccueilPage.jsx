@@ -16,11 +16,11 @@ import useAccueil from './useAccueil.js';
 export default function AccueilPage() {
   const { t } = useTraduction();
   usePageMeta('', t('accueil.description'));
-  const { contenu, aLaUne, realisations } = useAccueil();
+  const { contenu, contenuPret, aLaUne, realisations } = useAccueil();
   return (
     <>
       <Bandeaux bandeaux={contenu.bandeaux} />
-      <Hero contenu={contenu} />
+      <Hero contenu={contenu} pret={contenuPret} />
       <Usages />
       <ProduitsALaUne produits={aLaUne} />
       <SectionActualites />

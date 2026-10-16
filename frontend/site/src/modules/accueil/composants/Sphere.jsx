@@ -1,5 +1,8 @@
 // Sphère de photos de sols (contenus de l'accueil) : elle tourne lentement et s'arrête au survol ou au
 // focus ; un clic ouvre le produit lié (sinon le catalogue). Mouvement réduit : grille simple.
+// Accessibilité : bouton Pause / Lecture (WCAG 2.2.2) ; la photo qui reçoit le focus clavier est tournée face
+// au visiteur ; les faces arrière sont masquées (jamais de photo inversée ou cachée sous le focus).
+import { useState } from 'react';
 import { Link } from 'react-router';
 
 import { useMouvementReduit } from '@/app/preferences.js';
@@ -28,6 +31,8 @@ export function positions(nombre) {
 export default function Sphere({ photos = [] }) {
   const { t } = useTraduction();
   const reduit = useMouvementReduit();
+  const [enPause, setEnPause] = useState(false);
+  const [cible, setCible] = useState(null); // angle de la photo focalisée au clavier
   const liste = photos.filter((p) => p?.image?.url);
   if (!liste.length) return null;
 
@@ -52,20 +57,27 @@ export default function Sphere({ photos = [] }) {
 
   const places = positions(liste.length);
   return (
-    <div className={styles.sphere}>
-      <ul className={styles.globe} aria-label={t('accueil.sphere.titre')}>
-        {liste.map((p, i) => {
-          const { y, rayon, angle } = places[i];
-          return (
-            <li key={p.id} className={styles.tuile}
-              style={{ transform: `translateY(${y}px) rotateY(${angle}deg) translateZ(${rayon}px)` }}>
-              <Link to={lien(p)} aria-label={libelle(p)}>
-                <img src={p.image.url} alt="" width={LARGEUR_TUILE} height="150" decoding="async" />
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+    <div className={styles.cadreSphere}>
+      <div className={styles.sphere}>
+        <ul className={[styles.globe, enPause && styles.globeArrete, cible !== null && styles.globeCible].filter(Boolean).join(' ')}
+          style={cible !== null ? { '--cible': `${-cible}deg` } : undefined} aria-label={t('accueil.sphere.titre')}
+          onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setCible(null); }}>
+          {liste.map((p, i) => {
+            const { y, rayon, angle } = places[i];
+            return (
+              <li key={p.id} className={styles.tuile}
+                style={{ transform: `translateY(${y}px) rotateY(${angle}deg) translateZ(${rayon}px)` }}>
+                <Link to={lien(p)} aria-label={libelle(p)} onFocus={() => setCible(angle)}>
+                  <img src={p.image.url} alt="" width={LARGEUR_TUILE} height="150" decoding="async" />
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <button type="button" className={styles.pauseSphere} aria-pressed={enPause} onClick={() => setEnPause((v) => !v)}>
+        {enPause ? t('accueil.sphere.lecture') : t('accueil.sphere.pause')}
+      </button>
     </div>
   );
 }

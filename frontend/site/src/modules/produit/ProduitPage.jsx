@@ -9,6 +9,7 @@ import MessageErreur from '@partage/ui/MessageErreur.jsx';
 import usePageMeta from '@partage/utils/usePageMeta.js';
 
 import { useTraduction } from '@/i18n/index.js';
+import { estUsage } from '@/modules/catalogue/usages.js';
 
 import FicheTechnique from './composants/FicheTechnique.jsx';
 import Galerie from './composants/Galerie.jsx';
@@ -41,7 +42,7 @@ export default function ProduitPage() {
     );
   }
 
-  const usages = produit.usages || [];
+  const usages = (produit.usages || []).filter(estUsage);
   return (
     <div className="conteneur section">
       <nav aria-label={t('produit.filAriane')} className={styles.ariane}>

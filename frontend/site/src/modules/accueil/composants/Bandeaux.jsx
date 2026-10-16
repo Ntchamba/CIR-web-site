@@ -6,7 +6,8 @@ import { useTraduction } from '@/i18n/index.js';
 
 import styles from '../Accueil.module.css';
 
-const estInterne = (lien) => typeof lien === 'string' && lien.startsWith('/') && !lien.startsWith('//') && !lien.includes('\\');
+// Espaces, tabulations, retours à la ligne et barres obliques inversées refusés (« /\t/site.com » deviendrait « //site.com »).
+const estInterne = (lien) => typeof lien === 'string' && lien.startsWith('/') && !lien.startsWith('//') && !/[\s\\]/.test(lien);
 
 export default function Bandeaux({ bandeaux = [] }) {
   const { t } = useTraduction();

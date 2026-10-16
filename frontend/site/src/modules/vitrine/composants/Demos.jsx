@@ -10,7 +10,7 @@ import ImageMedia from '@/composants/ImageMedia.jsx';
 import VoirPlus from '@/composants/VoirPlus.jsx';
 import { useTraduction } from '@/i18n/index.js';
 
-import { adresseIntegration } from '../regles.js';
+import { adresseIntegration, lienHttps } from '../regles.js';
 import { useDemos } from '../useVitrine.js';
 import styles from '../Vitrine.module.css';
 
@@ -19,6 +19,7 @@ function Lecteur({ demo }) {
   const [lecture, setLecture] = useState(false);
   const integration = demo.integration ? adresseIntegration(demo.integration) : null;
   const lisible = Boolean(demo.video || integration);
+  const lien = lienHttps(demo.lien);
 
   if (lecture && demo.video) {
     return (
@@ -55,9 +56,9 @@ function Lecteur({ demo }) {
       </button>
     );
   }
-  if (demo.lien) {
+  if (lien) {
     return (
-      <a href={demo.lien} className={styles.apercu} target="_blank" rel="noopener noreferrer"
+      <a href={lien} className={styles.apercu} target="_blank" rel="noopener noreferrer"
         aria-label={t('vitrine.demos.ouvrir', { titre: demo.titre })}>
         {apercu}
       </a>

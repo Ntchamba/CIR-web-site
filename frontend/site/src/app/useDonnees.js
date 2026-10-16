@@ -10,6 +10,7 @@ export default function useDonnees(charger, deps = []) {
   const [etat, setEtat] = useState({ donnees: null, chargement: true, erreur: null });
   const [essai, setEssai] = useState(0);
   const chargerActuel = useRef(charger);
+  const languePrecedente = useRef(langue);
 
   useEffect(() => {
     chargerActuel.current = charger;
@@ -18,8 +19,11 @@ export default function useDonnees(charger, deps = []) {
   useEffect(() => {
     const controleur = new AbortController();
     let actif = true;
-    // Les données déjà affichées restent visibles pendant le rechargement (changement de langue).
-    setEtat((e) => ({ ...e, chargement: true, erreur: null }));
+    // Changement de langue seul : les données affichées restent visibles pendant le rechargement.
+    // Autre dépendance changée (autre produit, autre actualité) : l'ancienne fiche disparaît aussitôt.
+    const seuleLaLangue = languePrecedente.current !== langue;
+    languePrecedente.current = langue;
+    setEtat((e) => ({ donnees: seuleLaLangue ? e.donnees : null, chargement: true, erreur: null }));
     Promise.resolve()
       .then(() => chargerActuel.current({ signal: controleur.signal }))
       .then((donnees) => actif && setEtat({ donnees: donnees ?? null, chargement: false, erreur: null }))

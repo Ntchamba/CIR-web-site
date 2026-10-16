@@ -148,6 +148,8 @@ export default {
       photo: 'Epoxy resin floor',
       voirProduit: 'View the product {nom}',
       voirCatalogue: '{alt}: view the catalogue',
+      pause: 'Pause the sphere',
+      lecture: 'Play the sphere',
     },
     usages: {
       surtitre: 'For every use',

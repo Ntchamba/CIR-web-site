@@ -37,7 +37,8 @@ export default function PiedDePage() {
           <h2 className={styles.etiquette}>{t('pied.contact')}</h2>
           <address className={styles.adresse}>
             <span>{coordonnees.adresse}</span>
-            <span>{t('marque.ville')}</span>
+            {/* La ville n'est ajoutée que si l'adresse ne la contient pas déjà. */}
+            {!/douala/i.test(coordonnees.adresse) && <span>{t('marque.ville')}</span>}
           </address>
           {coordonnees.telephones.map((tel) => (
             <a key={tel.lien} href={tel.lien}>{t('pied.telephone', { numero: tel.affichage })}</a>

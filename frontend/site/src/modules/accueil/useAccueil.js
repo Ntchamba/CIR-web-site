@@ -13,6 +13,8 @@ export default function useAccueil() {
   return {
     contenu: contenus.donnees || {},
     chargementContenu: contenus.chargement,
+    // Contenus reçus, ou chargement terminé (erreur) : les textes par défaut peuvent s'afficher.
+    contenuPret: Boolean(contenus.donnees) || !contenus.chargement,
     aLaUne: resultats(aLaUne.donnees),
     realisations: resultats(realisations.donnees),
   };

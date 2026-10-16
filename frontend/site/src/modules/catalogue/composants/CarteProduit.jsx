@@ -6,12 +6,14 @@ import { prix } from '@partage/utils/format.js';
 import ImageMedia from '@/composants/ImageMedia.jsx';
 import { useTraduction } from '@/i18n/index.js';
 
+import { estUsage } from '../usages.js';
+
 import styles from '../Catalogue.module.css';
 
 export default function CarteProduit({ produit, niveauTitre = 3 }) {
   const { t } = useTraduction();
   const Titre = `h${niveauTitre}`;
-  const usages = produit.usages || [];
+  const usages = (produit.usages || []).filter(estUsage); // jamais de clé brute pour un usage inconnu
   return (
     <article className={styles.carte}>
       <div className={styles.vignette}>
