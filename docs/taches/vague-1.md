@@ -1,5 +1,7 @@
 # Vague 1 : Vitrine
 
+Contrat d'API commun aux trois agents : `docs/taches/vague-1-contrat-api.md`.
+
 Chaque paire travaille dans sa propre fenêtre de contexte : l'agent code, puis son agent testeur relit le code, écrit et lance les tests unitaires, et renvoie ses remarques jusqu'à ce que tout passe.
 
 ## Module `catalogue` (BF-01, BF-05, BF-06, BF-14)
