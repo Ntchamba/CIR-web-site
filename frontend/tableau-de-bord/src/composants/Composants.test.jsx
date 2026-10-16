@@ -94,6 +94,7 @@ describe('OngletsLangues', () => {
     await u.type(champ, 'Epoxy floor');
     expect(screen.getByRole('tab', { name: /English/ })).not.toHaveTextContent('traduction à compléter');
     // Navigation au clavier entre les onglets.
+    screen.getByRole('tab', { name: /English/ }).focus();
     await u.keyboard('{ArrowRight}');
     expect(screen.getByRole('tab', { name: /中文/ })).toHaveFocus();
   });

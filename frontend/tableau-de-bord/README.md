@@ -34,6 +34,24 @@ préférée du client affichée sur sa fiche. Voir `frontend/partage/README.md` 
       en-tête `X-Robots-Tag: noindex` servi par `serve` (`public/serve.json`)
 - [x] Suite de tests complète (testeur)
 
+## Vague 1 : vitrine (agent `tableau-de-bord`, vérifié par `tableau-de-bord-testeur`)
+
+Contrat d'API : `docs/taches/vague-1-contrat-api.md`.
+
+- [x] Modules `catalogue`, `vitrine`, `actualites`, `contenus` passés dans « Pilotage » (`layout/menu.js`), routes
+      chargées à la demande (`catalogue/*`, `vitrine/*`, `actualites`, `contenus/*` ; sous-routes dans chaque page)
+- [x] Composants propres au tableau de bord (`src/composants/`) :
+  - `Tiroir.jsx` : panneau latéral modal (focus piégé, Échap, voile, retour du focus)
+  - `OngletsLangues.jsx` : onglet Français (obligatoire) + en, zh, de, ja ; pastille sur les langues à compléter ;
+    édite l'objet `traductions` ; exporte aussi `BarreLangues` et `PastilleTraductions`
+  - `ChampImage.jsx` : aperçu, choix, retrait, contrôle de taille, erreur 400 (variante `video`)
+  - `BoutonSupprimer.jsx` (confirmation dans la ligne), `SousNavigation.jsx`
+  - `langues.js` (`languesIncompletes`, `modifierTraduction`), `envoi.js` (JSON ou multipart, `repartirErreur`,
+    `lirePrix`, dates locales), `useChargement.js`, `usages.js`, `Composants.module.css`, `Gestion.module.css`
+- [x] Textes de l'interface dans les cinq langues (`src/i18n/`)
+- [x] Tests de base (`src/composants/Composants.test.jsx`, un test par page ; outils dans `src/test/api-simulee.jsx`)
+- [ ] Suite de tests complète (testeur)
+
 ## Déploiement (Railway)
 
 Service à part : config file `frontend/tableau-de-bord/railway.toml`, root directory vide (racine du dépôt),
