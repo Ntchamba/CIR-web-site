@@ -1,5 +1,4 @@
 """Tests des règles métier des comptes (services.py, adresses.py, jwt.py)."""
-from types import SimpleNamespace
 
 from django.contrib.auth.models import AnonymousUser
 from django.core.cache import cache
@@ -81,7 +80,7 @@ class InscriptionServiceTests(TestCase):
         self.assertIn("nom_complet", ctx.exception.detail)
 
     def test_mot_de_passe_faible_refuse(self):
-        for faible in ("court1", "12345678901", "password", "awatest2026"):
+        for faible in ("court1", "12345678901", "password", "awa@exemple.cm"):
             with self.subTest(mot_de_passe=faible), self.assertRaises(ValidationError) as ctx:
                 inscrire(mot_de_passe=faible)
             self.assertIn("mot_de_passe", ctx.exception.detail)

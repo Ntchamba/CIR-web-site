@@ -1,9 +1,10 @@
 """API publique des comptes (/api/comptes/) : inscription, connexion, profil."""
+from django.conf import settings
 from rest_framework import generics, status
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.throttling import ScopedRateThrottle
+from rest_framework.throttling import BaseThrottle, ScopedRateThrottle
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.views import TokenBlacklistView, TokenRefreshView
 
@@ -13,8 +14,9 @@ from .serializers import InscriptionSerializer, UtilisateurSerializer
 
 
 def adresse_ip(request):
-    transmise = request.META.get("HTTP_X_FORWARDED_FOR", "")
-    return transmise.split(",")[0].strip() if transmise else request.META.get("REMOTE_ADDR", "")
+    """Adresse du client, selon REST_FRAMEWORK["NUM_PROXIES"] (même règle que les quotas de DRF) :
+    0 → REMOTE_ADDR ; n → n-ième valeur en partant de la fin de X-Forwarded-For (ajoutée par le proxy)."""
+    return BaseThrottle().get_ident(request)
 
 
 class InscriptionView(generics.CreateAPIView):
@@ -22,6 +24,7 @@ class InscriptionView(generics.CreateAPIView):
 
     serializer_class = InscriptionSerializer
     permission_classes = [AllowAny]
+    authentication_classes = []  # un vieux jeton envoyé par le navigateur ne doit pas bloquer (401)
     throttle_classes = [ScopedRateThrottle]
     throttle_scope = "inscription"
 
@@ -43,8 +46,9 @@ class ConnexionView(generics.GenericAPIView):
     authentication_classes = []
 
     def post(self, request, *args, **kwargs):
-        cle = services.cle_connexion(request.data.get("email", ""), adresse_ip(request))
-        if services.connexion_bloquee(cle):
+        cle = services.cle_connexion(request.data.get("email", ""))
+        cle_ip = services.cle_connexion_ip(adresse_ip(request))
+        if services.connexion_bloquee(cle) or services.connexion_bloquee(cle_ip, settings.CONNEXION_ESSAIS_MAX_IP):
             return Response({"detail": "Trop d'essais incorrects. Réessayez dans 15 minutes."},
                             status=status.HTTP_429_TOO_MANY_REQUESTS)
         serializer = self.get_serializer(data=request.data)
@@ -52,12 +56,14 @@ class ConnexionView(generics.GenericAPIView):
             serializer.is_valid(raise_exception=True)
         except AuthenticationFailed:
             services.enregistrer_echec_connexion(cle)
+            services.enregistrer_echec_connexion(cle_ip)
             return Response({"detail": "E-mail ou mot de passe incorrect."}, status=status.HTTP_401_UNAUTHORIZED)
         except ValidationError as erreur:
             detail = erreur.detail.get("detail") if isinstance(erreur.detail, dict) else None
             if detail is None:  # champs manquants : pas compté comme un essai
                 raise
             services.enregistrer_echec_connexion(cle)
+            services.enregistrer_echec_connexion(cle_ip)
             message = detail[0] if isinstance(detail, list) else detail
             return Response({"detail": str(message)}, status=status.HTTP_403_FORBIDDEN)
         services.reinitialiser_essais_connexion(cle)

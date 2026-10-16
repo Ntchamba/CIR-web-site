@@ -13,14 +13,47 @@ from PIL import Image, ImageOps
 TAILLES = {"vignette": 480, "moyenne": 960, "grande": 1600}
 LARGEUR_MAX = TAILLES["moyenne"] + 320  # 1280 px par défaut
 QUALITE = 72
+OCTETS_MAX = 10 * 1024 * 1024  # 10 Mo par fichier envoyé
+PIXELS_MAX = 40_000_000  # 40 mégapixels (ex. 8000 x 5000)
 
 
-def convertir_en_webp(source, largeur_max=LARGEUR_MAX, qualite=QUALITE):
-    """Lit une image (chemin ou fichier ouvert) et renvoie ses octets au format WebP."""
-    with Image.open(source) as ouverte:
+class ImageInvalide(ValueError):
+    """Fichier refusé : trop lourd, trop grand en pixels ou illisible."""
+
+
+def taille_en_octets(source):
+    if isinstance(source, (str, Path)):
+        return Path(source).stat().st_size
+    taille = getattr(source, "size", None)
+    if isinstance(taille, int):
+        return taille
+    position = source.tell()
+    source.seek(0, 2)
+    taille = source.tell()
+    source.seek(position)
+    return taille
+
+
+def convertir_en_webp(source, largeur_max=LARGEUR_MAX, qualite=QUALITE,
+                      octets_max=OCTETS_MAX, pixels_max=PIXELS_MAX):
+    """Lit une image (chemin ou fichier ouvert) et renvoie ses octets au format WebP.
+
+    Refuse (ImageInvalide) les fichiers de plus de `octets_max` octets ou de plus de `pixels_max`
+    pixels, avant de décoder l'image (protection contre les « bombes de décompression »).
+    """
+    if taille_en_octets(source) > octets_max:
+        raise ImageInvalide(f"Image trop lourde (maximum {octets_max / (1024 * 1024):g} Mo).")
+    try:
+        ouverte = Image.open(source)
+    except Exception as erreur:  # noqa: BLE001 - tout fichier illisible est refusé de la même façon
+        raise ImageInvalide("Fichier image illisible.") from erreur
+    with ouverte:
+        if ouverte.width * ouverte.height > pixels_max:
+            raise ImageInvalide("Image trop grande (nombre de pixels).")
         image = ImageOps.exif_transpose(ouverte)
         if image.mode not in ("RGB", "RGBA"):
-            image = image.convert("RGBA" if "A" in image.getbands() else "RGB")
+            transparente = "A" in image.getbands() or image.has_transparency_data
+            image = image.convert("RGBA" if transparente else "RGB")
         if image.width > largeur_max:
             hauteur = max(1, round(image.height * largeur_max / image.width))
             image = image.resize((largeur_max, hauteur), Image.LANCZOS)

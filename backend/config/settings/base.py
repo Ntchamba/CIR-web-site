@@ -128,6 +128,9 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "apps.noyau.pagination.PaginationStandard",
     "PAGE_SIZE": 24,
     "DEFAULT_THROTTLE_RATES": {"inscription": "20/hour"},
+    # Nombre de proxys de confiance devant l'application : l'adresse du client est la valeur ajoutée
+    # par le dernier proxy dans X-Forwarded-For. 0 = REMOTE_ADDR (en-tête ignoré, valeur de dev/tests).
+    "NUM_PROXIES": int(env("DJANGO_NOMBRE_PROXIES", "0")),
 }
 
 SIMPLE_JWT = {
@@ -142,6 +145,8 @@ SIMPLE_JWT = {
 # Connexion : blocage après 5 essais incorrects pendant 15 minutes (BNF-01)
 CONNEXION_ESSAIS_MAX = 5
 CONNEXION_BLOCAGE_SECONDES = 15 * 60
+# Second compteur par adresse IP (plusieurs comptes essayés depuis la même adresse)
+CONNEXION_ESSAIS_MAX_IP = 20
 
 CORS_ALLOWED_ORIGINS = env_liste("CORS_ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:5174")
 

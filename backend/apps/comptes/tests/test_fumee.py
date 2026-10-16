@@ -93,6 +93,13 @@ class EquipeFumeeTests(APITestCase):
         r = self.client.get("/api/admin/comptes/equipe/")
         self.assertEqual(r.data["count"], 3)
 
+    def test_filtre_ville_insensible_a_la_casse(self):
+        Utilisateur.objects.filter(pk=self.client_cir.pk).update(ville="Douala")
+        Utilisateur.objects.create_user("y@exemple.cm", MDP, nom_complet="Y", ville="Yaoundé")
+        self.client.force_authenticate(self.membre)
+        r = self.client.get("/api/admin/comptes/clients/", {"ville": " douala "})
+        self.assertEqual([c["email"] for c in r.data["results"]], ["c@exemple.cm"])
+
     def test_connexion_equipe_refuse_client(self):
         r = self.client.post("/api/admin/comptes/connexion/", {"email": "c@exemple.cm", "mot_de_passe": MDP},
                              format="json")

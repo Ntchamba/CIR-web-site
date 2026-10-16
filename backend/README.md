@@ -41,6 +41,22 @@ Tests : `python manage.py test`. Vérification : `curl http://127.0.0.1:8000/api
 | POST | `/api/admin/comptes/equipe/<id>/desactiver/` et `/reactiver/` | super-admin |
 | GET | `/api/admin/comptes/clients/` et `/<id>/` | équipe ; `?search=`, `?ville=`, `?is_active=`, `?adresse_complete=1/0`, `?taille=` |
 
+### Sécurité de la connexion et des quotas
+
+- **Blocage après 5 échecs (BNF-01)** : le compteur est **par e-mail** (`cir:connexion:<email>`),
+  quelle que soit l'adresse IP, pendant 15 minutes. Il est **partagé entre la connexion publique et
+  celle du tableau de bord** : 5 échecs sur l'une bloquent aussi l'autre pour cet e-mail. Un second
+  compteur par adresse IP bloque après 20 échecs (tous comptes confondus). Une connexion réussie remet
+  le compteur de l'e-mail à zéro. Les compteurs vivent dans le cache : utiliser Redis (`REDIS_URL`)
+  en production pour qu'ils soient communs à tous les processus.
+- **`DJANGO_NOMBRE_PROXIES`** (`REST_FRAMEWORK["NUM_PROXIES"]`) : nombre de proxys de confiance devant
+  l'application. L'adresse du client est la valeur ajoutée par le dernier proxy dans `X-Forwarded-For`
+  (les valeurs placées avant par le client sont ignorées). Défaut : `1` en production (Railway), `0` en
+  développement et en tests (`REMOTE_ADDR`, en-tête ignoré). Sert au quota d'inscription (20 par heure
+  et par adresse) et au compteur de connexion par IP.
+- **Images** : `apps/noyau/images.py` refuse les fichiers de plus de 10 Mo ou 40 mégapixels
+  (`ImageInvalide`) avant de les décoder.
+
 En-tête d'authentification : `Authorization: Bearer <acces>`. Listes paginées : `{count, next, previous, results}`.
 
 ## Déploiement (Railway)

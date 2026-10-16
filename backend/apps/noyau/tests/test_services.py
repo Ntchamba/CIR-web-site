@@ -1,10 +1,8 @@
 """Tests des utilitaires du noyau : conversion WebP, permissions, pagination."""
 from io import BytesIO
 from types import SimpleNamespace
-from unittest import mock
 
 from django.contrib.auth.models import AnonymousUser
-from django.core.files.base import ContentFile
 from django.test import SimpleTestCase
 from PIL import Image
 from rest_framework.test import APIRequestFactory

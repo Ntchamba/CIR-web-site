@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.auth import password_validation
 from django.core.cache import cache
 from django.core.exceptions import ValidationError as ErreurDjango
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from rest_framework.exceptions import PermissionDenied, ValidationError
 
 from .adresses import nettoyer, valider_adresse
@@ -40,6 +40,15 @@ def verifier_nom(nom_complet):
     return nom
 
 
+def _creer_sans_doublon(**champs):
+    """Crée le compte ; deux inscriptions simultanées avec le même e-mail donnent une erreur propre."""
+    try:
+        with transaction.atomic():
+            return Utilisateur.objects.create_user(**champs)
+    except IntegrityError as erreur:
+        raise ValidationError({"email": ["Un compte existe déjà avec cette adresse e-mail."]}) from erreur
+
+
 # --- Clients ---
 
 @transaction.atomic
@@ -50,7 +59,7 @@ def inscrire_client(*, email, mot_de_passe, nom_complet, telephone="", **adresse
     adresse_propre = valider_adresse(adresse)
     brouillon = Utilisateur(email=email, nom_complet=nom)
     verifier_mot_de_passe(mot_de_passe, brouillon)
-    return Utilisateur.objects.create_user(
+    return _creer_sans_doublon(
         email=email,
         password=mot_de_passe,
         nom_complet=nom,
@@ -96,7 +105,7 @@ def ajouter_membre(demandeur, *, email, mot_de_passe, nom_complet, telephone="",
     email = verifier_email_disponible(email)
     nom = verifier_nom(nom_complet)
     verifier_mot_de_passe(mot_de_passe, Utilisateur(email=email, nom_complet=nom))
-    return Utilisateur.objects.create_user(
+    return _creer_sans_doublon(
         email=email, password=mot_de_passe, nom_complet=nom, telephone=nettoyer(telephone), role=role
     )
 
@@ -128,12 +137,21 @@ def reactiver_membre(demandeur, membre):
 
 # --- Connexion : blocage après trop d'essais incorrects (BNF-01) ---
 
-def cle_connexion(email, ip):
-    return f"cir:connexion:{normaliser_email(email)}:{ip}"
+# Le compteur principal est par e-mail (quelle que soit l'adresse IP, que le client peut masquer) et
+# il est partagé entre la connexion publique et celle du tableau de bord. Un second compteur, par IP,
+# freine l'essai de nombreux comptes depuis une même adresse.
+
+def cle_connexion(email, ip=None):
+    cle = f"cir:connexion:{normaliser_email(email)}"
+    return f"{cle}:{ip}" if ip else cle
 
 
-def connexion_bloquee(cle):
-    return cache.get(cle, 0) >= settings.CONNEXION_ESSAIS_MAX
+def cle_connexion_ip(ip):
+    return f"cir:connexion-ip:{ip}"
+
+
+def connexion_bloquee(cle, seuil=None):
+    return cache.get(cle, 0) >= (seuil or settings.CONNEXION_ESSAIS_MAX)
 
 
 def enregistrer_echec_connexion(cle):

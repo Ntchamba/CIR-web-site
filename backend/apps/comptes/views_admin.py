@@ -49,10 +49,13 @@ class ClientsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [EstEquipe]
     search_fields = ["nom_complet", "email", "telephone", "ville", "quartier"]
     ordering_fields = ["date_inscription", "nom_complet"]
-    filterset_fields = ["is_active", "ville"]
+    filterset_fields = ["is_active"]
 
     def get_queryset(self):
         qs = Utilisateur.objects.clients()
+        ville = self.request.query_params.get("ville", "").strip()
+        if ville:  # saisie libre : « douala » trouve « Douala »
+            qs = qs.filter(ville__iexact=ville)
         adresse = self.request.query_params.get("adresse_complete")
         vides = Q(ville="") | Q(quartier="") | Q(rue_ou_repere="")
         if adresse in ("1", "true", "oui"):
