@@ -32,18 +32,23 @@ describe('fichiers de textes du site', () => {
 });
 
 describe('changement de langue', () => {
-  it('visiteur : toute la page passe en anglais, titre de l’onglet compris, sans appel au compte', async () => {
+  it('visiteur : toute la page passe en anglais, titre de l’onglet compris, contenus rechargés en anglais', async () => {
     const fetch = simulerApi();
     rendre('/');
-    expect(await screen.findByRole('heading', { level: 1, name: 'Accueil' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: 'Des sols en résine époxy faits pour durer' })).toBeInTheDocument();
     await userEvent.selectOptions(choixEntete(), 'en');
-    expect(await screen.findByRole('heading', { level: 1, name: 'Home' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: 'Epoxy resin floors built to last' })).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: 'Main navigation' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Sign in' })).toHaveAttribute('href', '/connexion');
     expect(screen.getByText('Our resins are made by our partner Jiuye.')).toBeInTheDocument();
-    await waitFor(() => expect(document.title).toBe('Home | CIR, epoxy resin floors'));
+    await waitFor(() => expect(document.title).toBe('CIR: epoxy resin floor coatings in Douala'));
     expect(document.documentElement.lang).toBe('en');
-    expect(fetch).not.toHaveBeenCalled();
+    // Le contenu de l'API est redemandé dans la nouvelle langue ; aucun appel au compte pour un visiteur.
+    await waitFor(() => {
+      const langues = appels(fetch, 'GET', '/api/contenus/accueil/').map(([, init]) => init.headers['Accept-Language']);
+      expect(langues).toContain('en');
+    });
+    expect(appels(fetch, 'GET', '/api/comptes/moi/')).toHaveLength(0);
   });
 
   it('japonais et chinois : textes et formulaires traduits', async () => {

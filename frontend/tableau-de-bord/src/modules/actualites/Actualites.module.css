@@ -1,0 +1,5 @@
+/* Actualités : résumé tronqué dans la liste. */
+.colonneTitre { max-width: 460px; }
+.colonneTitre > span {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}

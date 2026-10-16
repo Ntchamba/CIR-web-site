@@ -1,0 +1,78 @@
+/* Mise en page commune des pages de gestion (catalogue, vitrine, actualités, contenus). */
+.page { max-width: 1200px; display: grid; gap: var(--esp-5); }
+.entete { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--esp-4); }
+.entete > div { min-width: 0; }
+
+.succes {
+  padding: var(--esp-3) var(--esp-4); border-radius: var(--rayon-s);
+  background: var(--succes-fond); color: var(--succes); font-weight: 600;
+}
+
+.filtres { display: grid; gap: var(--esp-4); align-items: end; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+.compte { color: var(--encre-3); font-size: 14px; }
+
+.tableau { padding: 0; overflow-x: auto; }
+.tableau table { width: 100%; border-collapse: collapse; min-width: 720px; }
+.tableau th, .tableau td { padding: var(--esp-3) var(--esp-4); text-align: left; vertical-align: middle; }
+.tableau th {
+  font-size: 13px; font-weight: 600; color: var(--encre-3);
+  border-bottom: 1px solid var(--filet); background: var(--fond-2);
+}
+.tableau tbody tr + tr td { border-top: 1px solid var(--filet-2); }
+.tableau tbody tr:hover td { background: var(--fond); }
+
+.vignette {
+  display: block; width: 64px; height: 48px; border-radius: var(--rayon-s); object-fit: cover; background: var(--fond-2);
+}
+.nom {
+  padding: 0; border: 0; background: none; text-align: left;
+  color: var(--bleu); font: inherit; font-weight: 600; cursor: pointer; text-decoration: underline;
+  text-underline-offset: 3px; min-height: var(--cible-tactile);
+}
+.secondaire { display: block; color: var(--encre-3); font-size: 14px; }
+.pastilles { display: flex; flex-wrap: wrap; gap: var(--esp-1); }
+.actions { text-align: right; white-space: nowrap; }
+
+.pastille { display: inline-block; padding: 2px 10px; border-radius: var(--pastille); font-size: 13px; font-weight: 600; white-space: nowrap; }
+.ok { background: var(--succes-fond); color: var(--succes); }
+.attention { background: var(--st-negociation-f); color: var(--st-negociation-t); }
+.info { background: var(--st-contrat-f); color: var(--st-contrat-t); }
+.neutre { background: var(--st-annulee-f); color: var(--st-annulee-t); }
+.alerte { background: var(--st-nouvelle-f); color: var(--st-nouvelle-t); }
+
+.pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--esp-4); color: var(--encre-2); }
+
+/* Formulaires (dans un tiroir ou une carte) */
+.formulaire { display: grid; gap: var(--esp-5); }
+.bloc { display: grid; gap: var(--esp-4); padding: 0; margin: 0; border: 0; min-width: 0; }
+.bloc > legend, .titreBloc { font-family: var(--police-titre); font-size: 19px; font-weight: 500; margin-bottom: var(--esp-2); padding: 0; }
+.grille { display: grid; gap: var(--esp-4); grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.cases { display: flex; flex-wrap: wrap; gap: var(--esp-2) var(--esp-5); }
+.case { display: inline-flex; align-items: center; gap: var(--esp-2); min-height: var(--cible-tactile); font-weight: 500; cursor: pointer; }
+.case input { width: 20px; height: 20px; accent-color: var(--bleu); }
+.aide { color: var(--encre-3); font-size: 14px; }
+.erreurChamp { font-size: 13px; font-weight: 500; color: var(--danger); }
+.actionsFormulaire { display: flex; flex-wrap: wrap; gap: var(--esp-3); }
+.titreCarte { font-family: var(--police-titre); font-size: 22px; font-weight: 500; }
+
+/* Listes ordonnables (couches, caractéristiques, images…) */
+.lignes { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--esp-3); }
+.ligne {
+  display: grid; gap: var(--esp-3); align-items: end; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  padding: var(--esp-3); border: 1px solid var(--filet-2); border-radius: var(--rayon-s); background: var(--blanc);
+}
+.boutonsLigne { display: flex; flex-wrap: wrap; gap: var(--esp-1); align-items: center; }
+.icone {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: var(--cible-tactile); height: var(--cible-tactile); padding: 0 var(--esp-2);
+  border: 1px solid var(--filet); border-radius: var(--rayon-s); background: var(--blanc);
+  color: var(--encre-2); font: inherit; font-size: 14px; cursor: pointer;
+}
+.icone:hover:not(:disabled) { border-color: var(--encre); color: var(--encre); }
+.icone:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Grille de cartes (photos, témoignages) */
+.cartes { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--esp-4); grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.carteElement { display: grid; gap: var(--esp-3); align-content: start; padding: var(--esp-4); }
+.imageCarte { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--rayon-s); background: var(--fond-2); }

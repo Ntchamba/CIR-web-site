@@ -1,0 +1,30 @@
+/* Vitrine : produits d'une réalisation, modération des témoignages, compteur « en attente ». */
+.choixProduits {
+  display: grid; gap: 0 var(--esp-4); grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  max-height: 260px; overflow-y: auto; padding: var(--esp-2) var(--esp-3);
+  border: 1px solid var(--filet); border-radius: var(--rayon-s); background: var(--blanc);
+}
+
+.compteur {
+  padding: 1px 8px; border-radius: var(--pastille); background: var(--corail); color: var(--encre);
+  font-size: 12px; font-weight: 700;
+}
+
+.filtreStatut { display: flex; flex-wrap: wrap; gap: var(--esp-2); }
+.filtre {
+  min-height: var(--cible-tactile); padding: 0 var(--esp-4);
+  border: 1px solid var(--filet); border-radius: var(--pastille); background: var(--blanc);
+  color: var(--encre-2); font: inherit; font-weight: 600; cursor: pointer;
+}
+.filtre:hover { border-color: var(--encre-2); }
+.filtreActif { background: var(--bleu); border-color: var(--bleu); color: var(--blanc); }
+
+.enteteTemoignage { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--esp-3); }
+.auteur { font-size: 17px; font-weight: 600; }
+.note { color: #c98a00; font-size: 18px; letter-spacing: 2px; }
+.texte {
+  margin: 0; padding-left: var(--esp-3); border-left: 3px solid var(--filet);
+  white-space: pre-line; overflow-wrap: anywhere;
+}
+.motif { padding: var(--esp-2) var(--esp-3); border-radius: var(--rayon-s); background: var(--fond-2); font-size: 14px; }
+.refus { display: grid; gap: var(--esp-3); }

@@ -15,6 +15,10 @@ Fichiers propres au module :
 - `permissions.py (EstEquipe, EstSuperAdmin)`
 - `sitemap.py`
 - `sante.py (/api/sante/)`
+- `medias.py` (vague 1 : URL absolues, objet image `{url, alt}`, `preparer_images` → 400 sur le champ,
+  `valider_video` (.mp4/.webm, 50 Mo), `servir_media` pour `/media/` avec cache)
+- `champs.py` (vague 1 : listes et identifiants envoyés en chaîne JSON dans un formulaire multipart)
+- `slugs.py` (vague 1 : `slug_unique`)
 
 ## Tâches (agent `backend`, vérifiées par `backend-testeur`)
 

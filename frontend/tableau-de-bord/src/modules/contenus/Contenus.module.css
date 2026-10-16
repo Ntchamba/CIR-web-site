@@ -1,0 +1,4 @@
+/* Contenus : liste des numéros de téléphone. */
+.telephone { display: flex; align-items: flex-end; gap: var(--esp-2); }
+.telephone > div { flex: 1 1 auto; }
+.telephone > button { margin-bottom: 2px; }

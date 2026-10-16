@@ -31,19 +31,42 @@ export function reponse(status, corps) {
 }
 
 /**
- * Remplace fetch par un faux back-end. `routes` : { 'POST /api/comptes/connexion/': (corps, init) => reponse(...) }.
+ * Remplace fetch par un faux back-end. `routes` : { 'POST /api/comptes/connexion/': (corps, init, url) => reponse(...) }.
+ * La clé ne contient pas la chaîne de requête : `url` (objet URL) permet de lire ?page=, ?usage=…
  * Renvoie le vi.fn() ; une route absente répond 404.
  */
 export function simulerApi(routes = {}) {
   const fetch = vi.fn(async (url, init = {}) => {
-    const chemin = new URL(url).pathname;
-    const gestion = routes[`${init.method || 'GET'} ${chemin}`];
+    const adresse = new URL(url);
+    const gestion = routes[`${init.method || 'GET'} ${adresse.pathname}`];
     if (!gestion) return reponse(404, { detail: 'Introuvable.' });
     const corps = typeof init.body === 'string' ? JSON.parse(init.body) : init.body;
-    return typeof gestion === 'function' ? gestion(corps, init) : gestion;
+    return typeof gestion === 'function' ? gestion(corps, init, adresse) : gestion;
   });
   vi.stubGlobal('fetch', fetch);
   return fetch;
+}
+
+/** Réponse paginée DRF : { count, next, previous, results }. */
+export function page(results, { count = results.length, next = null, previous = null } = {}) {
+  return { count, next, previous, results };
+}
+
+/** Paramètres de requête des appels GET à une route (un URLSearchParams par appel). */
+export function parametresDes(fetch, chemin) {
+  return fetch.mock.calls
+    .filter(([url, init = {}]) => (init.method || 'GET') === 'GET' && new URL(url).pathname === chemin)
+    .map(([url]) => new URL(url).searchParams);
+}
+
+/** Simule le réglage « mouvement réduit » du système (window.matchMedia). */
+export function simulerMouvementReduit(reduit = true) {
+  vi.stubGlobal('matchMedia', (requete) => ({
+    matches: reduit && requete.includes('prefers-reduced-motion'),
+    media: requete,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+  }));
 }
 
 /** Appels faits à une route ([corps, init] pour chacun). */

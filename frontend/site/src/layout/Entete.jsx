@@ -9,19 +9,21 @@ import { useTraduction } from '@/i18n/index.js';
 import { prenomDe } from '@/modules/compte/adresse.js';
 import { useAuth } from '@/modules/compte/AuthContext.jsx';
 
-import { COORDONNEES } from './coordonnees.js';
+import { useCoordonnees } from './contenus.js';
 import styles from './Entete.module.css';
 
 export const LIENS_PRINCIPAUX = [
   { vers: '/', cle: 'nav.accueil', fin: true },
   { vers: '/catalogue', cle: 'nav.catalogue' },
   { vers: '/realisations', cle: 'nav.realisations' },
+  { vers: '/actualites', cle: 'nav.actualites' },
   { vers: '/commandes', cle: 'nav.mesCommandes' },
 ];
 
 export default function Entete() {
   const { t } = useTraduction();
   const { utilisateur, retenirLangue } = useAuth();
+  const { telephone } = useCoordonnees();
 
   return (
     <header className={styles.entete}>
@@ -45,8 +47,8 @@ export default function Entete() {
 
         <div className={styles.actions}>
           <ChoixLangue className={styles.langue} surChangement={retenirLangue} />
-          <a href={COORDONNEES.lienTelephone} className={styles.boutonRond}
-            aria-label={t('entete.appeler', { telephone: COORDONNEES.telephone })}>
+          <a href={telephone.lien} className={styles.boutonRond}
+            aria-label={t('entete.appeler', { telephone: telephone.affichage })}>
             <Icone nom="tel" />
           </a>
           {utilisateur ? (

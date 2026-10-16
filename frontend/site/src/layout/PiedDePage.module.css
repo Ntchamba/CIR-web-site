@@ -37,3 +37,6 @@
 @media (max-width: 520px) {
   .grille { grid-template-columns: 1fr; }
 }
+
+.adresse { display: flex; flex-direction: column; font-style: normal; margin-bottom: 4px; }
+.colonne a { overflow-wrap: anywhere; }

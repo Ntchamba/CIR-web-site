@@ -68,10 +68,54 @@ Tests : `python manage.py test`. Vérification : `curl http://127.0.0.1:8000/api
 
 En-tête d'authentification : `Authorization: Bearer <acces>`. Listes paginées : `{count, next, previous, results}`.
 
+## API (vague 1 : catalogue, vitrine, actualités, contenus)
+
+Contrat détaillé (champs JSON exacts) : `docs/taches/vague-1-contrat-api.md`. Lecture publique sans
+authentification (un jeton périmé est ignoré) ; API équipe réservée à `EstEquipe`. Les textes publics arrivent
+dans la langue de `Accept-Language` (français en secours) ; l'API équipe renvoie les textes français,
+`traductions` et `langues_incompletes`. En `multipart/form-data`, `traductions`, `caracteristiques`, `couches`
+et `produits` sont des chaînes JSON. Médias : URL absolues ; images converties en WebP (refus 400 sur le champ
+au-delà de 10 Mo ou 40 mégapixels) ; vidéos `.mp4` ou `.webm`, 50 Mo (vidéo de fond : 30 Mo). Un fichier
+facultatif envoyé à `null` (JSON) ou vide (multipart) est retiré.
+
+| Méthode | Route | Accès |
+|---|---|---|
+| GET | `/api/catalogue/familles/` | public : tableau `{id, nom, slug, description, nombre_produits}` |
+| GET | `/api/catalogue/produits/` | public, paginé : `?famille=<slug>&usage=maison\|industrie\|entreprise\|exterieur&nouveau=1&a_la_une=1&search=` |
+| GET | `/api/catalogue/produits/<slug>/` | public : fiche complète (404 si hors ligne) |
+| GET, POST | `/api/admin/catalogue/familles/` | équipe (tableau simple) |
+| GET, PATCH, PUT, DELETE | `/api/admin/catalogue/familles/<id>/` | équipe ; DELETE refusé (400) si la famille a des produits |
+| GET, POST | `/api/admin/catalogue/produits/` | équipe, paginé : `?famille=<id>&en_ligne=1\|0&search=` |
+| GET, PATCH, PUT, DELETE | `/api/admin/catalogue/produits/<id>/` | équipe ; `caracteristiques` et `couches` remplacées en entier |
+| POST | `/api/admin/catalogue/produits/<id>/images/` et `/designs/` | équipe (multipart) |
+| GET, PATCH, DELETE | `/api/admin/catalogue/images/<id>/` et `/designs/<id>/` | équipe |
+| GET | `/api/vitrine/realisations/` (`?type=`), `/realisations/<slug>/` | public, paginé |
+| GET | `/api/vitrine/demos/` | public, paginé (`integration` : adresse YouTube sans cookies ou Vimeo) |
+| GET | `/api/vitrine/temoignages/` | public, paginé (publiés seulement) |
+| POST | `/api/vitrine/temoignages/` | client connecté (pas l'équipe) : `{texte, note, ville?, type_chantier?}` → 201 « en_attente » ; 5 par 24 h (429) |
+| GET | `/api/vitrine/temoignages/miens/` | connecté : ses témoignages avec `statut` et `motif_refus` |
+| CRUD | `/api/admin/vitrine/realisations/`, `/api/admin/vitrine/demos/` | équipe (multipart) |
+| GET, DELETE | `/api/admin/vitrine/temoignages/` (`?statut=`), `/<id>/` | équipe |
+| POST | `/api/admin/vitrine/temoignages/<id>/publier/`, `/<id>/refuser/` `{motif?}` | équipe |
+| GET | `/api/actualites/` (`?taille=3`), `/api/actualites/<slug>/` | public, paginé (publiées, date passée) |
+| CRUD | `/api/admin/actualites/` | équipe (multipart) ; `programmee` en lecture |
+| GET | `/api/contenus/accueil/` | public : accueil complet (coordonnées, bandeaux actifs, sphère) |
+| GET, PATCH | `/api/admin/contenus/accueil/` | équipe (multipart possible) |
+| CRUD | `/api/admin/contenus/bandeaux/`, `/api/admin/contenus/sphere/` | équipe (tableaux simples) |
+| POST | `/api/admin/contenus/sphere/ordre/` `{ids: [...]}` | équipe |
+
+Données de référence du catalogue (idempotent, sans prix ni image) : `python manage.py charger_catalogue_reference`.
+Les coordonnées initiales de l'accueil sont créées par la migration `contenus.0002_coordonnees_initiales`.
+
+### Médias en production
+
+`DJANGO_MEDIA_ROOT` : dossier des fichiers envoyés (volume Railway, ex. `/data/media`). Si
+`DJANGO_SERVIR_MEDIAS` est vrai (défaut), Django sert `/media/` avec `Cache-Control: public, max-age=2592000`.
+
 ## Déploiement (Railway)
 
 Service avec racine `/backend` et fichier de configuration `/backend/railway.toml` :
 migrations en pré-déploiement, `collectstatic` puis `daphne` au démarrage, sonde sur `/api/sante/`.
 Variables : `DJANGO_SETTINGS_MODULE=config.settings.prod`, `DJANGO_SECRET_KEY`, `DATABASE_URL`
 (référence au service PostgreSQL), `DJANGO_ALLOWED_HOSTS`, `DJANGO_CSRF_TRUSTED_ORIGINS`,
-`CORS_ALLOWED_ORIGINS`, et de préférence `REDIS_URL`.
+`CORS_ALLOWED_ORIGINS`, `DJANGO_MEDIA_ROOT` (volume), et de préférence `REDIS_URL`.

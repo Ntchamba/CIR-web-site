@@ -1,0 +1,29 @@
+/* Catalogue : photos et designs d'un produit, plan de coupe. */
+.media {
+  display: grid; gap: var(--esp-3); align-items: center; grid-template-columns: auto minmax(0, 1fr) auto;
+  padding: var(--esp-3); border: 1px solid var(--filet-2); border-radius: var(--rayon-s); background: var(--blanc);
+}
+@media (max-width: 640px) { .media { grid-template-columns: auto minmax(0, 1fr); } }
+.miniature { width: 72px; height: 54px; border-radius: var(--rayon-s); object-fit: cover; background: var(--fond-2); }
+.nuance { width: 72px; height: 54px; border-radius: var(--rayon-s); border: 1px solid var(--filet); }
+.infosMedia { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; min-width: 0; overflow-wrap: anywhere; }
+.editionMedia, .ajoutMedia { grid-column: 1 / -1; display: grid; gap: var(--esp-4); }
+.ajoutMedia { padding: var(--esp-4); border: 1px dashed var(--champ); border-radius: var(--rayon-s); background: var(--blanc); }
+.titreAjout { font-size: 16px; font-weight: 600; }
+.couleur { display: flex; align-items: flex-start; gap: var(--esp-3); }
+.couleur > div { flex: 1 1 auto; }
+.couleur input[type='color'] {
+  width: var(--cible-tactile); height: 48px; padding: 2px; border: 1px solid var(--champ); border-radius: var(--rayon-s);
+  background: var(--blanc); cursor: pointer; margin-top: 28px;
+}
+
+.planCoupe { margin: 0; display: grid; gap: var(--esp-2); }
+.planCoupe figcaption { font-size: 14px; font-weight: 600; color: var(--encre-2); }
+.planCoupe ol { list-style: none; margin: 0; padding: 0; border-radius: var(--rayon-s); overflow: hidden; border: 1px solid var(--filet); }
+.planCoupe li {
+  display: flex; justify-content: space-between; gap: var(--esp-3);
+  padding: var(--esp-2) var(--esp-3); font-size: 14px; font-weight: 600;
+}
+.support {
+  background: repeating-linear-gradient(135deg, #b9c4ca 0 6px, #a7b3ba 6px 12px); color: var(--encre);
+}

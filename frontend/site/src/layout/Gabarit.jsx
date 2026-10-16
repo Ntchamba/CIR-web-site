@@ -1,6 +1,8 @@
 // Gabarit commun : lien d'évitement, en-tête, contenu de la page, pied de page, barre d'onglets mobile.
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router';
+
+import Chargement from '@partage/ui/Chargement.jsx';
 
 import { useTraduction } from '@/i18n/index.js';
 
@@ -23,7 +25,10 @@ export default function Gabarit() {
       <a href="#contenu" className={styles.evitement}>{t('nav.allerAuContenu')}</a>
       <Entete />
       <main id="contenu" className={styles.contenu} tabIndex={-1}>
-        <Outlet />
+        {/* Page chargée à la demande : l'en-tête et le pied de page restent affichés pendant le chargement. */}
+        <Suspense fallback={<Chargement plein />}>
+          <Outlet />
+        </Suspense>
       </main>
       <PiedDePage />
       <BarreOnglets />

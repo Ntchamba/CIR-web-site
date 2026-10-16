@@ -46,8 +46,9 @@ function rendre(chemin = '/', utilisateur = MEMBRE, autres = () => reponse(200, 
 
 describe('menu', () => {
   it("réserve l'entrée Équipe au super-administrateur", () => {
-    expect(modulesVisibles(false).map((m) => m.chemin)).toEqual(['/', '/clients']);
-    expect(modulesVisibles(true).map((m) => m.chemin)).toEqual(['/', '/clients', '/equipe']);
+    const vague1 = ['/catalogue', '/vitrine', '/actualites', '/contenus'];
+    expect(modulesVisibles(false).map((m) => m.chemin)).toEqual(['/', '/clients', ...vague1]);
+    expect(modulesVisibles(true).map((m) => m.chemin)).toEqual(['/', '/clients', ...vague1, '/equipe']);
   });
 
   it('a des chemins uniques', () => {
@@ -73,7 +74,7 @@ describe('Coque', () => {
     expect(screen.getByText('JM')).toHaveAttribute('aria-hidden', 'true');
     // Raccourcis de l'accueil : pas d'Équipe pour un simple membre.
     const raccourcis = within(screen.getByRole('main')).getAllByRole('link').map((l) => l.textContent);
-    expect(raccourcis).toEqual(['Clients']);
+    expect(raccourcis).toEqual(['Clients', 'Catalogue', 'Vitrine', 'Actualités', 'Contenus du site']);
   });
 
   it('ouvre et ferme le tiroir avec le bouton et la touche Échap', async () => {

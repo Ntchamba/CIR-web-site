@@ -117,3 +117,206 @@ msgstr "此字段不可翻译：%(champ)s。"
 #, python-format
 msgid "Une traduction doit être un texte (%(champ)s)."
 msgstr "翻译必须是文本（%(champ)s）。"
+
+#: apps/actualites/services.py:30
+#: apps/vitrine/services.py:108
+#: apps/vitrine/services.py:139
+msgid "Le titre est obligatoire."
+msgstr "标题为必填项。"
+
+#: apps/catalogue/models.py:126
+msgid "Couleur attendue au format #RRGGBB."
+msgstr "颜色格式应为 #RRGGBB。"
+
+#: apps/catalogue/models.py:20
+msgid "Maison"
+msgstr "住宅"
+
+#: apps/catalogue/models.py:21
+msgid "Industrie"
+msgstr "工业"
+
+#: apps/catalogue/models.py:22
+msgid "Entreprise"
+msgstr "企业"
+
+#: apps/catalogue/models.py:23
+msgid "Extérieur"
+msgstr "室外"
+
+#: apps/catalogue/prix.py:16
+msgid "par m²"
+msgstr "每平方米"
+
+#: apps/catalogue/prix.py:17
+msgid "par kg"
+msgstr "每公斤"
+
+#: apps/catalogue/prix.py:18
+msgid "pose comprise"
+msgstr "含施工"
+
+#: apps/catalogue/prix.py:30
+#: apps/catalogue/prix.py:43
+#: apps/catalogue/prix.py:33
+#: apps/catalogue/prix.py:40
+msgid "Le prix doit être un nombre entier de francs CFA."
+msgstr "价格必须是以非洲法郎计的整数。"
+
+#: apps/catalogue/prix.py:45
+#: apps/catalogue/prix.py:38
+msgid "Le prix ne peut pas être négatif."
+msgstr "价格不能为负数。"
+
+#: apps/catalogue/prix.py:47
+msgid "Le prix est trop élevé."
+msgstr "价格过高。"
+
+#: apps/catalogue/prix.py:53
+msgid "Unité de prix inconnue."
+msgstr "未知的价格单位。"
+
+#: apps/catalogue/services.py:77
+msgid "Cette famille contient des produits : déplacez-les ou supprimez-les d'abord."
+msgstr "该系列包含产品：请先移动或删除这些产品。"
+
+#: apps/catalogue/services.py:54
+#: apps/catalogue/services.py:118
+#: apps/catalogue/services.py:178
+msgid "Le nom est obligatoire."
+msgstr "名称为必填项。"
+
+#: apps/catalogue/services.py:59
+msgid "Une famille porte déjà ce nom."
+msgstr "已有同名系列。"
+
+#: apps/catalogue/services.py:91
+msgid "Un produit porte déjà cette référence."
+msgstr "已有使用该型号的产品。"
+
+#: apps/contenus/models.py:53
+msgid "Le lien doit être un chemin du site commençant par « / »."
+msgstr "链接必须是以“/”开头的站内路径。"
+
+#: apps/contenus/services.py:63
+#: apps/contenus/services.py:67
+msgid "Les téléphones doivent être une liste de numéros."
+msgstr "电话必须是号码列表。"
+
+#: apps/contenus/services.py:114
+msgid "La fin doit être postérieure au début."
+msgstr "结束时间必须晚于开始时间。"
+
+#: apps/contenus/services.py:131
+msgid "L'image est obligatoire."
+msgstr "图片为必填项。"
+
+#: apps/contenus/services.py:150
+msgid "Liste d'identifiants attendue."
+msgstr "应提供标识符列表。"
+
+#: apps/contenus/services.py:152
+msgid "Un identifiant figure plusieurs fois."
+msgstr "某个标识符出现了多次。"
+
+#: apps/contenus/services.py:77
+msgid "%(max)s numéros au plus."
+msgstr "最多 %(max)s 个号码。"
+
+#: apps/contenus/services.py:110
+msgid "Le texte est obligatoire."
+msgstr "文本为必填项。"
+
+#: apps/contenus/services.py:156
+msgid "Photo introuvable : %(id)s."
+msgstr "找不到照片：%(id)s。"
+
+#: apps/contenus/services.py:72
+#: apps/contenus/services.py:90
+msgid "Numéro de téléphone invalide : %(numero)s."
+msgstr "电话号码无效：%(numero)s。"
+
+#: apps/noyau/medias.py:78
+msgid "Format de vidéo non accepté : envoyez un fichier .mp4 ou .webm."
+msgstr "不支持该视频格式：请上传 .mp4 或 .webm 文件。"
+
+#: apps/noyau/medias.py:85
+msgid "Fichier vidéo illisible."
+msgstr "视频文件无法读取。"
+
+#: apps/noyau/medias.py:81
+msgid "Vidéo trop lourde (maximum %(mo)s Mo)."
+msgstr "视频过大（最大 %(mo)s MB）。"
+
+#: apps/vitrine/models.py:52
+msgid "Durée attendue au format 1:45 ou 1:02:30."
+msgstr "时长格式应为 1:45 或 1:02:30。"
+
+#: apps/vitrine/models.py:84
+msgid "En attente"
+msgstr "待审核"
+
+#: apps/vitrine/models.py:85
+msgid "Publié"
+msgstr "已发布"
+
+#: apps/vitrine/models.py:86
+msgid "Refusé"
+msgstr "已拒绝"
+
+#: apps/vitrine/moderation.py:44
+msgid "Le témoignage ne doit pas contenir d'adresse e-mail."
+msgstr "评价中不得包含电子邮箱地址。"
+
+#: apps/vitrine/moderation.py:46
+msgid "Le témoignage ne doit pas contenir de lien."
+msgstr "评价中不得包含链接。"
+
+#: apps/vitrine/moderation.py:48
+msgid "Le témoignage ne doit pas contenir de numéro de téléphone."
+msgstr "评价中不得包含电话号码。"
+
+#: apps/vitrine/moderation.py:38
+msgid "Le témoignage doit compter au moins %(min)s caractères."
+msgstr "评价至少需要 %(min)s 个字符。"
+
+#: apps/vitrine/moderation.py:41
+msgid "Le témoignage ne doit pas dépasser %(max)s caractères."
+msgstr "评价不得超过 %(max)s 个字符。"
+
+#: apps/vitrine/moderation.py:66
+msgid "Le motif ne doit pas dépasser %(max)s caractères."
+msgstr "原因不得超过 %(max)s 个字符。"
+
+#: apps/vitrine/permissions.py:13
+#: apps/vitrine/services.py:173
+msgid "Seuls les clients connectés peuvent déposer un témoignage."
+msgstr "只有已登录的客户才能提交评价。"
+
+#: apps/vitrine/serializers.py:33
+msgid "%(titre)s, avant les travaux"
+msgstr "%(titre)s，施工前"
+
+#: apps/vitrine/serializers.py:37
+msgid "%(titre)s, après les travaux"
+msgstr "%(titre)s，施工后"
+
+#: apps/vitrine/services.py:112
+msgid "La photo après les travaux est obligatoire."
+msgstr "必须提供施工后照片。"
+
+#: apps/vitrine/services.py:147
+msgid "Envoyez une vidéo ou indiquez un lien YouTube ou Vimeo."
+msgstr "请上传视频或提供 YouTube 或 Vimeo 链接。"
+
+#: apps/vitrine/services.py:176
+msgid "Vous avez déjà déposé %(nombre)s témoignages aujourd'hui. Réessayez demain."
+msgstr "您今天已提交 %(nombre)s 条评价，请明天再试。"
+
+#: apps/vitrine/services.py:180
+msgid "La note doit être comprise entre 1 et 5."
+msgstr "评分必须在 1 到 5 之间。"
+
+#: apps/vitrine/services.py:143
+msgid "Le lien doit mener à une vidéo YouTube ou Vimeo."
+msgstr "链接必须指向 YouTube 或 Vimeo 视频。"

@@ -52,6 +52,10 @@ INSTALLED_APPS = [
     # Modules CIR (docs/architecture.md)
     "apps.noyau",
     "apps.comptes",  # BF-08, BF-17
+    "apps.catalogue",  # BF-01, BF-05, BF-06, BF-14
+    "apps.vitrine",  # BF-02, BF-03, BF-04, BF-15
+    "apps.actualites",  # BF-07
+    "apps.contenus",  # BF-15, O2
 ]
 
 MIDDLEWARE = [
@@ -117,6 +121,9 @@ STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = Path(env("DJANGO_MEDIA_ROOT", str(BASE_DIR / "media")))
+# Service des fichiers /media/ par Django (production : volume Railway monté sur DJANGO_MEDIA_ROOT),
+# avec un en-tête de cache (apps/noyau/medias.py). Vrai par défaut ; 0 si un autre service s'en charge.
+SERVIR_MEDIAS = env_bool("DJANGO_SERVIR_MEDIAS", True)
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 STORAGES = {
@@ -124,7 +131,8 @@ STORAGES = {
     "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
 }
 
-# Taille maximale d'un envoi (images du tableau de bord)
+# Taille maximale d'un envoi hors fichiers (les fichiers au-delà de 5 Mo passent par un fichier temporaire ;
+# leurs plafonds sont contrôlés par apps/noyau/images.py et apps/noyau/medias.py : images 10 Mo, vidéos 50 Mo)
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
 

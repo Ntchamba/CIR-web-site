@@ -1,0 +1,70 @@
+/* Module catalogue : page, filtres, cartes produit (aussi utilisées sur l'accueil). */
+.entete { margin-bottom: 28px; }
+.intro { margin-top: 8px; max-width: 680px; color: var(--encre-2); }
+
+.disposition { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 32px; align-items: start; }
+.descriptionFamille { margin-bottom: 20px; color: var(--encre-2); max-width: 720px; }
+
+/* Filtres */
+.filtres {
+  position: sticky; top: calc(var(--hauteur-entete) + 16px);
+  display: flex; flex-direction: column; gap: 20px;
+  padding: 20px; border-radius: var(--rayon-l); background: var(--blanc); border: 1px solid var(--filet);
+}
+.recherche { display: flex; flex-direction: column; gap: 10px; }
+.etiquette { display: block; margin-bottom: 8px; font-size: 15px; font-weight: 500; }
+.puces { display: flex; flex-wrap: wrap; gap: 8px; }
+.puce {
+  min-height: var(--cible-tactile); padding: 0 16px;
+  border: 1px solid var(--champ); border-radius: var(--pastille); background: var(--blanc);
+  font-size: 14px; font-weight: 600;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+.puce:hover { border-color: var(--encre); }
+.puce[aria-pressed='true'] { background: var(--encre); border-color: var(--encre); color: var(--blanc); }
+.effacer { align-self: flex-start; }
+
+/* Grille et cartes */
+.grille {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;
+}
+.grille > li { display: flex; }
+.carte {
+  position: relative; width: 100%;
+  display: flex; flex-direction: column;
+  border-radius: var(--rayon-l); background: var(--blanc); border: 1px solid var(--filet); overflow: hidden;
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+.carte:hover, .carte:focus-within { box-shadow: var(--ombre); transform: translateY(-2px); }
+.vignette { position: relative; aspect-ratio: 4 / 3; background: var(--fond-2); }
+.vignette img { width: 100%; height: 100%; object-fit: cover; }
+.sansImage {
+  display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;
+  font-family: var(--police-titre); font-size: 28px; color: var(--bleu);
+  background: linear-gradient(135deg, var(--fond-2), #dcebf3);
+}
+.pastilles { position: absolute; top: 12px; left: 12px; display: flex; gap: 6px; flex-wrap: wrap; }
+.nouveau, .une {
+  padding: 4px 10px; border-radius: var(--pastille);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.nouveau { background: var(--corail); color: var(--encre); }
+.une { background: var(--encre); color: var(--blanc); }
+.corps { flex: 1; display: flex; flex-direction: column; gap: 8px; padding: 18px; }
+.famille { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--encre-2); }
+.reference { color: var(--bleu); }
+.nomProduit { font-size: 20px; }
+.lienCarte { color: var(--encre); text-decoration: none; }
+.lienCarte::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
+.lienCarte:focus-visible { outline: none; }
+.carte:has(.lienCarte:focus-visible) { outline: 3px solid var(--corail); outline-offset: 2px; }
+.accroche { color: var(--encre-2); font-size: 15px; }
+.usages { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.usages li { padding: 2px 10px; border-radius: var(--pastille); background: var(--fond-2); font-size: 13px; }
+.prix { margin-top: auto; padding-top: 8px; font-weight: 700; color: var(--encre); }
+
+@media (max-width: 900px) {
+  .disposition { grid-template-columns: 1fr; }
+  .filtres { position: static; }
+}

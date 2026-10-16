@@ -117,3 +117,206 @@ msgstr "Dieses Feld ist nicht übersetzbar: %(champ)s."
 #, python-format
 msgid "Une traduction doit être un texte (%(champ)s)."
 msgstr "Eine Übersetzung muss ein Text sein (%(champ)s)."
+
+#: apps/actualites/services.py:30
+#: apps/vitrine/services.py:108
+#: apps/vitrine/services.py:139
+msgid "Le titre est obligatoire."
+msgstr "Der Titel ist erforderlich."
+
+#: apps/catalogue/models.py:126
+msgid "Couleur attendue au format #RRGGBB."
+msgstr "Farbe im Format #RRGGBB erwartet."
+
+#: apps/catalogue/models.py:20
+msgid "Maison"
+msgstr "Wohnhaus"
+
+#: apps/catalogue/models.py:21
+msgid "Industrie"
+msgstr "Industrie"
+
+#: apps/catalogue/models.py:22
+msgid "Entreprise"
+msgstr "Unternehmen"
+
+#: apps/catalogue/models.py:23
+msgid "Extérieur"
+msgstr "Außenbereich"
+
+#: apps/catalogue/prix.py:16
+msgid "par m²"
+msgstr "pro m²"
+
+#: apps/catalogue/prix.py:17
+msgid "par kg"
+msgstr "pro kg"
+
+#: apps/catalogue/prix.py:18
+msgid "pose comprise"
+msgstr "inklusive Verlegung"
+
+#: apps/catalogue/prix.py:30
+#: apps/catalogue/prix.py:43
+#: apps/catalogue/prix.py:33
+#: apps/catalogue/prix.py:40
+msgid "Le prix doit être un nombre entier de francs CFA."
+msgstr "Der Preis muss eine ganze Zahl in CFA-Franc sein."
+
+#: apps/catalogue/prix.py:45
+#: apps/catalogue/prix.py:38
+msgid "Le prix ne peut pas être négatif."
+msgstr "Der Preis darf nicht negativ sein."
+
+#: apps/catalogue/prix.py:47
+msgid "Le prix est trop élevé."
+msgstr "Der Preis ist zu hoch."
+
+#: apps/catalogue/prix.py:53
+msgid "Unité de prix inconnue."
+msgstr "Unbekannte Preiseinheit."
+
+#: apps/catalogue/services.py:77
+msgid "Cette famille contient des produits : déplacez-les ou supprimez-les d'abord."
+msgstr "Diese Produktfamilie enthält Produkte: Verschieben oder löschen Sie sie zuerst."
+
+#: apps/catalogue/services.py:54
+#: apps/catalogue/services.py:118
+#: apps/catalogue/services.py:178
+msgid "Le nom est obligatoire."
+msgstr "Der Name ist erforderlich."
+
+#: apps/catalogue/services.py:59
+msgid "Une famille porte déjà ce nom."
+msgstr "Es gibt bereits eine Produktfamilie mit diesem Namen."
+
+#: apps/catalogue/services.py:91
+msgid "Un produit porte déjà cette référence."
+msgstr "Es gibt bereits ein Produkt mit dieser Referenz."
+
+#: apps/contenus/models.py:53
+msgid "Le lien doit être un chemin du site commençant par « / »."
+msgstr "Der Link muss ein Pfad der Website sein, der mit „/“ beginnt."
+
+#: apps/contenus/services.py:63
+#: apps/contenus/services.py:67
+msgid "Les téléphones doivent être une liste de numéros."
+msgstr "Die Telefonnummern müssen eine Liste von Nummern sein."
+
+#: apps/contenus/services.py:114
+msgid "La fin doit être postérieure au début."
+msgstr "Das Ende muss nach dem Beginn liegen."
+
+#: apps/contenus/services.py:131
+msgid "L'image est obligatoire."
+msgstr "Das Bild ist erforderlich."
+
+#: apps/contenus/services.py:150
+msgid "Liste d'identifiants attendue."
+msgstr "Eine Liste von Kennungen wird erwartet."
+
+#: apps/contenus/services.py:152
+msgid "Un identifiant figure plusieurs fois."
+msgstr "Eine Kennung kommt mehrfach vor."
+
+#: apps/contenus/services.py:77
+msgid "%(max)s numéros au plus."
+msgstr "Höchstens %(max)s Nummern."
+
+#: apps/contenus/services.py:110
+msgid "Le texte est obligatoire."
+msgstr "Der Text ist erforderlich."
+
+#: apps/contenus/services.py:156
+msgid "Photo introuvable : %(id)s."
+msgstr "Foto nicht gefunden: %(id)s."
+
+#: apps/contenus/services.py:72
+#: apps/contenus/services.py:90
+msgid "Numéro de téléphone invalide : %(numero)s."
+msgstr "Ungültige Telefonnummer: %(numero)s."
+
+#: apps/noyau/medias.py:78
+msgid "Format de vidéo non accepté : envoyez un fichier .mp4 ou .webm."
+msgstr "Videoformat nicht akzeptiert: Laden Sie eine .mp4- oder .webm-Datei hoch."
+
+#: apps/noyau/medias.py:85
+msgid "Fichier vidéo illisible."
+msgstr "Videodatei nicht lesbar."
+
+#: apps/noyau/medias.py:81
+msgid "Vidéo trop lourde (maximum %(mo)s Mo)."
+msgstr "Video zu groß (maximal %(mo)s MB)."
+
+#: apps/vitrine/models.py:52
+msgid "Durée attendue au format 1:45 ou 1:02:30."
+msgstr "Dauer im Format 1:45 oder 1:02:30 erwartet."
+
+#: apps/vitrine/models.py:84
+msgid "En attente"
+msgstr "Ausstehend"
+
+#: apps/vitrine/models.py:85
+msgid "Publié"
+msgstr "Veröffentlicht"
+
+#: apps/vitrine/models.py:86
+msgid "Refusé"
+msgstr "Abgelehnt"
+
+#: apps/vitrine/moderation.py:44
+msgid "Le témoignage ne doit pas contenir d'adresse e-mail."
+msgstr "Der Erfahrungsbericht darf keine E-Mail-Adresse enthalten."
+
+#: apps/vitrine/moderation.py:46
+msgid "Le témoignage ne doit pas contenir de lien."
+msgstr "Der Erfahrungsbericht darf keinen Link enthalten."
+
+#: apps/vitrine/moderation.py:48
+msgid "Le témoignage ne doit pas contenir de numéro de téléphone."
+msgstr "Der Erfahrungsbericht darf keine Telefonnummer enthalten."
+
+#: apps/vitrine/moderation.py:38
+msgid "Le témoignage doit compter au moins %(min)s caractères."
+msgstr "Der Erfahrungsbericht muss mindestens %(min)s Zeichen lang sein."
+
+#: apps/vitrine/moderation.py:41
+msgid "Le témoignage ne doit pas dépasser %(max)s caractères."
+msgstr "Der Erfahrungsbericht darf höchstens %(max)s Zeichen lang sein."
+
+#: apps/vitrine/moderation.py:66
+msgid "Le motif ne doit pas dépasser %(max)s caractères."
+msgstr "Die Begründung darf höchstens %(max)s Zeichen lang sein."
+
+#: apps/vitrine/permissions.py:13
+#: apps/vitrine/services.py:173
+msgid "Seuls les clients connectés peuvent déposer un témoignage."
+msgstr "Nur angemeldete Kunden können einen Erfahrungsbericht abgeben."
+
+#: apps/vitrine/serializers.py:33
+msgid "%(titre)s, avant les travaux"
+msgstr "%(titre)s, vor den Arbeiten"
+
+#: apps/vitrine/serializers.py:37
+msgid "%(titre)s, après les travaux"
+msgstr "%(titre)s, nach den Arbeiten"
+
+#: apps/vitrine/services.py:112
+msgid "La photo après les travaux est obligatoire."
+msgstr "Das Foto nach den Arbeiten ist erforderlich."
+
+#: apps/vitrine/services.py:147
+msgid "Envoyez une vidéo ou indiquez un lien YouTube ou Vimeo."
+msgstr "Laden Sie ein Video hoch oder geben Sie einen YouTube- oder Vimeo-Link an."
+
+#: apps/vitrine/services.py:176
+msgid "Vous avez déjà déposé %(nombre)s témoignages aujourd'hui. Réessayez demain."
+msgstr "Sie haben heute bereits %(nombre)s Erfahrungsberichte abgegeben. Bitte versuchen Sie es morgen erneut."
+
+#: apps/vitrine/services.py:180
+msgid "La note doit être comprise entre 1 et 5."
+msgstr "Die Bewertung muss zwischen 1 und 5 liegen."
+
+#: apps/vitrine/services.py:143
+msgid "Le lien doit mener à une vidéo YouTube ou Vimeo."
+msgstr "Der Link muss zu einem YouTube- oder Vimeo-Video führen."

@@ -117,3 +117,206 @@ msgstr "このフィールドは翻訳できません：%(champ)s。"
 #, python-format
 msgid "Une traduction doit être un texte (%(champ)s)."
 msgstr "翻訳はテキストである必要があります（%(champ)s）。"
+
+#: apps/actualites/services.py:30
+#: apps/vitrine/services.py:108
+#: apps/vitrine/services.py:139
+msgid "Le titre est obligatoire."
+msgstr "タイトルは必須です。"
+
+#: apps/catalogue/models.py:126
+msgid "Couleur attendue au format #RRGGBB."
+msgstr "色は #RRGGBB 形式で入力してください。"
+
+#: apps/catalogue/models.py:20
+msgid "Maison"
+msgstr "住宅"
+
+#: apps/catalogue/models.py:21
+msgid "Industrie"
+msgstr "工業"
+
+#: apps/catalogue/models.py:22
+msgid "Entreprise"
+msgstr "企業"
+
+#: apps/catalogue/models.py:23
+msgid "Extérieur"
+msgstr "屋外"
+
+#: apps/catalogue/prix.py:16
+msgid "par m²"
+msgstr "1 m² あたり"
+
+#: apps/catalogue/prix.py:17
+msgid "par kg"
+msgstr "1 kg あたり"
+
+#: apps/catalogue/prix.py:18
+msgid "pose comprise"
+msgstr "施工込み"
+
+#: apps/catalogue/prix.py:30
+#: apps/catalogue/prix.py:43
+#: apps/catalogue/prix.py:33
+#: apps/catalogue/prix.py:40
+msgid "Le prix doit être un nombre entier de francs CFA."
+msgstr "価格は CFA フランの整数で入力してください。"
+
+#: apps/catalogue/prix.py:45
+#: apps/catalogue/prix.py:38
+msgid "Le prix ne peut pas être négatif."
+msgstr "価格をマイナスにすることはできません。"
+
+#: apps/catalogue/prix.py:47
+msgid "Le prix est trop élevé."
+msgstr "価格が高すぎます。"
+
+#: apps/catalogue/prix.py:53
+msgid "Unité de prix inconnue."
+msgstr "不明な価格単位です。"
+
+#: apps/catalogue/services.py:77
+msgid "Cette famille contient des produits : déplacez-les ou supprimez-les d'abord."
+msgstr "このファミリーには製品が含まれています。先に移動または削除してください。"
+
+#: apps/catalogue/services.py:54
+#: apps/catalogue/services.py:118
+#: apps/catalogue/services.py:178
+msgid "Le nom est obligatoire."
+msgstr "名前は必須です。"
+
+#: apps/catalogue/services.py:59
+msgid "Une famille porte déjà ce nom."
+msgstr "この名前のファミリーはすでに存在します。"
+
+#: apps/catalogue/services.py:91
+msgid "Un produit porte déjà cette référence."
+msgstr "この品番の製品はすでに存在します。"
+
+#: apps/contenus/models.py:53
+msgid "Le lien doit être un chemin du site commençant par « / »."
+msgstr "リンクは「/」で始まるサイト内のパスにしてください。"
+
+#: apps/contenus/services.py:63
+#: apps/contenus/services.py:67
+msgid "Les téléphones doivent être une liste de numéros."
+msgstr "電話番号は番号のリストで指定してください。"
+
+#: apps/contenus/services.py:114
+msgid "La fin doit être postérieure au début."
+msgstr "終了日時は開始日時より後にしてください。"
+
+#: apps/contenus/services.py:131
+msgid "L'image est obligatoire."
+msgstr "画像は必須です。"
+
+#: apps/contenus/services.py:150
+msgid "Liste d'identifiants attendue."
+msgstr "ID のリストを指定してください。"
+
+#: apps/contenus/services.py:152
+msgid "Un identifiant figure plusieurs fois."
+msgstr "同じ ID が複数回含まれています。"
+
+#: apps/contenus/services.py:77
+msgid "%(max)s numéros au plus."
+msgstr "番号は最大 %(max)s 件までです。"
+
+#: apps/contenus/services.py:110
+msgid "Le texte est obligatoire."
+msgstr "テキストは必須です。"
+
+#: apps/contenus/services.py:156
+msgid "Photo introuvable : %(id)s."
+msgstr "写真が見つかりません：%(id)s。"
+
+#: apps/contenus/services.py:72
+#: apps/contenus/services.py:90
+msgid "Numéro de téléphone invalide : %(numero)s."
+msgstr "無効な電話番号です：%(numero)s。"
+
+#: apps/noyau/medias.py:78
+msgid "Format de vidéo non accepté : envoyez un fichier .mp4 ou .webm."
+msgstr "この動画形式は使用できません。.mp4 または .webm ファイルを送信してください。"
+
+#: apps/noyau/medias.py:85
+msgid "Fichier vidéo illisible."
+msgstr "動画ファイルを読み込めません。"
+
+#: apps/noyau/medias.py:81
+msgid "Vidéo trop lourde (maximum %(mo)s Mo)."
+msgstr "動画のサイズが大きすぎます（最大 %(mo)s MB）。"
+
+#: apps/vitrine/models.py:52
+msgid "Durée attendue au format 1:45 ou 1:02:30."
+msgstr "再生時間は 1:45 または 1:02:30 の形式で入力してください。"
+
+#: apps/vitrine/models.py:84
+msgid "En attente"
+msgstr "承認待ち"
+
+#: apps/vitrine/models.py:85
+msgid "Publié"
+msgstr "公開済み"
+
+#: apps/vitrine/models.py:86
+msgid "Refusé"
+msgstr "却下"
+
+#: apps/vitrine/moderation.py:44
+msgid "Le témoignage ne doit pas contenir d'adresse e-mail."
+msgstr "お客様の声にメールアドレスを含めることはできません。"
+
+#: apps/vitrine/moderation.py:46
+msgid "Le témoignage ne doit pas contenir de lien."
+msgstr "お客様の声にリンクを含めることはできません。"
+
+#: apps/vitrine/moderation.py:48
+msgid "Le témoignage ne doit pas contenir de numéro de téléphone."
+msgstr "お客様の声に電話番号を含めることはできません。"
+
+#: apps/vitrine/moderation.py:38
+msgid "Le témoignage doit compter au moins %(min)s caractères."
+msgstr "お客様の声は %(min)s 文字以上で入力してください。"
+
+#: apps/vitrine/moderation.py:41
+msgid "Le témoignage ne doit pas dépasser %(max)s caractères."
+msgstr "お客様の声は %(max)s 文字以内で入力してください。"
+
+#: apps/vitrine/moderation.py:66
+msgid "Le motif ne doit pas dépasser %(max)s caractères."
+msgstr "理由は %(max)s 文字以内で入力してください。"
+
+#: apps/vitrine/permissions.py:13
+#: apps/vitrine/services.py:173
+msgid "Seuls les clients connectés peuvent déposer un témoignage."
+msgstr "お客様の声を投稿できるのは、ログインしたお客様のみです。"
+
+#: apps/vitrine/serializers.py:33
+msgid "%(titre)s, avant les travaux"
+msgstr "%(titre)s（施工前）"
+
+#: apps/vitrine/serializers.py:37
+msgid "%(titre)s, après les travaux"
+msgstr "%(titre)s（施工後）"
+
+#: apps/vitrine/services.py:112
+msgid "La photo après les travaux est obligatoire."
+msgstr "施工後の写真は必須です。"
+
+#: apps/vitrine/services.py:147
+msgid "Envoyez une vidéo ou indiquez un lien YouTube ou Vimeo."
+msgstr "動画を送信するか、YouTube または Vimeo のリンクを入力してください。"
+
+#: apps/vitrine/services.py:176
+msgid "Vous avez déjà déposé %(nombre)s témoignages aujourd'hui. Réessayez demain."
+msgstr "本日はすでに %(nombre)s 件のお客様の声を投稿しています。明日もう一度お試しください。"
+
+#: apps/vitrine/services.py:180
+msgid "La note doit être comprise entre 1 et 5."
+msgstr "評価は 1 から 5 の間で指定してください。"
+
+#: apps/vitrine/services.py:143
+msgid "Le lien doit mener à une vidéo YouTube ou Vimeo."
+msgstr "リンクは YouTube または Vimeo の動画を指している必要があります。"

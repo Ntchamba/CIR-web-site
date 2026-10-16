@@ -16,6 +16,10 @@ const ConnexionPage = lazy(() => import('@/modules/connexion/ConnexionPage.jsx')
 const EquipePage = lazy(() => import('@/modules/equipe/EquipePage.jsx'));
 const ClientsPage = lazy(() => import('@/modules/clients/ClientsPage.jsx'));
 const FicheClientPage = lazy(() => import('@/modules/clients/FicheClientPage.jsx'));
+const CataloguePage = lazy(() => import('@/modules/catalogue/CataloguePage.jsx'));
+const VitrinePage = lazy(() => import('@/modules/vitrine/VitrinePage.jsx'));
+const ActualitesPage = lazy(() => import('@/modules/actualites/ActualitesPage.jsx'));
+const ContenusPage = lazy(() => import('@/modules/contenus/ContenusPage.jsx'));
 
 export default function RoutesTableauDeBord() {
   return (
@@ -27,6 +31,10 @@ export default function RoutesTableauDeBord() {
             <Route index element={<AccueilPage />} />
             <Route path="clients" element={<ClientsPage />} />
             <Route path="clients/:id" element={<FicheClientPage />} />
+            <Route path="catalogue/*" element={<CataloguePage />} />
+            <Route path="vitrine/*" element={<VitrinePage />} />
+            <Route path="actualites" element={<ActualitesPage />} />
+            <Route path="contenus/*" element={<ContenusPage />} />
             <Route path="equipe" element={<RouteEquipe superAdmin><EquipePage /></RouteEquipe>} />
             {MODULES_A_VENIR.map((m) => (
               <Route key={m.chemin} path={m.chemin.slice(1)}

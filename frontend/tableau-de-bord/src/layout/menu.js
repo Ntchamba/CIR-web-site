@@ -18,6 +18,10 @@ function entree(module, chemin, icone, extra = {}) {
 export const MODULES_ACTIFS = [
   entree('accueil', '/', 'accueil', { fin: true }),
   entree('clients', '/clients', 'clients'),
+  entree('catalogue', '/catalogue', 'catalogue'),
+  entree('vitrine', '/vitrine', 'realisations'),
+  entree('actualites', '/actualites', 'actualites'),
+  entree('contenus', '/contenus', 'contenus'),
   entree('equipe', '/equipe', 'equipe', { superAdmin: true }),
 ];
 
@@ -26,10 +30,6 @@ export const MODULES_A_VENIR = [
   entree('devis', '/devis', 'devis'),
   entree('messagerie', '/messagerie', 'message'),
   entree('appels', '/appels', 'tel'),
-  entree('catalogue', '/catalogue', 'catalogue'),
-  entree('vitrine', '/vitrine', 'realisations'),
-  entree('actualites', '/actualites', 'actualites'),
-  entree('contenus', '/contenus', 'contenus'),
   entree('contact', '/contact', 'contact'),
   entree('paiements', '/paiements', 'paiements'),
   entree('statistiques', '/statistiques', 'statistiques'),

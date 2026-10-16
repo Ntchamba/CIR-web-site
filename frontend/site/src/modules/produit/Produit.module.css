@@ -1,0 +1,96 @@
+/* Module produit : fiche d'un produit. */
+.ariane { display: flex; flex-wrap: wrap; gap: 4px 20px; margin-bottom: 20px; }
+.ariane a { display: inline-flex; align-items: center; gap: 6px; min-height: var(--cible-tactile); font-weight: 600; text-decoration: none; }
+.ariane a:hover { text-decoration: underline; }
+
+.haut { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+.bas { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 40px; margin-top: 56px; align-items: start; }
+
+/* Galerie */
+.galerie { display: flex; flex-direction: column; gap: 12px; }
+.grandeImage { aspect-ratio: 4 / 3; border-radius: var(--rayon-l); overflow: hidden; background: var(--fond-2); }
+.grandeImage img { width: 100%; height: 100%; object-fit: cover; }
+.sansImage {
+  aspect-ratio: 4 / 3; align-items: center; justify-content: center; text-align: center; padding: 24px;
+  border-radius: var(--rayon-l); background: linear-gradient(135deg, var(--fond-2), #dcebf3); color: var(--encre-2);
+}
+.sansImage span { font-family: var(--police-titre); font-size: clamp(32px, 6vw, 56px); color: var(--bleu); }
+.vignettes { list-style: none; margin: 0; padding: 0; display: flex; gap: 10px; overflow-x: auto; }
+.vignettes button {
+  display: block; padding: 0; width: 88px; height: 66px; flex-shrink: 0;
+  border: 2px solid transparent; border-radius: var(--rayon-s); overflow: hidden; background: var(--fond-2);
+}
+.vignettes button[aria-pressed='true'] { border-color: var(--corail); }
+.vignettes img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Résumé et panneau */
+.resume { display: flex; flex-direction: column; gap: 14px; }
+.pastilles { display: flex; gap: 8px; flex-wrap: wrap; }
+.reference { font-weight: 700; letter-spacing: 0.06em; color: var(--bleu); }
+.nouveau { padding: 2px 10px; border-radius: var(--pastille); background: var(--corail); font-size: 12px; font-weight: 700; text-transform: uppercase; }
+.titre { font-size: clamp(30px, 4.5vw, 42px); }
+.accroche { font-size: 18px; color: var(--encre-2); }
+.usages { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.usages li { padding: 4px 12px; border-radius: var(--pastille); background: var(--fond-2); font-size: 14px; }
+
+.panneau {
+  display: flex; flex-direction: column; gap: 20px; margin-top: 8px;
+  padding: 22px; border-radius: var(--rayon-l); background: var(--blanc); border: 1px solid var(--filet);
+}
+.prix { font-size: 22px; font-weight: 700; }
+.designs { margin: 0; padding: 0; border: 0; }
+.designs legend { padding: 0; margin-bottom: 10px; font-weight: 600; }
+.designChoisi { margin-top: 8px; min-height: 1.5em; color: var(--encre-2); }
+.pastillesDesign { display: flex; flex-wrap: wrap; gap: 10px; }
+.design { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; cursor: pointer; text-align: center; }
+.echantillon {
+  display: block; width: 56px; height: 56px; border-radius: 50%; overflow: hidden;
+  border: 1px solid var(--filet); box-shadow: 0 0 0 3px transparent; transition: box-shadow var(--transition);
+}
+.echantillon img { width: 100%; height: 100%; object-fit: cover; }
+.design input:checked + .echantillon { box-shadow: 0 0 0 3px var(--corail); }
+.design input:focus-visible + .echantillon { outline: 3px solid var(--bleu); outline-offset: 3px; }
+.nomDesign { font-size: 12px; line-height: 1.25; }
+.contact { display: flex; flex-direction: column; gap: 10px; }
+.note { font-size: 14px; color: var(--encre-2); }
+
+/* Fiche technique */
+.fiche { display: flex; flex-direction: column; gap: 28px; }
+.fiche h2, .coupe h2 { font-size: clamp(24px, 3vw, 30px); }
+.rubrique h3 { margin-bottom: 8px; font-size: 20px; }
+.texte, .etapes dd { color: var(--encre-2); }
+.texte p + p, .etapes dd p + p { margin-top: 10px; }
+.etapes { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.etapes dt { font-weight: 600; }
+.etapes dd { margin: 2px 0 0; }
+.defilementTableau { overflow-x: auto; }
+.tableau { width: 100%; border-collapse: collapse; background: var(--blanc); border-radius: var(--rayon); overflow: hidden; }
+.tableau caption { text-align: left; margin-bottom: 8px; font-family: var(--police-titre); font-size: 20px; }
+.tableau th, .tableau td { padding: 12px 14px; border-bottom: 1px solid var(--filet-2); text-align: left; vertical-align: top; }
+.tableau thead th { background: var(--encre); color: var(--blanc); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
+.tableau tbody th { font-weight: 600; }
+
+/* Plan de coupe */
+.coupe { position: sticky; top: calc(var(--hauteur-entete) + 16px); display: flex; flex-direction: column; gap: 12px; }
+.texteCoupe { color: var(--encre-2); }
+.couches { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-radius: var(--rayon); overflow: hidden; border: 1px solid var(--filet); }
+.couches li {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  min-height: 52px; padding: 10px 16px;
+  /* Teinte de plus en plus soutenue de la surface vers le support. */
+  background: color-mix(in srgb, var(--bleu) min(55%, calc(14% + var(--niveau, 0) * 10%)), var(--blanc));
+  color: var(--encre);
+}
+.couches li:first-child { background: linear-gradient(90deg, #e9f4fa, #cfe6f2); }
+.nomCouche { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-weight: 600; }
+.etiquetteSurface { padding: 1px 8px; border-radius: var(--pastille); background: var(--blanc); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--bleu-fonce); }
+.epaisseur { font-size: 14px; white-space: nowrap; }
+.couches .support {
+  min-height: 64px; color: var(--blanc);
+  background: repeating-linear-gradient(135deg, #55636d 0 8px, #4a5760 8px 16px);
+}
+
+@media (max-width: 900px) {
+  .haut, .bas { grid-template-columns: 1fr; gap: 28px; }
+  .coupe { position: static; }
+}

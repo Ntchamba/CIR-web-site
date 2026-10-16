@@ -14,8 +14,9 @@ Fichiers propres au module :
 
 ## Tâches (agent `backend`, vérifiées par `backend-testeur`)
 
-- [ ] Modèles et migrations
-- [ ] Règles métier dans `services.py` (jamais dans les vues)
-- [ ] API publique `/api/actualites/` et API équipe `/api/admin/actualites/`
-- [ ] Permissions
-- [ ] Tests unitaires et d'API (écrits et lancés par `backend-testeur`)
+- [x] Modèles et migrations
+- [x] Règles métier dans `services.py` (jamais dans les vues)
+- [x] API publique `/api/actualites/` et API équipe `/api/admin/actualites/`
+- [x] Permissions
+- [x] Multilingue : titre, résumé et texte traduits ; programmation (`publie_le` futur, `programmee`)
+- [ ] Tests unitaires et d'API (tests de base écrits par `backend` ; à compléter et valider par `backend-testeur`)

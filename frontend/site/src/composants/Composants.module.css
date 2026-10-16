@@ -1,0 +1,17 @@
+/* Petits composants communs aux pages du site. */
+.voirPlus { display: flex; flex-direction: column; align-items: center; gap: 14px; margin-top: 32px; }
+.compte { font-size: 14px; color: var(--encre-2); }
+
+.surtitre {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--corail-fonce);
+}
+.enteteSection { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; margin-bottom: 28px; }
+.enteteSection h2 { font-size: clamp(26px, 3.6vw, 36px); }
+.lienSection {
+  display: inline-flex; align-items: center; gap: 8px; min-height: var(--cible-tactile);
+  font-weight: 600; text-decoration: none;
+}
+.lienSection:hover { text-decoration: underline; }
