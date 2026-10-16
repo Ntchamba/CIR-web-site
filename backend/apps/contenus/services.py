@@ -7,7 +7,8 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from rest_framework.exceptions import ValidationError
 
-from apps.noyau.medias import MO, enregistrer_avec_images
+from apps.noyau.medias import MO, effacer_apres_validation, enregistrer_avec_images, preparer_remplacement, \
+    supprimer_avec_fichiers
 
 from .models import Bandeau, ContenuAccueil, PhotoSphere
 
@@ -18,15 +19,6 @@ _TELEPHONE = re.compile(r"^\+?[\d\s().-]{6,25}$")
 
 def _texte(valeur):
     return " ".join(str(valeur or "").split())
-
-
-def _vider_fichiers(instance, donnees, champs):
-    for champ in champs:
-        if champ in donnees and not donnees[champ]:
-            fichier = getattr(instance, champ)
-            if fichier:
-                fichier.delete(save=False)
-            donnees[champ] = ""
 
 
 # --- Lecture ---
@@ -92,10 +84,12 @@ def modifier_accueil(donnees):
     for champ in ("titre", "accroche", "adresse"):
         if champ in donnees:
             donnees[champ] = _texte(donnees[champ])
-    _vider_fichiers(contenu, donnees, ("video_fond", "image_affiche"))
+    anciens = preparer_remplacement(contenu, donnees, ("video_fond", "image_affiche"))
     for champ, valeur in donnees.items():
         setattr(contenu, champ, valeur)
-    return enregistrer_avec_images(contenu)
+    enregistrer_avec_images(contenu)
+    effacer_apres_validation(anciens)
+    return contenu
 
 
 # --- Bandeaux ---
@@ -129,18 +123,19 @@ def enregistrer_photo(photo, donnees):
     donnees = dict(donnees)
     if "image" in donnees and not donnees["image"]:
         raise ValidationError({"image": [_("L'image est obligatoire.")]})
+    anciens = preparer_remplacement(photo, donnees, ("image",))
     for champ, valeur in donnees.items():
         setattr(photo, champ, valeur)
     if creation and "ordre" not in donnees:
         dernier = PhotoSphere.objects.order_by("-ordre").values_list("ordre", flat=True).first()
         photo.ordre = 0 if dernier is None else dernier + 1
-    return enregistrer_avec_images(photo)
+    enregistrer_avec_images(photo)
+    effacer_apres_validation(anciens)
+    return photo
 
 
 def supprimer_photo(photo):
-    if photo.image:
-        photo.image.delete(save=False)
-    photo.delete()
+    supprimer_avec_fichiers(photo, ("image",))
 
 
 @transaction.atomic

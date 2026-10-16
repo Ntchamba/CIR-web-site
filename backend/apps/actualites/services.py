@@ -4,7 +4,8 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from rest_framework.exceptions import ValidationError
 
-from apps.noyau.medias import enregistrer_avec_images
+from apps.noyau.medias import effacer_apres_validation, enregistrer_avec_images, preparer_remplacement, \
+    supprimer_avec_fichiers
 
 from .models import Actualite
 
@@ -30,16 +31,13 @@ def enregistrer_actualite(actualite, donnees):
             raise ValidationError({"titre": [_("Le titre est obligatoire.")]})
     if "publie_le" in donnees and donnees["publie_le"] is None:
         donnees["publie_le"] = timezone.now()
-    if "image" in donnees and not donnees["image"]:
-        if actualite.image:
-            actualite.image.delete(save=False)
-        donnees["image"] = ""
+    anciens = preparer_remplacement(actualite, donnees, ("image",))
     for champ, valeur in donnees.items():
         setattr(actualite, champ, valeur)
-    return enregistrer_avec_images(actualite)
+    enregistrer_avec_images(actualite)
+    effacer_apres_validation(anciens)
+    return actualite
 
 
 def supprimer_actualite(actualite):
-    if actualite.image:
-        actualite.image.delete(save=False)
-    actualite.delete()
+    supprimer_avec_fichiers(actualite, ("image",))

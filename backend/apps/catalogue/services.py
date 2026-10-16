@@ -4,7 +4,8 @@ from django.db.models import Count, Prefetch, Q
 from django.utils.translation import gettext as _
 from rest_framework.exceptions import ValidationError
 
-from apps.noyau.medias import enregistrer_avec_images
+from apps.noyau.medias import effacer_apres_validation, enregistrer_avec_images, preparer_remplacement, \
+    supprimer_avec_fichiers
 
 from .models import Caracteristique, Couche, Design, Famille, ImageProduit, Produit
 from .prix import normaliser_prix, valider_unite
@@ -160,8 +161,7 @@ def modifier_image(image, donnees):
 
 
 def supprimer_image(image):
-    image.image.delete(save=False)
-    image.delete()
+    supprimer_avec_fichiers(image, ("image",))
 
 
 @transaction.atomic
@@ -178,15 +178,12 @@ def enregistrer_design(design, donnees, produit=None):
             raise ValidationError({"nom": [_("Le nom est obligatoire.")]})
     if donnees.get("couleur"):
         donnees["couleur"] = donnees["couleur"].upper()
-    if "image" in donnees and not donnees["image"]:
-        if design.image:
-            design.image.delete(save=False)
-        donnees["image"] = ""
+    anciens = preparer_remplacement(design, donnees, ("image",))
     _appliquer(design, donnees, exclus=("produit",))
-    return enregistrer_avec_images(design)
+    enregistrer_avec_images(design)
+    effacer_apres_validation(anciens)
+    return design
 
 
 def supprimer_design(design):
-    if design.image:
-        design.image.delete(save=False)
-    design.delete()
+    supprimer_avec_fichiers(design, ("image",))

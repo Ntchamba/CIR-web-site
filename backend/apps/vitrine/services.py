@@ -9,7 +9,8 @@ from django.utils.translation import gettext as _
 from rest_framework.exceptions import PermissionDenied, Throttled, ValidationError
 
 from apps.noyau.langues import langue_active
-from apps.noyau.medias import enregistrer_avec_images
+from apps.noyau.medias import effacer_apres_validation, enregistrer_avec_images, preparer_remplacement, \
+    supprimer_avec_fichiers
 
 from . import moderation
 from .models import Demo, Realisation, StatutTemoignage, Temoignage
@@ -31,16 +32,6 @@ def _appliquer(instance, donnees, exclus=()):
     for champ, valeur in donnees.items():
         if champ not in exclus:
             setattr(instance, champ, valeur)
-
-
-def _vider_fichiers(instance, donnees, champs):
-    """Un fichier facultatif envoyé vide (null ou "") est retiré de l'objet."""
-    for champ in champs:
-        if champ in donnees and not donnees[champ]:
-            fichier = getattr(instance, champ)
-            if fichier:
-                fichier.delete(save=False)
-            donnees[champ] = ""
 
 
 # --- Vidéos : adresse d'intégration YouTube ou Vimeo ---
@@ -110,20 +101,17 @@ def enregistrer_realisation(realisation, donnees):
         donnees["ville"] = _texte(donnees["ville"])
     if "image_apres" in donnees and not donnees["image_apres"]:
         raise ValidationError({"image_apres": [_("La photo après les travaux est obligatoire.")]})
-    _vider_fichiers(realisation, donnees, ("image_avant",))
+    anciens = preparer_remplacement(realisation, donnees, ("image_apres", "image_avant"))
     _appliquer(realisation, donnees)
     enregistrer_avec_images(realisation)
     if produits is not None:
         realisation.produits.set(produits)
+    effacer_apres_validation(anciens)
     return realisation
 
 
 def supprimer_realisation(realisation):
-    for champ in ("image_apres", "image_avant"):
-        fichier = getattr(realisation, champ)
-        if fichier:
-            fichier.delete(save=False)
-    realisation.delete()
+    supprimer_avec_fichiers(realisation, ("image_apres", "image_avant"))
 
 
 # --- Démonstrations ---
@@ -141,19 +129,17 @@ def enregistrer_demo(demo, donnees):
         donnees["lien"] = str(donnees["lien"] or "").strip()
         if donnees["lien"] and not adresse_integration(donnees["lien"]):
             raise ValidationError({"lien": [_("Le lien doit mener à une vidéo YouTube ou Vimeo.")]})
-    _vider_fichiers(demo, donnees, ("video", "miniature"))
+    anciens = preparer_remplacement(demo, donnees, ("video", "miniature"))
     _appliquer(demo, donnees)
     if not demo.video and not demo.lien:
         raise ValidationError({"video": [_("Envoyez une vidéo ou indiquez un lien YouTube ou Vimeo.")]})
-    return enregistrer_avec_images(demo)
+    enregistrer_avec_images(demo)
+    effacer_apres_validation(anciens)
+    return demo
 
 
 def supprimer_demo(demo):
-    for champ in ("video", "miniature"):
-        fichier = getattr(demo, champ)
-        if fichier:
-            fichier.delete(save=False)
-    demo.delete()
+    supprimer_avec_fichiers(demo, ("video", "miniature"))
 
 
 # --- Témoignages ---
