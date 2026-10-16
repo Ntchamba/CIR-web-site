@@ -324,3 +324,7 @@ msgstr "The link must point to a YouTube or Vimeo video."
 #: apps/vitrine/moderation.py
 msgid "La ville ne doit contenir ni lien, ni adresse e-mail, ni numéro de téléphone."
 msgstr "The city must not contain a link, an email address or a phone number."
+
+#: apps/contenus/services.py
+msgid "La date de fin ne peut pas précéder la date de début."
+msgstr "The end date cannot be before the start date."

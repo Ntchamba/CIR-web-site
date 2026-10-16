@@ -17,8 +17,9 @@ import gestion from '@/composants/Gestion.module.css';
 import { creerDemo, modifierDemo, supprimerDemo } from '../api.js';
 
 const CHAMPS = ['titre', 'description', 'video', 'lien', 'miniature', 'duree', 'realisation', 'publie', 'ordre', 'traductions'];
-const LIEN_VIDEO = /^https:\/\/(www\.|m\.)?(youtube\.com|youtu\.be|vimeo\.com|player\.vimeo\.com)\//i;
-const DUREE = /^\d{1,3}:[0-5]\d$/;
+const LIEN_VIDEO = /^https:\/\/(www\.|m\.)?(youtube\.com|youtube-nocookie\.com|youtu\.be|vimeo\.com|player\.vimeo\.com)\//i;
+// Même règle que le modèle Demo : « 1:45 » ou « 1:02:30 ».
+const DUREE = /^\d{1,2}(:[0-5]\d){1,2}$/;
 
 export function validerDemo(form, { video }) {
   const erreurs = {};

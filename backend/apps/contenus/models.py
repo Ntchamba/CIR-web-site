@@ -62,15 +62,16 @@ def lien_interne(valeur):
 
 
 class Bandeau(TraductionsMixin, models.Model):
-    """Message court en haut de l'accueil, affiché s'il est actif et dans ses dates."""
+    """Message court en haut de l'accueil, affiché s'il est actif et dans ses dates (fin incluse)."""
 
     champs_traduits = ("texte",)
 
     texte = models.CharField(max_length=200)
     lien = models.CharField(max_length=200, blank=True, validators=[lien_interne])
     actif = models.BooleanField(default=True)
-    debut = models.DateTimeField("début", null=True, blank=True)
-    fin = models.DateTimeField(null=True, blank=True)
+    # Dates facultatives, incluses toutes les deux (jour de Douala) : affiché du début au soir de la fin
+    debut = models.DateField("début", null=True, blank=True)
+    fin = models.DateField(null=True, blank=True)
     ordre = models.PositiveIntegerField(default=0)
     traductions = champ_traductions()
 

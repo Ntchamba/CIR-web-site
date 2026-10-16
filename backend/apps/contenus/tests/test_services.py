@@ -11,20 +11,25 @@ from apps.contenus.models import Bandeau, PhotoSphere
 
 
 class ServicesContenusTests(MediasTemporairesMixin, TestCase):
-    def test_bandeaux_actifs(self):
-        maintenant = timezone.now()
+    def test_bandeaux_actifs_fin_incluse(self):
+        aujourd_hui = timezone.localdate()
         visible = Bandeau.objects.create(texte="Promo")
-        dans_dates = Bandeau.objects.create(texte="Salon", debut=maintenant - timedelta(days=1),
-                                            fin=maintenant + timedelta(days=1))
+        dans_dates = Bandeau.objects.create(texte="Salon", debut=aujourd_hui - timedelta(days=1),
+                                            fin=aujourd_hui + timedelta(days=1))
+        un_jour = Bandeau.objects.create(texte="Aujourd'hui", debut=aujourd_hui, fin=aujourd_hui)
         Bandeau.objects.create(texte="Inactif", actif=False)
-        Bandeau.objects.create(texte="Fini", fin=maintenant - timedelta(hours=1))
-        Bandeau.objects.create(texte="Futur", debut=maintenant + timedelta(hours=1))
-        self.assertEqual(list(services.bandeaux_actifs()), [visible, dans_dates])
+        Bandeau.objects.create(texte="Fini hier", fin=aujourd_hui - timedelta(days=1))
+        Bandeau.objects.create(texte="Demain", debut=aujourd_hui + timedelta(days=1))
+        self.assertEqual(list(services.bandeaux_actifs()), [visible, dans_dates, un_jour])
 
     def test_fin_avant_debut(self):
-        maintenant = timezone.now()
-        with self.assertRaises(ValidationError):
-            services.enregistrer_bandeau(None, {"texte": "X", "debut": maintenant, "fin": maintenant})
+        aujourd_hui = timezone.localdate()
+        b = services.enregistrer_bandeau(None, {"texte": "X", "debut": aujourd_hui, "fin": aujourd_hui})
+        self.assertEqual(b.fin, b.debut)  # un seul jour : accepté
+        with self.assertRaises(ValidationError) as contexte:
+            services.enregistrer_bandeau(None, {"texte": "X", "debut": aujourd_hui,
+                                                "fin": aujourd_hui - timedelta(days=1)})
+        self.assertIn("fin", contexte.exception.detail)
 
     def test_telephones(self):
         self.assertEqual(services.valider_telephones([" +237  6 99 81 16 35 ", "", "+237 6 99 81 16 35"]),

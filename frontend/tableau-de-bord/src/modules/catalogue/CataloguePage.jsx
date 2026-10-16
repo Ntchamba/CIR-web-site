@@ -28,7 +28,7 @@ export default function CataloguePage() {
         { chemin: '/catalogue/familles', libelle: t('catalogue.familles.titre') },
       ]} />
       <Routes>
-        <Route index element={<ListeProduits familles={familles.familles} />} />
+        <Route index element={<ListeProduits familles={familles.familles} surChangementFamilles={familles.recharger} />} />
         <Route path="familles" element={<ListeFamilles etat={familles} />} />
       </Routes>
     </div>

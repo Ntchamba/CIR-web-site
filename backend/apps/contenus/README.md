@@ -19,5 +19,6 @@ Fichiers propres au module :
 - [x] API publique `/api/contenus/` et API équipe `/api/admin/contenus/`
 - [x] Permissions
 - [x] Multilingue : titre, accroche, texte partenaire, bandeaux et textes alternatifs traduits
+- [x] Bandeaux : `debut` et `fin` en dates, fin incluse (jour de Douala), `fin == debut` accepté
 - [x] Migration de données `0002_coordonnees_initiales` (trois téléphones, WhatsApp, adresse)
 - [ ] Tests unitaires et d'API (tests de base écrits par `backend` ; à compléter et valider par `backend-testeur`)

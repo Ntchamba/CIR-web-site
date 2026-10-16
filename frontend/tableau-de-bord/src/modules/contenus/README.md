@@ -8,7 +8,7 @@ Fichiers :
 
 - `ContenusPage.jsx` : sous-routes `/contenus` (accueil), `/contenus/bandeaux`, `/contenus/sphere`
 - `SectionAccueil.jsx` (+ `composants/EditeurTelephones.jsx`) : titre, accroche, texte partenaire traduits ; vidéo de fond (30 Mo) et image ; téléphones, WhatsApp, e-mail, adresse. Textes en PATCH JSON, puis fichiers en PATCH multipart s'il y en a
-- `SectionBandeaux.jsx`, `composants/TiroirBandeau.jsx` : texte traduit, lien interne (« / »), actif, début / fin, ordre
+- `SectionBandeaux.jsx`, `composants/TiroirBandeau.jsx` : texte traduit, lien interne (`^/(?!/)[^\s\\]*$`, comme le serveur), actif, début / fin en `YYYY-MM-DD` (jour de fin inclus, fin = début permis ; dates affichées sans conversion UTC), ordre
 - `SectionSphere.jsx`, `composants/TiroirPhotoSphere.jsx` : photos, texte alternatif traduit, produit lié, ordre (`POST sphere/ordre/`)
 - `api.js`, `useContenus.js` (`useBandeaux`, `useSphere`, `etatBandeau`), `Contenus.module.css`
 

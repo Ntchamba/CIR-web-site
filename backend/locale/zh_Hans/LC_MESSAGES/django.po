@@ -324,3 +324,7 @@ msgstr "链接必须指向 YouTube 或 Vimeo 视频。"
 #: apps/vitrine/moderation.py
 msgid "La ville ne doit contenir ni lien, ni adresse e-mail, ni numéro de téléphone."
 msgstr "城市中不得包含链接、电子邮箱地址或电话号码。"
+
+#: apps/contenus/services.py
+msgid "La date de fin ne peut pas précéder la date de début."
+msgstr "结束日期不能早于开始日期。"

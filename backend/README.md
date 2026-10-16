@@ -101,7 +101,7 @@ facultatif envoyé à `null` (JSON) ou vide (multipart) est retiré.
 | CRUD | `/api/admin/actualites/` | équipe (multipart) ; `programmee` en lecture |
 | GET | `/api/contenus/accueil/` | public : accueil complet (coordonnées, bandeaux actifs, sphère) |
 | GET, PATCH | `/api/admin/contenus/accueil/` | équipe (multipart possible) |
-| CRUD | `/api/admin/contenus/bandeaux/`, `/api/admin/contenus/sphere/` | équipe (tableaux simples) |
+| CRUD | `/api/admin/contenus/bandeaux/`, `/api/admin/contenus/sphere/` | équipe (tableaux simples) ; bandeaux : `debut`, `fin` en dates `AAAA-MM-JJ`, fin incluse (jour de Douala), `fin == debut` accepté |
 | POST | `/api/admin/contenus/sphere/ordre/` `{ids: [...]}` | équipe |
 
 Données de référence du catalogue (idempotent, sans prix ni image) : `python manage.py charger_catalogue_reference`.

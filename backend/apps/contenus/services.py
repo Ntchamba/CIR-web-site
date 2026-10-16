@@ -27,12 +27,15 @@ def contenu_accueil():
     return ContenuAccueil.charger()
 
 
-def bandeaux_actifs(maintenant=None):
-    """Bandeaux actifs dont la période (début, fin facultatifs) contient l'instant présent."""
-    maintenant = maintenant or timezone.now()
+def bandeaux_actifs(aujourd_hui=None):
+    """Bandeaux actifs dont la période contient le jour présent (fuseau Africa/Douala).
+
+    `debut` et `fin` sont facultatifs et **inclus** : un bandeau qui finit aujourd'hui est encore affiché.
+    """
+    aujourd_hui = aujourd_hui or timezone.localdate()
     return Bandeau.objects.filter(actif=True).filter(
-        Q(debut__isnull=True) | Q(debut__lte=maintenant),
-        Q(fin__isnull=True) | Q(fin__gt=maintenant),
+        Q(debut__isnull=True) | Q(debut__lte=aujourd_hui),
+        Q(fin__isnull=True) | Q(fin__gte=aujourd_hui),
     )
 
 
@@ -104,8 +107,8 @@ def enregistrer_bandeau(bandeau, donnees):
             raise ValidationError({"texte": [_("Le texte est obligatoire.")]})
     for champ, valeur in donnees.items():
         setattr(bandeau, champ, valeur)
-    if bandeau.debut and bandeau.fin and bandeau.fin <= bandeau.debut:
-        raise ValidationError({"fin": [_("La fin doit être postérieure au début.")]})
+    if bandeau.debut and bandeau.fin and bandeau.fin < bandeau.debut:  # fin == début : un seul jour
+        raise ValidationError({"fin": [_("La date de fin ne peut pas précéder la date de début.")]})
     bandeau.save()
     return bandeau
 

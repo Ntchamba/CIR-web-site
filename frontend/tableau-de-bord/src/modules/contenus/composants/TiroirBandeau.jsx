@@ -16,12 +16,16 @@ import gestion from '@/composants/Gestion.module.css';
 import { creerBandeau, modifierBandeau, supprimerBandeau } from '../api.js';
 
 const CHAMPS = ['texte', 'lien', 'actif', 'debut', 'fin', 'ordre', 'traductions'];
+// Même règle que le serveur (^/(?!/)[^\s\\]*$) : chemin du site, sans espace, caractère de contrôle ni « \ ».
+// eslint-disable-next-line no-control-regex
+const LIEN_INTERNE = /^\/(?!\/)[^\s\\\u0000-\u001f\u007f]*$/;
 
 export function validerBandeau(form) {
   const erreurs = {};
   if (!form.texte.trim()) erreurs.texte = traduire('contenus.bandeaux.texteManquant');
   const lien = form.lien.trim();
-  if (lien && (!lien.startsWith('/') || lien.startsWith('//'))) erreurs.lien = traduire('contenus.bandeaux.lienInvalide');
+  // Fin incluse : le bandeau s'affiche encore le jour de fin ; fin == début est permis.
+  if (lien && !LIEN_INTERNE.test(lien)) erreurs.lien = traduire('contenus.bandeaux.lienInvalide');
   if (form.debut && form.fin && form.fin < form.debut) erreurs.fin = traduire('contenus.bandeaux.finAvantDebut');
   return erreurs;
 }

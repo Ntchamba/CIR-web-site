@@ -90,12 +90,12 @@ export default function GestionImages({ produitId, images, surChangement }) {
     copie.splice(index + sens, 0, image);
     setErreur(null);
     try {
-      // Seules les deux photos échangées changent d'ordre.
-      const a = copie[index];
-      const b = copie[index + sens];
-      const [majA, majB] = await Promise.all([modifierImage(a.id, { ordre: index }), modifierImage(b.id, { ordre: index + sens })]);
-      surChangement(copie.map((img) => (img.id === majA.id ? { ...img, ...majA } : img.id === majB.id ? { ...img, ...majB } : img))
-        .map((img, i) => ({ ...img, ordre: i })));
+      // Le serveur ne renumérote pas les photos (ordres 5, 6, 7… possibles) : chaque photo dont l'ordre
+      // diffère de sa nouvelle position reçoit `ordre = position`.
+      const aModifier = copie.map((img, i) => [img, i]).filter(([img, i]) => (img.ordre ?? 0) !== i);
+      const majs = await Promise.all(aModifier.map(([img, i]) => modifierImage(img.id, { ordre: i })));
+      const parId = new Map(majs.filter(Boolean).map((m) => [m.id, m]));
+      surChangement(copie.map((img, i) => ({ ...img, ...(parId.get(img.id) || {}), ordre: i })));
     } catch (e) {
       setErreur(e);
     }

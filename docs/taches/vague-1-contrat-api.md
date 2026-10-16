@@ -131,7 +131,7 @@ publication, refus).
 | Modèle | Champs | Traduits |
 |---|---|---|
 | `ContenuAccueil` (enregistrement unique) | `titre`, `accroche`, `video_fond` (facultative), `image_affiche` (image de la vidéo, facultative), `texte_partenaire`, `telephones` (liste JSON de numéros), `whatsapp`, `email`, `adresse` | `titre`, `accroche`, `texte_partenaire` |
-| `Bandeau` | `texte`, `lien` (chemin interne commençant par `/`, facultatif), `actif`, `debut`, `fin` (facultatifs), `ordre` | `texte` |
+| `Bandeau` | `texte`, `lien` (chemin interne commençant par `/`, facultatif), `actif`, `debut`, `fin` (dates `AAAA-MM-JJ` facultatives, fin incluse : affiché si `debut <= aujourd'hui <= fin`, jour de Douala ; `fin == debut` accepté), `ordre` | `texte` |
 | `PhotoSphere` | `image` (WebP 480), `alt`, `produit` (FK catalogue, SET_NULL), `ordre` | `alt` |
 
 - Public `GET /api/contenus/accueil/` → **une seule requête pour l'accueil** :

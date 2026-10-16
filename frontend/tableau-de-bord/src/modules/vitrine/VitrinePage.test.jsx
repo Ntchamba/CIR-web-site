@@ -18,7 +18,7 @@ describe('validerDemo', () => {
     expect(validerDemo(base, { video: null }).lien).toBe('Envoyez une vidéo ou indiquez un lien.');
     expect(validerDemo({ ...base, lien: 'https://exemple.cm/v' }, { video: null }).lien).toMatch(/YouTube ou Vimeo/);
     expect(validerDemo({ ...base, lien: 'https://youtu.be/abc', duree: '1:45' }, { video: null })).toEqual({});
-    expect(validerDemo({ ...base, duree: '90' }, { video: 'https://x/v.mp4' }).duree).toMatch(/minutes:secondes/);
+    expect(validerDemo({ ...base, duree: '90' }, { video: 'https://x/v.mp4' }).duree).toMatch(/1:45 ou 1:02:30/);
   });
 });
 

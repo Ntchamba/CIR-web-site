@@ -12,7 +12,7 @@ import { PastilleTraductions } from '@/composants/OngletsLangues.jsx';
 import gestion from '@/composants/Gestion.module.css';
 
 import TiroirBandeau from './composants/TiroirBandeau.jsx';
-import { etatBandeau, useBandeaux } from './useContenus.js';
+import { dateDuJour, etatBandeau, useBandeaux } from './useContenus.js';
 
 const CLASSES = { actif: gestion.ok, programme: gestion.info, expire: gestion.neutre, inactif: gestion.neutre };
 
@@ -22,10 +22,11 @@ export default function SectionBandeaux() {
   const [ouvert, setOuvert] = useState(null);
   const [annonce, setAnnonce] = useState('');
 
+  const jour = (v) => date(dateDuJour(v));
   const periode = (b) => {
-    if (b.debut && b.fin) return t('contenus.bandeaux.du', { debut: date(b.debut), fin: date(b.fin) });
-    if (b.debut) return t('contenus.bandeaux.aPartirDu', { date: date(b.debut) });
-    if (b.fin) return t('contenus.bandeaux.jusquAu', { date: date(b.fin) });
+    if (b.debut && b.fin) return t('contenus.bandeaux.du', { debut: jour(b.debut), fin: jour(b.fin) });
+    if (b.debut) return t('contenus.bandeaux.aPartirDu', { date: jour(b.debut) });
+    if (b.fin) return t('contenus.bandeaux.jusquAu', { date: jour(b.fin) });
     return t('contenus.bandeaux.sansPeriode');
   };
 

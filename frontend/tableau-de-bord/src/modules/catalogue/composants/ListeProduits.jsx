@@ -21,7 +21,8 @@ const vignette = (produit) => {
   return images[0]?.url || produit.image?.url || '';
 };
 
-export default function ListeProduits({ familles }) {
+/** `surChangementFamilles` : recharge les familles (nombre de produits) après création, suppression ou changement de famille. */
+export default function ListeProduits({ familles, surChangementFamilles }) {
   const { t } = useTraduction();
   const {
     produits, total, suivante, precedente, criteres, saisie, changerSaisie, filtrer, allerALaPage, effacer, filtre,
@@ -125,10 +126,16 @@ export default function ListeProduits({ familles }) {
 
       {ouvert && (
         <TiroirProduit key={ouvert} produitId={ouvert} familles={familles} surFermeture={() => setOuvert(null)}
-          surEnregistrement={remplacer}
+          surEnregistrement={(produit) => {
+            const avant = produits.find((p) => p.id === produit.id);
+            const idFamille = (f) => f?.id ?? f;
+            remplacer(produit);
+            if (!avant || idFamille(avant.famille) !== idFamille(produit.famille)) surChangementFamilles?.();
+          }}
           surSuppression={(id) => {
             const nom = produits.find((p) => p.id === id)?.nom || '';
             retirer(id);
+            surChangementFamilles?.();
             setOuvert(null);
             setAnnonce(t('catalogue.produits.supprime', { nom }));
           }} />

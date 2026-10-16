@@ -72,8 +72,11 @@ function FormulaireDesign({ design, produitId, surEnregistre, surAnnuler }) {
           value={COULEUR.test(form.couleur) ? form.couleur : '#ffffff'}
           onChange={(e) => setForm((f) => ({ ...f, couleur: e.target.value.toUpperCase() }))} />
       </div>
-      <ChampImage libelle={t('catalogue.designs.image')} image={design?.image} fichier={form.fichier || null}
-        erreur={erreurs.image} surChoix={(fichier) => setForm((f) => ({ ...f, fichier: fichier || undefined }))} />
+      {/* fichier : File (nouveau), null (image retirée : envoi de image: null), undefined (inchangée) */}
+      <ChampImage libelle={t('catalogue.designs.image')} image={form.fichier === null ? null : design?.image}
+        fichier={form.fichier || null} erreur={erreurs.image}
+        surChoix={(fichier) => setForm((f) => ({ ...f, fichier: fichier || undefined }))}
+        surRetrait={design ? () => setForm((f) => ({ ...f, fichier: null })) : undefined} />
       <MessageErreur erreur={erreur} />
       <div className={gestion.actionsFormulaire}>
         <Bouton taille="petit" chargement={envoi} onClick={enregistrer}>

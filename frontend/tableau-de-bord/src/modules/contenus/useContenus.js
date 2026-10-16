@@ -25,7 +25,19 @@ export default function useContenus() {
   return useChargement((signal) => contenusApi.obtenirAccueil({ signal }), []);
 }
 
-/** État d'un bandeau : 'inactif', 'programme' (début futur), 'expire' (fin passée) ou 'actif'. */
+/**
+ * Date « YYYY-MM-DD » (DateField du serveur) → Date à minuit, heure locale. `new Date('2026-10-31')` serait minuit
+ * UTC, soit la veille dans les fuseaux à l'ouest de Greenwich : on construit la date à partir de ses chiffres.
+ */
+export function dateDuJour(valeur) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(valeur || ''));
+  return m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])) : null;
+}
+
+/**
+ * État d'un bandeau : 'inactif', 'programme' (début futur), 'expire' (fin passée) ou 'actif'.
+ * Règle du serveur : affiché si debut <= aujourd'hui <= fin (le jour de fin est inclus).
+ */
 export function etatBandeau(bandeau, maintenant = new Date()) {
   if (!bandeau?.actif) return 'inactif';
   const jour = (v) => String(v || '').slice(0, 10);
