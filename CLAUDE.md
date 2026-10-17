@@ -2,6 +2,7 @@
 
 Branche de travail : `prototype-2`. `prototype-1` reste intact, comme référence.
 Document d'architecture : `docs/architecture.md`. Fiches de tâches : `docs/taches/vague-<n>.md`.
+**À lire en premier pour reprendre le projet : `docs/passation.md`** (état, décisions, méthode des agents).
 
 ## Le projet
 
