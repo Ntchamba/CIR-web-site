@@ -5,24 +5,24 @@ Contrat d'API commun aux trois agents : `docs/taches/vague-1-contrat-api.md`.
 Chaque paire travaille dans sa propre fenêtre de contexte : l'agent code, puis son agent testeur relit le code, écrit et lance les tests unitaires, et renvoie ses remarques jusqu'à ce que tout passe.
 
 ## Module `catalogue` (BF-01, BF-05, BF-06, BF-14)
-- [ ] Back-end : paire `backend` + `backend-testeur`
-- [ ] Site : paire `site` + `site-testeur`
-- [ ] Tableau de bord : paire `tableau-de-bord` + `tableau-de-bord-testeur`
+- [x] Back-end : paire `backend` + `backend-testeur`
+- [x] Site : paire `site` + `site-testeur`
+- [x] Tableau de bord : paire `tableau-de-bord` + `tableau-de-bord-testeur`
 
 ## Module `vitrine` (BF-02, BF-03, BF-04, BF-15)
-- [ ] Back-end : paire `backend` + `backend-testeur`
-- [ ] Site : paire `site` + `site-testeur`
-- [ ] Tableau de bord : paire `tableau-de-bord` + `tableau-de-bord-testeur`
+- [x] Back-end : paire `backend` + `backend-testeur`
+- [x] Site : paire `site` + `site-testeur`
+- [x] Tableau de bord : paire `tableau-de-bord` + `tableau-de-bord-testeur`
 
 ## Module `actualites` (BF-07)
-- [ ] Back-end : paire `backend` + `backend-testeur`
-- [ ] Site : paire `site` + `site-testeur`
-- [ ] Tableau de bord : paire `tableau-de-bord` + `tableau-de-bord-testeur`
+- [x] Back-end : paire `backend` + `backend-testeur`
+- [x] Site : paire `site` + `site-testeur`
+- [x] Tableau de bord : paire `tableau-de-bord` + `tableau-de-bord-testeur`
 
 ## Module `contenus` (BF-15, O2)
-- [ ] Back-end : paire `backend` + `backend-testeur`
-- [ ] Site : paire `site` + `site-testeur`
-- [ ] Tableau de bord : paire `tableau-de-bord` + `tableau-de-bord-testeur`
+- [x] Back-end : paire `backend` + `backend-testeur`
+- [x] Site : paire `site` + `site-testeur`
+- [x] Tableau de bord : paire `tableau-de-bord` + `tableau-de-bord-testeur`
 
 
 Une branche et une pull request par vague (ou par module si la vague est grande), vers `prototype-2`.
