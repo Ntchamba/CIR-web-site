@@ -276,7 +276,7 @@ describe('Demandes de rendu (format réel)', () => {
       ['PATCH', /demandes-rendu\/2\/$/, (url, o) => ({ ...DEMANDE, ...JSON.parse(o.body) })],
     ]);
     await u.selectOptions(within(tiroir).getByLabelText('État'), 'en_etude');
-    await u.type(within(tiroir).getByLabelText("Réponse à l'équipe"), 'On regarde');
+    await u.type(within(tiroir).getByLabelText("Réponse de l'équipe"), 'On regarde');
     await u.click(within(tiroir).getByRole('button', { name: 'Enregistrer la réponse' }));
     await waitFor(() => expect(appels(simule, 'PATCH', 'demandes-rendu/2/')).toHaveLength(1));
     expect(JSON.parse(appels(simule, 'PATCH', 'demandes-rendu/2/')[0][1].body)).toEqual({ etat: 'en_etude', reponse_equipe: 'On regarde' });
