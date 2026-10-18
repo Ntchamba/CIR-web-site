@@ -179,7 +179,8 @@ class NegociationBoutEnBoutTests(BaseVague2):
                           contrat["proposition"]), ("client", "480000", "12000", 15, pid))
         self.assertEqual(contrat["client"]["email"], "a@exemple.cm")
         self.assertEqual(contrat["reference"], r.data["reference"])
-        self.assertEqual(len(contrat["lignes"]), 1)
+        self.assertEqual(contrat["lignes"], [{"produit_nom": "Sol autolissant", "produit_reference": "YD-500",
+                                              "design_nom": None}])
         self.assertEqual([h["vers"] for h in r.data["historique"]], ["negociation", "contrat_signe"])
         self.assertEqual(r.data["actions_possibles"], [])
         self.assertFalse(r.data["propositions"][1]["peut_repondre"])

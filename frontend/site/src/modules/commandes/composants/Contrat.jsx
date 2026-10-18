@@ -13,12 +13,9 @@ import styles from '../Commandes.module.css';
 /** Adresse du contrat : texte ou objet {ville, quartier, rue_ou_repere}. */
 const texteAdresse = (a) => (typeof a === 'string' ? a : [a?.rue_ou_repere, a?.quartier, a?.ville].filter(Boolean).join(', '));
 
-/** Ligne du contrat : texte ou objet (nom du produit et du design, tels qu'enregistrés). */
+/** Ligne du contrat : instantané {produit_nom, produit_reference, design_nom|null} (noms tels qu'à la commande). */
 function texteLigne(l) {
-  if (typeof l === 'string') return l;
-  const produit = l?.produit_nom || l?.nom || l?.produit?.nom || l?.libelle || '';
-  const design = l?.design_nom || l?.design?.nom || '';
-  return [l?.produit_reference, produit, design].filter(Boolean).join(' · ');
+  return [l?.produit_reference, l?.produit_nom, l?.design_nom].filter(Boolean).join(' · ');
 }
 
 export default function Contrat({ contrat }) {

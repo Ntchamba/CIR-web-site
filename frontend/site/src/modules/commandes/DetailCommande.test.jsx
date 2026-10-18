@@ -72,7 +72,7 @@ describe('DetailCommande : affichage', () => {
     expect(screen.getByRole('heading', { name: 'Montant convenu' })).toBeInTheDocument();
     expect(screen.getAllByText(/510\s000 FCFA/).length).toBeGreaterThan(1);
     expect(screen.getByRole('heading', { name: 'Contrat CTR-2026-0007' })).toBeInTheDocument();
-    expect(screen.getByText('YD-306 Sable coloré · Gris anthracite')).toBeInTheDocument();
+    expect(screen.getByText('YD-306 · Sable coloré · Gris anthracite')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Imprimer/ })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Annuler la commande' })).toBeNull();
     expect(screen.queryByRole('button', { name: 'Accepter' })).toBeNull();

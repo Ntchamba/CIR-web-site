@@ -182,7 +182,7 @@ class CommandeDetailSerializer(serializers.ModelSerializer):
         return PropositionSerializer(commande.propositions.all(), many=True, context=contexte).data
 
     def get_contrat(self, commande):
-        contrat = contrats.contrat_de(commande, list(self._lignes(commande)))
+        contrat = contrats.contrat_de(commande)
         if contrat is not None:
             contrat["signe_le"] = _date(contrat["signe_le"])
         return contrat

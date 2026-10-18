@@ -89,7 +89,8 @@ API `/api/selection/` (client connecté, `EstClient`) :
    surface »). **Refuser** : seulement par l'autre partie ; la proposition passe à `refusee`, la commande reste en
    `negociation`. Toute réponse à une proposition qui n'est plus `en_attente` : 400.
 5. **Contrat** (`contrats.py`) : la commande signée expose un objet `contrat` en lecture seule
-   `{reference, signe_le, accepte_par: "client"|"equipe", client: {nom_complet, email, telephone}, adresse,
+   `{reference, signe_le, accepte_par: "client"|"equipe", client: {nom_complet, email, telephone},
+   adresse: {ville, quartier, rue_ou_repere} (instantané),
    lignes: [{produit_nom, produit_reference, design_nom|null}] (instantanés du moment de la commande),
    montant, prix_m2, delai_jours, proposition: <id>}` (pas de PDF).
 6. Signaux Django `proposition_acceptee`, `proposition_refusee`, `proposition_remplacee` (module
@@ -123,7 +124,7 @@ API `/api/selection/` (client connecté, `EstClient`) :
 - `GET <id>/` → `{id, reference, type_batiment, etat, surface_m2, description, adresse: {ville, quartier,
   rue_ou_repere}, lignes: [{id, produit: {id, slug, reference, nom, image}|null, design: {id, nom, couleur}|null}],
   montant_convenu, prix_m2_convenu, delai_convenu_jours, signe_le, propositions: [Proposition], historique:
-  [{de, vers, par: "client"|"equipe", cree_le}], contrat: {…}|null, devis: [DevisResume envoyés], action_requise,
+  [{de, vers, par: "client"|"equipe", motif: <texte>|null, cree_le}], contrat: {…}|null, devis: [DevisResume envoyés], action_requise,
   actions_possibles, cree_le, modifie_le}`. `produit.nom` est le nom **traduit** du produit courant, à défaut
   l'instantané. `Proposition` : `{id, auteur_role, auteur_nom, prix_m2, total, delai_jours, message, etat, devis: <id>|null,
   peut_repondre, cree_le, repondu_le}` (`peut_repondre` : vrai si la proposition est `en_attente` et que
@@ -131,7 +132,9 @@ API `/api/selection/` (client connecté, `EstClient`) :
 - `actions_possibles` (calculé par le serveur, le front ne recalcule rien) : pour un client, sous-ensemble de
   `["modifier", "annuler", "proposer"]` ; pour l'équipe, de `["modifier", "annuler", "proposer", "demarrer_travaux",
   "terminer"]`.
-- `PATCH <id>/` `{surface_m2?, description?}` : seulement en `nouvelle` (sinon 400).
+- `PATCH <id>/` `{surface_m2?, description?}` : seulement en `nouvelle` (sinon 400) ; renvoie le **détail** de la
+  commande (comme toutes les actions sur une commande : `annuler`, `etat`, `accepter`, `refuser`). Le motif d'annulation
+  est renvoyé dans `historique[].motif`.
 - `POST <id>/annuler/` `{motif?}` → détail (règle 3). Le motif est gardé dans l'historique.
 - `POST <id>/propositions/` `{prix_m2?, total?, delai_jours?, message?}` → 201 `Proposition`.
 - `POST <id>/propositions/<pid>/accepter/` et `…/refuser/` `{message?}` → détail de la commande.

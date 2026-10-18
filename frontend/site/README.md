@@ -45,7 +45,11 @@ npm start                    # sert dist/ (serve -s), port $PORT ou 3000
 | `/actualites`, `/actualites/:slug` | Actualités (module `actualites`) |
 | `/connexion`, `/inscription` | module `compte` ; `?suite=/chemin` pour revenir après connexion |
 | `/compte` | profil (protégé) |
-| `/commandes` | « Bientôt disponible » (protégé, vague 2) |
+| `/selection` | Ma sélection (protégé, module `selection`) |
+| `/commandes`, `/commandes/nouvelle`, `/commandes/:id` | Commandes, négociation, devis, contrat (protégées, modules `commandes`, `devis`) |
+| `/devis/demande` | Demande de rendu (protégée) |
+| `/contact` | Contact (publique, module `contact`) |
+| `/mes-demandes` | Demandes de contact et de rendu (protégée) |
 | `*` | page introuvable |
 
 ## API utilisée (back-end Django, base `VITE_API_URL`)
@@ -62,6 +66,9 @@ Toutes les requêtes envoient `Accept-Language` (langue de l'interface) : les me
   `POST /api/vitrine/temoignages/` et `GET /api/vitrine/temoignages/miens/` (connecté), `GET /api/actualites/` (+ `<slug>/`).
   Le contenu arrive traduit dans la langue de l'interface ; il est redemandé quand la langue change.
 - `GET/PATCH /api/comptes/moi/` → `{id, email, nom_complet, telephone, role, est_equipe, langue, ville, quartier, rue_ou_repere, adresse_complete (booléen), adresse_formatee, date_inscription}` ; e-mail et rôle non modifiables
+- Vague 2 (contrat `docs/taches/vague-2-contrat-api.md`) : `/api/selection/` (+ `resume/`), `/api/commandes/` (+ `<id>/`, `annuler/`,
+  `propositions/`, `propositions/<id>/accepter|refuser/`), `/api/devis/<id>/`, `/api/devis/demandes-rendu/` (multipart),
+  `POST /api/contact/demandes/`, `GET /api/contact/demandes/miennes/`. Erreurs traitées : 403 `adresse_incomplete`, 429, 400 par champ.
 
 ## Déploiement Railway
 

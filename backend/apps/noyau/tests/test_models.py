@@ -94,7 +94,7 @@ class ReglagesProductionTests(SimpleTestCase):
         self.assertEqual(self.lire_prod("p.REST_FRAMEWORK['NUM_PROXIES']"), 1)
         self.assertEqual(self.lire_prod("p.REST_FRAMEWORK['NUM_PROXIES']", DJANGO_NOMBRE_PROXIES="2"), 2)
         # le reste de la configuration DRF est conservé
-        self.assertEqual(self.lire_prod("p.REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']"), {"inscription": "20/hour"})
+        self.assertEqual(self.lire_prod("p.REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']"), {"inscription": "20/hour", "contact": "5/hour"})
 
 
 class ProxysDeveloppementTests(SimpleTestCase):

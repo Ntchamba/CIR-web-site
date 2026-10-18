@@ -45,7 +45,7 @@ export const COMMANDE_SIGNEE = {
     reference: 'CTR-2026-0007', signe_le: '2026-10-17T10:00:00Z', accepte_par: 'client',
     client: { nom_complet: 'Awa Ngono', email: 'awa@exemple.cm', telephone: '+237699000000' },
     adresse: 'Près de la pharmacie, Bonapriso, Douala',
-    lignes: ['YD-306 Sable coloré · Gris anthracite'],
+    lignes: [{ produit_nom: 'Sable coloré', produit_reference: 'YD-306', design_nom: 'Gris anthracite' }],
     montant: '510000', prix_m2: '12000', delai_jours: 10, proposition: 11,
   },
   action_requise: false,

@@ -12,10 +12,14 @@ def proposition_acceptee(commande):
     return acceptees[-1] if acceptees else None
 
 
-def contrat_de(commande, lignes):
-    """Objet `contrat` du détail d'une commande, ou None tant qu'elle n'est pas signée.
+def lignes_instantanees(commande):
+    """Lignes du contrat : noms et référence du moment de la commande (le catalogue peut changer ensuite)."""
+    return [{"produit_nom": ligne.produit_nom, "produit_reference": ligne.produit_reference,
+             "design_nom": ligne.design_nom or None} for ligne in commande.lignes.all()]
 
-    `lignes` : lignes déjà mises en forme par le sérialiseur (même forme que dans le détail).
+
+def contrat_de(commande):
+    """Objet `contrat` du détail d'une commande, ou None tant qu'elle n'est pas signée.
     """
     if commande.signe_le is None:
         return None
@@ -30,7 +34,7 @@ def contrat_de(commande, lignes):
         "accepte_par": accepte_par,
         "client": {"nom_complet": client.nom_complet, "email": client.email, "telephone": client.telephone},
         "adresse": {"ville": commande.ville, "quartier": commande.quartier, "rue_ou_repere": commande.rue_ou_repere},
-        "lignes": lignes,
+        "lignes": lignes_instantanees(commande),
         "montant": None if commande.montant_convenu is None else str(commande.montant_convenu),
         "prix_m2": None if commande.prix_m2_convenu is None else str(commande.prix_m2_convenu),
         "delai_jours": commande.delai_convenu_jours,
