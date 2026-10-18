@@ -45,6 +45,12 @@ export const resumeDemandesRendu = ({ signal } = {}) => api.get(`${RENDU}resume/
 /** Commande à laquelle le devis se rattache (référence, client, surface, lignes). */
 export const obtenirCommandeDuDevis = (id, { signal } = {}) => api.get(`/api/admin/commandes/${encodeURIComponent(id)}/`, { signal });
 
+/** Commandes d'un client encore ouvertes (ni terminées ni annulées), 100 au plus. */
+export const listerCommandesOuvertesDuClient = (clientId, { signal } = {}) =>
+  api.get(`/api/admin/commandes/?client=${encodeURIComponent(clientId)}&taille=100`, { signal })
+    .then(resultats)
+    .then((liste) => liste.filter((c) => !['terminee', 'annulee'].includes(c.etat)));
+
 /** Produits du catalogue (100 au plus) : id, nom, reference, prix (ou null), unite_prix ('m2' | 'kg' | 'pose'). */
 export const listerProduitsDuCatalogue = ({ signal } = {}) =>
   api.get('/api/admin/catalogue/produits/?taille=100', { signal }).then(resultats);

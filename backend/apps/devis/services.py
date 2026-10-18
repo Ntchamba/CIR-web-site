@@ -132,8 +132,11 @@ def envoyer(devis, utilisateur):
         raise ValidationError({"lignes": [_("Ajoutez au moins une ligne au devis.")]})
     resultat = calcul.calculer([ligne.donnees_calcul() for ligne in lignes])
     if not resultat.complet:
-        raise ValidationError({"detail": _("Le devis est incomplet : renseignez toutes les surfaces et tous les "
-                                           "prix avant de l'envoyer."), "erreurs": resultat.erreurs})
+        erreur = ValidationError({"detail": _("Le devis est incomplet : renseignez toutes les surfaces et tous les "
+                                              "prix avant de l'envoyer.")})
+        # `erreurs[].ligne` reste un entier (DRF convertirait tout en chaîne)
+        erreur.detail = {"detail": erreur.detail["detail"], "erreurs": resultat.erreurs}
+        raise erreur
     if resultat.total <= 0:
         raise ValidationError({"detail": _("Le total du devis doit être supérieur à zéro.")})
     if any(not ligne.libelle_affiche for ligne in lignes):

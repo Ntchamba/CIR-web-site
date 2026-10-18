@@ -16,7 +16,7 @@ const nouvelleCle = () => `ligne-${++compteur}`;
 
 export const ligneVide = (type = 'materiau', extra = {}) => ({
   cle: nouvelleCle(), type_ligne: type, libelle: '', produit: '',
-  surface_m2: '', dosage_kg_m2: '', prix_kg: '', prix_m2: '', montant_forfait: '', ...extra,
+  surface_m2: '', dosage_kg_m2: '', prix_kg: '', prix_m2: '', montant_forfait: '', libelle_affiche: '', ...extra,
 });
 
 /** Ligne du serveur → saisie (nombres en texte). */
@@ -24,6 +24,8 @@ export function versSaisie(ligne) {
   const texte = (v) => (v == null ? '' : String(v));
   return ligneVide(ligne.type_ligne, {
     libelle: ligne.libelle || '',
+    // Texte indicatif (nom du produit traduit) si le serveur le fournit ; jamais renvoyé.
+    libelle_affiche: ligne.libelle_affiche || '',
     produit: ligne.produit != null ? String(ligne.produit?.id ?? ligne.produit) : '',
     surface_m2: texte(ligne.surface_m2), dosage_kg_m2: texte(ligne.dosage_kg_m2), prix_kg: texte(ligne.prix_kg),
     prix_m2: texte(ligne.prix_m2), montant_forfait: texte(ligne.montant_forfait),

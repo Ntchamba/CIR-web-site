@@ -26,7 +26,7 @@ def _entier(valeur):
 
 # --- Lignes ---
 
-def representation_ligne(ligne, resultat, *, equipe, libelle, id=None, produit=None):
+def representation_ligne(ligne, resultat, *, equipe, libelle, id=None, produit=None, libelle_brut=None):
     """Ligne mise en forme : `ligne` (dict des champs saisis) et `resultat` (calcul.ResultatLigne)."""
     donnees = {
         "ordre": ligne.get("ordre", 0),
@@ -40,7 +40,9 @@ def representation_ligne(ligne, resultat, *, equipe, libelle, id=None, produit=N
         "montant": _entier(resultat.montant),
     }
     if equipe:
-        donnees = {"id": id, **donnees, "produit": produit, "montant_forfait": _entier(ligne.get("montant_forfait"))}
+        # équipe : `libelle` = valeur saisie (peut être vide), `libelle_affiche` = libellé ou nom traduit du produit
+        donnees = {"id": id, **donnees, "libelle": libelle_brut or "", "libelle_affiche": libelle,
+                   "produit": produit, "montant_forfait": _entier(ligne.get("montant_forfait"))}
     return donnees
 
 
@@ -55,7 +57,8 @@ class LigneDevisSerializer(serializers.ModelSerializer):
     def to_representation(self, ligne):
         saisie = {**ligne.donnees_calcul(), "ordre": ligne.ordre}
         return representation_ligne(saisie, ligne.resultat, equipe=self.context.get("equipe", False),
-                                    libelle=ligne.libelle_affiche, id=ligne.pk, produit=ligne.produit_id)
+                                    libelle=ligne.libelle_affiche, id=ligne.pk, produit=ligne.produit_id,
+                                    libelle_brut=ligne.libelle)
 
 
 class LigneDevisEntreeSerializer(serializers.Serializer):
@@ -156,7 +159,8 @@ def apercu_representation(lignes):
         produit = ligne.get("produit")
         libelle = ligne.get("libelle") or (produit.traduit("nom") if produit else "")
         sortie.append(representation_ligne({**ligne, "ordre": ordre}, calcule, equipe=True, libelle=libelle,
-                                           id=None, produit=produit.pk if produit else None))
+                                           id=None, produit=produit.pk if produit else None,
+                                           libelle_brut=ligne.get("libelle")))
     return {"lignes": sortie, "total": str(resultat.total), "complet": resultat.complet,
             "erreurs": resultat.erreurs}
 

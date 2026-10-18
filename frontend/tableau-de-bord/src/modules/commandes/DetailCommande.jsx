@@ -108,7 +108,7 @@ function BoutonsEtape({ commande, surDetail, annoncer }) {
         {actions.includes('annuler') && (
           <ConfirmerAction libelle={t('commandes.etape.annuler')}
             question={t('commandes.etape.confirmerAnnuler')} libelleConfirmer={t('commandes.etape.confirmerAnnulerBouton')}
-            champ={{ libelle: t('commandes.etape.motif'), nom: 'motif' }}
+            champ={{ libelle: t('commandes.etape.motif'), nom: 'motif', max: 500 }}
             surConfirmation={(motif) => poser('annulee', motif, t('commandes.etape.annuleeAnnonce'))} />
         )}
       </div>

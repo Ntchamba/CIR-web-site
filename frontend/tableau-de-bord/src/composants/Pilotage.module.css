@@ -40,7 +40,7 @@
 
 /* --- Liens de contact --- */
 .liensContact { display: grid; gap: 2px; }
-.liensContact a { display: inline-flex; align-items: center; min-height: 28px; overflow-wrap: anywhere; }
+.liensContact a { display: inline-flex; align-items: center; min-height: var(--cible-tactile); overflow-wrap: anywhere; }
 
 /* --- Divers --- */
 .titreCarte { font-family: var(--police-titre); font-size: 20px; font-weight: 500; }

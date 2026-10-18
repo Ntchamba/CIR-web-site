@@ -55,6 +55,12 @@ export default function PanneauNegociation({ commande, surMiseAJour, surDetail, 
                 )}
               </dl>
               {p.message && <p className={styles.message}>{p.message}</p>}
+              {p.reponse && (
+                <p className={styles.message}>
+                  <strong>{t(p.auteur_role === 'client' ? 'commandes.negociation.reponseEquipe' : 'commandes.negociation.reponseClient')}</strong>
+                  {' : '}{p.reponse}
+                </p>
+              )}
               <small>{dateHeure(p.cree_le)}</small>
               {p.peut_repondre && (
                 <div className={styles.actions}>

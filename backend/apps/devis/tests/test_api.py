@@ -43,7 +43,7 @@ class DevisEquipeTests(Base):
                          ("brouillon", "250000", True, None, False))
         self.assertEqual(d["lignes"][0]["montant"], "240000")
         self.assertEqual(set(d["lignes"][1]), {"id", "ordre", "type_ligne", "libelle", "surface_m2", "dosage_kg_m2",
-                                               "quantite_kg", "prix_kg", "prix_m2", "montant", "produit",
+                                               "quantite_kg", "prix_kg", "prix_m2", "montant", "produit", "libelle_affiche",
                                                "montant_forfait"})
         self.assertEqual(d["cree_par"]["id"], self.membre.pk)
 
@@ -56,9 +56,10 @@ class DevisEquipeTests(Base):
 
     def test_libelle_vide_prend_le_nom_du_produit(self):
         d = self.devis(lignes=[{"type_ligne": "forfait", "produit": self.produit.pk, "montant_forfait": 5}])
-        self.assertEqual(d["lignes"][0]["libelle"], "Sol autolissant")
+        self.assertEqual(d["lignes"][0]["libelle_affiche"], "Sol autolissant")
         d2 = self.client.get(f"{URL_ADMIN}{d['id']}/", HTTP_ACCEPT_LANGUAGE="en").data
-        self.assertEqual(d2["lignes"][0]["libelle"], "Self-levelling floor")
+        self.assertEqual(d2["lignes"][0]["libelle_affiche"], "Self-levelling floor")
+        self.assertEqual(d2["lignes"][0]["libelle"], "")
 
     def test_modification_remplace_les_lignes_seulement_en_brouillon(self):
         d = self.devis()
@@ -86,6 +87,23 @@ class DevisEquipeTests(Base):
         self.assertEqual(Devis.objects.count(), 0)
         self.assertEqual(self.client.post(f"{URL_ADMIN}calculer/", {"lignes": [{"type_ligne": "zz"}]},
                                           format="json").status_code, 400)
+
+    def test_libelle_brut_equipe_et_libelle_affiche(self):
+        d = self.devis(lignes=[{"type_ligne": "forfait", "produit": self.produit.pk, "montant_forfait": 5}])
+        ligne = d["lignes"][0]
+        self.assertEqual((ligne["libelle"], ligne["libelle_affiche"]), ("", "Sol autolissant"))
+        self.se_connecter(self.membre)
+        self.client.post(f"{URL_ADMIN}{d['id']}/envoyer/")
+        self.se_connecter(self.client_a)  # le client garde `libelle` = texte affiché
+        lc = self.client.get(f"{URL}{d['id']}/").data["lignes"][0]
+        self.assertEqual(lc["libelle"], "Sol autolissant")
+        self.assertNotIn("libelle_affiche", lc)
+
+    def test_erreurs_d_envoi_avec_ligne_entiere(self):
+        d = self.devis(lignes=[{"type_ligne": "surface", "libelle": "x", "surface_m2": "5"}])
+        r = self.client.post(f"{URL_ADMIN}{d['id']}/envoyer/")
+        self.assertEqual(r.status_code, 400)
+        self.assertIs(type(r.json()["erreurs"][0]["ligne"]), int)
 
     def test_envoi_incomplet_refuse(self):
         for lignes in ([], [{"type_ligne": "surface", "libelle": "x", "surface_m2": "5"}],

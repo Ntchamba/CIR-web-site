@@ -8,7 +8,7 @@ import Bouton from '@partage/ui/Bouton.jsx';
 import Champ from '@partage/ui/Champ.jsx';
 import Chargement from '@partage/ui/Chargement.jsx';
 import MessageErreur from '@partage/ui/MessageErreur.jsx';
-import { dateHeure, fcfa, surface } from '@partage/utils/format.js';
+import { dateHeure, fcfa, STATUTS, surface } from '@partage/utils/format.js';
 
 import { erreursChamps } from '@/app/api.js';
 import LiensContact from '@/composants/LiensContact.jsx';
@@ -18,13 +18,40 @@ import Tiroir from '@/composants/Tiroir.jsx';
 import useChargement from '@/composants/useChargement.js';
 import { useTraduction } from '@/i18n/index.js';
 
-import { modifierDemandeRendu, obtenirDemandeRendu } from '../api.js';
+import { listerCommandesOuvertesDuClient, modifierDemandeRendu, obtenirDemandeRendu } from '../api.js';
 import styles from '../Devis.module.css';
 
 export const ETATS_RENDU = ['nouvelle', 'en_etude', 'devis_envoye', 'close'];
 
 function Info({ libelle, children }) {
   return <div className={styles.info}><dt>{libelle}</dt><dd>{children || '—'}</dd></div>;
+}
+
+/** Demande sans commande liée : l'équipe choisit une commande ouverte du client pour créer le devis. */
+function ChoixCommande({ clientId, demandeId }) {
+  const { t } = useTraduction();
+  const [choisie, setChoisie] = useState('');
+  const { donnees, chargement } = useChargement(
+    (signal) => (clientId ? listerCommandesOuvertesDuClient(clientId, { signal }).catch(() => []) : []), [clientId],
+  );
+  if (chargement) return <Chargement texte={t('devis.demandes.chargementCommandes')} />;
+  if (!donnees?.length) return <p className={styles.vide}>{t('devis.demandes.sansCommande')}</p>;
+  return (
+    <div className={styles.section}>
+      <p className={styles.vide}>{t('devis.demandes.choisirCommandeAide')}</p>
+      <Champ libelle={t('devis.demandes.choisirCommande')} name="commande_client" value={choisie}
+        options={[['', t('devis.demandes.choisirCommandePlaceholder')],
+          ...donnees.map((c) => [String(c.id), `${c.reference} · ${STATUTS[c.etat]?.libelle || c.etat}`])]}
+        onChange={(e) => setChoisie(e.target.value)} />
+      {choisie && (
+        <div>
+          <Bouton as={Link} to={`/devis/nouveau?commande=${choisie}&demande=${demandeId}`} variante="contour">
+            {t('devis.demandes.creerDevis')}
+          </Bouton>
+        </div>
+      )}
+    </div>
+  );
 }
 
 function Contenu({ demande, surMiseAJour }) {
@@ -122,7 +149,7 @@ function Contenu({ demande, surMiseAJour }) {
             </Bouton>
           </div>
         ) : (
-          <p className={styles.vide}>{t('devis.demandes.sansCommande')}</p>
+          <ChoixCommande clientId={client.id} demandeId={demande.id} />
         )}
       </section>
 

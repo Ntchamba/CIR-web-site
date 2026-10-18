@@ -130,6 +130,8 @@ l'objet d'un autre client donne 404. Références `CIR-/DEV-/REN-/CTC-AAAA-NNNN`
 | GET | `/api/contact/demandes/miennes/` | suivi du client connecté |
 | GET, PATCH | `/api/admin/contact/demandes/`, `resume/`, `<id>/` | boîte de réception de l'équipe |
 
+Lignes de devis, API équipe : `libelle` brut + `libelle_affiche` (nom traduit du produit si vide) ; API client : `libelle` affiché. Montants plafonnés à 2 147 483 647 FCFA (400).
+
 ### Médias en production
 
 `DJANGO_MEDIA_ROOT` : dossier des fichiers envoyés (volume Railway, ex. `/data/media`). Si

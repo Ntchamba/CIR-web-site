@@ -180,7 +180,9 @@ vide et le devis ne peut pas être envoyé tant qu'il manque (jamais de prix inv
   `cree_par`, `cree_le`, `modifie_le` ; propriétés `valide_jusqu_au` (date) et `expire` (vrai si `envoye` et date passée).
 - `LigneDevis` : `devis`, `ordre`, `type_ligne`, `libelle` (≤ 160 ; vide avec `produit` → nom traduit du produit),
   `produit` (FK null), `surface_m2`, `dosage_kg_m2`, `prix_kg`, `prix_m2`, `montant_forfait`, et calculés en
-  lecture `quantite_kg`, `montant`.
+  lecture `quantite_kg`, `montant`. API équipe : `libelle` est la valeur brute saisie (éventuellement vide) et
+  `libelle_affiche` vaut `libelle` ou, s'il est vide, le nom traduit du produit ; l'API client renvoie le texte
+  affiché dans `libelle`. `erreurs[].ligne` est un entier (indice à partir de 0), y compris dans la 400 de `envoyer/`.
 
 ### API client `/api/devis/` (`EstClient`)
 

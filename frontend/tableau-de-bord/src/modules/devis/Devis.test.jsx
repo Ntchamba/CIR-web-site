@@ -63,7 +63,7 @@ describe('DevisPage', () => {
     expect(await within(tiroir).findByRole('img', { name: 'Image jointe 1' })).toHaveAttribute('src', 'http://x/a.webp');
     expect(within(tiroir).getByRole('link', { name: 'Créer un devis' })).toHaveAttribute('href', '/devis/nouveau?commande=5&demande=9');
     await u.selectOptions(within(tiroir).getByLabelText('État'), 'en_etude');
-    await u.type(within(tiroir).getByLabelText("Réponse à l'équipe"), 'Bien reçu');
+    await u.type(within(tiroir).getByLabelText("Réponse de l'équipe"), 'Bien reçu');
     await u.click(within(tiroir).getByRole('button', { name: 'Enregistrer la réponse' }));
     await waitFor(() => expect(appels(simule, 'PATCH', 'demandes-rendu/9/')).toHaveLength(1));
     expect(JSON.parse(appels(simule, 'PATCH', 'demandes-rendu/9/')[0][1].body)).toEqual({ etat: 'en_etude', reponse_equipe: 'Bien reçu' });
@@ -159,5 +159,38 @@ describe('EditeurDevis', () => {
     base();
     rendre('/devis/nouveau');
     expect(await screen.findByRole('heading', { level: 1, name: "Choisissez d'abord une commande" })).toBeInTheDocument();
+  });
+});
+
+describe('Demande de rendu sans commande liée', () => {
+  const demande = { id: 9, reference: 'REN-2026-0009', description: 'Je voudrais un rendu gris', type_batiment: 'maison', surface_m2: null, etat: 'nouvelle', commande: null, images: [], devis: [], reponse_equipe: '', notes_internes: '', cree_le: '2026-10-17T10:00:00Z', client: { id: 3, nom_complet: 'Awa Nana', email: 'awa@x.cm', telephone: '690' } };
+  const ouvrir = async (commandes) => {
+    const simule = simulerApi([
+      ['GET', 'demandes-rendu/resume/', { nouvelle: 1, total: 1 }],
+      ['GET', /demandes-rendu\/9\/$/, demande],
+      ['GET', 'client=3', page(commandes)],
+      ['GET', 'demandes-rendu/', page([demande])],
+    ]);
+    rendre('/devis?onglet=demandes');
+    await userEvent.setup().click(await screen.findByRole('button', { name: 'REN-2026-0009' }));
+    return { simule, tiroir: await screen.findByRole('dialog') };
+  };
+
+  it("propose les commandes ouvertes du client, hors terminées et annulées", async () => {
+    const { simule, tiroir } = await ouvrir([
+      { id: 5, reference: 'CIR-2026-0005', etat: 'negociation' },
+      { id: 6, reference: 'CIR-2026-0006', etat: 'terminee' },
+    ]);
+    const choix = await within(tiroir).findByLabelText('Commande du client');
+    expect(within(choix).queryByText(/CIR-2026-0006/)).toBeNull();
+    expect(simule.mock.calls.some(([u]) => String(u).includes('client=3&taille=100'))).toBe(true);
+    await userEvent.setup().selectOptions(choix, '5');
+    expect(within(tiroir).getByRole('link', { name: 'Créer un devis' })).toHaveAttribute('href', '/devis/nouveau?commande=5&demande=9');
+  });
+
+  it("message clair quand le client n'a aucune commande ouverte", async () => {
+    const { tiroir } = await ouvrir([]);
+    expect(await within(tiroir).findByText(/Aucune commande liée/)).toBeInTheDocument();
+    expect(within(tiroir).queryByRole('link', { name: 'Créer un devis' })).toBeNull();
   });
 });

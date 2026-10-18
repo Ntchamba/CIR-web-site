@@ -5,7 +5,7 @@
   display: inline-flex; align-items: center; gap: var(--esp-2); min-height: var(--cible-tactile); font-weight: 500; cursor: pointer;
 }
 .caseAction input { width: 20px; height: 20px; accent-color: var(--bleu); }
-.reference { font-weight: 600; color: var(--bleu); }
+.reference { display: inline-flex; align-items: center; min-height: var(--cible-tactile); font-weight: 600; color: var(--bleu); }
 .etapeCellule { display: grid; gap: var(--esp-1); justify-items: start; }
 
 /* --- Détail --- */

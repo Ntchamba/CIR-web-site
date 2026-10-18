@@ -32,7 +32,7 @@ export default function LigneEditable({
           options={TYPES_LIGNE.map((c) => [c, t(`devis.editeur.types.${c}`)])}
           onChange={(e) => surChangement({ type_ligne: e.target.value })} />
         <Champ libelle={t('devis.editeur.libelle')} name="libelle" value={ligne.libelle} erreur={erreurs.libelle}
-          maxLength={160} aide={t('devis.editeur.aideLibelle')} onChange={(e) => surChangement({ libelle: e.target.value })} />
+          maxLength={160} placeholder={ligne.libelle_affiche || undefined} aide={t('devis.editeur.aideLibelle')} onChange={(e) => surChangement({ libelle: e.target.value })} />
         <Champ libelle={t('devis.editeur.produit')} name="produit" value={ligne.produit} erreur={erreurs.produit}
           options={[['', t('devis.editeur.aucunProduit')], ...produits.map((p) => [String(p.id), p.reference ? `${p.nom} (${p.reference})` : p.nom])]}
           onChange={(e) => surChangement({ produit: e.target.value })}

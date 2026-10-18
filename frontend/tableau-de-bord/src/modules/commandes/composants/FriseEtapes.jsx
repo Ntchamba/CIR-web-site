@@ -15,6 +15,7 @@ export default function FriseEtapes({ etat, historique = [], creeLe }) {
     if (cle === 'nouvelle') return creeLe;
     return [...historique].reverse().find((h) => h.vers === cle)?.cree_le;
   };
+  const motifAnnulation = [...historique].reverse().find((h) => h.vers === 'annulee')?.motif;
   const annulee = etat === 'annulee';
 
   return (
@@ -37,6 +38,7 @@ export default function FriseEtapes({ etat, historique = [], creeLe }) {
           <li aria-current="step" className={`${styles.etape} ${styles.etapeCourante}`}>
             <strong>{STATUTS.annulee.libelle}</strong>
             {dateEtape('annulee') && <small>{date(dateEtape('annulee'))}</small>}
+            {motifAnnulation && <small>{t('commandes.frise.motif', { motif: motifAnnulation })}</small>}
             <small>{t('commandes.frise.courante')}</small>
           </li>
         )}
@@ -53,6 +55,7 @@ export default function FriseEtapes({ etat, historique = [], creeLe }) {
                   vers: STATUTS[h.vers]?.libelle || h.vers,
                   par: t(`commandes.auteurs.${h.par}`),
                 })}
+                {h.motif && <> {t('commandes.frise.motif', { motif: h.motif })}</>}
               </li>
             ))}
           </ul>

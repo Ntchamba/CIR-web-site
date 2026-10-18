@@ -83,6 +83,9 @@ export default function EditeurDevis() {
   const [envoi, setEnvoi] = useState(false);
   const [annonce, setAnnonce] = useState(state?.annonce || '');
   const initialise = useRef(false);
+  // Brouillon créé pendant cette session (nouveau devis) : les enregistrements suivants le modifient au lieu d'en créer un autre.
+  const [creeId, setCreeId] = useState(null);
+  const idCourant = id || creeId;
 
   const brouillon = !id || devis.donnees?.etat === 'brouillon';
   usePageMeta(devis.donnees?.reference || t('devis.editeur.nouveau'));
@@ -98,6 +101,10 @@ export default function EditeurDevis() {
       initialise.current = true;
       const surfaceCommande = commande.donnees?.surface_m2 != null ? String(commande.donnees.surface_m2) : '';
       setLignes((commande.donnees?.lignes || []).filter((l) => l.produit).map((l) => {
+        // Produit retiré du catalogue (id null) : pas de produit lié, le nom d'origine sert de libellé.
+        if (l.produit.id == null) {
+          return ligneVide('materiau', { libelle: l.produit.nom || '', surface_m2: surfaceCommande });
+        }
         const produit = produits.find((p) => p.id === l.produit.id);
         return avecPrixCatalogue(ligneVide('materiau', { produit: String(l.produit.id), surface_m2: surfaceCommande }), produit);
       }));
@@ -131,8 +138,10 @@ export default function EditeurDevis() {
   /** Enregistre le brouillon (création ou modification) et renvoie le devis du serveur. */
   async function enregistrer() {
     const corps = { validite_jours: Number(form.validite_jours) || undefined, notes: form.notes, lignes: lignes.map(versCorps) };
-    if (id) return modifierDevis(id, corps);
-    return creerDevis({ commande: Number(commandeId), ...(demandeUrl ? { demande: Number(demandeUrl) } : {}), ...corps });
+    if (idCourant) return modifierDevis(idCourant, corps);
+    const cree = await creerDevis({ commande: Number(commandeId), ...(demandeUrl ? { demande: Number(demandeUrl) } : {}), ...corps });
+    setCreeId(cree.id);
+    return cree;
   }
 
   async function surEnregistrement(e) {
@@ -157,19 +166,21 @@ export default function EditeurDevis() {
 
   async function envoyer() {
     setErreur(null);
+    let enregistre;
     try {
-      const enregistre = await enregistrer();
-      const envoye = await envoyerDevis(enregistre.id);
-      if (id) {
-        devis.setDonnees(envoye);
-        setAnnonce(t('devis.editeur.envoye'));
-      } else {
-        navigate(`/devis/${enregistre.id}`, { replace: true, state: { annonce: t('devis.editeur.envoye') } });
-      }
+      enregistre = await enregistrer();
     } catch (err) {
-      // L'erreur s'affiche dans la confirmation (et sous les champs du formulaire).
+      // Échec de l'enregistrement : l'erreur s'affiche sous les champs du formulaire (la confirmation se ferme).
       setErreur(err);
-      throw err;
+      return;
+    }
+    // Échec de l'envoi : l'erreur s'affiche une seule fois, dans le bloc de confirmation.
+    const envoye = await envoyerDevis(enregistre.id);
+    if (id) {
+      devis.setDonnees(envoye);
+      setAnnonce(t('devis.editeur.envoye'));
+    } else {
+      navigate(`/devis/${enregistre.id}`, { replace: true, state: { annonce: t('devis.editeur.envoye') } });
     }
   }
 
