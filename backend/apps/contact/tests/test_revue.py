@@ -169,3 +169,12 @@ class DroitsRevueTests(Base):
         for i in range(10):
             DemandeContact.objects.create(auteur=self.client_a, nom="A", message="Bonjour", produit=self.produit)
         self.assertEqual((mesurer(URL_ADMIN, self.membre), mesurer(f"{URL}miennes/", self.client_a)), avant)
+
+
+class CorrectionsRevueTests(Base):
+    def test_corps_non_objet_donne_400_jamais_500(self):
+        for corps in ("[]", '["a"]', '"texte"', "12", "null"):
+            with self.subTest(corps=corps):
+                cache.clear()
+                r = self.client.post(URL, corps, content_type="application/json")
+                self.assertEqual(r.status_code, 400, r.content)

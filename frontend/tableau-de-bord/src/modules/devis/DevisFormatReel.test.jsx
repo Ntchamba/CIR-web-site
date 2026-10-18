@@ -295,3 +295,113 @@ describe('Demandes de rendu (format réel)', () => {
     await waitFor(() => expect(within(tiroir).getByLabelText('État')).toHaveAccessibleDescription(/pas un choix valide/));
   });
 });
+
+// Correction du point « libellé » : le serveur renvoie `libelle` (saisi) et `libelle_affiche` (nom du produit si vide).
+describe('EditeurDevis : libellé saisi et libellé affiché (format réel)', () => {
+  const AVEC_PRODUIT = {
+    ...BROUILLON,
+    lignes: [
+      { ...BROUILLON.lignes[0], libelle: '', libelle_affiche: 'Sol autolissant' },
+      { ...BROUILLON.lignes[1], libelle: 'Transport', libelle_affiche: 'Transport' },
+    ],
+  };
+
+  it('renvoie `libelle` tel que saisi : jamais le nom du produit (libelle_affiche) quand il est vide', async () => {
+    const simule = base([
+      ['GET', /\/api\/admin\/devis\/1\/$/, AVEC_PRODUIT],
+      ['POST', '/api/admin/devis/calculer/', APERCU_COMPLET],
+      ['PATCH', /\/api\/admin\/devis\/1\/$/, AVEC_PRODUIT],
+    ]);
+    rendre('/devis/1');
+    const u = userEvent.setup();
+    const libelles = await screen.findAllByLabelText('Libellé');
+    expect(libelles[0]).toHaveValue('');
+    expect(libelles[0]).toHaveAttribute('placeholder', 'Sol autolissant');
+    expect(libelles[1]).toHaveValue('Transport');
+    await u.click(screen.getByRole('button', { name: 'Enregistrer le brouillon' }));
+    await waitFor(() => expect(appels(simule, 'PATCH', '/devis/1/')).toHaveLength(1));
+    const corps = JSON.parse(appels(simule, 'PATCH', '/devis/1/')[0][1].body);
+    expect(corps.lignes[0]).not.toHaveProperty('libelle');
+    expect(corps.lignes[0].produit).toBe(1);
+    expect(corps.lignes[1].libelle).toBe('Transport');
+    corps.lignes.forEach((l) => expect(l).not.toHaveProperty('libelle_affiche'));
+  });
+
+  it('produit retiré du catalogue (id null) : le nom d’origine devient le libellé, aucun produit envoyé', async () => {
+    const simule = base([
+      ['GET', '/api/admin/commandes/3/', { ...COMMANDE, lignes: [{ id: 4, produit: { id: null, slug: null, reference: 'YD-500', nom: 'Sol autolissant', image: null }, design: null }] }],
+      ['POST', '/api/admin/devis/calculer/', { lignes: [{}], total: '0', complet: false, erreurs: [] }],
+    ]);
+    rendre('/devis/nouveau?commande=3');
+    expect(await screen.findByLabelText('Libellé')).toHaveValue('Sol autolissant');
+    await waitFor(() => expect(appels(simule, 'POST', 'calculer').length).toBeGreaterThan(0));
+    const lignes = JSON.parse(appels(simule, 'POST', 'calculer')[0][1].body).lignes;
+    expect(lignes[0]).toMatchObject({ libelle: 'Sol autolissant' });
+    expect(lignes[0]).not.toHaveProperty('produit');
+  });
+});
+
+describe('EditeurDevis : un échec d’envoi ne s’affiche qu’une fois', () => {
+  it('une seule alerte dans le bloc de confirmation', async () => {
+    base([
+      ['GET', /\/api\/admin\/devis\/1\/$/, BROUILLON],
+      ['POST', '/api/admin/devis/calculer/', APERCU_COMPLET],
+      ['PATCH', /\/api\/admin\/devis\/1\/$/, BROUILLON],
+      ['POST', '/api/admin/devis/1/envoyer/', () => reponse(400, { detail: 'Devis incomplet.', erreurs: [{ ligne: 1, champ: 'prix_m2', message: 'Le prix au m² est obligatoire.' }] })],
+    ]);
+    rendre('/devis/1');
+    const u = userEvent.setup();
+    const envoyer = await screen.findByRole('button', { name: 'Envoyer au client' });
+    await waitFor(() => expect(envoyer).toBeEnabled());
+    await u.click(envoyer);
+    await u.click(screen.getByRole('button', { name: "Confirmer l'envoi" }));
+    await screen.findByText('Devis incomplet.');
+    expect(screen.getAllByText('Devis incomplet.')).toHaveLength(1);
+  });
+});
+
+describe('Demande de rendu sans commande liée : choix d’une commande ouverte du client', () => {
+  const DEMANDE = {
+    id: 2, reference: 'REN-2026-0002', description: 'Je voudrais un rendu de mon salon complet', type_batiment: 'maison', surface_m2: null,
+    produit: null, commande: null, images: [], etat: 'nouvelle', reponse_equipe: '', devis: [], cree_le: '2026-10-18T12:07:34+01:00',
+    client: { id: 2, nom_complet: 'Awa Nana', email: 'awa@x.cm', telephone: '+237 677 00 11 22' }, notes_internes: '', modifie_le: '2026-10-18T12:07:34+01:00',
+  };
+  const COMMANDE_LISTE = (id, reference, etat) => ({
+    id, reference, type_batiment: 'maison', etat, surface_m2: '20.00', nombre_lignes: 1, montant_convenu: null,
+    client: { id: 2, nom_complet: 'Awa Nana', email: 'awa@x.cm', telephone: '+237 677 00 11 22', ville: 'Douala' },
+    action_requise: false, modifie_le: '2026-10-18T12:00:00Z', cree_le: '2026-10-18T12:00:00Z',
+  });
+  const ouvrir = async (commandes) => {
+    const simule = simulerApi([
+      ['GET', 'demandes-rendu/resume/', { nouvelle: 1, en_etude: 0, devis_envoye: 0, close: 0, total: 1 }],
+      ['GET', /demandes-rendu\/2\/$/, DEMANDE],
+      ['GET', '/api/admin/commandes/?client=2', page(commandes)],
+      ['GET', 'demandes-rendu/', page([DEMANDE])],
+    ]);
+    rendre('/devis?onglet=demandes');
+    const u = userEvent.setup();
+    await u.click(await screen.findByRole('button', { name: 'REN-2026-0002' }));
+    const tiroir = await screen.findByRole('dialog');
+    return { simule, u, tiroir };
+  };
+
+  it('interroge les commandes du client, ignore les terminées et annulées, et mène à l’éditeur avec la demande', async () => {
+    const { simule, u, tiroir } = await ouvrir([
+      COMMANDE_LISTE(3, 'CIR-2026-0003', 'negociation'), COMMANDE_LISTE(4, 'CIR-2026-0004', 'terminee'), COMMANDE_LISTE(5, 'CIR-2026-0005', 'annulee'),
+    ]);
+    const choix = await within(tiroir).findByLabelText('Commande du client');
+    expect(appels(simule, 'GET', '/api/admin/commandes/?client=2').length).toBe(1);
+    const options = within(choix).getAllByRole('option').map((o) => o.value);
+    expect(options).toEqual(['', '3']);
+    expect(within(tiroir).queryByRole('link', { name: 'Créer un devis' })).toBeNull();
+    await u.selectOptions(choix, '3');
+    expect(within(tiroir).getByRole('link', { name: 'Créer un devis' })).toHaveAttribute('href', '/devis/nouveau?commande=3&demande=2');
+  });
+
+  it('aucune commande ouverte : message explicatif, pas de lien de création', async () => {
+    const { tiroir } = await ouvrir([COMMANDE_LISTE(4, 'CIR-2026-0004', 'terminee')]);
+    expect(await within(tiroir).findByText(/Aucune commande/)).toBeInTheDocument();
+    expect(within(tiroir).queryByRole('link', { name: 'Créer un devis' })).toBeNull();
+  });
+});
+

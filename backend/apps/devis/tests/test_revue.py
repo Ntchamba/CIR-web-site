@@ -357,3 +357,48 @@ class DemandesRenduRevueTests(Base):
             self.assertEqual(self.client.get(f"{URL_ADMIN}demandes-rendu/").status_code, code)
             self.assertEqual(self.client.patch(f"{URL_ADMIN}demandes-rendu/{d.pk}/", {}, format="json").status_code,
                              code)
+
+
+class CorrectionsRevueTests(Base):
+    def test_ligne_equipe_libelle_brut_et_affiche(self):
+        d = self.devis(lignes=[{"type_ligne": "surface", "produit": self.produit.pk, "surface_m2": "2",
+                                "prix_m2": 10},
+                               {"type_ligne": "forfait", "libelle": "  Transport  ", "montant_forfait": 5}])
+        l0, l1 = d["lignes"]
+        self.assertEqual((l0["libelle"], l0["libelle_affiche"]), ("", "Sol autolissant"))
+        self.assertEqual((l1["libelle"], l1["libelle_affiche"]), ("Transport", "Transport"))
+        r = self.client.post(f"{URL_ADMIN}calculer/", {"lignes": [{"type_ligne": "surface",
+                                                                   "produit": self.produit.pk}]}, format="json")
+        self.assertEqual((r.data["lignes"][0]["libelle"], r.data["lignes"][0]["libelle_affiche"]),
+                         ("", "Sol autolissant"))
+        self.envoyer(d)
+        self.se_connecter(self.client_a)  # côté client : un seul libellé, pas de champ brut
+        lignes = self.client.get(f"{URL}{d['id']}/").data["lignes"]
+        self.assertEqual(lignes[0]["libelle"], "Sol autolissant")
+        self.assertNotIn("libelle_affiche", lignes[0])
+
+    def test_envoi_incomplet_erreurs_avec_indice_entier(self):
+        d = self.devis(lignes=[{"type_ligne": "forfait", "libelle": "A", "montant_forfait": 5},
+                               {"type_ligne": "surface", "libelle": "B", "surface_m2": "3"}])
+        r = self.envoyer(d)
+        self.assertEqual(r.status_code, 400)
+        self.assertIn("detail", r.data)
+        self.assertEqual([(e["ligne"], e["champ"]) for e in r.data["erreurs"]], [(1, "prix_m2")])
+        self.assertIsInstance(r.data["erreurs"][0]["ligne"], int)
+
+    def test_plafond_des_montants(self):
+        self.se_connecter(self.membre)
+        gros = {"type_ligne": "surface", "libelle": "G", "surface_m2": "99999999.99", "prix_m2": 1_000_000_000}
+        r = self.client.post(f"{URL_ADMIN}calculer/", {"lignes": [gros]}, format="json")
+        self.assertEqual(r.status_code, 200)
+        self.assertFalse(r.data["complet"])
+        self.assertTrue(r.data["erreurs"])
+        self.assertLessEqual(int(r.data["total"]), 2_147_483_647)
+        moitie = {"type_ligne": "forfait", "libelle": "M", "montant_forfait": 1_000_000_000}
+        r = self.client.post(f"{URL_ADMIN}calculer/", {"lignes": [moitie] * 3}, format="json")
+        self.assertFalse(r.data["complet"])
+        d = self.devis(lignes=[moitie] * 3)
+        self.assertEqual(self.envoyer(d).status_code, 400)
+        self.assertEqual(Devis.objects.get(pk=d["id"]).etat, "brouillon")
+        d = self.devis(lignes=[moitie] * 2)
+        self.assertEqual(self.envoyer(d).status_code, 200)

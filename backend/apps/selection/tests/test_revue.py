@@ -94,3 +94,30 @@ class SelectionRevueTests(BaseVague2):
             p = self.produit.__class__.objects.create(famille=self.famille, nom=f"P{i}", reference=f"Q-{i}")
             self.client.post(URL, {"produit": p.pk}, format="json")
         self.assertEqual(mesurer(), avant)
+
+
+class CourseRevueTests(BaseVague2):
+    def test_ajout_simultane_du_meme_element(self):
+        """Un autre ajout passe entre la vérification et la création : pas de 500, l'existant est renvoyé."""
+        from unittest import mock
+
+        from apps.selection import services
+
+        existant = ElementSelection.objects.create(utilisateur=self.client_a, produit=self.produit)
+        vrai_filter = ElementSelection.objects.filter
+        appels = {"n": 0}
+
+        class Vide:
+            def first(self):
+                return None
+
+        def filtre(*args, **kwargs):
+            if "design" in kwargs and appels["n"] == 0:  # la vérification d'existence ne voit rien
+                appels["n"] += 1
+                return Vide()
+            return vrai_filter(*args, **kwargs)
+
+        with mock.patch.object(ElementSelection.objects, "filter", side_effect=filtre):
+            element, cree = services.ajouter(self.client_a, self.produit.pk)
+        self.assertEqual((element.pk, cree), (existant.pk, False))
+        self.assertEqual(ElementSelection.objects.count(), 1)
