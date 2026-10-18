@@ -40,16 +40,6 @@ export default {
     partenaireTexte: 'Our resins are made by our partner Jiuye.',
     droits: '© {annee} Complexe Industriel Révélation SARL, Douala',
   },
-  bientot: {
-    pastille: 'Coming soon',
-    titre: 'This page is being prepared',
-    attente: '{texte} In the meantime, our team is available by phone.',
-    appeler: 'Call CIR',
-    retour: 'Back to home page',
-  },
-  pages: {
-    commandes: { titre: 'My orders', texte: 'Order tracking is coming soon.' },
-  },
   introuvable: {
     meta: 'Page not found',
     titre: 'This page does not exist',
@@ -459,6 +449,7 @@ export default {
       historique: 'History of stage changes',
       ligne: '{de} → {vers}, by {par}, on {date}',
       creation: 'Creation',
+      motif: 'Reason: {motif}',
       par: { client: 'you', equipe: 'the CIR team' },
     },
     actions: {

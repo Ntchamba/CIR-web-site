@@ -40,16 +40,6 @@ export default {
     partenaireTexte: '当社の樹脂はパートナー企業 Jiuye が製造しています。',
     droits: '© {annee} Complexe Industriel Révélation SARL、ドゥアラ',
   },
-  bientot: {
-    pastille: '近日公開',
-    titre: 'このページは準備中です',
-    attente: '{texte} それまでの間、お電話にてスタッフが対応いたします。',
-    appeler: 'CIR に電話する',
-    retour: 'ホームに戻る',
-  },
-  pages: {
-    commandes: { titre: 'ご注文履歴', texte: 'ご注文の追跡機能は近日公開予定です。' },
-  },
   introuvable: {
     meta: 'ページが見つかりません',
     titre: 'このページは存在しません',
@@ -456,6 +446,7 @@ export default {
       historique: '段階の変更履歴',
       ligne: '{de} → {vers}（{par}、{date}）',
       creation: '作成',
+      motif: '理由：{motif}',
       par: { client: 'お客様', equipe: 'CIR チーム' },
     },
     actions: {

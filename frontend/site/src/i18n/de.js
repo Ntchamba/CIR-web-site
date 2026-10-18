@@ -40,16 +40,6 @@ export default {
     partenaireTexte: 'Unsere Harze werden von unserem Partner Jiuye hergestellt.',
     droits: '© {annee} Complexe Industriel Révélation SARL, Douala',
   },
-  bientot: {
-    pastille: 'Demnächst verfügbar',
-    titre: 'Diese Seite ist in Vorbereitung',
-    attente: '{texte} In der Zwischenzeit ist unser Team telefonisch für Sie da.',
-    appeler: 'CIR anrufen',
-    retour: 'Zurück zur Startseite',
-  },
-  pages: {
-    commandes: { titre: 'Meine Bestellungen', texte: 'Die Verfolgung Ihrer Bestellungen folgt in Kürze.' },
-  },
   introuvable: {
     meta: 'Seite nicht gefunden',
     titre: 'Diese Seite existiert nicht',
@@ -459,6 +449,7 @@ export default {
       historique: 'Verlauf der Phasenwechsel',
       ligne: '{de} → {vers}, durch {par}, am {date}',
       creation: 'Erstellung',
+      motif: 'Grund: {motif}',
       par: { client: 'Sie', equipe: 'das CIR-Team' },
     },
     actions: {

@@ -41,16 +41,6 @@ export default {
     partenaireTexte: 'Nos résines sont fabriquées par notre partenaire Jiuye.',
     droits: '© {annee} Complexe Industriel Révélation SARL, Douala',
   },
-  bientot: {
-    pastille: 'Bientôt disponible',
-    titre: 'Cette page est en préparation',
-    attente: '{texte} En attendant, notre équipe répond par téléphone.',
-    appeler: 'Appeler le CIR',
-    retour: "Retour à l'accueil",
-  },
-  pages: {
-    commandes: { titre: 'Mes commandes', texte: 'Le suivi de vos commandes arrive bientôt.' },
-  },
   introuvable: {
     meta: 'Page introuvable',
     titre: "Cette page n'existe pas",
@@ -460,6 +450,7 @@ export default {
       historique: "Historique des changements d'étape",
       ligne: '{de} → {vers}, par {par}, le {date}',
       creation: 'Création',
+      motif: 'Motif : {motif}',
       par: { client: 'vous', equipe: "l'équipe CIR" },
     },
     actions: {

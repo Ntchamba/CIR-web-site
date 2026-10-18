@@ -40,16 +40,6 @@ export default {
     partenaireTexte: '我们的树脂由合作伙伴九叶（Jiuye）生产。',
     droits: '© {annee} Complexe Industriel Révélation SARL，杜阿拉',
   },
-  bientot: {
-    pastille: '即将推出',
-    titre: '此页面正在筹备中',
-    attente: '{texte} 在此期间，您可以致电我们的团队。',
-    appeler: '致电 CIR',
-    retour: '返回首页',
-  },
-  pages: {
-    commandes: { titre: '我的订单', texte: '订单跟踪功能即将推出。' },
-  },
   introuvable: {
     meta: '页面未找到',
     titre: '此页面不存在',
@@ -456,6 +446,7 @@ export default {
       historique: '阶段变更记录',
       ligne: '{de} → {vers}，由{par}操作，{date}',
       creation: '创建',
+      motif: '原因：{motif}',
       par: { client: '您', equipe: 'CIR 团队' },
     },
     actions: {

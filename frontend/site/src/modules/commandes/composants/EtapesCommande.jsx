@@ -18,6 +18,7 @@ export default function EtapesCommande({ commande }) {
   // Annulée : on garde les étapes atteintes avant l'annulation, puis « Annulée » comme dernière étape.
   const atteintes = new Set(['nouvelle', ...historique.flatMap((h) => [h.de, h.vers])]);
   const etapes = annulee ? [...ORDRE_ETAPES.filter((e) => atteintes.has(e)), 'annulee'] : ORDRE_ETAPES;
+  const motifAnnulation = [...historique].reverse().find((h) => h.vers === 'annulee' && h.motif)?.motif || '';
   const indexCourant = etapes.indexOf(commande.etat);
 
   return (
@@ -38,6 +39,9 @@ export default function EtapesCommande({ commande }) {
                   {courante ? t('commandes.etapes.courante') : faite ? t('commandes.etapes.faite') : t('commandes.etapes.aVenir')}
                 </span>
                 {quand && <time dateTime={quand}>{date(quand)}</time>}
+                {cle === 'annulee' && motifAnnulation && (
+                  <span className={styles.meta}>{t('commandes.etapes.motif', { motif: motifAnnulation })}</span>
+                )}
               </span>
             </li>
           );
@@ -56,6 +60,7 @@ export default function EtapesCommande({ commande }) {
                   par: t(`commandes.etapes.par.${h.par === 'equipe' ? 'equipe' : 'client'}`),
                   date: dateHeure(h.cree_le),
                 })}
+                {h.motif && <span className={styles.meta}> {t('commandes.etapes.motif', { motif: h.motif })}</span>}
               </li>
             ))}
           </ul>
