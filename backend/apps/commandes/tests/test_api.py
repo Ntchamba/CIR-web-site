@@ -113,6 +113,7 @@ class CommandesClientTests(BaseVague2):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.data["etat"], "annulee")
         self.assertEqual(r.data["actions_possibles"], [])
+        self.assertEqual(r.data["adresse"]["ville"], "Douala")
         self.assertEqual((r.data["historique"][0]["par"], r.data["historique"][0]["motif"]), ("client", "Plus besoin"))
         self.assertEqual(self.client.post(f"{URL}{c.pk}/annuler/", {}, format="json").status_code, 400)
 

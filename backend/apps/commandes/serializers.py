@@ -105,6 +105,11 @@ class HistoriqueSerializer(serializers.ModelSerializer):
         fields = ["de", "vers", "par", "motif", "cree_le"]
         read_only_fields = fields
 
+    def to_representation(self, instance):
+        donnees = super().to_representation(instance)
+        donnees["motif"] = donnees["motif"] or None  # texte ou null
+        return donnees
+
 
 # --- Lecture : listes ---
 

@@ -24,8 +24,10 @@ def charger_prod(code=CODE_PROD, **env):
 
 
 class NoyauSansModeleTests(SimpleTestCase):
-    def test_aucun_modele(self):
-        self.assertEqual(list(apps.get_app_config("noyau").get_models()), [])
+    def test_seul_modele_le_compteur_de_references(self):
+        # vague 2 : le noyau porte les compteurs des références séquentielles (CIR-2026-0001…)
+        noms = [m.__name__ for m in apps.get_app_config("noyau").get_models()]
+        self.assertEqual(noms, ["CompteurReference"])
 
     def test_utilisateur_personnalise(self):
         self.assertEqual(settings.AUTH_USER_MODEL, "comptes.Utilisateur")
