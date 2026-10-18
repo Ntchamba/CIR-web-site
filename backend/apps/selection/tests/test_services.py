@@ -25,3 +25,23 @@ class SelectionServicesTests(BaseVague2):
         services.vider(self.client_a)
         self.assertEqual(services.ids_produits(self.client_a), [])
         self.assertEqual(services.ids_produits(self.client_b), [self.autre_produit.pk])
+
+
+class AjoutSimultaneTests(BaseVague2):
+    def test_conflit_d_unicite_renvoie_l_element_existant(self):
+        from unittest import mock
+
+        from django.db import IntegrityError
+        from apps.selection.models import ElementSelection
+
+        existant = ElementSelection.objects.create(utilisateur=self.client_a, produit=self.produit)
+
+        def concurrent(**kw):  # l'autre requête a gagné la course juste avant
+            raise IntegrityError("unique")
+
+        with mock.patch.object(services.ElementSelection.objects, "filter") as filtre:
+            filtre.return_value.first.return_value = None
+            filtre.return_value.count.return_value = 0
+            with mock.patch.object(services.ElementSelection.objects, "create", side_effect=concurrent):
+                element, cree = services.ajouter(self.client_a, self.produit.pk)
+        self.assertEqual((element.pk, cree), (existant.pk, False))

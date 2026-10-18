@@ -3,12 +3,12 @@
 Un jeton absent, périmé ou invalide ne bloque pas la requête (pas de 401) : le visiteur reste anonyme.
 """
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from rest_framework.exceptions import AuthenticationFailed
 
 
 class AuthentificationFacultative(JWTAuthentication):
     def authenticate(self, request):
         try:
             return super().authenticate(request)
-        except (InvalidToken, TokenError):
+        except AuthenticationFailed:  # parente de InvalidToken : jeton périmé, compte désactivé ou supprimé
             return None

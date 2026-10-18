@@ -1,5 +1,5 @@
 """Règles métier de la sélection (BF-09). Les vues et sérialiseurs ne font qu'appeler ces fonctions."""
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.db.models import Prefetch
 from django.utils.translation import gettext as _
 from rest_framework.exceptions import ValidationError
@@ -41,7 +41,11 @@ def ajouter(utilisateur, produit_id, design_id=None):
     if ElementSelection.objects.filter(utilisateur=utilisateur).count() >= ELEMENTS_MAX:
         raise ValidationError({"detail": _("Votre sélection est pleine (%(nombre)s éléments au plus).")
                                % {"nombre": ELEMENTS_MAX}})
-    return ElementSelection.objects.create(utilisateur=utilisateur, produit=produit, design=design), True
+    try:
+        with transaction.atomic():
+            return ElementSelection.objects.create(utilisateur=utilisateur, produit=produit, design=design), True
+    except IntegrityError:  # même ajout simultané : l'élément existe déjà
+        return ElementSelection.objects.get(utilisateur=utilisateur, produit=produit, design=design), False
 
 
 def retirer(utilisateur, element):

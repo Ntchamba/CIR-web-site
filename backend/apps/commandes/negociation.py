@@ -14,6 +14,8 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from rest_framework.exceptions import ValidationError
 
+from apps.noyau.montants import MONTANT_MAX
+
 from . import signals
 from .etapes import ETATS_NEGOCIABLES, Etat, changer_etat
 from .models import Commande, EtatProposition, Proposition
@@ -42,6 +44,10 @@ def preparer_proposition(surface_m2, *, prix_m2=None, total=None, delai_jours=No
     """Contrôle les montants d'une proposition et complète le total quand la surface est connue."""
     prix_m2 = _entier(prix_m2, "prix_m2")
     total = _entier(total, "total")
+    for champ, valeur in (("prix_m2", prix_m2), ("total", total)):
+        if valeur is not None and valeur > MONTANT_MAX:
+            raise ValidationError({champ: [_("Le total dépasse le montant maximal accepté (%(max)s FCFA).")
+                                           % {"max": MONTANT_MAX}]})
     delai_jours = _entier(delai_jours, "delai_jours", minimum=1)
     message = (message or "").strip()
     if len(message) > MESSAGE_MAX:
@@ -50,6 +56,9 @@ def preparer_proposition(surface_m2, *, prix_m2=None, total=None, delai_jours=No
     if prix_m2 is None and total is None:
         raise ValidationError({"detail": _("Indiquez au moins un prix au m² ou un total.")})
     calcule = calculer_total(prix_m2, surface_m2)
+    if calcule is not None and calcule > MONTANT_MAX:
+        raise ValidationError({"total": [_("Le total dépasse le montant maximal accepté (%(max)s FCFA).")
+                                         % {"max": MONTANT_MAX}]})
     if total is None:
         total = calcule
     elif calcule is not None and abs(total - calcule) > TOLERANCE_TOTAL:

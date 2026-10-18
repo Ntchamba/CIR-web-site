@@ -653,3 +653,12 @@ msgstr "Your selection is full (%(nombre)s items at most)."
 #: apps/selection/services.py:37
 msgid "Ce design n'appartient pas à ce produit."
 msgstr "This design does not belong to this product."
+
+#: apps/commandes/negociation.py:60
+#: apps/commandes/negociation.py:49
+msgid "Le total dépasse le montant maximal accepté (%(max)s FCFA)."
+msgstr "The total exceeds the maximum accepted amount (%(max)s FCFA)."
+
+#: apps/devis/calcul.py:89
+msgid "Le montant dépasse le maximum accepté (%(max)s FCFA)."
+msgstr "The amount exceeds the maximum accepted (%(max)s FCFA)."

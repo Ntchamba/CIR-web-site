@@ -5,6 +5,8 @@
 - Quota : 5 demandes par heure et par adresse IP (`DEFAULT_THROTTLE_RATES["contact"]`), toujours par adresse IP,
   même pour un client connecté (le quota par compte, 10 par jour, est dans services.py).
 """
+from collections.abc import Mapping
+
 from rest_framework.throttling import SimpleRateThrottle
 
 
@@ -17,4 +19,6 @@ class QuotaContactIP(SimpleRateThrottle):
 
 def piege_rempli(donnees):
     """Vrai si le champ piège `site_web` contient quelque chose."""
+    if not isinstance(donnees, Mapping):  # corps JSON qui n'est pas un objet : le sérialiseur répondra 400
+        return False
     return bool(str(donnees.get("site_web") or "").strip())

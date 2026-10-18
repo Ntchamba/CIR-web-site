@@ -653,3 +653,12 @@ msgstr "選択リストがいっぱいです（最大 %(nombre)s 件）。"
 #: apps/selection/services.py:37
 msgid "Ce design n'appartient pas à ce produit."
 msgstr "このデザインはこの商品のものではありません。"
+
+#: apps/commandes/negociation.py:60
+#: apps/commandes/negociation.py:49
+msgid "Le total dépasse le montant maximal accepté (%(max)s FCFA)."
+msgstr "合計金額が上限（%(max)s FCFA）を超えています。"
+
+#: apps/devis/calcul.py:89
+msgid "Le montant dépasse le maximum accepté (%(max)s FCFA)."
+msgstr "金額が上限（%(max)s FCFA）を超えています。"

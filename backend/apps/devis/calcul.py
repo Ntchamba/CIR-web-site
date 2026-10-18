@@ -15,6 +15,8 @@ from django.db import models
 from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy
 
+from apps.noyau.montants import MONTANT_MAX
+
 
 class TypeLigne(models.TextChoices):
     MATERIAU = "materiau", gettext_lazy("Matériau")
@@ -82,6 +84,10 @@ def calculer_ligne(ligne):
             resultat.montant = int(ligne["montant_forfait"])
     else:
         resultat.erreurs.append(("type_ligne", _("Type de ligne inconnu.")))
+    if resultat.montant is not None and resultat.montant > MONTANT_MAX:
+        resultat.montant = None
+        resultat.erreurs.append(("montant", _("Le montant dépasse le maximum accepté (%(max)s FCFA).")
+                                 % {"max": MONTANT_MAX}))
     return resultat
 
 
@@ -91,4 +97,8 @@ def calculer(lignes):
     erreurs = [{"ligne": i, "champ": champ, "message": message}
                for i, resultat in enumerate(resultats) for champ, message in resultat.erreurs]
     total = sum(r.montant for r in resultats if r.montant is not None)
+    if total > MONTANT_MAX:
+        erreurs.append({"ligne": None, "champ": "total",
+                        "message": _("Le total dépasse le montant maximal accepté (%(max)s FCFA).")
+                        % {"max": MONTANT_MAX}})
     return ResultatDevis(lignes=resultats, total=total, complet=bool(resultats) and not erreurs, erreurs=erreurs)
