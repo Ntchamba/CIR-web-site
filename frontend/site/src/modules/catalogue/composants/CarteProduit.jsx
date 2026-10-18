@@ -5,6 +5,7 @@ import { prix } from '@partage/utils/format.js';
 
 import ImageMedia from '@/composants/ImageMedia.jsx';
 import { useTraduction } from '@/i18n/index.js';
+import BoutonSelection from '@/modules/selection/composants/BoutonSelection.jsx';
 
 import { estUsage } from '../usages.js';
 
@@ -41,6 +42,10 @@ export default function CarteProduit({ produit, niveauTitre = 3 }) {
           </ul>
         )}
         <p className={styles.prix}>{prix(produit.prix, produit.unite_prix)}</p>
+        {/* Au-dessus du lien étendu de la carte (CSS .actionsCarte) */}
+        <div className={styles.actionsCarte}>
+          <BoutonSelection produit={produit.id} nom={produit.nom} taille="petit" />
+        </div>
       </div>
     </article>
   );

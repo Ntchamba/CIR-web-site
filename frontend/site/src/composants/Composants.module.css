@@ -15,3 +15,12 @@
   font-weight: 600; text-decoration: none;
 }
 .lienSection:hover { text-decoration: underline; }
+
+/* Confirmation avant action */
+.confirmation {
+  display: flex; flex-direction: column; gap: 12px; padding: 16px 18px;
+  border: 2px solid var(--bleu); border-radius: var(--rayon); background: var(--blanc);
+}
+.confirmationDanger { border-color: var(--danger); background: var(--danger-fond); }
+.confirmation:focus-visible { outline: 3px solid var(--corail); outline-offset: 2px; }
+.confirmationActions { display: flex; flex-wrap: wrap; gap: 10px; }

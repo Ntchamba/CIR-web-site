@@ -46,9 +46,10 @@ function rendre(chemin = '/', utilisateur = MEMBRE, autres = () => reponse(200, 
 
 describe('menu', () => {
   it("réserve l'entrée Équipe au super-administrateur", () => {
+    const vague2 = ['/commandes', '/devis', '/contact'];
     const vague1 = ['/catalogue', '/vitrine', '/actualites', '/contenus'];
-    expect(modulesVisibles(false).map((m) => m.chemin)).toEqual(['/', '/clients', ...vague1]);
-    expect(modulesVisibles(true).map((m) => m.chemin)).toEqual(['/', '/clients', ...vague1, '/equipe']);
+    expect(modulesVisibles(false).map((m) => m.chemin)).toEqual(['/', ...vague2, '/clients', ...vague1]);
+    expect(modulesVisibles(true).map((m) => m.chemin)).toEqual(['/', ...vague2, '/clients', ...vague1, '/equipe']);
   });
 
   it('a des chemins uniques', () => {
@@ -74,7 +75,7 @@ describe('Coque', () => {
     expect(screen.getByText('JM')).toHaveAttribute('aria-hidden', 'true');
     // Raccourcis de l'accueil : pas d'Équipe pour un simple membre.
     const raccourcis = within(screen.getByRole('main')).getAllByRole('link').map((l) => l.textContent);
-    expect(raccourcis).toEqual(['Clients', 'Catalogue', 'Vitrine', 'Actualités', 'Contenus du site']);
+    expect(raccourcis).toEqual(['Commandes', 'Devis', 'Demandes de contact', 'Clients', 'Catalogue', 'Vitrine', 'Actualités', 'Contenus du site']);
   });
 
   it('ouvre et ferme le tiroir avec le bouton et la touche Échap', async () => {
@@ -102,13 +103,36 @@ describe('Coque', () => {
   });
 
   it('liste les modules à venir et affiche « Bientôt disponible » sur leur page', async () => {
-    rendre('/commandes');
-    expect(await screen.findByRole('heading', { level: 1, name: 'Commandes' })).toBeInTheDocument();
-    expect(screen.getByText('Le suivi des commandes et des négociations arrive bientôt.')).toBeInTheDocument();
+    rendre('/messagerie');
+    expect(await screen.findByRole('heading', { level: 1, name: 'Messagerie' })).toBeInTheDocument();
+    expect(screen.getByText('La messagerie avec les clients arrive bientôt.')).toBeInTheDocument();
     const menu = screen.getByRole('navigation', { name: 'Menu du tableau de bord' });
     expect(within(menu).getAllByText('Bientôt disponible')).toHaveLength(MODULES_A_VENIR.length);
-    expect(within(menu).getByRole('link', { name: /Commandes/ })).toHaveAttribute('aria-current', 'page');
+    expect(within(menu).getByRole('link', { name: /Messagerie/ })).toHaveAttribute('aria-current', 'page');
+    // Les modules de la vague 2 sont désormais dans « Pilotage ».
+    expect(MODULES_A_VENIR.map((m) => m.chemin)).not.toContain('/commandes');
+    expect(within(menu).getByRole('link', { name: /Commandes/ })).toHaveAttribute('href', '/commandes');
   });
+
+  it('affiche les pastilles du nombre à traiter et les recharge à la navigation', async () => {
+    let actionRequise = 3;
+    const simule = rendre('/', MEMBRE, (u) => {
+      if (u.includes('/api/admin/commandes/resume/')) return reponse(200, { total: 9, action_requise: actionRequise });
+      if (u.includes('/api/admin/devis/demandes-rendu/resume/')) return reponse(200, { nouvelle: 2, total: 5 });
+      if (u.includes('/api/admin/contact/demandes/resume/')) return reponse(200, { nouvelle: 0, total: 4 });
+      return reponse(200, { count: 0, next: null, previous: null, results: [] });
+    });
+    const menu = await screen.findByRole('navigation', { name: 'Menu du tableau de bord' });
+    expect(await within(menu).findByRole('link', { name: 'Commandes 3 à traiter' })).toBeInTheDocument();
+    expect(within(menu).getByRole('link', { name: 'Devis 2 à traiter' })).toBeInTheDocument();
+    // Zéro à traiter : pas de pastille.
+    expect(within(menu).getByRole('link', { name: 'Demandes de contact' })).toBeInTheDocument();
+    const avant = simule.mock.calls.filter(([u]) => String(u).includes('/api/admin/commandes/resume/')).length;
+    actionRequise = 1;
+    await userEvent.setup().click(within(menu).getByRole('link', { name: 'Clients' }));
+    expect(await within(menu).findByRole('link', { name: 'Commandes 1 à traiter' })).toBeInTheDocument();
+    expect(simule.mock.calls.filter(([u]) => String(u).includes('/api/admin/commandes/resume/')).length).toBeGreaterThan(avant);
+  }, 20000);
 
   it('affiche une page 404 dans la coque', async () => {
     rendre('/nimporte-quoi');

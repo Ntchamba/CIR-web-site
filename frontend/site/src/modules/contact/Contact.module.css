@@ -1,0 +1,46 @@
+/* Module contact : formulaire (accueil et /contact) et « Mes demandes ». */
+.section { padding-block: clamp(40px, 7vw, 88px); background: var(--fond-2); }
+.contenu { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: clamp(24px, 5vw, 56px); align-items: start; }
+.texte { display: flex; flex-direction: column; gap: 12px; }
+.texte h2, .texte h3 { font-size: clamp(26px, 3.6vw, 36px); }
+.texte p { color: var(--encre-2); max-width: 46ch; }
+.coordonnees { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+.coordonnees a { display: inline-flex; align-items: center; min-height: var(--cible-tactile); font-weight: 600; }
+.formulaire {
+  display: flex; flex-direction: column; gap: 16px; padding: clamp(18px, 3vw, 28px);
+  border: 1px solid var(--filet); border-radius: var(--rayon-l); background: var(--blanc);
+}
+.deuxColonnes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.choix { margin: 0; padding: 0; border: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.choix legend { padding: 0; margin-bottom: 8px; font-weight: 600; }
+.choix label { display: inline-flex; align-items: center; gap: 10px; min-height: var(--cible-tactile); cursor: pointer; }
+.choix input { width: 22px; height: 22px; accent-color: var(--bleu); }
+.succes { padding: 14px 16px; border-radius: var(--rayon-s); background: var(--succes-fond); color: var(--succes); display: flex; flex-direction: column; gap: 4px; }
+.succes a { display: inline-flex; align-items: center; min-height: var(--cible-tactile); font-weight: 600; }
+.piege { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
+/* Page Contact */
+.pageContact { padding-bottom: 0; }
+
+/* Mes demandes */
+.entetePage { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; margin-bottom: 24px; }
+.intro { color: var(--encre-2); max-width: 60ch; margin-top: 8px; }
+.groupe { display: flex; flex-direction: column; gap: 16px; margin-top: 40px; }
+.groupe h2 { font-size: 26px; }
+.liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.demande { display: flex; flex-direction: column; gap: 8px; padding: 18px; border: 1px solid var(--filet); border-radius: var(--rayon); background: var(--blanc); }
+.demandeHaut { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.demandeHaut h3 { font-size: 18px; margin-right: auto; }
+.etat { padding: 2px 10px; border-radius: var(--pastille); background: var(--fond-2); font-size: 12px; font-weight: 700; color: var(--encre-2); }
+.meta { font-size: 14px; color: var(--encre-2); }
+.libre { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
+.reponse { margin: 0; padding: 12px 14px; border-left: 4px solid var(--bleu); background: var(--fond); border-radius: 0 var(--rayon-s) var(--rayon-s) 0; }
+.reponse strong { display: block; font-size: 13px; color: var(--encre-2); }
+.succesPage { padding: 12px 16px; border-radius: var(--rayon-s); background: var(--succes-fond); color: var(--succes); font-weight: 600; margin-bottom: 16px; }
+.images { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.images img { width: 72px; height: 54px; object-fit: cover; border-radius: var(--rayon-s); background: var(--fond-2); }
+.liens { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.liens a { display: inline-flex; align-items: center; min-height: var(--cible-tactile); font-weight: 600; }
+
+@media (max-width: 900px) { .contenu { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .deuxColonnes { grid-template-columns: 1fr; } }

@@ -1,0 +1,34 @@
+/* Module selection : bouton d'ajout et page « Ma sélection ». */
+.boutonSelection { display: flex; flex-direction: column; gap: 6px; }
+.dansSelection { font-weight: 600; letter-spacing: 0.04em; text-transform: none; font-size: 14px; }
+.confirme, .erreur { margin: 0; font-size: 14px; min-height: 0; }
+.confirme { color: var(--succes); }
+.confirme a { display: inline-flex; align-items: center; min-height: var(--cible-tactile); font-weight: 600; }
+.erreur { color: var(--danger); }
+
+.entete { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 24px; margin-bottom: 24px; }
+.intro { color: var(--encre-2); max-width: 60ch; }
+.liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.element {
+  display: grid; grid-template-columns: 88px minmax(0, 1fr) auto; gap: 16px; align-items: center;
+  padding: 14px; border: 1px solid var(--filet); border-radius: var(--rayon); background: var(--blanc);
+}
+.horsLigne { opacity: 0.8; border-style: dashed; }
+.vignette { width: 88px; height: 66px; border-radius: var(--rayon-s); background: var(--fond-2); overflow: hidden; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--bleu); }
+.vignette img { width: 100%; height: 100%; object-fit: cover; }
+.infos { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.infos h2 { font-size: 18px; }
+.infos a { color: var(--encre); text-decoration: none; }
+.infos a:hover { text-decoration: underline; }
+.meta { font-size: 14px; color: var(--encre-2); }
+.design { display: inline-flex; align-items: center; gap: 6px; }
+.pastilleCouleur { width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--filet); }
+.alerte { margin: 0; font-weight: 600; color: var(--danger); font-size: 14px; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 24px; }
+.actionsListe { display: flex; flex-direction: column; gap: 14px; margin-top: 24px; }
+
+@media (max-width: 600px) {
+  .element { grid-template-columns: 64px minmax(0, 1fr); }
+  .element > :last-child { grid-column: 1 / -1; }
+  .vignette { width: 64px; height: 48px; }
+}

@@ -4,6 +4,7 @@ import usePageMeta from '@partage/utils/usePageMeta.js';
 
 import { useTraduction } from '@/i18n/index.js';
 import SectionActualites from '@/modules/actualites/composants/SectionActualites.jsx';
+import SectionContact from '@/modules/contact/composants/SectionContact.jsx';
 
 import ApercuRealisations from './composants/ApercuRealisations.jsx';
 import Bandeaux from './composants/Bandeaux.jsx';
@@ -26,6 +27,7 @@ export default function AccueilPage() {
       <SectionActualites />
       <ApercuRealisations realisations={realisations} />
       <Partenaire texte={contenu.texte_partenaire} />
+      <SectionContact />
     </>
   );
 }

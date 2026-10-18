@@ -21,3 +21,17 @@
 @media (max-width: 900px) {
   body { padding-bottom: calc(var(--hauteur-onglets) + env(safe-area-inset-bottom)); }
 }
+
+/* Impression du devis et du contrat : seul l'élément ciblé (classe .impression-cible, posée par
+   composants/imprimer.js) reste visible ; le reste de la page est masqué. */
+@media print {
+  body[data-impression] * { visibility: hidden !important; }
+  body[data-impression] .impression-cible,
+  body[data-impression] .impression-cible * { visibility: visible !important; }
+  body[data-impression] .impression-cible {
+    position: absolute; inset: 0 auto auto 0; width: 100%; margin: 0; padding: 0;
+    border: 0; box-shadow: none; background: #fff; color: #000;
+  }
+  body[data-impression] .masquer-impression { display: none !important; }
+  body { padding-bottom: 0 !important; }
+}

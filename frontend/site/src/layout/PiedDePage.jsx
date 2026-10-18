@@ -31,6 +31,7 @@ export default function PiedDePage() {
           <Link to="/realisations">{t('nav.realisations')}</Link>
           <Link to="/actualites">{t('nav.actualites')}</Link>
           <Link to="/commandes">{t('nav.mesCommandes')}</Link>
+          <Link to="/contact">{t('nav.contact')}</Link>
         </nav>
 
         <div className={styles.colonne}>

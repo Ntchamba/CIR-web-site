@@ -2,6 +2,7 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 
+import App from '@/app/App.jsx';
 import { AuthProvider } from '@/modules/compte/AuthContext.jsx';
 
 export const CLE_JETONS = 'cir-site.jetons';
@@ -105,4 +106,23 @@ export function rendreAvecRoutes(chemin, pages, { protegees = {}, Protection } =
       </AuthProvider>
     </MemoryRouter>,
   );
+}
+
+/** Rendu de l'application entière (session, sélection, routes, en-tête) à l'adresse donnée. */
+export function rendreApp(chemin = '/') {
+  return render(
+    <MemoryRouter initialEntries={[chemin]}>
+      <App />
+    </MemoryRouter>,
+  );
+}
+
+/** Routes de base d'un client connecté : profil complet et sélection vide. */
+export function routesClient(extra = {}, { utilisateur = UTILISATEUR, produits = [] } = {}) {
+  connecterLocalement();
+  return {
+    'GET /api/comptes/moi/': reponse(200, utilisateur),
+    'GET /api/selection/resume/': reponse(200, { count: produits.length, produits }),
+    ...extra,
+  };
 }

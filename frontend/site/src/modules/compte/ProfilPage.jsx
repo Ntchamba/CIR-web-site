@@ -83,6 +83,8 @@ export default function ProfilPage() {
           )}
           <div className={styles.liens}>
             <Bouton as={Link} to="/commandes" variante="texte">{t('compte.profil.mesCommandes')}</Bouton>
+            <Bouton as={Link} to="/mes-demandes" variante="texte">{t('compte.profil.mesDemandes')}</Bouton>
+            <Bouton as={Link} to="/selection" variante="texte">{t('compte.profil.maSelection')}</Bouton>
             <Bouton variante="texte" onClick={deconnecter}>{t('compte.profil.seDeconnecter')}</Bouton>
           </div>
         </section>

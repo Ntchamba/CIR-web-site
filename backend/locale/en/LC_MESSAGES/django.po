@@ -328,3 +328,328 @@ msgstr "The city must not contain a link, an email address or a phone number."
 #: apps/contenus/services.py
 msgid "La date de fin ne peut pas précéder la date de début."
 msgstr "The end date cannot be before the start date."
+
+#: apps/commandes/etapes.py:16
+#: apps/contact/models.py:26
+msgid "Nouvelle"
+msgstr "New"
+
+#: apps/commandes/etapes.py:17
+msgid "En négociation"
+msgstr "In negotiation"
+
+#: apps/commandes/etapes.py:18
+msgid "Contrat signé"
+msgstr "Contract signed"
+
+#: apps/commandes/etapes.py:19
+msgid "Travaux en cours"
+msgstr "Work in progress"
+
+#: apps/commandes/etapes.py:20
+msgid "Terminée"
+msgstr "Completed"
+
+#: apps/commandes/etapes.py:21
+msgid "Annulée"
+msgstr "Cancelled"
+
+#: apps/commandes/etapes.py:28
+msgid "Équipe"
+msgstr "Team"
+
+#: apps/commandes/etapes.py:88
+msgid "Cette commande ne peut pas passer de l'étape « %(de)s » à l'étape « %(vers)s »."
+msgstr "This order cannot move from the stage \"%(de)s\" to the stage \"%(vers)s\"."
+
+#: apps/commandes/models.py:76
+msgid "Acceptée"
+msgstr "Accepted"
+
+#: apps/commandes/models.py:77
+msgid "Refusée"
+msgstr "Declined"
+
+#: apps/commandes/models.py:78
+msgid "Remplacée"
+msgstr "Replaced"
+
+#: apps/commandes/negociation.py:51
+msgid "Indiquez au moins un prix au m² ou un total."
+msgstr "Enter at least a price per m² or a total."
+
+#: apps/commandes/negociation.py:90
+msgid "Cette commande n'est plus en négociation : aucune proposition n'est possible."
+msgstr "This order is no longer in negotiation: no proposal is possible."
+
+#: apps/commandes/negociation.py:105
+msgid "Cette proposition n'attend plus de réponse."
+msgstr "This proposal no longer awaits a reply."
+
+#: apps/commandes/negociation.py:107
+msgid "Vous ne pouvez pas répondre à votre propre proposition."
+msgstr "You cannot reply to your own proposal."
+
+#: apps/commandes/negociation.py:134
+msgid "Impossible de déterminer le montant : précisez la surface de la commande."
+msgstr "The amount cannot be determined: please specify the surface area of the order."
+
+#: apps/commandes/negociation.py:36
+msgid "Indiquez un nombre entier supérieur ou égal à %(minimum)s."
+msgstr "Enter a whole number greater than or equal to %(minimum)s."
+
+#: apps/commandes/negociation.py:48
+#: apps/commandes/negociation.py:113
+msgid "Le message est trop long (%(max)s caractères au plus)."
+msgstr "The message is too long (%(max)s characters at most)."
+
+#: apps/commandes/negociation.py:56
+msgid "Le total ne correspond pas au prix au m² multiplié par la surface (%(attendu)s FCFA)."
+msgstr "The total does not match the price per m² multiplied by the surface area (%(attendu)s FCFA)."
+
+#: apps/commandes/services.py:103
+msgid "Un compte de l'équipe ne peut pas passer commande."
+msgstr "A team account cannot place an order."
+
+#: apps/commandes/services.py:106
+msgid "Complétez votre adresse (ville, quartier, rue ou repère) dans votre profil pour passer commande."
+msgstr "Complete your address (city, neighbourhood, street or landmark) in your profile to place an order."
+
+#: apps/commandes/services.py:197
+msgid "La commande ne peut plus être modifiée : elle est déjà en négociation."
+msgstr "The order can no longer be edited: it is already in negotiation."
+
+#: apps/commandes/services.py:114
+msgid "Vous avez déjà passé %(nombre)s commandes aujourd'hui. Réessayez demain."
+msgstr "You have already placed %(nombre)s orders today. Please try again tomorrow."
+
+#: apps/commandes/services.py:123
+#: apps/devis/services.py:216
+msgid "La surface doit être supérieure à zéro."
+msgstr "The surface area must be greater than zero."
+
+#: apps/commandes/services.py:150
+msgid "Ajoutez au moins un produit à la commande."
+msgstr "Add at least one product to the order."
+
+#: apps/commandes/services.py:130
+msgid "La description est trop longue (%(max)s caractères au plus)."
+msgstr "The description is too long (%(max)s characters at most)."
+
+#: apps/commandes/services.py:152
+msgid "Une commande compte %(max)s produits au plus."
+msgstr "An order can contain %(max)s products at most."
+
+#: apps/commandes/services.py:159
+msgid "Un des produits n'est pas disponible : retirez-le de la commande."
+msgstr "One of the products is not available: remove it from the order."
+
+#: apps/commandes/services.py:162
+msgid "Un des designs n'appartient pas au produit choisi."
+msgstr "One of the designs does not belong to the chosen product."
+
+#: apps/commandes/services.py:215
+msgid "La surface ne peut plus être modifiée une fois le contrat signé."
+msgstr "The surface area can no longer be changed once the contract is signed."
+
+#: apps/contact/models.py:14
+msgid "Question"
+msgstr "Question"
+
+#: apps/contact/models.py:15
+msgid "Être rappelé"
+msgstr "Request a call back"
+
+#: apps/contact/models.py:19
+msgid "Matin"
+msgstr "Morning"
+
+#: apps/contact/models.py:20
+msgid "Après-midi"
+msgstr "Afternoon"
+
+#: apps/contact/models.py:21
+msgid "Soir"
+msgstr "Evening"
+
+#: apps/contact/models.py:22
+msgid "Peu importe"
+msgstr "Any time"
+
+#: apps/contact/models.py:27
+msgid "En cours"
+msgstr "In progress"
+
+#: apps/contact/models.py:28
+msgid "Traitée"
+msgstr "Handled"
+
+#: apps/contact/services.py:86
+msgid "Le téléphone est obligatoire pour être rappelé."
+msgstr "A phone number is required to be called back."
+
+#: apps/contact/services.py:88
+msgid "Indiquez une adresse e-mail ou un numéro de téléphone."
+msgstr "Enter an email address or a phone number."
+
+#: apps/contact/services.py:40
+msgid "Numéro de téléphone invalide."
+msgstr "Invalid phone number."
+
+#: apps/contact/services.py:50
+msgid "Le message ne doit pas contenir de lien."
+msgstr "The message must not contain a link."
+
+#: apps/contact/services.py:57
+msgid "Vous avez déjà envoyé %(nombre)s messages aujourd'hui. Réessayez demain."
+msgstr "You have already sent %(nombre)s messages today. Please try again tomorrow."
+
+#: apps/contact/services.py:47
+msgid "Le message doit compter entre %(min)s et %(max)s caractères."
+msgstr "The message must be between %(min)s and %(max)s characters long."
+
+#: apps/contact/services.py:96
+#: apps/devis/services.py:221
+msgid "Ce produit n'est pas disponible."
+msgstr "This product is not available."
+
+#: apps/contact/services.py:33
+msgid "Adresse e-mail invalide."
+msgstr "Invalid email address."
+
+#: apps/devis/calcul.py:20
+msgid "Matériau"
+msgstr "Material"
+
+#: apps/devis/calcul.py:21
+msgid "Surface"
+msgstr "Surface"
+
+#: apps/devis/calcul.py:22
+msgid "Forfait"
+msgstr "Flat fee"
+
+#: apps/devis/calcul.py:65
+#: apps/devis/calcul.py:74
+msgid "La surface est obligatoire."
+msgstr "The surface area is required."
+
+#: apps/devis/calcul.py:66
+msgid "Le dosage est obligatoire."
+msgstr "The dosage is required."
+
+#: apps/devis/calcul.py:67
+msgid "Le prix au kg est obligatoire."
+msgstr "The price per kg is required."
+
+#: apps/devis/calcul.py:55
+msgid "La valeur doit être supérieure à zéro."
+msgstr "The value must be greater than zero."
+
+#: apps/devis/calcul.py:75
+msgid "Le prix au m² est obligatoire."
+msgstr "The price per m² is required."
+
+#: apps/devis/calcul.py:80
+msgid "Le montant du forfait est obligatoire."
+msgstr "The flat fee amount is required."
+
+#: apps/devis/calcul.py:84
+msgid "Type de ligne inconnu."
+msgstr "Unknown line type."
+
+#: apps/devis/models.py:24
+msgid "En étude"
+msgstr "Under review"
+
+#: apps/devis/models.py:25
+msgid "Devis envoyé"
+msgstr "Quote sent"
+
+#: apps/devis/models.py:26
+msgid "Clôturée"
+msgstr "Closed"
+
+#: apps/devis/models.py:78
+msgid "Brouillon"
+msgstr "Draft"
+
+#: apps/devis/models.py:79
+msgid "Envoyé"
+msgstr "Sent"
+
+#: apps/devis/models.py:80
+msgid "Accepté"
+msgstr "Accepted"
+
+#: apps/devis/models.py:82
+msgid "Remplacé"
+msgstr "Replaced"
+
+#: apps/devis/services.py:73
+msgid "Seul un devis en brouillon peut être modifié ou supprimé."
+msgstr "Only a draft quote can be edited or deleted."
+
+#: apps/devis/services.py:129
+msgid "Ce devis a déjà été envoyé."
+msgstr "This quote has already been sent."
+
+#: apps/devis/services.py:135
+msgid "Le devis est incomplet : renseignez toutes les surfaces et tous les prix avant de l'envoyer."
+msgstr "The quote is incomplete: fill in all surface areas and prices before sending it."
+
+#: apps/devis/services.py:138
+msgid "Le total du devis doit être supérieur à zéro."
+msgstr "The quote total must be greater than zero."
+
+#: apps/devis/services.py:102
+msgid "Cette demande de rendu appartient à un autre client."
+msgstr "This render request belongs to another customer."
+
+#: apps/devis/services.py:132
+msgid "Ajoutez au moins une ligne au devis."
+msgstr "Add at least one line to the quote."
+
+#: apps/devis/services.py:140
+msgid "Chaque ligne doit avoir un libellé ou un produit."
+msgstr "Each line must have a label or a product."
+
+#: apps/devis/services.py:179
+msgid "Vous avez déjà envoyé %(nombre)s demandes de rendu aujourd'hui. Réessayez demain."
+msgstr "You have already sent %(nombre)s render requests today. Please try again tomorrow."
+
+#: apps/devis/services.py:229
+msgid "Cinq images au plus par demande."
+msgstr "Five images at most per request."
+
+#: apps/devis/services.py:92
+msgid "La commande est obligatoire."
+msgstr "The order is required."
+
+#: apps/devis/services.py:94
+msgid "Cette commande est terminée ou annulée : on ne peut plus y joindre de devis."
+msgstr "This order is completed or cancelled: a quote can no longer be attached to it."
+
+#: apps/devis/services.py:212
+msgid "La description doit compter entre %(min)s et %(max)s caractères."
+msgstr "The description must be between %(min)s and %(max)s characters long."
+
+#: apps/devis/services.py:226
+msgid "Commande introuvable."
+msgstr "Order not found."
+
+#: apps/noyau/permissions.py:28
+msgid "Accès réservé aux clients."
+msgstr "Access reserved for customers."
+
+#: apps/noyau/permissions.py:34
+msgid "Les comptes de l'équipe n'utilisent pas cette fonction : passez par le tableau de bord."
+msgstr "Team accounts do not use this feature: please use the dashboard."
+
+#: apps/selection/services.py:42
+msgid "Votre sélection est pleine (%(nombre)s éléments au plus)."
+msgstr "Your selection is full (%(nombre)s items at most)."
+
+#: apps/selection/services.py:37
+msgid "Ce design n'appartient pas à ce produit."
+msgstr "This design does not belong to this product."

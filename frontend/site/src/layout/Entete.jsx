@@ -8,6 +8,7 @@ import Icone from '@partage/ui/Icone.jsx';
 import { useTraduction } from '@/i18n/index.js';
 import { prenomDe } from '@/modules/compte/adresse.js';
 import { useAuth } from '@/modules/compte/AuthContext.jsx';
+import { useSelection } from '@/modules/selection/SelectionContext.jsx';
 
 import { useCoordonnees } from './contenus.js';
 import styles from './Entete.module.css';
@@ -24,6 +25,7 @@ export default function Entete() {
   const { t } = useTraduction();
   const { utilisateur, retenirLangue } = useAuth();
   const { telephone } = useCoordonnees();
+  const selection = useSelection();
 
   return (
     <header className={styles.entete}>
@@ -51,6 +53,13 @@ export default function Entete() {
             aria-label={t('entete.appeler', { telephone: telephone.affichage })}>
             <Icone nom="tel" />
           </a>
+          {selection.disponible && (
+            <Link to="/selection" className={styles.selection}
+              aria-label={t('selection.compteur', { n: selection.nombre })}>
+              <Icone nom="selection" />
+              {selection.nombre > 0 && <span className={styles.compteur} aria-hidden="true">{selection.nombre}</span>}
+            </Link>
+          )}
           {utilisateur ? (
             <Link to="/compte" className={styles.compte}>
               <Icone nom="compte" />

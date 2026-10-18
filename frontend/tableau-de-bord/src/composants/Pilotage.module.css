@@ -1,0 +1,47 @@
+/* Composants communs aux pages de pilotage (commandes, devis, contact) : onglets, confirmation, notes, pastilles. */
+
+/* --- Onglets --- */
+.onglets { display: flex; flex-wrap: wrap; gap: var(--esp-1); border-bottom: 1px solid var(--filet); }
+.onglet {
+  display: inline-flex; align-items: center; gap: var(--esp-2);
+  min-height: var(--cible-tactile); padding: 0 var(--esp-4);
+  border: 0; border-bottom: 3px solid transparent; background: none;
+  color: var(--encre-2); font: inherit; font-weight: 600; cursor: pointer;
+}
+.onglet:hover { color: var(--encre); }
+.ongletActif { color: var(--encre); border-bottom-color: var(--corail); }
+.nombre {
+  display: inline-block; min-width: 24px; padding: 1px 8px; border-radius: var(--pastille);
+  background: var(--fond-2); color: var(--encre-2); font-size: 13px; font-weight: 600; text-align: center;
+}
+.nombreUrgent { background: var(--corail); color: var(--encre); }
+.panneau { padding-top: var(--esp-4); display: grid; gap: var(--esp-4); }
+
+/* --- Confirmation en ligne --- */
+.confirmation {
+  display: grid; gap: var(--esp-3); padding: var(--esp-4);
+  border: 1px solid var(--st-negociation-t); border-radius: var(--rayon-s); background: var(--st-negociation-f);
+}
+.confirmation p { font-weight: 500; }
+.boutonsConfirmation { display: flex; flex-wrap: wrap; gap: var(--esp-3); align-items: center; }
+
+/* --- Notes internes --- */
+.notes { display: grid; gap: var(--esp-3); }
+.notes textarea { min-height: 110px; }
+.avertissement { color: var(--encre-3); font-size: 14px; }
+.annonce {
+  padding: var(--esp-2) var(--esp-4); border-radius: var(--rayon-s);
+  background: var(--succes-fond); color: var(--succes); font-weight: 600;
+}
+
+/* --- Pastilles --- */
+.pastille { display: inline-block; padding: 2px 10px; border-radius: var(--pastille); font-size: 13px; font-weight: 600; white-space: nowrap; }
+.urgente { background: var(--corail); color: var(--encre); }
+
+/* --- Liens de contact --- */
+.liensContact { display: grid; gap: 2px; }
+.liensContact a { display: inline-flex; align-items: center; min-height: 28px; overflow-wrap: anywhere; }
+
+/* --- Divers --- */
+.titreCarte { font-family: var(--police-titre); font-size: 20px; font-weight: 500; }
+.erreurChamp { font-size: 13px; font-weight: 500; color: var(--danger); }

@@ -20,6 +20,11 @@ const CataloguePage = lazy(() => import('@/modules/catalogue/CataloguePage.jsx')
 const VitrinePage = lazy(() => import('@/modules/vitrine/VitrinePage.jsx'));
 const ActualitesPage = lazy(() => import('@/modules/actualites/ActualitesPage.jsx'));
 const ContenusPage = lazy(() => import('@/modules/contenus/ContenusPage.jsx'));
+const CommandesPage = lazy(() => import('@/modules/commandes/CommandesPage.jsx'));
+const DetailCommande = lazy(() => import('@/modules/commandes/DetailCommande.jsx'));
+const DevisPage = lazy(() => import('@/modules/devis/DevisPage.jsx'));
+const EditeurDevis = lazy(() => import('@/modules/devis/EditeurDevis.jsx'));
+const DemandesPage = lazy(() => import('@/modules/contact/DemandesPage.jsx'));
 
 export default function RoutesTableauDeBord() {
   return (
@@ -29,6 +34,13 @@ export default function RoutesTableauDeBord() {
         <Route element={<RouteEquipe />}>
           <Route element={<Coque />}>
             <Route index element={<AccueilPage />} />
+            <Route path="commandes" element={<CommandesPage />} />
+            <Route path="commandes/:id" element={<DetailCommande />} />
+            <Route path="devis" element={<DevisPage />} />
+            {/* Deux éléments distincts (clés différentes) : l'éditeur repart de zéro après la création d'un devis. */}
+            <Route path="devis/nouveau" element={<EditeurDevis key="nouveau" />} />
+            <Route path="devis/:id" element={<EditeurDevis key="existant" />} />
+            <Route path="contact" element={<DemandesPage />} />
             <Route path="clients" element={<ClientsPage />} />
             <Route path="clients/:id" element={<FicheClientPage />} />
             <Route path="catalogue/*" element={<CataloguePage />} />

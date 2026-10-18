@@ -4,6 +4,7 @@ import { configurerPageMeta } from '@partage/utils/usePageMeta.js';
 
 import { t } from '@/i18n/index.js';
 import { AuthProvider } from '@/modules/compte/AuthContext.jsx';
+import { SelectionProvider } from '@/modules/selection/SelectionContext.jsx';
 
 import RoutesSite from './routes.jsx';
 
@@ -15,7 +16,9 @@ configurerPageMeta({
 export default function App() {
   return (
     <AuthProvider>
-      <RoutesSite />
+      <SelectionProvider>
+        <RoutesSite />
+      </SelectionProvider>
     </AuthProvider>
   );
 }

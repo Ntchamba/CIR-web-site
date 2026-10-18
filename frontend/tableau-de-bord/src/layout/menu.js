@@ -14,9 +14,15 @@ function entree(module, chemin, icone, extra = {}) {
   };
 }
 
-/** Modules livrés. `superAdmin` : entrée visible seulement pour le super-administrateur. */
+/**
+ * Modules livrés. `superAdmin` : entrée visible seulement pour le super-administrateur.
+ * `pastille` : le menu affiche le nombre d'éléments à traiter (voir usePastilles.js).
+ */
 export const MODULES_ACTIFS = [
   entree('accueil', '/', 'accueil', { fin: true }),
+  entree('commandes', '/commandes', 'commandes', { pastille: true }),
+  entree('devis', '/devis', 'devis', { pastille: true }),
+  entree('contact', '/contact', 'contact', { pastille: true }),
   entree('clients', '/clients', 'clients'),
   entree('catalogue', '/catalogue', 'catalogue'),
   entree('vitrine', '/vitrine', 'realisations'),
@@ -26,11 +32,8 @@ export const MODULES_ACTIFS = [
 ];
 
 export const MODULES_A_VENIR = [
-  entree('commandes', '/commandes', 'commandes'),
-  entree('devis', '/devis', 'devis'),
   entree('messagerie', '/messagerie', 'message'),
   entree('appels', '/appels', 'tel'),
-  entree('contact', '/contact', 'contact'),
   entree('paiements', '/paiements', 'paiements'),
   entree('statistiques', '/statistiques', 'statistiques'),
   entree('notifications', '/notifications', 'notifications'),

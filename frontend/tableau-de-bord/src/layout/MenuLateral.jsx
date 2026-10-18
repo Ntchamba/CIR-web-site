@@ -6,6 +6,7 @@ import { useAuth } from '@/modules/connexion/AuthContext.jsx';
 
 import IconeMenu from './IconeMenu.jsx';
 import { MODULES_A_VENIR, modulesVisibles } from './menu.js';
+import usePastilles from './usePastilles.js';
 import styles from './Coque.module.css';
 
 const classeLien = ({ isActive }) => `${styles.lien} ${isActive ? styles.actif : ''}`;
@@ -13,6 +14,7 @@ const classeLien = ({ isActive }) => `${styles.lien} ${isActive ? styles.actif :
 export default function MenuLateral({ id, ouvert, surNavigation }) {
   const { t } = useTraduction();
   const { superAdmin } = useAuth();
+  const nombres = usePastilles();
   return (
     <nav id={id} className={`${styles.menu} ${ouvert ? styles.menuOuvert : ''}`} aria-label={t('coque.menu')}>
       <NavLink to="/" className={styles.logo} onClick={surNavigation}>
@@ -27,6 +29,12 @@ export default function MenuLateral({ id, ouvert, surNavigation }) {
             <NavLink to={m.chemin} end={m.fin} className={classeLien} onClick={surNavigation}>
               <IconeMenu nom={m.icone} />
               <span>{m.libelle}</span>
+              {m.pastille && nombres[m.module] > 0 && (
+                <span className={styles.pastilleMenu}>
+                  <span aria-hidden="true">{nombres[m.module]}</span>
+                  <span className="visuellement-cache">{' '}{t('coque.aTraiter', { n: nombres[m.module] })}</span>
+                </span>
+              )}
             </NavLink>
           </li>
         ))}

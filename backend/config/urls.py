@@ -25,6 +25,13 @@ urlpatterns = [
     path("api/admin/actualites/", include("apps.actualites.urls_admin")),
     path("api/contenus/", include("apps.contenus.urls")),
     path("api/admin/contenus/", include("apps.contenus.urls_admin")),
+    path("api/selection/", include("apps.selection.urls")),
+    path("api/commandes/", include("apps.commandes.urls")),
+    path("api/admin/commandes/", include("apps.commandes.urls_admin")),
+    path("api/devis/", include("apps.devis.urls")),
+    path("api/admin/devis/", include("apps.devis.urls_admin")),
+    path("api/contact/", include("apps.contact.urls")),
+    path("api/admin/contact/", include("apps.contact.urls_admin")),
 ]
 
 if settings.SERVIR_MEDIAS:

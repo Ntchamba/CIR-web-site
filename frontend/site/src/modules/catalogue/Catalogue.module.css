@@ -68,3 +68,6 @@
   .disposition { grid-template-columns: 1fr; }
   .filtres { position: static; }
 }
+
+/* Bouton de sélection : au-dessus du lien qui couvre toute la carte */
+.actionsCarte { position: relative; z-index: 1; align-self: flex-start; margin-top: 4px; }

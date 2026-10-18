@@ -56,6 +56,10 @@ INSTALLED_APPS = [
     "apps.vitrine",  # BF-02, BF-03, BF-04, BF-15
     "apps.actualites",  # BF-07
     "apps.contenus",  # BF-15, O2
+    "apps.selection",  # BF-09
+    "apps.commandes",  # BF-10, BF-12, BF-13, BF-16
+    "apps.devis",  # BF-11, BF-12
+    "apps.contact",  # BF-11, BF-13
 ]
 
 MIDDLEWARE = [
@@ -147,7 +151,8 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "apps.noyau.pagination.PaginationStandard",
     "PAGE_SIZE": 24,
-    "DEFAULT_THROTTLE_RATES": {"inscription": "20/hour"},
+    # contact : 5 demandes par heure et par adresse IP (les autres quotas, par compte et par jour, sont dans les services)
+    "DEFAULT_THROTTLE_RATES": {"inscription": "20/hour", "contact": "5/hour"},
     # Nombre de proxys de confiance devant l'application : l'adresse du client est la valeur ajoutée
     # par le dernier proxy dans X-Forwarded-For. 0 = REMOTE_ADDR (en-tête ignoré, valeur de dev/tests).
     "NUM_PROXIES": int(env("DJANGO_NOMBRE_PROXIES", "0")),

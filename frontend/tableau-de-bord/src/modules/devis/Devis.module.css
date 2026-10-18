@@ -1,0 +1,40 @@
+.page { max-width: 1100px; display: grid; gap: var(--esp-5); }
+.filtres { display: grid; gap: var(--esp-4); align-items: end; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto; }
+@media (max-width: 720px) { .filtres { grid-template-columns: 1fr; } }
+.reference { font-weight: 600; color: var(--bleu); }
+.retour { display: inline-flex; align-items: center; gap: var(--esp-2); min-height: var(--cible-tactile); color: var(--bleu); font-weight: 600; }
+.pastilles { display: flex; flex-wrap: wrap; gap: var(--esp-2); align-items: center; }
+.carte { display: grid; gap: var(--esp-4); }
+.titreCarte { font-family: var(--police-titre); font-size: 20px; font-weight: 500; }
+.grille { display: grid; gap: var(--esp-4); grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.vide { color: var(--encre-3); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--esp-3); align-items: flex-start; }
+.avertissement { padding: var(--esp-3) var(--esp-4); border-radius: var(--rayon-s); background: var(--st-contrat-f); color: var(--st-contrat-t); font-weight: 500; }
+
+/* Lignes de l'éditeur */
+.lignes { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--esp-4); }
+.ligne { display: grid; gap: var(--esp-4); margin: 0; padding: var(--esp-4); border: 1px solid var(--filet); border-radius: var(--rayon-s); background: var(--blanc); }
+.ligne legend { padding: 0 var(--esp-2); font-weight: 600; }
+.resultat { display: flex; flex-wrap: wrap; gap: var(--esp-2) var(--esp-5); align-items: baseline; margin: 0; }
+.resultat div { display: grid; }
+.resultat dt { font-size: 13px; color: var(--encre-3); }
+.resultat dd { margin: 0; font-weight: 600; }
+.erreursLigne { color: var(--danger); font-size: 14px; font-weight: 500; }
+.boutonsLigne { display: flex; flex-wrap: wrap; gap: var(--esp-2); align-items: center; }
+.ajout { display: flex; flex-wrap: wrap; gap: var(--esp-3); }
+.total { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--esp-3); }
+.totalMontant { font-family: var(--police-titre); font-size: 28px; font-weight: 500; }
+.aideTotal { color: var(--encre-3); font-size: 14px; }
+
+/* Demandes de rendu (tiroir) */
+.images { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--esp-3); }
+.images img { width: 100%; max-height: 520px; object-fit: contain; border-radius: var(--rayon-s); background: var(--fond-2); }
+.texteClient { white-space: pre-wrap; overflow-wrap: anywhere; padding: var(--esp-3); border-radius: var(--rayon-s); background: var(--blanc); }
+.infos { display: grid; gap: var(--esp-3); margin: 0; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.info dt { font-size: 13px; color: var(--encre-3); }
+.info dd { margin: 0; font-weight: 500; overflow-wrap: anywhere; }
+.section { display: grid; gap: var(--esp-3); }
+.tableauSimple { width: 100%; border-collapse: collapse; }
+.tableauSimple th, .tableauSimple td { padding: var(--esp-2) var(--esp-3); text-align: left; border-bottom: 1px solid var(--filet-2); vertical-align: middle; }
+.tableauSimple th { font-size: 13px; color: var(--encre-3); font-weight: 600; }
+.defilement { overflow-x: auto; }

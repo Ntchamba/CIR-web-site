@@ -1,0 +1,61 @@
+.page { max-width: 1200px; display: grid; gap: var(--esp-5); }
+.filtres { display: grid; gap: var(--esp-4); align-items: end; grid-template-columns: minmax(0, 2fr) auto auto; }
+@media (max-width: 720px) { .filtres { grid-template-columns: 1fr; } }
+.caseAction {
+  display: inline-flex; align-items: center; gap: var(--esp-2); min-height: var(--cible-tactile); font-weight: 500; cursor: pointer;
+}
+.caseAction input { width: 20px; height: 20px; accent-color: var(--bleu); }
+.reference { font-weight: 600; color: var(--bleu); }
+.etapeCellule { display: grid; gap: var(--esp-1); justify-items: start; }
+
+/* --- Détail --- */
+.retour { display: inline-flex; align-items: center; gap: var(--esp-2); min-height: var(--cible-tactile); color: var(--bleu); font-weight: 600; }
+.enteteDetail { display: grid; gap: var(--esp-3); }
+.pastilles { display: flex; flex-wrap: wrap; gap: var(--esp-2); align-items: center; }
+.colonnes { display: grid; gap: var(--esp-5); grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: start; }
+@media (max-width: 960px) { .colonnes { grid-template-columns: 1fr; } }
+.colonne { display: grid; gap: var(--esp-5); min-width: 0; }
+.carte { display: grid; gap: var(--esp-4); }
+.titreCarte { font-family: var(--police-titre); font-size: 20px; font-weight: 500; }
+.infos { display: grid; gap: var(--esp-3); margin: 0; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.info dt { font-size: 13px; color: var(--encre-3); }
+.info dd { margin: 0; font-weight: 500; overflow-wrap: anywhere; }
+.texteClient { white-space: pre-wrap; overflow-wrap: anywhere; padding: var(--esp-3); border-radius: var(--rayon-s); background: var(--fond); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--esp-3); align-items: flex-start; }
+.formSurface { display: flex; flex-wrap: wrap; gap: var(--esp-3); align-items: flex-end; }
+.formSurface > :first-child { flex: 1 1 180px; }
+
+/* Frise des étapes */
+.frise { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--esp-2); grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+.etape {
+  display: grid; gap: 2px; padding: var(--esp-3); border: 1px solid var(--filet); border-radius: var(--rayon-s);
+  background: var(--blanc); color: var(--encre-3);
+}
+.etape strong { font-size: 15px; }
+.etape small { font-size: 12px; }
+.etapeFaite { color: var(--encre); background: var(--fond); border-color: var(--champ); }
+.etapeCourante { color: var(--encre); border-color: var(--corail); box-shadow: inset 0 3px 0 var(--corail); }
+.historique { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--esp-1); color: var(--encre-2); font-size: 14px; }
+
+/* Négociation */
+.propositions { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--esp-3); }
+.proposition { display: grid; gap: var(--esp-2); padding: var(--esp-4); border: 1px solid var(--filet); border-radius: var(--rayon-s); background: var(--blanc); }
+.propositionEnAttente { border-color: var(--st-negociation-t); background: var(--st-negociation-f); }
+.enteteProposition { display: flex; flex-wrap: wrap; gap: var(--esp-2) var(--esp-3); align-items: center; justify-content: space-between; }
+.message { white-space: pre-wrap; overflow-wrap: anywhere; }
+.chiffres { display: flex; flex-wrap: wrap; gap: var(--esp-2) var(--esp-5); margin: 0; }
+.chiffres div { display: grid; }
+.chiffres dt { font-size: 13px; color: var(--encre-3); }
+.chiffres dd { margin: 0; font-weight: 600; }
+.formProposition { display: grid; gap: var(--esp-4); padding: var(--esp-4); border: 1px solid var(--filet); border-radius: var(--rayon-s); background: var(--fond); }
+.grille { display: grid; gap: var(--esp-4); grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+.vide { color: var(--encre-3); }
+
+/* Lignes, devis, contrat */
+.tableauSimple { width: 100%; border-collapse: collapse; }
+.tableauSimple th, .tableauSimple td { padding: var(--esp-2) var(--esp-3); text-align: left; border-bottom: 1px solid var(--filet-2); vertical-align: middle; }
+.tableauSimple th { font-size: 13px; color: var(--encre-3); font-weight: 600; }
+.defilement { overflow-x: auto; }
+.pastilleCouleur { display: inline-block; width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--champ); margin-right: var(--esp-2); vertical-align: -2px; }
+.contrat { display: grid; gap: var(--esp-3); padding: var(--esp-4); border: 1px dashed var(--champ); border-radius: var(--rayon-s); }
+.liste { margin: 0; padding-left: var(--esp-5); }

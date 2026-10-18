@@ -1,7 +1,8 @@
-// Choix du design et contact. En attendant la sélection et la commande en ligne (vague 2) :
-// boutons « Appeler » et « WhatsApp » (message prérempli avec le produit et le design choisis).
+// Choix du design, sélection et commande (vague 2), contact : « Ajouter à ma sélection », « Commander »,
+// « Appeler » et « WhatsApp » (message prérempli avec le produit et le design choisis).
 // Rendu avec key={slug} : le design choisi est oublié en changeant de produit.
 import { useState } from 'react';
+import { Link } from 'react-router';
 
 import Bouton from '@partage/ui/Bouton.jsx';
 import Icone from '@partage/ui/Icone.jsx';
@@ -10,12 +11,15 @@ import { prix } from '@partage/utils/format.js';
 import { useTraduction } from '@/i18n/index.js';
 import { lienWhatsApp } from '@/layout/coordonnees.js';
 import { useCoordonnees } from '@/layout/contenus.js';
+import { useAuth } from '@/modules/compte/AuthContext.jsx';
+import BoutonSelection from '@/modules/selection/composants/BoutonSelection.jsx';
 
 import styles from '../Produit.module.css';
 
 export default function PanneauOptions({ produit }) {
   const { t } = useTraduction();
   const { telephone, whatsapp } = useCoordonnees();
+  const { utilisateur } = useAuth();
   const designs = produit.designs || [];
   const [choix, setChoix] = useState(null);
 
@@ -52,6 +56,16 @@ export default function PanneauOptions({ produit }) {
       )}
 
       <div className={styles.contact}>
+        <BoutonSelection produit={produit.id} design={design?.id ?? null} nom={produit.nom} taille="large" lienSiAjoute={false} />
+        {!utilisateur?.est_equipe && (
+          <Bouton as={Link} to={`/commandes/nouvelle?produit=${encodeURIComponent(produit.slug)}${design ? `&design=${design.id}` : ''}`}
+            taille="large">
+            {t('produit.options.commander')}
+          </Bouton>
+        )}
+      </div>
+
+      <div className={styles.contact}>
         <p>{t('produit.options.contact')}</p>
         <Bouton as="a" href={telephone.lien} taille="large">
           <Icone nom="tel" taille={18} />
@@ -62,7 +76,6 @@ export default function PanneauOptions({ produit }) {
           <Icone nom="message" taille={18} />
           {t('produit.options.whatsapp')}
         </Bouton>
-        <p className={styles.note}>{t('produit.options.commandeBientot')}</p>
       </div>
     </div>
   );

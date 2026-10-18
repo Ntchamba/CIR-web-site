@@ -1,0 +1,36 @@
+/* Module devis : aperçu d'un devis envoyé, demande de rendu. */
+.devis { display: flex; flex-direction: column; gap: 14px; padding: 18px; border: 1px solid var(--filet); border-radius: var(--rayon); background: var(--fond); }
+.enteteDevis { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.enteteDevis h3 { font-size: 18px; margin-right: auto; }
+.etat { padding: 2px 10px; border-radius: var(--pastille); background: var(--fond-2); font-size: 12px; font-weight: 700; color: var(--encre-2); }
+.expire { padding: 2px 10px; border-radius: var(--pastille); background: var(--danger-fond); border: 1px solid var(--danger-filet); font-size: 12px; font-weight: 700; color: var(--danger); }
+.resume { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px 20px; }
+.resume div { display: flex; flex-direction: column; gap: 2px; }
+.resume dt { font-size: 13px; color: var(--encre-2); }
+.resume dd { margin: 0; font-weight: 600; }
+.total { font-size: 20px; font-weight: 700 !important; }
+.tableau { width: 100%; border-collapse: collapse; background: var(--blanc); }
+.tableau th, .tableau td { padding: 10px 12px; border-bottom: 1px solid var(--filet-2); text-align: left; vertical-align: top; }
+.tableau thead th { background: var(--encre); color: var(--blanc); font-size: 13px; }
+.tableau tfoot th, .tableau tfoot td { font-weight: 700; border-bottom: 0; }
+.tableau td span { display: block; }
+.detailLigne { font-size: 13px; color: var(--encre-2); }
+.droite { text-align: right !important; white-space: nowrap; }
+.notes { white-space: pre-wrap; overflow-wrap: anywhere; color: var(--encre-2); margin: 0; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.lienNego { display: inline-flex; align-items: center; min-height: var(--cible-tactile); font-weight: 600; }
+
+/* Demande de rendu */
+.formDemande { display: flex; flex-direction: column; gap: 18px; max-width: 720px; margin-top: 24px; }
+.deuxColonnes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.intro { color: var(--encre-2); max-width: 60ch; margin-top: 8px; }
+.images { margin: 0; padding: 18px; border: 1px solid var(--filet); border-radius: var(--rayon); background: var(--blanc); display: flex; flex-direction: column; gap: 12px; }
+.images legend { padding: 0 6px; font-weight: 600; }
+.aide { font-size: 13px; color: var(--encre-2); }
+.erreur { font-size: 13px; font-weight: 500; color: var(--danger); }
+.apercus { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+.apercus li { display: flex; flex-direction: column; gap: 6px; }
+.apercus img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--rayon-s); background: var(--fond-2); }
+.rangee { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+@media (max-width: 520px) { .deuxColonnes { grid-template-columns: 1fr; } }

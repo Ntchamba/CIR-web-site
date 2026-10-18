@@ -40,6 +40,11 @@
 .lien:hover { background: rgba(255, 255, 255, 0.07); color: var(--blanc); }
 .actif { background: rgba(255, 109, 76, 0.16); color: var(--blanc); box-shadow: inset 3px 0 0 var(--corail); }
 
+.pastilleMenu {
+  margin-left: auto; min-width: 24px; padding: 1px 8px; border-radius: var(--pastille);
+  background: var(--corail); color: var(--encre); font-size: 12px; font-weight: 700; text-align: center;
+}
+
 .bientot {
   margin-left: auto; padding: 2px 8px; border-radius: var(--pastille);
   background: rgba(255, 255, 255, 0.08); color: #9fb4bf; font-size: 11px; white-space: nowrap;

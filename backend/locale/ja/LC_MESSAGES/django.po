@@ -328,3 +328,328 @@ msgstr "市区町村名にリンク、メールアドレス、電話番号を含
 #: apps/contenus/services.py
 msgid "La date de fin ne peut pas précéder la date de début."
 msgstr "終了日を開始日より前にすることはできません。"
+
+#: apps/commandes/etapes.py:16
+#: apps/contact/models.py:26
+msgid "Nouvelle"
+msgstr "新規"
+
+#: apps/commandes/etapes.py:17
+msgid "En négociation"
+msgstr "交渉中"
+
+#: apps/commandes/etapes.py:18
+msgid "Contrat signé"
+msgstr "契約締結済み"
+
+#: apps/commandes/etapes.py:19
+msgid "Travaux en cours"
+msgstr "工事中"
+
+#: apps/commandes/etapes.py:20
+msgid "Terminée"
+msgstr "完了"
+
+#: apps/commandes/etapes.py:21
+msgid "Annulée"
+msgstr "キャンセル済み"
+
+#: apps/commandes/etapes.py:28
+msgid "Équipe"
+msgstr "チーム"
+
+#: apps/commandes/etapes.py:88
+msgid "Cette commande ne peut pas passer de l'étape « %(de)s » à l'étape « %(vers)s »."
+msgstr "この注文は「%(de)s」から「%(vers)s」の段階に移せません。"
+
+#: apps/commandes/models.py:76
+msgid "Acceptée"
+msgstr "承諾済み"
+
+#: apps/commandes/models.py:77
+msgid "Refusée"
+msgstr "辞退済み"
+
+#: apps/commandes/models.py:78
+msgid "Remplacée"
+msgstr "差し替え済み"
+
+#: apps/commandes/negociation.py:51
+msgid "Indiquez au moins un prix au m² ou un total."
+msgstr "1平方メートルあたりの価格または合計金額のいずれかを入力してください。"
+
+#: apps/commandes/negociation.py:90
+msgid "Cette commande n'est plus en négociation : aucune proposition n'est possible."
+msgstr "この注文はすでに交渉段階にないため、提案はできません。"
+
+#: apps/commandes/negociation.py:105
+msgid "Cette proposition n'attend plus de réponse."
+msgstr "この提案はもう返答を必要としていません。"
+
+#: apps/commandes/negociation.py:107
+msgid "Vous ne pouvez pas répondre à votre propre proposition."
+msgstr "ご自身の提案に返答することはできません。"
+
+#: apps/commandes/negociation.py:134
+msgid "Impossible de déterminer le montant : précisez la surface de la commande."
+msgstr "金額を確定できません。注文の面積を指定してください。"
+
+#: apps/commandes/negociation.py:36
+msgid "Indiquez un nombre entier supérieur ou égal à %(minimum)s."
+msgstr "%(minimum)s 以上の整数を入力してください。"
+
+#: apps/commandes/negociation.py:48
+#: apps/commandes/negociation.py:113
+msgid "Le message est trop long (%(max)s caractères au plus)."
+msgstr "メッセージが長すぎます（最大 %(max)s 文字）。"
+
+#: apps/commandes/negociation.py:56
+msgid "Le total ne correspond pas au prix au m² multiplié par la surface (%(attendu)s FCFA)."
+msgstr "合計金額が「1平方メートルあたりの価格×面積」と一致しません（%(attendu)s FCFA）。"
+
+#: apps/commandes/services.py:103
+msgid "Un compte de l'équipe ne peut pas passer commande."
+msgstr "チームのアカウントでは注文できません。"
+
+#: apps/commandes/services.py:106
+msgid "Complétez votre adresse (ville, quartier, rue ou repère) dans votre profil pour passer commande."
+msgstr "注文するには、プロフィールで住所（市、地区、通りまたは目印）を入力してください。"
+
+#: apps/commandes/services.py:197
+msgid "La commande ne peut plus être modifiée : elle est déjà en négociation."
+msgstr "この注文はすでに交渉中のため、変更できません。"
+
+#: apps/commandes/services.py:114
+msgid "Vous avez déjà passé %(nombre)s commandes aujourd'hui. Réessayez demain."
+msgstr "本日はすでに %(nombre)s 件の注文をされています。明日もう一度お試しください。"
+
+#: apps/commandes/services.py:123
+#: apps/devis/services.py:216
+msgid "La surface doit être supérieure à zéro."
+msgstr "面積は0より大きい値にしてください。"
+
+#: apps/commandes/services.py:150
+msgid "Ajoutez au moins un produit à la commande."
+msgstr "注文に商品を1つ以上追加してください。"
+
+#: apps/commandes/services.py:130
+msgid "La description est trop longue (%(max)s caractères au plus)."
+msgstr "説明が長すぎます（最大 %(max)s 文字）。"
+
+#: apps/commandes/services.py:152
+msgid "Une commande compte %(max)s produits au plus."
+msgstr "1件の注文に含められる商品は最大 %(max)s 点です。"
+
+#: apps/commandes/services.py:159
+msgid "Un des produits n'est pas disponible : retirez-le de la commande."
+msgstr "商品の1つが利用できません。注文から削除してください。"
+
+#: apps/commandes/services.py:162
+msgid "Un des designs n'appartient pas au produit choisi."
+msgstr "デザインの1つが選択した商品のものではありません。"
+
+#: apps/commandes/services.py:215
+msgid "La surface ne peut plus être modifiée une fois le contrat signé."
+msgstr "契約締結後は面積を変更できません。"
+
+#: apps/contact/models.py:14
+msgid "Question"
+msgstr "質問"
+
+#: apps/contact/models.py:15
+msgid "Être rappelé"
+msgstr "折り返し電話"
+
+#: apps/contact/models.py:19
+msgid "Matin"
+msgstr "午前"
+
+#: apps/contact/models.py:20
+msgid "Après-midi"
+msgstr "午後"
+
+#: apps/contact/models.py:21
+msgid "Soir"
+msgstr "夕方"
+
+#: apps/contact/models.py:22
+msgid "Peu importe"
+msgstr "いつでも"
+
+#: apps/contact/models.py:27
+msgid "En cours"
+msgstr "対応中"
+
+#: apps/contact/models.py:28
+msgid "Traitée"
+msgstr "対応済み"
+
+#: apps/contact/services.py:86
+msgid "Le téléphone est obligatoire pour être rappelé."
+msgstr "折り返しのお電話には電話番号が必要です。"
+
+#: apps/contact/services.py:88
+msgid "Indiquez une adresse e-mail ou un numéro de téléphone."
+msgstr "メールアドレスまたは電話番号を入力してください。"
+
+#: apps/contact/services.py:40
+msgid "Numéro de téléphone invalide."
+msgstr "電話番号が正しくありません。"
+
+#: apps/contact/services.py:50
+msgid "Le message ne doit pas contenir de lien."
+msgstr "メッセージにリンクを含めることはできません。"
+
+#: apps/contact/services.py:57
+msgid "Vous avez déjà envoyé %(nombre)s messages aujourd'hui. Réessayez demain."
+msgstr "本日はすでに %(nombre)s 件のメッセージを送信されています。明日もう一度お試しください。"
+
+#: apps/contact/services.py:47
+msgid "Le message doit compter entre %(min)s et %(max)s caractères."
+msgstr "メッセージは %(min)s 文字以上 %(max)s 文字以内で入力してください。"
+
+#: apps/contact/services.py:96
+#: apps/devis/services.py:221
+msgid "Ce produit n'est pas disponible."
+msgstr "この商品は現在ご利用いただけません。"
+
+#: apps/contact/services.py:33
+msgid "Adresse e-mail invalide."
+msgstr "メールアドレスが正しくありません。"
+
+#: apps/devis/calcul.py:20
+msgid "Matériau"
+msgstr "材料"
+
+#: apps/devis/calcul.py:21
+msgid "Surface"
+msgstr "面積"
+
+#: apps/devis/calcul.py:22
+msgid "Forfait"
+msgstr "一式"
+
+#: apps/devis/calcul.py:65
+#: apps/devis/calcul.py:74
+msgid "La surface est obligatoire."
+msgstr "面積は必須です。"
+
+#: apps/devis/calcul.py:66
+msgid "Le dosage est obligatoire."
+msgstr "使用量は必須です。"
+
+#: apps/devis/calcul.py:67
+msgid "Le prix au kg est obligatoire."
+msgstr "1kgあたりの価格は必須です。"
+
+#: apps/devis/calcul.py:55
+msgid "La valeur doit être supérieure à zéro."
+msgstr "値は0より大きくしてください。"
+
+#: apps/devis/calcul.py:75
+msgid "Le prix au m² est obligatoire."
+msgstr "1平方メートルあたりの価格は必須です。"
+
+#: apps/devis/calcul.py:80
+msgid "Le montant du forfait est obligatoire."
+msgstr "一式の金額は必須です。"
+
+#: apps/devis/calcul.py:84
+msgid "Type de ligne inconnu."
+msgstr "不明な行の種類です。"
+
+#: apps/devis/models.py:24
+msgid "En étude"
+msgstr "検討中"
+
+#: apps/devis/models.py:25
+msgid "Devis envoyé"
+msgstr "見積書送付済み"
+
+#: apps/devis/models.py:26
+msgid "Clôturée"
+msgstr "完了（クローズ）"
+
+#: apps/devis/models.py:78
+msgid "Brouillon"
+msgstr "下書き"
+
+#: apps/devis/models.py:79
+msgid "Envoyé"
+msgstr "送付済み"
+
+#: apps/devis/models.py:80
+msgid "Accepté"
+msgstr "承諾済み"
+
+#: apps/devis/models.py:82
+msgid "Remplacé"
+msgstr "差し替え済み"
+
+#: apps/devis/services.py:73
+msgid "Seul un devis en brouillon peut être modifié ou supprimé."
+msgstr "下書きの見積書のみ変更・削除できます。"
+
+#: apps/devis/services.py:129
+msgid "Ce devis a déjà été envoyé."
+msgstr "この見積書はすでに送付済みです。"
+
+#: apps/devis/services.py:135
+msgid "Le devis est incomplet : renseignez toutes les surfaces et tous les prix avant de l'envoyer."
+msgstr "見積書が未完成です。送付する前にすべての面積と価格を入力してください。"
+
+#: apps/devis/services.py:138
+msgid "Le total du devis doit être supérieur à zéro."
+msgstr "見積書の合計金額は0より大きくしてください。"
+
+#: apps/devis/services.py:102
+msgid "Cette demande de rendu appartient à un autre client."
+msgstr "このレンダリング依頼は別のお客様のものです。"
+
+#: apps/devis/services.py:132
+msgid "Ajoutez au moins une ligne au devis."
+msgstr "見積書に行を1つ以上追加してください。"
+
+#: apps/devis/services.py:140
+msgid "Chaque ligne doit avoir un libellé ou un produit."
+msgstr "各行には名称または商品が必要です。"
+
+#: apps/devis/services.py:179
+msgid "Vous avez déjà envoyé %(nombre)s demandes de rendu aujourd'hui. Réessayez demain."
+msgstr "本日はすでに %(nombre)s 件のレンダリング依頼を送信されています。明日もう一度お試しください。"
+
+#: apps/devis/services.py:229
+msgid "Cinq images au plus par demande."
+msgstr "1件の依頼につき画像は5枚までです。"
+
+#: apps/devis/services.py:92
+msgid "La commande est obligatoire."
+msgstr "注文の指定は必須です。"
+
+#: apps/devis/services.py:94
+msgid "Cette commande est terminée ou annulée : on ne peut plus y joindre de devis."
+msgstr "この注文は完了またはキャンセル済みのため、見積書を追加できません。"
+
+#: apps/devis/services.py:212
+msgid "La description doit compter entre %(min)s et %(max)s caractères."
+msgstr "説明は %(min)s 文字以上 %(max)s 文字以内で入力してください。"
+
+#: apps/devis/services.py:226
+msgid "Commande introuvable."
+msgstr "注文が見つかりません。"
+
+#: apps/noyau/permissions.py:28
+msgid "Accès réservé aux clients."
+msgstr "お客様専用です。"
+
+#: apps/noyau/permissions.py:34
+msgid "Les comptes de l'équipe n'utilisent pas cette fonction : passez par le tableau de bord."
+msgstr "チームのアカウントではこの機能は使えません。ダッシュボードをご利用ください。"
+
+#: apps/selection/services.py:42
+msgid "Votre sélection est pleine (%(nombre)s éléments au plus)."
+msgstr "選択リストがいっぱいです（最大 %(nombre)s 件）。"
+
+#: apps/selection/services.py:37
+msgid "Ce design n'appartient pas à ce produit."
+msgstr "このデザインはこの商品のものではありません。"

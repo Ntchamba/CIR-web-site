@@ -51,6 +51,19 @@
 }
 .boutonRond:hover { color: inherit; background: rgba(127, 127, 127, 0.12); }
 
+/* Sélection : icône avec le nombre de produits */
+.selection {
+  position: relative; width: var(--cible-tactile); height: var(--cible-tactile);
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 22px; color: inherit; text-decoration: none;
+}
+.selection:hover { color: inherit; background: rgba(127, 127, 127, 0.12); }
+.compteur {
+  position: absolute; top: 4px; right: 2px; min-width: 18px; height: 18px; padding: 0 5px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 9px; background: var(--corail); color: var(--encre); font-size: 11px; font-weight: 700;
+}
+
 .connexion {
   display: inline-flex; align-items: center; min-height: var(--cible-tactile);
   padding: 0 22px;
