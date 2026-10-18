@@ -1,11 +1,14 @@
 // Préparation des tests Vitest : assertions DOM, nettoyage après chaque test.
 import '@testing-library/jest-dom/vitest';
-import { cleanup } from '@testing-library/react';
+import { cleanup, configure } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
 
 import { reinitialiserI18n } from '@partage/i18n/i18n.js';
 
 import { oublierContenusAccueil } from '@/layout/contenus.js';
+
+// Machine chargée (suite complète en parallèle) : on laisse plus de temps aux attentes asynchrones.
+configure({ asyncUtilTimeout: 4000 });
 
 afterEach(() => {
   cleanup();

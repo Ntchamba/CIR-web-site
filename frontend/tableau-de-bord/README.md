@@ -52,6 +52,18 @@ Contrat d'API : `docs/taches/vague-1-contrat-api.md`.
 - [x] Tests de base (`src/composants/Composants.test.jsx`, un test par page ; outils dans `src/test/api-simulee.jsx`)
 - [ ] Suite de tests complète (testeur)
 
+## Vague 2 : commande (agent `tableau-de-bord`, vérifié par `tableau-de-bord-testeur`)
+
+Contrat d'API : `docs/taches/vague-2-contrat-api.md`.
+
+- [x] Modules `commandes`, `devis`, `contact` dans « Pilotage » (`layout/menu.js`), routes à la demande
+      (`/commandes`, `/commandes/:id`, `/devis`, `/devis/nouveau?commande=`, `/devis/:id`, `/contact`)
+- [x] Pastilles du menu (`layout/usePastilles.js`) : `action_requise` (commandes), `nouvelle` (devis, contact), rechargées à la navigation
+- [x] Composants communs ajoutés à `src/composants/` : `Onglets`, `ConfirmerAction`, `NotesInternes`, `LiensContact`,
+      `PastilleEtat`, `useCriteres`, `useListe`, `Pilotage.module.css`
+- [x] Textes dans les cinq langues (`src/i18n/`), tests (`Commandes.test.jsx`, `Devis.test.jsx`, `Contact.test.jsx`, `Coque.test.jsx`)
+- [ ] Suite de tests complète (testeur)
+
 ## Déploiement (Railway)
 
 Service à part : config file `frontend/tableau-de-bord/railway.toml`, root directory vide (racine du dépôt),

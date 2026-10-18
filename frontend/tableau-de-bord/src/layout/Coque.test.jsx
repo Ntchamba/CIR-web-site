@@ -123,14 +123,14 @@ describe('Coque', () => {
       return reponse(200, { count: 0, next: null, previous: null, results: [] });
     });
     const menu = await screen.findByRole('navigation', { name: 'Menu du tableau de bord' });
-    expect(await within(menu).findByRole('link', { name: 'Commandes 3 à traiter' })).toBeInTheDocument();
-    expect(within(menu).getByRole('link', { name: 'Devis 2 à traiter' })).toBeInTheDocument();
+    expect(await within(menu).findByRole('link', { name: /^Commandes\s+3 à traiter$/u })).toBeInTheDocument();
+    expect(within(menu).getByRole('link', { name: /^Devis\s+2 à traiter$/u })).toBeInTheDocument();
     // Zéro à traiter : pas de pastille.
     expect(within(menu).getByRole('link', { name: 'Demandes de contact' })).toBeInTheDocument();
     const avant = simule.mock.calls.filter(([u]) => String(u).includes('/api/admin/commandes/resume/')).length;
     actionRequise = 1;
     await userEvent.setup().click(within(menu).getByRole('link', { name: 'Clients' }));
-    expect(await within(menu).findByRole('link', { name: 'Commandes 1 à traiter' })).toBeInTheDocument();
+    expect(await within(menu).findByRole('link', { name: /^Commandes\s+1 à traiter$/u })).toBeInTheDocument();
     expect(simule.mock.calls.filter(([u]) => String(u).includes('/api/admin/commandes/resume/')).length).toBeGreaterThan(avant);
   }, 20000);
 

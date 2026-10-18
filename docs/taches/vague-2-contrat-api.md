@@ -89,7 +89,8 @@ API `/api/selection/` (client connecté, `EstClient`) :
    surface »). **Refuser** : seulement par l'autre partie ; la proposition passe à `refusee`, la commande reste en
    `negociation`. Toute réponse à une proposition qui n'est plus `en_attente` : 400.
 5. **Contrat** (`contrats.py`) : la commande signée expose un objet `contrat` en lecture seule
-   `{reference, signe_le, accepte_par: "client"|"equipe", client: {nom_complet, email, telephone}, adresse, lignes,
+   `{reference, signe_le, accepte_par: "client"|"equipe", client: {nom_complet, email, telephone}, adresse,
+   lignes: [{produit_nom, produit_reference, design_nom|null}] (instantanés du moment de la commande),
    montant, prix_m2, delai_jours, proposition: <id>}` (pas de PDF).
 6. Signaux Django `proposition_acceptee`, `proposition_refusee`, `proposition_remplacee` (module
    `commandes/signals.py`, argument `proposition`) : le module `devis` s'y abonne ; `commandes` n'importe jamais
@@ -198,7 +199,8 @@ vide et le devis ne peut pas être envoyé tant qu'il manque (jamais de prix inv
 - `GET/PATCH/DELETE <id>/` : modifiable (et supprimable) **seulement en `brouillon`** ; `lignes` est **remplacée en
   entier** à l'écriture. Détail : champs du client + `commande`, `demande`, `notes`, `cree_par`.
 - `POST calculer/` `{lignes: […]}` → `{lignes: [{…champs calculés}], total, complet: bool, erreurs: [{ligne, champ,
-  message}]}` (aperçu sans rien enregistrer ; `complet` est faux s'il manque un prix ou une surface).
+  message}]}` (aperçu sans rien enregistrer ; `complet` est faux s'il manque un prix ou une surface ; `ligne`
+  est l'**indice à partir de 0** de la ligne dans la liste envoyée).
 - `POST <id>/envoyer/` : exige un devis `complet` et `total > 0` ; passe à `envoye` (`envoye_le`), **crée une
   proposition de l'équipe** sur la commande (`total` = total du devis, `message` = notes, `devis` = ce devis ;
   la commande passe en `negociation` si elle était `nouvelle` ; l'éventuelle proposition en attente est remplacée).
@@ -207,7 +209,9 @@ vide et le devis ne peut pas être envoyé tant qu'il manque (jamais de prix inv
   remplacée → `remplace`. Une demande de rendu liée passe à `devis_envoye` à l'envoi.
 - `GET/PATCH demandes-rendu/…` : `GET /` paginé `?etat=`, `?search=` ; `GET <id>/` ; `PATCH <id>/` `{etat?,
   reponse_equipe?, notes_internes?}` ; `GET resume/` → `{nouvelle, en_etude, devis_envoye, close, total}`.
-  Détail équipe : champs client + `client: {id, nom_complet, email, telephone}`, `notes_internes`.
+  Détail équipe : champs client + `client: {id, nom_complet, email, telephone}`, `notes_internes` ; la liste
+  équipe renvoie les mêmes champs que le détail. Dans `DevisResume` et le détail équipe d'un devis,
+  `commande` est l'**identifiant** de la commande (et `commande_reference` sa référence).
 
 ## Module `contact` (BF-11, BF-13)
 
@@ -225,7 +229,8 @@ quotas. Pas de lien (`http`) dans `message` pour un visiteur.
   site_web?}` → 201 `{id, reference}`.
 - Client connecté `GET /api/contact/demandes/miennes/` paginé → `{id, reference, type, creneau, message, produit:
   {slug, nom}|null, etat, reponse_equipe, cree_le, traitee_le}` (aucun suivi pour les visiteurs, faute de compte).
-- Équipe `/api/admin/contact/demandes/` : `GET /` paginé `?etat=`, `?type=`, `?search=` ; `GET <id>/` ; `PATCH <id>/`
+- Équipe `/api/admin/contact/demandes/` (la liste et le détail renvoient **les mêmes champs**, `notes_internes`
+  comprises : le tiroir du tableau de bord s'ouvre sur la ligne de la liste) : `GET /` paginé `?etat=`, `?type=`, `?search=` ; `GET <id>/` ; `PATCH <id>/`
   `{etat?, reponse_equipe?, notes_internes?}` (`traitee_le` posé en passant à `traitee`) ; `GET resume/` →
   `{nouvelle, en_cours, traitee, total}`. Les champs de l'équipe ajoutent `nom`, `email`, `telephone`, `langue`,
   `auteur: {id, nom_complet}|null`, `notes_internes`.

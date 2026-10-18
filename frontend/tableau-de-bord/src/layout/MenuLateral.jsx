@@ -29,10 +29,11 @@ export default function MenuLateral({ id, ouvert, surNavigation }) {
             <NavLink to={m.chemin} end={m.fin} className={classeLien} onClick={surNavigation}>
               <IconeMenu nom={m.icone} />
               <span>{m.libelle}</span>
+              {m.pastille && nombres[m.module] > 0 && ' '}
               {m.pastille && nombres[m.module] > 0 && (
                 <span className={styles.pastilleMenu}>
                   <span aria-hidden="true">{nombres[m.module]}</span>
-                  <span className="visuellement-cache">{' '}{t('coque.aTraiter', { n: nombres[m.module] })}</span>
+                  <span className="visuellement-cache">{t('coque.aTraiter', { n: nombres[m.module] })}</span>
                 </span>
               )}
             </NavLink>

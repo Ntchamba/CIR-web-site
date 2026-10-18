@@ -107,6 +107,29 @@ facultatif envoyé à `null` (JSON) ou vide (multipart) est retiré.
 Données de référence du catalogue (idempotent, sans prix ni image) : `python manage.py charger_catalogue_reference`.
 Les coordonnées initiales de l'accueil sont créées par la migration `contenus.0002_coordonnees_initiales`.
 
+## API (vague 2 : sélection, commandes, devis, contact)
+
+Contrat : `docs/taches/vague-2-contrat-api.md`. Règles métier dans les `services.py` (et `commandes/etapes.py`,
+`negociation.py`, `contrats.py`, `devis/calcul.py`). Routes client = rôle `client` (403 `compte_equipe` pour l'équipe) ;
+l'objet d'un autre client donne 404. Références `CIR-/DEV-/REN-/CTC-AAAA-NNNN` (compteur `noyau.CompteurReference`).
+
+| Méthode | Route | Rôle |
+|---|---|---|
+| GET, POST, DELETE | `/api/selection/`, `resume/`, `<id>/` | sélection du client (50 éléments au plus) |
+| GET, POST | `/api/commandes/` | liste, création (403 `adresse_incomplete`, quota 5/jour) |
+| GET, PATCH | `/api/commandes/<id>/` | détail (`actions_possibles`, `peut_repondre`), correction en « Nouvelle » |
+| POST | `/api/commandes/<id>/annuler/`, `propositions/`, `propositions/<pid>/accepter|refuser/` | étapes et négociation |
+| GET | `/api/admin/commandes/`, `resume/`, `<id>/` | équipe (`?etat= ?type= ?search= ?client= ?action_requise=1`) |
+| PATCH, POST | `/api/admin/commandes/<id>/`, `etat/`, `propositions/…` | surface, notes internes, travaux/terminée/annulée, négociation |
+| GET, POST | `/api/devis/demandes-rendu/`, `<id>/` | demandes de rendu (multipart, 5 images WebP, quota 5/jour) |
+| GET | `/api/devis/`, `<id>/` | devis reçus (jamais les brouillons), lecture seule |
+| GET, POST, PATCH, DELETE | `/api/admin/devis/`, `<id>/` | devis (modifiable seulement en brouillon, lignes remplacées en entier) |
+| POST | `/api/admin/devis/calculer/`, `<id>/envoyer/` | aperçu du calcul ; envoi = proposition de l'équipe |
+| GET, PATCH | `/api/admin/devis/demandes-rendu/`, `resume/`, `<id>/` | boîte de réception des demandes de rendu |
+| POST | `/api/contact/demandes/` | public (champ piège `site_web`, 5/heure/IP, 10/jour/compte) |
+| GET | `/api/contact/demandes/miennes/` | suivi du client connecté |
+| GET, PATCH | `/api/admin/contact/demandes/`, `resume/`, `<id>/` | boîte de réception de l'équipe |
+
 ### Médias en production
 
 `DJANGO_MEDIA_ROOT` : dossier des fichiers envoyés (volume Railway, ex. `/data/media`). Si

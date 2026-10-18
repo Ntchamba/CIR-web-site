@@ -113,6 +113,7 @@ export function rendreApp(chemin = '/') {
   return render(
     <MemoryRouter initialEntries={[chemin]}>
       <App />
+      <Emplacement />
     </MemoryRouter>,
   );
 }

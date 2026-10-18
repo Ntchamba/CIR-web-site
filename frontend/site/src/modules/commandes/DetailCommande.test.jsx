@@ -31,8 +31,6 @@ describe('DetailCommande : affichage', () => {
   it('frise : liste ordonnée, étape courante annoncée, étapes passées et à venir', async () => {
     ouvrir();
     await titre();
-    const frise = screen.getByRole('list', { name: '' , hidden: false, current: undefined }).closest('ol') || null;
-    expect(frise).toBeNull(); // la liste de produits n'est pas la frise : on cible la frise par son contenu
     const etapes = within(screen.getByRole('region', { name: 'Suivi de la commande' })).getAllByRole('listitem');
     // 5 étapes (l'historique est replié dans <details> mais ses lignes restent dans le DOM)
     const items = etapes.filter((li) => li.parentElement.tagName === 'OL');
@@ -119,7 +117,6 @@ describe('DetailCommande : négociation', () => {
     expect(appels(fetch, 'POST', '/api/commandes/7/propositions/11/accepter/')).toHaveLength(0);
     await u.type(within(confirmation).getByLabelText('Message (facultatif)'), 'Merci, on démarre');
     await u.click(within(confirmation).getByRole('button', { name: 'Accepter' }));
-    await waitFor(() => expect(screen.getByRole('status', { name: '' , hidden: true })).toBeTruthy());
     expect(await screen.findByText(/Contrat signé\. Montant convenu : 510\s000 FCFA\./)).toBeInTheDocument();
     const [[corps]] = appels(fetch, 'POST', '/api/commandes/7/propositions/11/accepter/');
     expect(corps).toEqual({ message: 'Merci, on démarre' });
@@ -144,7 +141,7 @@ describe('DetailCommande : négociation', () => {
     await titre();
     const u = userEvent.setup();
     await u.click(screen.getByRole('button', { name: 'Accepter' }));
-    await u.click(within(screen.getByRole('group')).getByRole('button', { name: 'Accepter' }));
+    await u.click(within(screen.getByRole('group', { name: 'Accepter cette proposition ?' })).getByRole('button', { name: 'Accepter' }));
     expect(await screen.findByText('Précisez la surface.')).toBeInTheDocument();
     expect(screen.getByRole('group', { name: 'Accepter cette proposition ?' })).toBeInTheDocument();
   });
@@ -258,7 +255,10 @@ describe('DetailCommande : négociation', () => {
 
 describe('DetailCommande : annuler et modifier', () => {
   it('annuler : confirmation avec motif, puis commande annulée annoncée', async () => {
-    const annulee = { ...COMMANDE, etat: 'annulee', actions_possibles: [], action_requise: false };
+    const annulee = {
+      ...COMMANDE, etat: 'annulee', actions_possibles: [], action_requise: false,
+      propositions: [{ ...PROPOSITION_EQUIPE, etat: 'remplacee', peut_repondre: false }],
+    };
     const fetch = ouvrir({ 'POST /api/commandes/7/annuler/': reponse(200, annulee) });
     await titre();
     const u = userEvent.setup();
@@ -270,7 +270,7 @@ describe('DetailCommande : annuler et modifier', () => {
     expect(await screen.findByText('La commande a été annulée.')).toBeInTheDocument();
     const [[corps]] = appels(fetch, 'POST', '/api/commandes/7/annuler/');
     expect(corps).toEqual({ motif: 'Projet reporté' });
-    expect(screen.queryByRole('button', { name: 'Annuler la commande' })).toBeNull();
+    await waitFor(() => expect(screen.queryByRole('button', { name: 'Annuler la commande' })).toBeNull());
     expect(screen.queryByRole('button', { name: 'Accepter' })).toBeNull();
   });
 

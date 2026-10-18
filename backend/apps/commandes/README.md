@@ -13,11 +13,12 @@ Fichiers propres au module :
 - `etapes.py (Nouvelle → En négociation → Contrat signé → Travaux en cours → Terminée, + Annulée)`
 - `negociation.py`
 - `contrats.py`
+- `signals.py` (proposition_acceptee / refusee / remplacee) et `extensions.py` (point d'extension pour `devis`, sans import à l'envers)
 
 ## Tâches (agent `backend`, vérifiées par `backend-testeur`)
 
-- [ ] Modèles et migrations
-- [ ] Règles métier dans `services.py` (jamais dans les vues)
-- [ ] API publique `/api/commandes/` et API équipe `/api/admin/commandes/`
-- [ ] Permissions
-- [ ] Tests unitaires et d'API (écrits et lancés par `backend-testeur`)
+- [x] Modèles et migrations
+- [x] Règles métier dans `services.py` (jamais dans les vues)
+- [x] API publique `/api/commandes/` et API équipe `/api/admin/commandes/`
+- [x] Permissions
+- [x] Tests unitaires et d'API (écrits et lancés par `backend-testeur`)
