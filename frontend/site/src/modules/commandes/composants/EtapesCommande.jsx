@@ -60,7 +60,7 @@ export default function EtapesCommande({ commande }) {
                   par: t(`commandes.etapes.par.${h.par === 'equipe' ? 'equipe' : 'client'}`),
                   date: dateHeure(h.cree_le),
                 })}
-                {h.motif && <span className={styles.meta}> {t('commandes.etapes.motif', { motif: h.motif })}</span>}
+                {h.motif && h.vers !== 'annulee' && <span className={styles.meta}> {t('commandes.etapes.motif', { motif: h.motif })}</span>}
               </li>
             ))}
           </ul>
