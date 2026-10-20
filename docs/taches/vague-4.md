@@ -17,3 +17,8 @@ Chaque paire travaille dans sa propre fenêtre de contexte : l'agent code, puis 
 
 
 Une branche et une pull request par vague (ou par module si la vague est grande), vers `prototype-2`.
+
+
+## Contrat d'API
+
+Le contrat détaillé est dans `docs/taches/vague-4-contrat-api.md`. Décision : `docs/decisions/9-paiements-et-statistiques.md`.
