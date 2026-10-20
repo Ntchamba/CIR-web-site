@@ -1,0 +1,73 @@
+/* Module notifications : cloche de l'en-tête, page des notifications, préférence, bandeau du direct. */
+.bandeau {
+  margin: 0; padding: 10px var(--gouttiere); background: var(--st-negociation-f); color: var(--st-negociation-t);
+  font-size: 14px; font-weight: 600; text-align: center;
+}
+
+/* Cloche */
+.centre { position: relative; }
+.cloche {
+  position: relative; width: var(--cible-tactile); height: var(--cible-tactile);
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 0; border-radius: 22px; background: transparent; color: inherit; cursor: pointer;
+}
+.cloche:hover { background: rgba(127, 127, 127, 0.12); }
+.pastille {
+  position: absolute; top: 4px; right: 2px; min-width: 18px; height: 18px; padding: 0 5px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 9px; background: var(--corail); color: var(--encre); font-size: 11px; font-weight: 700;
+}
+.menu {
+  position: absolute; right: 0; top: calc(100% + 8px); z-index: 60; width: min(380px, calc(100vw - 24px));
+  max-height: min(70vh, 560px); overflow-y: auto; padding: 14px;
+  display: flex; flex-direction: column; gap: 10px;
+  border: 1px solid var(--filet); border-radius: var(--rayon); background: var(--blanc); color: var(--encre);
+  box-shadow: var(--ombre);
+}
+.menuHaut { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.menuHaut h2 { font-size: 18px; }
+.lienBouton {
+  min-height: var(--cible-tactile); padding: 0 8px; border: 0; background: transparent; color: var(--bleu);
+  font: inherit; font-weight: 600; cursor: pointer;
+}
+.lienBouton:disabled { color: var(--encre-3); cursor: default; }
+.listeMenu, .liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.element, .carte {
+  width: 100%; min-height: var(--cible-tactile); display: flex; flex-direction: column; gap: 3px; align-items: flex-start;
+  padding: 10px 12px; border: 1px solid var(--filet); border-radius: var(--rayon-s); background: var(--blanc);
+  color: var(--encre); font: inherit; text-align: left; text-decoration: none; cursor: pointer;
+}
+.element:hover, .carte:hover { border-color: var(--bleu); color: var(--encre); }
+.nonLue { border-left: 4px solid var(--corail); background: var(--danger-fond); }
+.elementTitre { font-weight: 700; overflow-wrap: anywhere; }
+.elementTexte { color: var(--encre-2); font-size: 14px; overflow-wrap: anywhere; }
+.etiquetteNonLue {
+  display: inline-block; margin-right: 8px; padding: 1px 8px; border-radius: var(--pastille);
+  background: var(--corail); color: var(--encre); font-size: 11px; font-weight: 700; text-transform: uppercase;
+}
+.toutVoir { display: inline-flex; align-items: center; min-height: var(--cible-tactile); font-weight: 600; }
+.meta { font-size: 13px; color: var(--encre-3); }
+
+/* Page */
+.page { display: flex; flex-direction: column; gap: 16px; }
+.entetePage { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; }
+.intro { color: var(--encre-2); max-width: 60ch; margin-top: 8px; }
+.filtres { display: flex; gap: 8px; }
+.filtre {
+  min-height: var(--cible-tactile); padding: 0 18px; border: 1px solid var(--champ); border-radius: var(--pastille);
+  background: var(--blanc); color: var(--encre); font: inherit; font-weight: 600; cursor: pointer;
+}
+.filtreActif { background: var(--encre); border-color: var(--encre); color: var(--blanc); }
+.vide { color: var(--encre-2); }
+.carte { padding: 14px 16px; }
+
+/* Préférence */
+.preference {
+  display: flex; flex-direction: column; gap: 8px; margin-top: 24px; padding: 18px;
+  border: 1px solid var(--filet); border-radius: var(--rayon); background: var(--blanc);
+}
+.preference h2 { font-size: 22px; }
+.interrupteur { display: inline-flex; align-items: center; gap: 12px; min-height: var(--cible-tactile); cursor: pointer; font-weight: 600; }
+.interrupteur input { width: 24px; height: 24px; accent-color: var(--bleu); }
+.ok { color: var(--succes); font-weight: 600; }
+.erreurTexte { color: var(--danger); font-weight: 600; }

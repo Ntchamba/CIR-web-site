@@ -8,6 +8,8 @@ import { useTraduction } from '@/i18n/index.js';
 import { useAuth } from '@/modules/connexion/AuthContext.jsx';
 import { libelleRole } from '@/modules/connexion/roles.js';
 
+import CentreNotifications from '@/modules/notifications/composants/CentreNotifications.jsx';
+
 import styles from './Coque.module.css';
 
 export function initiales(nom) {
@@ -39,6 +41,7 @@ export default function Entete({ idMenu, menuOuvert, basculerMenu }) {
           <small>{libelleRole(utilisateur?.role)}</small>
         </span>
       </div>
+      <CentreNotifications />
       <ChoixLangue className={styles.langue} surChangement={retenirLangue} />
       <button type="button" className={styles.sortie} onClick={deconnecter}>
         <Icone nom="sortie" taille={20} />

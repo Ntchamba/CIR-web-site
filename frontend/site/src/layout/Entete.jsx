@@ -8,6 +8,8 @@ import Icone from '@partage/ui/Icone.jsx';
 import { useTraduction } from '@/i18n/index.js';
 import { prenomDe } from '@/modules/compte/adresse.js';
 import { useAuth } from '@/modules/compte/AuthContext.jsx';
+import CentreNotifications from '@/modules/notifications/composants/CentreNotifications.jsx';
+import { useDirect } from '@/modules/notifications/FondDirect.jsx';
 import { useSelection } from '@/modules/selection/SelectionContext.jsx';
 
 import { useCoordonnees } from './contenus.js';
@@ -26,6 +28,7 @@ export default function Entete() {
   const { utilisateur, retenirLangue } = useAuth();
   const { telephone } = useCoordonnees();
   const selection = useSelection();
+  const { nonLusMessages } = useDirect();
 
   return (
     <header className={styles.entete}>
@@ -60,6 +63,16 @@ export default function Entete() {
               {selection.nombre > 0 && <span className={styles.compteur} aria-hidden="true">{selection.nombre}</span>}
             </Link>
           )}
+          {utilisateur && (
+            <Link to="/messages" className={`${styles.selection} ${styles.messages}`}
+              aria-label={nonLusMessages > 0 ? t('entete.messagesNonLus', { n: nonLusMessages }) : t('entete.messages')}>
+              <Icone nom="message" />
+              {nonLusMessages > 0 && (
+                <span className={styles.compteur} aria-hidden="true">{nonLusMessages > 99 ? '99+' : nonLusMessages}</span>
+              )}
+            </Link>
+          )}
+          {utilisateur && !utilisateur.est_equipe && <CentreNotifications />}
           {utilisateur ? (
             <Link to="/compte" className={styles.compte}>
               <Icone nom="compte" />

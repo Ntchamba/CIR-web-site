@@ -6,7 +6,7 @@
     inset: auto 0 0 0;
     z-index: 40;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     padding-bottom: env(safe-area-inset-bottom);
     background: rgba(255, 255, 255, 0.97);
     border-top: 1px solid var(--filet);
@@ -29,3 +29,15 @@
 }
 .onglet:hover { color: var(--encre); }
 .actif, .actif:hover { color: var(--bleu); border-top-color: var(--corail); font-weight: 600; }
+
+.icone { position: relative; display: inline-flex; }
+.pastille {
+  position: absolute; top: -6px; right: -10px; min-width: 16px; height: 16px; padding: 0 4px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 8px; background: var(--corail); color: var(--encre); font-size: 10px; font-weight: 700;
+}
+/* Très petit écran : six onglets ne tiennent plus ; Compte reste dans l'en-tête. */
+@media (max-width: 380px) {
+  .barre { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .compte { display: none; }
+}

@@ -16,3 +16,6 @@ DATABASES = {
 WHITENOISE_USE_FINDERS = True
 WHITENOISE_AUTOREFRESH = True
 (BASE_DIR / "staticfiles").mkdir(exist_ok=True)
+
+# En développement, les e-mails sont envoyés (ou écrits dans la console) juste après chaque action.
+NOTIFICATIONS_ENVOI_IMMEDIAT = env_bool("NOTIFICATIONS_ENVOI_IMMEDIAT", True)

@@ -1,0 +1,56 @@
+/* Module appels : bouton, choix audio/vidéo, salle d'appel plein écran. */
+.bloc { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.bloc a, .explication a { display: inline-flex; align-items: center; min-height: var(--cible-tactile); font-weight: 600; }
+.desactive { opacity: 0.6; cursor: not-allowed; }
+.explication { max-width: 42ch; font-size: 14px; color: var(--encre-2); }
+.lienConnexion { display: inline-flex; align-items: center; min-height: var(--cible-tactile); font-weight: 600; }
+
+/* Fenêtre de choix */
+.voile {
+  position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center; padding: 16px;
+  background: rgba(8, 24, 32, 0.6);
+}
+.dialogue {
+  width: min(520px, 100%); max-height: 100%; overflow-y: auto; display: flex; flex-direction: column; gap: 14px;
+  padding: 22px; border-radius: var(--rayon-l); background: var(--blanc); color: var(--encre); box-shadow: var(--ombre-forte);
+}
+.dialogue h2 { font-size: 24px; }
+.avertissement { color: var(--encre-2); font-size: 15px; }
+.choix { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.choixBouton {
+  min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  padding: 14px 10px; border: 2px solid var(--filet); border-radius: var(--rayon); background: var(--fond);
+  color: var(--encre); font: inherit; text-align: center; cursor: pointer;
+}
+.choixBouton:hover:not(:disabled) { border-color: var(--bleu); }
+.choixBouton:disabled { opacity: 0.6; cursor: wait; }
+.choixBouton span { font-size: 13px; color: var(--encre-2); }
+.erreur { padding: 10px 12px; border-radius: var(--rayon-s); background: var(--danger-fond); border: 1px solid var(--danger-filet); color: var(--danger); font-weight: 600; }
+.alternatives { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 6px; }
+.alternatives a { display: inline-flex; align-items: center; min-height: var(--cible-tactile); }
+
+/* Salle d'appel */
+.salle {
+  position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column;
+  background: var(--encre); color: var(--blanc);
+}
+.salleHaut { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 10px 16px; }
+.salleHaut h2 { font-size: 20px; color: var(--blanc); margin-right: auto; }
+.statut { font-weight: 700; }
+.sonne::after { content: ''; display: inline-block; width: 10px; height: 10px; margin-left: 10px; border-radius: 50%; background: var(--corail); }
+.raccrocher { background: var(--corail-fonce); color: var(--blanc); }
+.raccrocher:hover { background: #b83a21; }
+.alerteMedia { margin: 0 16px 8px; padding: 10px 12px; border-radius: var(--rayon-s); background: var(--st-negociation-f); color: var(--st-negociation-t); font-weight: 600; }
+.zoneJitsi { position: relative; flex: 1 1 auto; min-height: 0; }
+.jitsi { position: absolute; inset: 0; }
+.jitsi iframe { border: 0; }
+.chargement { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; margin: 0; }
+.fin { flex: 1 1 auto; background: var(--fond); color: var(--encre); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 24px; text-align: center; }
+.finTexte { font-size: clamp(20px, 3vw, 28px); font-family: var(--police-titre); max-width: 28ch; }
+.finActions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+
+@media (max-width: 480px) { .choix { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: no-preference) {
+  .sonne::after { animation: sonnerie 1s ease-in-out infinite; }
+  @keyframes sonnerie { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(1.4); } }
+}

@@ -33,7 +33,7 @@ export default function MenuLateral({ id, ouvert, surNavigation }) {
               {m.pastille && nombres[m.module] > 0 && (
                 <span className={styles.pastilleMenu}>
                   <span aria-hidden="true">{nombres[m.module]}</span>
-                  <span className="visuellement-cache">{t('coque.aTraiter', { n: nombres[m.module] })}</span>
+                  <span className="visuellement-cache">{t(`coque.${m.pastilleTexte || 'aTraiter'}`, { n: nombres[m.module] })}</span>
                 </span>
               )}
             </NavLink>

@@ -8,6 +8,7 @@ import re
 import time
 
 import jwt
+from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
 from cryptography.hazmat.primitives.serialization import load_pem_private_key
 
 from .erreurs import JaasNonConfigure, JaasSalleInvalide
@@ -23,10 +24,10 @@ def _cle_privee_pem() -> str:
 
 def _cle_lisible(pem: str) -> bool:
     try:
-        load_pem_private_key(pem.encode("utf-8"), password=None)
+        cle = load_pem_private_key(pem.encode("utf-8"), password=None)
     except Exception:  # clé absente, mal formée, chiffrée : jamais de détail (pas de fuite)
         return False
-    return True
+    return isinstance(cle, RSAPrivateKey)  # RS256 exige une clé RSA
 
 
 def configure() -> bool:
@@ -46,7 +47,7 @@ def creer_jeton(*, salle, utilisateur_id, nom, email="", moderateur=False, duree
     """Crée un JWT JaaS signé RS256 pour une salle donnée."""
     if not configure():
         raise JaasNonConfigure("Les appels vidéo ne sont pas configurés.")
-    if not isinstance(salle, str) or not _MOTIF_SALLE.match(salle):
+    if not isinstance(salle, str) or not _MOTIF_SALLE.fullmatch(salle):
         raise JaasSalleInvalide("Nom de salle invalide.")
     app_id = os.environ["JAAS_APP_ID"]
     maintenant = int(time.time())

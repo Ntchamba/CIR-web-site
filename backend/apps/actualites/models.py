@@ -21,6 +21,8 @@ class Actualite(TraductionsMixin, ImagesOptimiseesMixin, models.Model):
     publie = models.BooleanField("publiée", default=True, db_index=True)
     # Dans le futur : actualité programmée (invisible sur le site jusqu'à cette date)
     publie_le = models.DateTimeField("publiée le", default=timezone.now, db_index=True)
+    # Renseignée par la commande `notifier_actualites` quand la nouveauté a été annoncée aux clients (une seule fois)
+    notifiee_le = models.DateTimeField("annoncée le", null=True, blank=True, editable=False)
     cree_le = models.DateTimeField("créée le", auto_now_add=True)
     modifie_le = models.DateTimeField("modifiée le", auto_now=True)
     traductions = champ_traductions()

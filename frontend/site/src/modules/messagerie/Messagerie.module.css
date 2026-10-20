@@ -1,0 +1,94 @@
+/* Module messagerie : page /messages (fil, bulles, saisie, pièces jointes). */
+.page {
+  display: flex; flex-direction: column; gap: 12px;
+  height: calc(100dvh - var(--hauteur-entete)); min-height: 520px; padding-block: 16px;
+}
+.entete { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px 24px; }
+.intro { color: var(--encre-2); max-width: 60ch; margin-top: 4px; font-size: 15px; }
+.nonLus { margin-top: 6px; font-weight: 700; color: var(--corail-fonce); }
+
+.filConteneur { position: relative; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.fil {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 12px;
+  border: 1px solid var(--filet); border-radius: var(--rayon); background: var(--blanc);
+  overscroll-behavior: contain;
+}
+.messages { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.historique { display: flex; justify-content: center; margin-bottom: 10px; }
+.vide { color: var(--encre-2); text-align: center; padding: 32px 12px; }
+.jour { align-self: center; margin: 10px 0 2px; }
+.jour span { padding: 3px 12px; border-radius: var(--pastille); background: var(--fond-2); color: var(--encre-2); font-size: 12px; font-weight: 600; }
+
+.ligne { display: flex; flex-direction: column; gap: 4px; max-width: 100%; }
+.moi { align-items: flex-end; }
+.equipe { align-items: flex-start; }
+.bulle { max-width: min(80%, 560px); padding: 9px 12px; border-radius: var(--rayon); display: flex; flex-direction: column; gap: 4px; }
+.bulleMoi { background: var(--bleu); color: var(--blanc); border-bottom-right-radius: 4px; }
+.bulleEquipe { background: var(--fond-2); color: var(--encre); border-bottom-left-radius: 4px; }
+.auteur { font-size: 12px; font-weight: 700; color: var(--encre-2); }
+.texte { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
+.pied { font-size: 12px; opacity: 0.85; }
+.aPropos { font-size: 13px; font-weight: 700; color: inherit; text-decoration: underline; min-height: 24px; }
+.bulleMoi .aPropos:hover { color: var(--blanc); }
+.echec { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font-size: 13px; color: var(--danger); font-weight: 600; }
+.echec button {
+  min-height: var(--cible-tactile); padding: 0 10px; border: 0; background: transparent; color: var(--bleu);
+  font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer;
+}
+
+.indicateurs { min-height: 22px; padding: 2px 4px; font-size: 13px; color: var(--encre-2); }
+.ecrit { font-style: italic; }
+.nouveaux {
+  position: absolute; left: 50%; bottom: 30px; transform: translateX(-50%); min-height: var(--cible-tactile);
+  padding: 0 18px; border: 0; border-radius: var(--pastille); background: var(--encre); color: var(--blanc);
+  font: inherit; font-weight: 600; box-shadow: var(--ombre); cursor: pointer;
+}
+
+/* Pièces jointes */
+.piece { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+.apercuPiece { max-width: 100%; max-height: 220px; border-radius: var(--rayon-s); object-fit: contain; background: rgba(255, 255, 255, 0.4); }
+.boutonPiece {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 2px 4px; border: 0; background: transparent;
+  color: inherit; font: inherit; font-size: 14px; text-decoration: underline; cursor: pointer; text-align: left;
+}
+span.boutonPiece { cursor: default; text-decoration: none; }
+.nomPiece { overflow-wrap: anywhere; }
+.erreurTexte { color: var(--danger); font-size: 14px; font-weight: 600; margin: 0; }
+.bulleMoi .erreurTexte { color: #ffd2c6; }
+
+/* Saisie */
+.composeur { display: flex; flex-direction: column; gap: 8px; }
+.commande { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+.commande label { font-weight: 600; font-size: 14px; }
+.commande select { min-height: var(--cible-tactile); padding: 0 10px; border: 1px solid var(--champ); border-radius: var(--rayon-s); background: var(--blanc); font: inherit; }
+.saisie { display: flex; gap: 8px; align-items: flex-end; }
+.saisie textarea {
+  flex: 1 1 auto; min-height: var(--cible-tactile); max-height: 160px; padding: 10px 12px; resize: vertical;
+  border: 1px solid var(--champ); border-radius: var(--rayon-s); font: inherit; background: var(--blanc);
+}
+.actionsSaisie { display: flex; gap: 8px; align-items: center; }
+.boutonIcone {
+  width: var(--cible-tactile); height: var(--cible-tactile); display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--champ); border-radius: var(--rayon-s); background: var(--blanc); color: var(--encre); cursor: pointer;
+}
+.boutonIcone:disabled { opacity: 0.5; cursor: default; }
+.aideSaisie { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--encre-2); }
+.compteurFort { color: var(--danger); font-weight: 700; }
+.fichiers { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.fichier { display: inline-flex; align-items: center; gap: 8px; padding: 4px 4px 4px 8px; border: 1px solid var(--filet); border-radius: var(--rayon-s); background: var(--blanc); font-size: 14px; }
+.miniature { width: 36px; height: 36px; object-fit: cover; border-radius: 6px; }
+.retrait {
+  width: var(--cible-tactile); height: var(--cible-tactile); display: inline-flex; align-items: center; justify-content: center;
+  border: 0; border-radius: 50%; background: transparent; color: var(--encre); cursor: pointer;
+}
+.retrait:hover { background: var(--fond-2); }
+
+@media (max-width: 900px) {
+  .page { height: calc(100dvh - var(--hauteur-entete-mobile) - var(--hauteur-onglets) - env(safe-area-inset-bottom)); }
+  .bulle { max-width: 90%; }
+  .aideSaisie span:first-child { display: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bulle { animation: apparition 160ms ease-out; }
+  @keyframes apparition { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+}

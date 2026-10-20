@@ -60,6 +60,9 @@ INSTALLED_APPS = [
     "apps.commandes",  # BF-10, BF-12, BF-13, BF-16
     "apps.devis",  # BF-11, BF-12
     "apps.contact",  # BF-11, BF-13
+    "apps.messagerie",  # BF-11 (vague 3)
+    "apps.appels",  # BF-11 (vague 3)
+    "apps.notifications",  # BF-07, BF-13 (vague 3)
 ]
 
 MIDDLEWARE = [
@@ -128,6 +131,9 @@ MEDIA_ROOT = Path(env("DJANGO_MEDIA_ROOT", str(BASE_DIR / "media")))
 # Service des fichiers /media/ par Django (production : volume Railway monté sur DJANGO_MEDIA_ROOT),
 # avec un en-tête de cache (apps/noyau/medias.py). Vrai par défaut ; 0 si un autre service s'en charge.
 SERVIR_MEDIAS = env_bool("DJANGO_SERVIR_MEDIAS", True)
+# Pièces jointes de la messagerie : dossier PRIVÉ (jamais servi par /media/), lu par une vue qui vérifie les droits.
+# Production : chemin d'un volume Railway, ex. /data/prive
+PRIVATE_ROOT = Path(env("DJANGO_PRIVATE_ROOT", str(BASE_DIR / "prive")))
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 STORAGES = {
@@ -186,9 +192,22 @@ else:
     CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}}
     CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
 
-# --- E-mails : branchés sur l'API Gmail dans une vague suivante (backend/integrations/gmail) ---
+# --- E-mails ---
+# Les e-mails des notifications passent par la file d'envoi (apps/notifications) et l'API Gmail
+# (backend/integrations/gmail) ; EMAIL_BACKEND ne sert qu'aux messages techniques de Django.
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", "CIR <no-reply@revelation-sarl.com>")
+
+# --- Échanges en direct, appels et notifications (vague 3) ---
+# Adresses publiques utilisées dans les liens des e-mails (sans « / » final)
+SITE_URL = env("SITE_URL").rstrip("/")
+ADMIN_URL_PUBLIQUE = env("ADMIN_URL_PUBLIQUE").rstrip("/")
+API_URL_PUBLIQUE = env("API_URL_PUBLIQUE").rstrip("/")  # lien de désabonnement (API)
+# 1 : l'envoi est tenté juste après la transaction ; 0 : seulement par `manage.py envoyer_emails`
+NOTIFICATIONS_ENVOI_IMMEDIAT = env_bool("NOTIFICATIONS_ENVOI_IMMEDIAT", False)
+GMAIL_LIMITE_JOUR = int(env("GMAIL_LIMITE_JOUR", "400") or "400")
+# Offre gratuite JaaS : 25 utilisateurs actifs par mois
+JAAS_LIMITE_GRATUITE = int(env("JAAS_LIMITE_GRATUITE", "25") or "25")
 
 LOGGING = {
     "version": 1,

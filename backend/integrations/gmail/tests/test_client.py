@@ -247,3 +247,89 @@ class GabaritsTests(TestCase):
         texte, html = client.rendre_gabarit(titre="T", corps_texte="C", corps_html="C")
         self.assertNotIn("<a href", html)
         self.assertNotIn("None", texte + html)
+
+
+class DurcissementTests(Base):
+    """Cas limites ajoutés par le testeur."""
+
+    def test_aucun_appel_reseau_reel(self):
+        # Garde-fou : toute requête non simulée ferait échouer ce test.
+        with mock.patch("integrations.gmail.client.requests.post", side_effect=reponses_ok()) as post, \
+                mock.patch("socket.socket", side_effect=AssertionError("réseau réel interdit")):
+            client.envoyer(self.msg())
+        self.assertEqual(post.call_count, 2)
+
+    def test_caracteres_de_controle_refuses(self):
+        for kw in [dict(sujet="a\x00b"), dict(destinataire="a@b.c\x00"), dict(sujet="a\rb")]:
+            with self.subTest(kw=kw), mock.patch("integrations.gmail.client.requests.post") as post:
+                with self.assertRaises(GmailErreurDefinitive):
+                    client.envoyer(self.msg(**kw))
+                post.assert_not_called()
+
+    def test_expediteur_configure_avec_retour_ligne_refuse(self):
+        with mock.patch.dict("os.environ", {"GMAIL_EXPEDITEUR": "a@b.c\r\nBcc: x@y.z"}), \
+                mock.patch("integrations.gmail.client.requests.post") as post:
+            with self.assertRaises(GmailErreurDefinitive):
+                client.envoyer(self.msg())
+            post.assert_not_called()
+
+    def test_separateurs_unicode_refuses(self):
+        # U+2028, U+0085, \\x0b, \\x0c : jamais de ValueError brute ni d'en-tête supplémentaire.
+        for sujet in ["a\u2028Bcc: x@y.z", "a\u0085c", "a\x0bb", "a\x0cb"]:
+            with self.subTest(sujet=sujet), mock.patch("integrations.gmail.client.requests.post") as post:
+                with self.assertRaises(GmailErreurDefinitive):
+                    client.envoyer(self.msg(sujet=sujet))
+                post.assert_not_called()
+
+    def test_sujet_non_ascii_encode(self):
+        with mock.patch("integrations.gmail.client.requests.post", side_effect=reponses_ok()) as post:
+            client.envoyer(self.msg(sujet="Résine 张伟"))
+        brut = base64.urlsafe_b64decode(post.call_args_list[-1].kwargs["json"]["raw"])
+        entete = brut.split(b"\r\n\r\n")[0] if b"\r\n\r\n" in brut else brut.split(b"\n\n")[0]
+        entete.decode("ascii")  # l'en-tête brut doit être en ASCII pur (mots encodés)
+
+    def test_reponse_jeton_malformee(self):
+        r = rep(200, {"pas_de_jeton": 1})
+        with mock.patch("integrations.gmail.client.requests.post", return_value=r):
+            with self.assertRaises(GmailErreurTemporaire):
+                client.envoyer(self.msg())
+        r = rep(200, {"access_token": "x", "expires_in": "abc"})
+        with mock.patch("integrations.gmail.client.requests.post", return_value=r):
+            with self.assertRaises(GmailErreurTemporaire):
+                client.envoyer(self.msg())
+
+    def test_jeton_non_json(self):
+        r = rep(200)
+        r.json.side_effect = ValueError("pas du json")
+        with mock.patch("integrations.gmail.client.requests.post", return_value=r):
+            with self.assertRaises(GmailErreurTemporaire):
+                client.envoyer(self.msg())
+
+    def test_echec_jeton_ne_met_rien_en_cache(self):
+        with mock.patch("integrations.gmail.client.requests.post", return_value=rep(503)):
+            with self.assertRaises(GmailErreurTemporaire):
+                client.envoyer(self.msg())
+        self.assertIsNone(client._cache["jeton"])
+
+    def test_jeton_transmis_en_post_formulaire_pas_dans_l_url(self):
+        with mock.patch("integrations.gmail.client.requests.post", side_effect=reponses_ok()) as post:
+            client.envoyer(self.msg())
+        for appel in post.call_args_list:
+            for s in ("SECRET-TEST-XYZ", "REFRESH-TEST-XYZ", "ACCES-TEST"):
+                self.assertNotIn(s, appel.args[0])
+
+    def test_gabarit_lien_et_pied_echappes(self):
+        _, html = client.rendre_gabarit(titre="T", corps_texte="C", lien='https://x.test/"><script>1</script>',
+                                       pied="<b>x</b>", lien_desabonnement='"><i>')
+        self.assertNotIn("<script>", html)
+        self.assertNotIn("<b>x</b>", html)
+        self.assertNotIn('"><i>', html)
+
+    def test_gabarit_variables_absentes(self):
+        texte, html = client.rendre_gabarit()
+        self.assertNotIn("None", texte + html)
+
+    def test_pas_de_journalisation_de_secret(self):
+        with self.assertNoLogs("integrations.gmail", level="DEBUG"):
+            with mock.patch("integrations.gmail.client.requests.post", side_effect=reponses_ok()):
+                client.envoyer(self.msg())

@@ -101,3 +101,58 @@ class JetonsTests(TestCase):
             with self.assertRaises(JaasNonConfigure) as ctx:
                 jetons.creer_jeton(salle="salle-abcdefgh", utilisateur_id=1, nom="A")
             self.assertNotIn(secret, str(ctx.exception))
+
+
+class DurcissementTests(TestCase):
+    """Cas limites ajoutés par le testeur."""
+
+    def setUp(self):
+        p = mock.patch.dict("os.environ", ENV, clear=True)
+        p.start()
+        self.addCleanup(p.stop)
+
+    def test_salle_avec_retour_ligne_final_refusee(self):
+        # `$` accepte un « \n » final avec `match` : le nom doit être contrôlé en entier.
+        for salle in ["salle-abcdefgh\n", "salle-abcdefgh\r\n", "salle-abcdefgh "]:
+            with self.subTest(salle=salle), self.assertRaises(JaasSalleInvalide):
+                jetons.creer_jeton(salle=salle, utilisateur_id=1, nom="A")
+
+    def test_salles_limites_acceptees(self):
+        for salle in ["a" * 8, "a" * 64, "Ab_cd-12"]:
+            c = _decoder(jetons.creer_jeton(salle=salle, utilisateur_id=1, nom="A"))
+            self.assertEqual(c["room"], salle)
+
+    def test_cle_non_rsa_refusee_proprement(self):
+        from cryptography.hazmat.primitives.asymmetric import ec
+        cle = ec.generate_private_key(ec.SECP256R1())
+        pem = cle.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8,
+                                serialization.NoEncryption()).decode()
+        with mock.patch.dict("os.environ", {"JAAS_PRIVATE_KEY": pem}):
+            self.assertFalse(jetons.configure())
+            with self.assertRaises(JaasNonConfigure):
+                jetons.creer_jeton(salle="salle-abcdefgh", utilisateur_id=1, nom="A")
+
+    def test_cle_chiffree_refusee(self):
+        cle = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+        pem = cle.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8,
+                                serialization.BestAvailableEncryption(b"mdp")).decode()
+        with mock.patch.dict("os.environ", {"JAAS_PRIVATE_KEY": pem}):
+            self.assertFalse(jetons.configure())
+
+    def test_jeton_expire_refuse(self):
+        jeton = jetons.creer_jeton(salle="salle-abcdefgh", utilisateur_id=1, nom="A", duree_secondes=-100)
+        with self.assertRaises(jwt.ExpiredSignatureError):
+            _decoder(jeton)
+
+    def test_mauvaise_audience_refusee(self):
+        jeton = jetons.creer_jeton(salle="salle-abcdefgh", utilisateur_id=1, nom="A")
+        with self.assertRaises(jwt.InvalidAudienceError):
+            jwt.decode(jeton, PUB, algorithms=["RS256"], audience="autre")
+
+    def test_aucune_cle_privee_dans_le_jeton(self):
+        jeton = jetons.creer_jeton(salle="salle-abcdefgh", utilisateur_id=1, nom="A")
+        self.assertNotIn("PRIVATE KEY", jeton)
+
+    def test_parametres_client_sans_app_id(self):
+        with mock.patch.dict("os.environ", {}, clear=True):
+            self.assertEqual(jetons.parametres_client()["app_id"], "")

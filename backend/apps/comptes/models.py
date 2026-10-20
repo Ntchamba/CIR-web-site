@@ -49,6 +49,11 @@ class Utilisateur(AbstractBaseUser, PermissionsMixin):
     # Langue préférée : celle des e-mails et des échanges avec l'équipe (code court : fr, en, zh, de, ja)
     langue = models.CharField(max_length=5, choices=Langue.choices, default=LANGUE_PAR_DEFAUT)
 
+    # Préférences d'e-mails (vague 3). Les nouveautés exigent un consentement : désactivées par défaut.
+    recevoir_nouveautes = models.BooleanField("recevoir les nouveautés par e-mail", default=False)
+    # Équipe : recevoir par e-mail les événements à traiter (commandes, demandes, contacts, appels manqués)
+    email_equipe = models.BooleanField("e-mails de l'équipe", default=True)
+
     is_active = models.BooleanField("actif", default=True)
     # Calculé à partir du rôle (accès à l'administration Django) : ne pas modifier à la main.
     is_staff = models.BooleanField("accès à l'administration", default=False, editable=False)

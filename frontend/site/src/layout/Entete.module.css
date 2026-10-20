@@ -84,6 +84,9 @@
 }
 .compte:hover { color: inherit; border-color: var(--encre); }
 
+/* Messages : sur téléphone, l'onglet du bas le remplace */
+@media (max-width: 900px) { .messages { display: none; } }
+
 /* Cinq liens + langue + connexion : on resserre avant que les libellés ne passent sur deux lignes */
 @media (max-width: 1320px) {
   .nav { gap: 4px 20px; }

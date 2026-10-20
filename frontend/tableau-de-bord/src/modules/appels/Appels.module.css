@@ -1,0 +1,47 @@
+/* Appels : bannière d'appel entrant, salle plein écran, page d'historique, jauge d'usage. */
+.page { max-width: 1200px; display: grid; gap: var(--esp-5); }
+.haut { display: grid; gap: var(--esp-4); grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); align-items: start; }
+.titreCarte { font-family: var(--police-titre); font-size: 20px; font-weight: 500; }
+
+/* --- Appel entrant --- */
+.bandeaux {
+  position: sticky; top: 0; z-index: 35; display: grid; gap: var(--esp-2);
+  padding: var(--esp-3) clamp(16px, 3vw, 32px); background: var(--encre); color: var(--blanc);
+}
+.appelEntrant { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--esp-3); }
+.texteAppel { display: grid; gap: 2px; margin: 0; }
+.texteAppel span { color: #c9d7de; }
+.boutonsAppel { display: flex; flex-wrap: wrap; gap: var(--esp-2); }
+.bandeaux button[class*="texte"] { color: var(--blanc); justify-self: start; }
+.messageAppel { margin: 0; color: #ffd2c6; font-weight: 600; }
+@media (prefers-reduced-motion: no-preference) {
+  .appelEntrant { animation: sonne 1.4s ease-in-out infinite; }
+}
+@keyframes sonne { 50% { opacity: 0.82; } }
+
+/* --- Salle --- */
+.salle { position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; background: #081820; color: var(--blanc); }
+.enteteSalle { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--esp-3); padding: var(--esp-3) var(--esp-4); }
+.enteteSalle p { margin: 0; }
+.zoneVideo { flex: 1 1 auto; min-height: 0; }
+.avertissementSalle { margin: 0 var(--esp-4); padding: var(--esp-2) var(--esp-3); border-radius: var(--rayon-s); background: var(--st-negociation-f); color: var(--st-negociation-t); font-weight: 600; }
+
+/* --- Page --- */
+.nonConfigure {
+  display: grid; gap: 2px; padding: var(--esp-3) var(--esp-4); border-radius: var(--rayon-s);
+  background: var(--st-negociation-f); color: var(--st-negociation-t);
+}
+.reglageSonnerie { display: grid; gap: var(--esp-3); justify-items: start; }
+.manque td { background: var(--danger-fond); }
+.actionsAppel { display: inline-flex; flex-wrap: wrap; gap: var(--esp-2); justify-content: flex-end; }
+
+/* --- Jauge --- */
+.usage { display: grid; gap: var(--esp-3); }
+.usageTexte { font-size: 18px; font-weight: 600; }
+.usageMois { color: var(--encre-3); font-size: 14px; }
+.jauge { height: 14px; border-radius: var(--pastille); background: var(--fond-2); overflow: hidden; }
+.jauge span { display: block; height: 100%; border-radius: var(--pastille); background: var(--bleu); }
+.jauge_proche span { background: var(--st-negociation-t); }
+.jauge_depasse span { background: var(--danger); }
+.alerteUsage { padding: var(--esp-2) var(--esp-3); border-radius: var(--rayon-s); background: var(--st-negociation-f); color: var(--st-negociation-t); font-weight: 600; }
+.jauge_depasse + .usageMois + .alerteUsage { background: var(--danger-fond); color: var(--danger); }

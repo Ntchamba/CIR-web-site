@@ -12,3 +12,5 @@ dj-database-url>=2.2,<4                 # Lecture de DATABASE_URL
 Pillow>=10.4,<13                        # Conversion des images en WebP
 python-dotenv>=1.0,<2                   # Lecture du fichier .env
 whitenoise>=6.7,<7                      # Fichiers statiques en production
+PyJWT[crypto]>=2.8,<3                   # Jetons RS256 des appels Jitsi (JaaS)
+requests>=2.32,<3                       # Appels HTTP de l'API Gmail

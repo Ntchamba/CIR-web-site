@@ -5,6 +5,8 @@ import { Outlet, useLocation } from 'react-router';
 import Chargement from '@partage/ui/Chargement.jsx';
 
 import { useTraduction } from '@/i18n/index.js';
+import SalleAppel from '@/modules/appels/composants/SalleAppel.jsx';
+import BandeauDirect from '@/modules/notifications/composants/BandeauDirect.jsx';
 
 import BarreOnglets from './BarreOnglets.jsx';
 import Entete from './Entete.jsx';
@@ -25,6 +27,7 @@ export default function Gabarit() {
       <a href="#contenu" className={styles.evitement}>{t('nav.allerAuContenu')}</a>
       <Entete />
       <main id="contenu" className={styles.contenu} tabIndex={-1}>
+        <BandeauDirect />
         {/* Page chargée à la demande : l'en-tête et le pied de page restent affichés pendant le chargement. */}
         <Suspense fallback={<Chargement plein />}>
           <Outlet />
@@ -32,6 +35,7 @@ export default function Gabarit() {
       </main>
       <PiedDePage />
       <BarreOnglets />
+      <SalleAppel />
     </div>
   );
 }

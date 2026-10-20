@@ -4,13 +4,24 @@ import { Outlet, useLocation } from 'react-router';
 
 import { useTraduction } from '@/i18n/index.js';
 
+import SonnerieAppel from '@/modules/appels/SonnerieAppel.jsx';
+
+import { useDirect } from './direct.js';
 import Entete from './Entete.jsx';
+import FondDirect from './FondDirect.jsx';
 import MenuLateral from './MenuLateral.jsx';
 import styles from './Coque.module.css';
 
 const ID_MENU = 'menu-tableau-de-bord';
 
-export default function Coque() {
+function BandeauDirect() {
+  const { t } = useTraduction();
+  const { interrompu } = useDirect();
+  if (!interrompu) return null;
+  return <p className={styles.bandeauDirect} role="status">{t('direct.interrompu')}</p>;
+}
+
+function ContenuCoque() {
   const { t } = useTraduction();
   const [menuOuvert, setMenuOuvert] = useState(false);
   const { pathname } = useLocation();
@@ -31,10 +42,20 @@ export default function Coque() {
       {menuOuvert && <div className={styles.voile} onClick={() => setMenuOuvert(false)} aria-hidden="true" />}
       <div className={styles.principal}>
         <Entete idMenu={ID_MENU} menuOuvert={menuOuvert} basculerMenu={() => setMenuOuvert((o) => !o)} />
+        <BandeauDirect />
+        <SonnerieAppel />
         <main id="contenu" className={styles.contenu} tabIndex={-1}>
           <Outlet />
         </main>
       </div>
     </div>
+  );
+}
+
+export default function Coque() {
+  return (
+    <FondDirect>
+      <ContenuCoque />
+    </FondDirect>
   );
 }

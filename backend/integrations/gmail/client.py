@@ -55,7 +55,7 @@ def vider_cache():
 def _propre(valeur, nom):
     """Refuse tout retour à la ligne ou caractère de contrôle (injection d'en-têtes)."""
     texte = str(valeur)
-    if any(c in texte for c in "\r\n\x00"):
+    if any(c in texte for c in "\r\n\x00") or len(texte.splitlines()) > 1:  # aussi U+2028, U+0085, \x0b, \x0c
         raise GmailErreurDefinitive(f"Caractère interdit dans le champ « {nom} ».")
     return texte
 

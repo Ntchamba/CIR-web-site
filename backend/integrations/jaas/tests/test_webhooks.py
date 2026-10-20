@@ -60,3 +60,40 @@ class AnalyserTests(TestCase):
 
     def test_type_inconnu_ignore(self):
         self.assertEqual(webhooks.analyser('{"eventType": "AUTRE"}'), [])
+
+
+class SecuriteSupplementaireTests(TestCase):
+    def test_prefixe_ou_suffixe_du_secret_refuse(self):
+        with mock.patch.dict("os.environ", {"JAAS_WEBHOOK_SECRET": "s3cret-test"}, clear=True):
+            for faux in ["s3cret", "s3cret-test2", "xs3cret-test", "S3CRET-TEST"]:
+                with self.subTest(faux=faux):
+                    self.assertFalse(webhooks.verifier({"X-Webhook-Secret": faux}, b""))
+                    self.assertFalse(webhooks.verifier({"Authorization": f"Bearer {faux}"}, b""))
+
+    def test_bearer_insensible_a_la_casse_du_schema(self):
+        with mock.patch.dict("os.environ", {"JAAS_WEBHOOK_SECRET": "s3cret-test"}, clear=True):
+            self.assertTrue(webhooks.verifier({"Authorization": "bearer s3cret-test"}, b""))
+
+    def test_secret_vide_recu_refuse(self):
+        with mock.patch.dict("os.environ", {"JAAS_WEBHOOK_SECRET": "s3cret-test"}, clear=True):
+            self.assertFalse(webhooks.verifier({"X-Webhook-Secret": "  "}, b""))
+            self.assertFalse(webhooks.verifier({"Authorization": "Bearer "}, b""))
+
+    def test_secret_configure_vide_ne_laisse_rien_passer(self):
+        with mock.patch.dict("os.environ", {"JAAS_WEBHOOK_SECRET": ""}, clear=True):
+            self.assertFalse(webhooks.verifier({"X-Webhook-Secret": ""}, b""))
+            self.assertFalse(webhooks.verifier({"Authorization": "Bearer "}, b""))
+
+    def test_analyse_variantes_de_format(self):
+        corps = json.dumps({"eventType": "PARTICIPANT_LEFT",
+                            "data": {"fqn": "app/salle-abcdefgh", "participant": {"id": "p9"}}})
+        ev = webhooks.analyser(corps)
+        self.assertEqual((ev[0].salle, ev[0].participant_id), ("salle-abcdefgh", "p9"))
+
+    def test_analyse_donnees_mal_formees(self):
+        for corps in ['{"eventType": "ROOM_CREATED", "data": "x"}', '{"eventType": ["ROOM_CREATED"]}']:
+            with self.subTest(corps=corps):
+                try:
+                    webhooks.analyser(corps)
+                except Exception as exc:  # pragma: no cover
+                    self.fail(f"ne doit jamais lever : {exc!r}")

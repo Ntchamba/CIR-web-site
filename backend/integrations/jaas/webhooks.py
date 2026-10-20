@@ -56,7 +56,7 @@ def analyser(corps) -> list:
         if not isinstance(element, dict):
             continue
         type_ = element.get("eventType")
-        if type_ not in TYPES_RETENUS:
+        if not isinstance(type_, str) or type_ not in TYPES_RETENUS:
             continue
         data = element.get("data") if isinstance(element.get("data"), dict) else {}
         salle = element.get("fqn") or data.get("fqn") or data.get("conference") or ""

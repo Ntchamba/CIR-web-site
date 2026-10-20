@@ -104,3 +104,9 @@
   .sortie span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .langue select { padding: 0 10px 0 32px; font-size: 13px; }
 }
+
+/* --- Direct interrompu --- */
+.bandeauDirect {
+  margin: 0; padding: var(--esp-2) clamp(16px, 3vw, 32px);
+  background: var(--st-negociation-f); color: var(--st-negociation-t); font-weight: 600; font-size: 14px;
+}

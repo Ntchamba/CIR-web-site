@@ -23,6 +23,8 @@ const NouvelleCommandePage = lazy(() => import('@/modules/commandes/NouvelleComm
 const DetailCommande = lazy(() => import('@/modules/commandes/DetailCommande.jsx'));
 const DemandeRenduPage = lazy(() => import('@/modules/devis/DemandeRenduPage.jsx'));
 const ContactPage = lazy(() => import('@/modules/contact/ContactPage.jsx'));
+const MessageriePage = lazy(() => import('@/modules/messagerie/MessageriePage.jsx'));
+const NotificationsPage = lazy(() => import('@/modules/notifications/NotificationsPage.jsx'));
 const MesDemandesPage = lazy(() => import('@/modules/contact/MesDemandesPage.jsx'));
 
 export default function RoutesSite() {
@@ -47,6 +49,8 @@ export default function RoutesSite() {
             <Route path="commandes/:id" element={<DetailCommande />} />
             <Route path="devis/demande" element={<DemandeRenduPage />} />
             <Route path="mes-demandes" element={<MesDemandesPage />} />
+            <Route path="messages" element={<MessageriePage />} />
+            <Route path="notifications" element={<NotificationsPage />} />
           </Route>
           <Route path="*" element={<PageIntrouvable />} />
         </Route>

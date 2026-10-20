@@ -20,8 +20,10 @@ class UtilisateurSerializer(serializers.ModelSerializer):
         fields = [
             "id", "email", "nom_complet", "telephone", "role", "est_equipe", "langue",
             "ville", "quartier", "rue_ou_repere", "adresse_complete", "adresse_formatee", "date_inscription",
+            "recevoir_nouveautes", "email_equipe",
         ]
-        read_only_fields = ["id", "email", "role", "date_inscription"]
+        # Les préférences d'e-mails se changent par /api/notifications/preferences/ (et la version équipe)
+        read_only_fields = ["id", "email", "role", "date_inscription", "recevoir_nouveautes", "email_equipe"]
 
     def update(self, instance, validated_data):
         return services.mettre_a_jour_profil(instance, validated_data)
