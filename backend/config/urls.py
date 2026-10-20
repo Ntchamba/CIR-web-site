@@ -38,6 +38,9 @@ urlpatterns = [
     path("api/admin/appels/", include("apps.appels.urls_admin")),
     path("api/notifications/", include("apps.notifications.urls")),
     path("api/admin/notifications/", include("apps.notifications.urls_admin")),
+    path("api/paiements/", include("apps.paiements.urls")),
+    path("api/admin/paiements/", include("apps.paiements.urls_admin")),
+    path("api/admin/statistiques/", include("apps.statistiques.urls_admin")),
 ]
 
 if settings.SERVIR_MEDIAS:

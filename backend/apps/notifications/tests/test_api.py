@@ -173,7 +173,7 @@ class ModelesTests(BaseVague3):
     def test_liste_des_evenements(self):
         r = self.client.get(ADMIN + "modeles/")
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(len(r.data), 14)
+        self.assertEqual(len(r.data), 17)  # 18 événements, dont « paiement_echoue » sans e-mail
         ligne = next(e for e in r.data if e["evenement"] == "commande_creee")
         self.assertEqual(set(ligne), {"evenement", "libelle", "variables", "langues"})
         self.assertEqual(ligne["variables"], ["nom", "reference", "montant", "etape"])

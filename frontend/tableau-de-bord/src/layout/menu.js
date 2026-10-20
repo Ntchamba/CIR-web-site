@@ -27,6 +27,8 @@ export const MODULES_ACTIFS = [
   entree('messagerie', '/messagerie', 'message', { pastille: true, pastilleTexte: 'nonLus' }),
   entree('appels', '/appels', 'tel', { pastille: true }),
   entree('notifications', '/notifications', 'notifications', { pastille: true, pastilleTexte: 'nonLues' }),
+  entree('paiements', '/paiements', 'paiements', { pastille: true }),
+  entree('statistiques', '/statistiques', 'statistiques'),
   entree('clients', '/clients', 'clients'),
   entree('catalogue', '/catalogue', 'catalogue'),
   entree('vitrine', '/vitrine', 'realisations'),
@@ -36,8 +38,6 @@ export const MODULES_ACTIFS = [
 ];
 
 export const MODULES_A_VENIR = [
-  entree('paiements', '/paiements', 'paiements'),
-  entree('statistiques', '/statistiques', 'statistiques'),
   entree('assistant', '/assistant', 'assistant'),
 ];
 

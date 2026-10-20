@@ -19,11 +19,11 @@ export const page = (results) => ({ count: results.length, next: null, previous:
  * `routes` : [[méthode, motif, (url, options) => Promise<Response> | corps]] ; la première qui correspond répond
  * (motif : chaîne contenue dans l'adresse ou expression régulière). Sinon 200 avec une liste vide.
  */
-export function simulerApi(routes = []) {
+export function simulerApi(routes = [], utilisateur = MEMBRE) {
   const simule = vi.fn((url, options = {}) => {
     const u = String(url);
     const methode = options.method || 'GET';
-    if (u.includes('/api/comptes/moi/')) return reponse(200, MEMBRE);
+    if (u.includes('/api/comptes/moi/')) return reponse(200, utilisateur);
     for (const [m, motif, rappel] of routes) {
       const ok = motif instanceof RegExp ? motif.test(u) : u.includes(motif);
       if (ok && m === methode) {

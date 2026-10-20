@@ -59,3 +59,10 @@ export const RESUME_COMMANDE = {
   montant_convenu: null, montant_paye: 0, reste_a_payer: null, statut_paiement: 'non_applicable',
   action_requise: true, modifie_le: '2026-10-16T09:00:00Z', cree_le: '2026-10-15T08:00:00Z',
 };
+
+/** Paiement du client (contrat d'API de la vague 4) : numéro toujours masqué, aucune référence CamPay. */
+export const PAIEMENT = {
+  id: 5, reference: 'PAY-2026-0001', commande: { id: 7, reference: 'CIR-2026-0007' }, montant: 510000, devise: 'XAF',
+  mode: 'mobile', etat: 'en_attente', etat_libelle: 'En attente', operateur: '', telephone_masque: '+237 6** ** ** 22',
+  code_ussd: '', lien: '', raison: '', raison_libelle: '', cree_le: new Date().toISOString(), termine_le: null, peut_annuler: false,
+};

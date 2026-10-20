@@ -63,6 +63,8 @@ INSTALLED_APPS = [
     "apps.messagerie",  # BF-11 (vague 3)
     "apps.appels",  # BF-11 (vague 3)
     "apps.notifications",  # BF-07, BF-13 (vague 3)
+    "apps.paiements",  # BF-10, BF-12 (vague 4)
+    "apps.statistiques",  # BF-16 (vague 4)
 ]
 
 MIDDLEWARE = [
@@ -161,7 +163,7 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {"inscription": "20/hour", "contact": "5/hour"},
     # Nombre de proxys de confiance devant l'application : l'adresse du client est la valeur ajoutée
     # par le dernier proxy dans X-Forwarded-For. 0 = REMOTE_ADDR (en-tête ignoré, valeur de dev/tests).
-    "NUM_PROXIES": int(env("DJANGO_NOMBRE_PROXIES", "0")),
+    "NUM_PROXIES": int(env("DJANGO_NOMBRE_PROXIES", "0") or "0"),
 }
 
 SIMPLE_JWT = {
@@ -208,6 +210,11 @@ NOTIFICATIONS_ENVOI_IMMEDIAT = env_bool("NOTIFICATIONS_ENVOI_IMMEDIAT", False)
 GMAIL_LIMITE_JOUR = int(env("GMAIL_LIMITE_JOUR", "400") or "400")
 # Offre gratuite JaaS : 25 utilisateurs actifs par mois
 JAAS_LIMITE_GRATUITE = int(env("JAAS_LIMITE_GRATUITE", "25") or "25")
+
+# --- Paiements CamPay (vague 4) ---
+# Les clés (CAMPAY_USERNAME, CAMPAY_PASSWORD, CAMPAY_BASE_URL, CAMPAY_WEBHOOK_KEY) sont lues par integrations/campay.
+PAIEMENT_MONTANT_MINIMUM = int(env("PAIEMENT_MONTANT_MINIMUM", "100") or "100")
+PAIEMENT_EXPIRATION_MINUTES = int(env("PAIEMENT_EXPIRATION_MINUTES", "15") or "15")
 
 LOGGING = {
     "version": 1,

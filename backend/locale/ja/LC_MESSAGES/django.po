@@ -1075,3 +1075,195 @@ msgstr "Gmail が設定されていません。"
 #: apps/notifications/services.py:358
 msgid "Erreur d'envoi."
 msgstr "送信エラー。"
+
+#: apps/notifications/courriels.py:80
+msgid "Paiement"
+msgstr "お支払い"
+
+#: apps/notifications/courriels.py:87
+msgid "Reste à payer"
+msgstr "残額"
+
+#: apps/notifications/evenements.py:89
+msgid "Paiement reçu pour la commande {reference}"
+msgstr "注文 {reference} のお支払いを受領しました"
+
+#: apps/notifications/evenements.py:90
+msgid "Bonjour {nom}, nous avons bien reçu votre paiement de {montant} pour la commande {reference}. Merci de votre confiance."
+msgstr "{nom} 様、注文 {reference} の {montant} のお支払いを確かに受領しました。ご利用ありがとうございます。"
+
+#: apps/notifications/evenements.py:94
+msgid "Paiement reçu : commande {reference}"
+msgstr "入金あり：注文 {reference}"
+
+#: apps/notifications/evenements.py:95
+msgid "{nom} a réglé {montant} pour la commande {reference}."
+msgstr "{nom} 様が注文 {reference} の {montant} をお支払いになりました。"
+
+#: apps/notifications/evenements.py:98
+msgid "Paiement non abouti : commande {reference}"
+msgstr "お支払いが完了しませんでした：注文 {reference}"
+
+#: apps/notifications/evenements.py:99
+msgid "Bonjour {nom}, votre paiement de {montant} pour la commande {reference} n'a pas abouti. Vous pouvez réessayer depuis votre commande."
+msgstr "{nom} 様、注文 {reference} の {montant} のお支払いは完了しませんでした。ご注文のページからもう一度お試しください。"
+
+#: apps/notifications/evenements.py:103
+msgid "Anomalie de paiement : commande {reference}"
+msgstr "お支払いの異常：注文 {reference}"
+
+#: apps/notifications/evenements.py:104
+msgid "Le paiement de {montant} de {nom} pour la commande {reference} présente une anomalie : rien n'a été encaissé. Vérifiez-le dans le tableau de bord."
+msgstr "{nom} 様の注文 {reference} の {montant} のお支払いに異常があります。入金は処理されていません。ダッシュボードで確認してください。"
+
+#: apps/notifications/models.py:28
+msgid "Paiement reçu"
+msgstr "入金を受領"
+
+#: apps/notifications/models.py:29
+msgid "Paiement reçu (équipe)"
+msgstr "入金を受領（チーム）"
+
+#: apps/notifications/models.py:30
+msgid "Paiement non abouti"
+msgstr "お支払い未完了"
+
+#: apps/notifications/models.py:31
+msgid "Anomalie de paiement"
+msgstr "お支払いの異常"
+
+#: apps/paiements/models.py:16
+msgid "Mobile Money"
+msgstr "モバイルマネー"
+
+#: apps/paiements/models.py:17
+msgid "Carte ou lien de paiement"
+msgstr "カードまたは支払いリンク"
+
+#: apps/paiements/models.py:18
+msgid "Règlement hors ligne"
+msgstr "オフライン決済"
+
+#: apps/paiements/models.py:23
+msgid "Réussi"
+msgstr "成功"
+
+#: apps/paiements/models.py:24
+msgid "Échoué"
+msgstr "失敗"
+
+#: apps/paiements/models.py:25
+msgid "Expiré"
+msgstr "期限切れ"
+
+#: apps/paiements/models.py:27
+msgid "Anomalie"
+msgstr "異常"
+
+#: apps/paiements/models.py:31
+msgid "Numéro de téléphone refusé par l'opérateur."
+msgstr "電話番号が通信事業者に拒否されました。"
+
+#: apps/paiements/models.py:32
+msgid "Paiement refusé ou non validé."
+msgstr "お支払いが拒否されたか、承認されませんでした。"
+
+#: apps/paiements/models.py:33
+msgid "Le délai pour valider le paiement est dépassé."
+msgstr "お支払いの承認期限を過ぎました。"
+
+#: apps/paiements/models.py:34
+msgid "Le montant reçu ne correspond pas à la demande."
+msgstr "受領した金額がリクエストと一致しません。"
+
+#: apps/paiements/models.py:35
+msgid "Cause inconnue."
+msgstr "原因不明です。"
+
+#: apps/paiements/models.py:39
+msgid "Espèces"
+msgstr "現金"
+
+#: apps/paiements/models.py:40
+msgid "Virement"
+msgstr "銀行振込"
+
+#: apps/paiements/models.py:41
+msgid "Chèque"
+msgstr "小切手"
+
+#: apps/paiements/models.py:42
+msgid "Autre"
+msgstr "その他"
+
+#: apps/paiements/services.py:358
+msgid "Cette commande ne peut pas être payée pour le moment : le contrat doit être signé et il doit rester un montant à payer."
+msgstr "この注文は現在お支払いできません。契約が締結済みで、未払いの金額が残っている必要があります。"
+
+#: apps/paiements/services.py:363
+msgid "Le paiement en ligne est momentanément indisponible. Réessayez dans quelques minutes."
+msgstr "オンライン決済は一時的にご利用いただけません。数分後にもう一度お試しください。"
+
+#: apps/paiements/services.py:113
+msgid "Paiement introuvable."
+msgstr "お支払いが見つかりません。"
+
+#: apps/paiements/services.py:408
+msgid "Le paiement en ligne n'est pas disponible pour le moment."
+msgstr "現在、オンライン決済はご利用いただけません。"
+
+#: apps/paiements/services.py:469
+msgid "Ce paiement ne peut pas être annulé."
+msgstr "このお支払いはキャンセルできません。"
+
+#: apps/paiements/services.py:488
+msgid "Ce paiement ne peut pas être revérifié."
+msgstr "このお支払いは再確認できません。"
+
+#: apps/paiements/services.py:348
+msgid "Saisissez un numéro de téléphone mobile camerounais valide (par exemple 6 99 00 11 22)."
+msgstr "有効なカメルーンの携帯電話番号を入力してください（例：6 99 00 11 22）。"
+
+#: apps/paiements/services.py:386
+msgid "Vous avez lancé trop de paiements : réessayez dans une heure."
+msgstr "お支払いの開始回数が多すぎます。1時間後にもう一度お試しください。"
+
+#: apps/paiements/services.py:389
+msgid "Un paiement est déjà en cours pour cette commande."
+msgstr "この注文のお支払いはすでに進行中です。"
+
+#: apps/paiements/services.py:353
+msgid "Le montant doit être compris entre %(min)s et %(max)s FCFA."
+msgstr "金額は %(min)s FCFA から %(max)s FCFA の間でなければなりません。"
+
+#: apps/paiements/services.py:410
+msgid "Choisissez Mobile Money ou le paiement par carte."
+msgstr "モバイルマネーまたはカード払いを選択してください。"
+
+#: apps/paiements/services.py:496
+msgid "Choisissez un mode de règlement."
+msgstr "支払い方法を選択してください。"
+
+#: apps/paiements/services.py:499
+msgid "La note est trop longue (300 caractères au plus)."
+msgstr "メモが長すぎます（300文字以内）。"
+
+#: apps/paiements/views.py:95
+msgid "Signature du webhook invalide."
+msgstr "Webhook の署名が無効です。"
+
+#: apps/statistiques/indicateurs.py:70
+msgid "La date de début doit précéder la date de fin."
+msgstr "開始日は終了日より前でなければなりません。"
+
+#: apps/statistiques/indicateurs.py:57
+msgid "Date invalide : utilisez le format AAAA-MM-JJ."
+msgstr "日付が無効です。YYYY-MM-DD の形式で入力してください。"
+
+#: apps/statistiques/indicateurs.py:72
+msgid "La période ne peut pas dépasser %(jours)s jours."
+msgstr "期間は %(jours)s 日を超えられません。"
+
+#: apps/statistiques/indicateurs.py:169
+msgid "Le nombre de mois doit être compris entre 1 et %(max)s."
+msgstr "月数は 1 から %(max)s の間でなければなりません。"

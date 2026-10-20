@@ -19,7 +19,7 @@ import commandeStyles from '@/modules/commandes/Commandes.module.css';
 import * as paiements from './api.js';
 import FormulairePaiement from './composants/FormulairePaiement.jsx';
 import SuiviPaiement from './composants/SuiviPaiement.jsx';
-import { rediriger } from './navigation.js';
+import { adresseSure, rediriger } from './navigation.js';
 import { peutPayer, resteAPayer } from './regles.js';
 import { useDisponibilite } from './usePaiements.js';
 import styles from './Paiements.module.css';
@@ -108,7 +108,7 @@ export default function PaiementPage() {
   const reste = resteAPayer(commande);
 
   function apresCreation(paiement) {
-    if (paiement.mode === 'lien' && paiement.lien) {
+    if (paiement.mode === 'lien' && adresseSure(paiement.lien)) {
       setSuivi(paiement);
       rediriger(paiement.lien);
       return;

@@ -19,6 +19,7 @@ from apps.commandes.signals import (commande_creee, etape_changee, proposition_c
 from apps.contact.signals import demande_contact_creee, demande_contact_repondue
 from apps.devis.signals import demande_rendu_creee, demande_rendu_repondue, devis_envoye
 from apps.messagerie.signals import message_cree, messages_lus
+from apps.paiements.signals import paiement_anomalie, paiement_echoue, paiement_reussi
 
 from . import services
 from .models import TypeNotification as T
@@ -199,3 +200,41 @@ def sur_appel_manque(sender, appel, **kwargs):
 def sur_actualite_publiee(sender, actualite, **kwargs):
     # Pas de `securise` : un échec doit annuler la diffusion et laisser `notifiee_le` vide (nouvel essai).
     services.diffuser_nouveaute(actualite)
+
+
+# --- Paiements (vague 4) ---
+
+def _donnees_paiement(paiement):
+    from apps.commandes import reglement
+
+    commande = paiement.commande
+    return _donnees_commande(commande, montant=paiement.montant, paiement=paiement.pk,
+                             paiement_reference=paiement.reference,
+                             reste_a_payer=reglement.reste_a_payer(commande))
+
+
+@receiver(paiement_reussi)
+@securise
+def sur_paiement_reussi(sender, paiement, **kwargs):
+    donnees = _donnees_paiement(paiement)
+    client = paiement.commande.client
+    services.notifier(client, T.PAIEMENT_RECU, donnees, cle_unique=f"paiement_recu:{paiement.pk}:{client.pk}")
+    for membre in services.membres_equipe():
+        services.notifier(membre, T.PAIEMENT_RECU_EQUIPE, donnees,
+                          cle_unique=f"paiement_recu_equipe:{paiement.pk}:{membre.pk}")
+
+
+@receiver(paiement_echoue)
+@securise
+def sur_paiement_echoue(sender, paiement, **kwargs):
+    # Application seulement : pas d'e-mail (pas de clé unique)
+    services.notifier(paiement.commande.client, T.PAIEMENT_ECHOUE, _donnees_paiement(paiement))
+
+
+@receiver(paiement_anomalie)
+@securise
+def sur_paiement_anomalie(sender, paiement, **kwargs):
+    donnees = _donnees_paiement(paiement)
+    for membre in services.membres_equipe():
+        services.notifier(membre, T.PAIEMENT_ANOMALIE, donnees,
+                          cle_unique=f"paiement_anomalie:{paiement.pk}:{membre.pk}")

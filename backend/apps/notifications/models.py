@@ -25,6 +25,10 @@ class TypeNotification(models.TextChoices):
     MESSAGE_NOUVEAU = "message_nouveau", _("Nouveau message")
     APPEL_MANQUE = "appel_manque", _("Appel manqué")
     NOUVEAUTE = "nouveaute", _("Nouveauté")
+    PAIEMENT_RECU = "paiement_recu", _("Paiement reçu")
+    PAIEMENT_RECU_EQUIPE = "paiement_recu_equipe", _("Paiement reçu (équipe)")
+    PAIEMENT_ECHOUE = "paiement_echoue", _("Paiement non abouti")
+    PAIEMENT_ANOMALIE = "paiement_anomalie", _("Anomalie de paiement")
 
 
 class Notification(models.Model):

@@ -84,7 +84,8 @@ class CommandesClientTests(BaseVague2):
         self.assertEqual(r.data["count"], 2)
         self.assertEqual([c["id"] for c in r.data["results"]], [a2.pk, a1.pk])  # plus récent d'abord
         self.assertEqual(set(r.data["results"][0]), {"id", "reference", "type_batiment", "etat", "surface_m2",
-                                                     "nombre_lignes", "montant_convenu", "action_requise",
+                                                     "nombre_lignes", "montant_convenu", "montant_paye",
+                                                     "reste_a_payer", "statut_paiement", "action_requise",
                                                      "modifie_le", "cree_le"})
         self.client.post(f"{URL}{a1.pk}/annuler/", {}, format="json")
         self.assertEqual([c["id"] for c in self.client.get(f"{URL}?etat=annulee").data["results"]], [a1.pk])
@@ -258,7 +259,8 @@ class CommandesEquipeTests(BaseVague2):
         self.assertEqual(r.data["count"], 2)
         premier = r.data["results"][0]
         self.assertEqual(set(premier), {"id", "reference", "type_batiment", "etat", "surface_m2", "nombre_lignes",
-                                        "montant_convenu", "client", "action_requise", "modifie_le", "cree_le"})
+                                        "montant_convenu", "montant_paye", "reste_a_payer", "statut_paiement", "client",
+                                        "action_requise", "modifie_le", "cree_le"})
         self.assertEqual(premier["client"], {"id": self.client_b.pk, "nom_complet": "Bruno Client",
                                              "email": "b@exemple.cm", "telephone": "", "ville": "Douala"})
         cas = {"type=industrie": [self.c2.pk], f"client={self.client_a.pk}": [self.c1.pk],

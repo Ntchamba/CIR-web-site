@@ -74,9 +74,17 @@ def _lignes(evenement, donnees, langue):
         lignes.append((_("Référence"), donnees["reference"]))
     if evenement == TypeNotification.ETAPE_CHANGEE and donnees.get("etape"):
         lignes.append((_("Étape"), evenements.variables_de(donnees)["etape"]))
-    if evenement in (TypeNotification.CONTRAT_SIGNE, TypeNotification.DEVIS_ENVOYE) and (
+    paiements = (TypeNotification.PAIEMENT_RECU, TypeNotification.PAIEMENT_RECU_EQUIPE,
+                 TypeNotification.PAIEMENT_ANOMALIE)
+    if evenement in paiements and donnees.get("paiement_reference"):
+        lignes.append((_("Paiement"), donnees["paiement_reference"]))
+    if evenement in (TypeNotification.CONTRAT_SIGNE, TypeNotification.DEVIS_ENVOYE, *paiements) and (
             donnees.get("montant") or donnees.get("exemple")):
         lignes.append((_("Montant"), evenements.variables_de(donnees)["montant"]))
+    if evenement in (TypeNotification.PAIEMENT_RECU, TypeNotification.PAIEMENT_RECU_EQUIPE) and (
+            donnees.get("reste_a_payer") is not None or donnees.get("exemple")):
+        reste = "[montant]" if donnees.get("exemple") else formater_montant(donnees.get("reste_a_payer"))
+        lignes.append((_("Reste à payer"), reste))
     return lignes
 
 

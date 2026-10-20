@@ -27,6 +27,8 @@ const EditeurDevis = lazy(() => import('@/modules/devis/EditeurDevis.jsx'));
 const DemandesPage = lazy(() => import('@/modules/contact/DemandesPage.jsx'));
 const MessageriePage = lazy(() => import('@/modules/messagerie/MessageriePage.jsx'));
 const AppelsEntrantsPage = lazy(() => import('@/modules/appels/AppelsEntrantsPage.jsx'));
+const PaiementsPage = lazy(() => import('@/modules/paiements/PaiementsPage.jsx'));
+const StatistiquesPage = lazy(() => import('@/modules/statistiques/StatistiquesPage.jsx'));
 const NotificationsPage = lazy(() => import('@/modules/notifications/NotificationsPage.jsx'));
 
 export default function RoutesTableauDeBord() {
@@ -47,6 +49,8 @@ export default function RoutesTableauDeBord() {
             <Route path="messagerie" element={<MessageriePage />} />
             <Route path="appels" element={<AppelsEntrantsPage />} />
             <Route path="notifications" element={<NotificationsPage />} />
+            <Route path="paiements" element={<PaiementsPage />} />
+            <Route path="statistiques" element={<StatistiquesPage />} />
             <Route path="clients" element={<ClientsPage />} />
             <Route path="clients/:id" element={<FicheClientPage />} />
             <Route path="catalogue/*" element={<CataloguePage />} />

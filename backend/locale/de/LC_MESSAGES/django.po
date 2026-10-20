@@ -1075,3 +1075,195 @@ msgstr "Gmail ist nicht konfiguriert."
 #: apps/notifications/services.py:358
 msgid "Erreur d'envoi."
 msgstr "Fehler beim Senden."
+
+#: apps/notifications/courriels.py:80
+msgid "Paiement"
+msgstr "Zahlung"
+
+#: apps/notifications/courriels.py:87
+msgid "Reste à payer"
+msgstr "Restbetrag"
+
+#: apps/notifications/evenements.py:89
+msgid "Paiement reçu pour la commande {reference}"
+msgstr "Zahlung für Bestellung {reference} eingegangen"
+
+#: apps/notifications/evenements.py:90
+msgid "Bonjour {nom}, nous avons bien reçu votre paiement de {montant} pour la commande {reference}. Merci de votre confiance."
+msgstr "Guten Tag {nom}, wir haben Ihre Zahlung von {montant} für die Bestellung {reference} erhalten. Vielen Dank für Ihr Vertrauen."
+
+#: apps/notifications/evenements.py:94
+msgid "Paiement reçu : commande {reference}"
+msgstr "Zahlung eingegangen: Bestellung {reference}"
+
+#: apps/notifications/evenements.py:95
+msgid "{nom} a réglé {montant} pour la commande {reference}."
+msgstr "{nom} hat {montant} für die Bestellung {reference} bezahlt."
+
+#: apps/notifications/evenements.py:98
+msgid "Paiement non abouti : commande {reference}"
+msgstr "Zahlung nicht abgeschlossen: Bestellung {reference}"
+
+#: apps/notifications/evenements.py:99
+msgid "Bonjour {nom}, votre paiement de {montant} pour la commande {reference} n'a pas abouti. Vous pouvez réessayer depuis votre commande."
+msgstr "Guten Tag {nom}, Ihre Zahlung von {montant} für die Bestellung {reference} ist nicht zustande gekommen. Sie können es in Ihrer Bestellung erneut versuchen."
+
+#: apps/notifications/evenements.py:103
+msgid "Anomalie de paiement : commande {reference}"
+msgstr "Zahlungsauffälligkeit: Bestellung {reference}"
+
+#: apps/notifications/evenements.py:104
+msgid "Le paiement de {montant} de {nom} pour la commande {reference} présente une anomalie : rien n'a été encaissé. Vérifiez-le dans le tableau de bord."
+msgstr "Die Zahlung von {montant} von {nom} für die Bestellung {reference} weist eine Auffälligkeit auf: Es wurde nichts verbucht. Bitte prüfen Sie sie im Dashboard."
+
+#: apps/notifications/models.py:28
+msgid "Paiement reçu"
+msgstr "Zahlung eingegangen"
+
+#: apps/notifications/models.py:29
+msgid "Paiement reçu (équipe)"
+msgstr "Zahlung eingegangen (Team)"
+
+#: apps/notifications/models.py:30
+msgid "Paiement non abouti"
+msgstr "Zahlung nicht abgeschlossen"
+
+#: apps/notifications/models.py:31
+msgid "Anomalie de paiement"
+msgstr "Zahlungsauffälligkeit"
+
+#: apps/paiements/models.py:16
+msgid "Mobile Money"
+msgstr "Mobile Money"
+
+#: apps/paiements/models.py:17
+msgid "Carte ou lien de paiement"
+msgstr "Karte oder Zahlungslink"
+
+#: apps/paiements/models.py:18
+msgid "Règlement hors ligne"
+msgstr "Offline-Zahlung"
+
+#: apps/paiements/models.py:23
+msgid "Réussi"
+msgstr "Erfolgreich"
+
+#: apps/paiements/models.py:24
+msgid "Échoué"
+msgstr "Fehlgeschlagen"
+
+#: apps/paiements/models.py:25
+msgid "Expiré"
+msgstr "Abgelaufen"
+
+#: apps/paiements/models.py:27
+msgid "Anomalie"
+msgstr "Auffälligkeit"
+
+#: apps/paiements/models.py:31
+msgid "Numéro de téléphone refusé par l'opérateur."
+msgstr "Die Telefonnummer wurde vom Netzbetreiber abgelehnt."
+
+#: apps/paiements/models.py:32
+msgid "Paiement refusé ou non validé."
+msgstr "Zahlung abgelehnt oder nicht bestätigt."
+
+#: apps/paiements/models.py:33
+msgid "Le délai pour valider le paiement est dépassé."
+msgstr "Die Frist zur Bestätigung der Zahlung ist abgelaufen."
+
+#: apps/paiements/models.py:34
+msgid "Le montant reçu ne correspond pas à la demande."
+msgstr "Der eingegangene Betrag entspricht nicht der Anforderung."
+
+#: apps/paiements/models.py:35
+msgid "Cause inconnue."
+msgstr "Unbekannte Ursache."
+
+#: apps/paiements/models.py:39
+msgid "Espèces"
+msgstr "Bargeld"
+
+#: apps/paiements/models.py:40
+msgid "Virement"
+msgstr "Überweisung"
+
+#: apps/paiements/models.py:41
+msgid "Chèque"
+msgstr "Scheck"
+
+#: apps/paiements/models.py:42
+msgid "Autre"
+msgstr "Sonstiges"
+
+#: apps/paiements/services.py:358
+msgid "Cette commande ne peut pas être payée pour le moment : le contrat doit être signé et il doit rester un montant à payer."
+msgstr "Diese Bestellung kann derzeit nicht bezahlt werden: Der Vertrag muss unterzeichnet sein und es muss ein offener Betrag bestehen."
+
+#: apps/paiements/services.py:363
+msgid "Le paiement en ligne est momentanément indisponible. Réessayez dans quelques minutes."
+msgstr "Die Online-Zahlung ist vorübergehend nicht verfügbar. Bitte versuchen Sie es in einigen Minuten erneut."
+
+#: apps/paiements/services.py:113
+msgid "Paiement introuvable."
+msgstr "Zahlung nicht gefunden."
+
+#: apps/paiements/services.py:408
+msgid "Le paiement en ligne n'est pas disponible pour le moment."
+msgstr "Die Online-Zahlung ist derzeit nicht verfügbar."
+
+#: apps/paiements/services.py:469
+msgid "Ce paiement ne peut pas être annulé."
+msgstr "Diese Zahlung kann nicht storniert werden."
+
+#: apps/paiements/services.py:488
+msgid "Ce paiement ne peut pas être revérifié."
+msgstr "Diese Zahlung kann nicht erneut geprüft werden."
+
+#: apps/paiements/services.py:348
+msgid "Saisissez un numéro de téléphone mobile camerounais valide (par exemple 6 99 00 11 22)."
+msgstr "Geben Sie eine gültige kamerunische Mobilfunknummer ein (zum Beispiel 6 99 00 11 22)."
+
+#: apps/paiements/services.py:386
+msgid "Vous avez lancé trop de paiements : réessayez dans une heure."
+msgstr "Sie haben zu viele Zahlungen gestartet: Versuchen Sie es in einer Stunde erneut."
+
+#: apps/paiements/services.py:389
+msgid "Un paiement est déjà en cours pour cette commande."
+msgstr "Für diese Bestellung läuft bereits eine Zahlung."
+
+#: apps/paiements/services.py:353
+msgid "Le montant doit être compris entre %(min)s et %(max)s FCFA."
+msgstr "Der Betrag muss zwischen %(min)s und %(max)s FCFA liegen."
+
+#: apps/paiements/services.py:410
+msgid "Choisissez Mobile Money ou le paiement par carte."
+msgstr "Wählen Sie Mobile Money oder Kartenzahlung."
+
+#: apps/paiements/services.py:496
+msgid "Choisissez un mode de règlement."
+msgstr "Wählen Sie eine Zahlungsart."
+
+#: apps/paiements/services.py:499
+msgid "La note est trop longue (300 caractères au plus)."
+msgstr "Die Notiz ist zu lang (höchstens 300 Zeichen)."
+
+#: apps/paiements/views.py:95
+msgid "Signature du webhook invalide."
+msgstr "Ungültige Webhook-Signatur."
+
+#: apps/statistiques/indicateurs.py:70
+msgid "La date de début doit précéder la date de fin."
+msgstr "Das Startdatum muss vor dem Enddatum liegen."
+
+#: apps/statistiques/indicateurs.py:57
+msgid "Date invalide : utilisez le format AAAA-MM-JJ."
+msgstr "Ungültiges Datum: Verwenden Sie das Format JJJJ-MM-TT."
+
+#: apps/statistiques/indicateurs.py:72
+msgid "La période ne peut pas dépasser %(jours)s jours."
+msgstr "Der Zeitraum darf %(jours)s Tage nicht überschreiten."
+
+#: apps/statistiques/indicateurs.py:169
+msgid "Le nombre de mois doit être compris entre 1 et %(max)s."
+msgstr "Die Anzahl der Monate muss zwischen 1 und %(max)s liegen."

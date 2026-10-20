@@ -48,9 +48,10 @@ describe('menu', () => {
   it("réserve l'entrée Équipe au super-administrateur", () => {
     const vague2 = ['/commandes', '/devis', '/contact'];
     const vague3 = ['/messagerie', '/appels', '/notifications'];
+    const vague4 = ['/paiements', '/statistiques'];
     const vague1 = ['/catalogue', '/vitrine', '/actualites', '/contenus'];
-    expect(modulesVisibles(false).map((m) => m.chemin)).toEqual(['/', ...vague2, ...vague3, '/clients', ...vague1]);
-    expect(modulesVisibles(true).map((m) => m.chemin)).toEqual(['/', ...vague2, ...vague3, '/clients', ...vague1, '/equipe']);
+    expect(modulesVisibles(false).map((m) => m.chemin)).toEqual(['/', ...vague2, ...vague3, ...vague4, '/clients', ...vague1]);
+    expect(modulesVisibles(true).map((m) => m.chemin)).toEqual(['/', ...vague2, ...vague3, ...vague4, '/clients', ...vague1, '/equipe']);
   });
 
   it('a des chemins uniques', () => {
@@ -76,7 +77,7 @@ describe('Coque', () => {
     expect(screen.getByText('JM')).toHaveAttribute('aria-hidden', 'true');
     // Raccourcis de l'accueil : pas d'Équipe pour un simple membre.
     const raccourcis = within(screen.getByRole('main')).getAllByRole('link').map((l) => l.textContent);
-    expect(raccourcis).toEqual(['Commandes', 'Devis', 'Demandes de contact', 'Messagerie', 'Appels', 'Notifications', 'Clients', 'Catalogue', 'Vitrine', 'Actualités', 'Contenus du site']);
+    expect(raccourcis).toEqual(['Commandes', 'Devis', 'Demandes de contact', 'Messagerie', 'Appels', 'Notifications', 'Paiements', 'Statistiques', 'Clients', 'Catalogue', 'Vitrine', 'Actualités', 'Contenus du site']);
   });
 
   it('ouvre et ferme le tiroir avec le bouton et la touche Échap', async () => {
@@ -104,12 +105,14 @@ describe('Coque', () => {
   });
 
   it('liste les modules à venir et affiche « Bientôt disponible » sur leur page', async () => {
-    rendre('/paiements');
-    expect(await screen.findByRole('heading', { level: 1, name: 'Paiements' })).toBeInTheDocument();
-    expect(screen.getByText('Le suivi des paiements CamPay arrive bientôt.')).toBeInTheDocument();
+    rendre('/assistant');
+    expect(await screen.findByRole('heading', { level: 1, name: 'Assistant IA' })).toBeInTheDocument();
+    expect(screen.getByText("Le suivi de l'assistant IA arrive bientôt.")).toBeInTheDocument();
     const menu = screen.getByRole('navigation', { name: 'Menu du tableau de bord' });
     expect(within(menu).getAllByText('Bientôt disponible')).toHaveLength(MODULES_A_VENIR.length);
-    expect(within(menu).getByRole('link', { name: /Paiements/ })).toHaveAttribute('aria-current', 'page');
+    expect(within(menu).getByRole('link', { name: /Assistant IA/ })).toHaveAttribute('aria-current', 'page');
+    // Les modules de la vague 4 sont désormais dans « Pilotage ».
+    expect(MODULES_A_VENIR.map((m) => m.chemin)).toEqual(['/assistant']);
     // Les modules des vagues 2 et 3 sont désormais dans « Pilotage ».
     expect(MODULES_A_VENIR.map((m) => m.chemin)).not.toContain('/commandes');
     expect(MODULES_A_VENIR.map((m) => m.chemin)).not.toContain('/messagerie');

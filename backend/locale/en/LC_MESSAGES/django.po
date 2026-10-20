@@ -1075,3 +1075,195 @@ msgstr "Gmail is not configured."
 #: apps/notifications/services.py:358
 msgid "Erreur d'envoi."
 msgstr "Sending error."
+
+#: apps/notifications/courriels.py:80
+msgid "Paiement"
+msgstr "Payment"
+
+#: apps/notifications/courriels.py:87
+msgid "Reste à payer"
+msgstr "Balance due"
+
+#: apps/notifications/evenements.py:89
+msgid "Paiement reçu pour la commande {reference}"
+msgstr "Payment received for order {reference}"
+
+#: apps/notifications/evenements.py:90
+msgid "Bonjour {nom}, nous avons bien reçu votre paiement de {montant} pour la commande {reference}. Merci de votre confiance."
+msgstr "Hello {nom}, we have received your payment of {montant} for order {reference}. Thank you for your trust."
+
+#: apps/notifications/evenements.py:94
+msgid "Paiement reçu : commande {reference}"
+msgstr "Payment received: order {reference}"
+
+#: apps/notifications/evenements.py:95
+msgid "{nom} a réglé {montant} pour la commande {reference}."
+msgstr "{nom} has paid {montant} for order {reference}."
+
+#: apps/notifications/evenements.py:98
+msgid "Paiement non abouti : commande {reference}"
+msgstr "Payment unsuccessful: order {reference}"
+
+#: apps/notifications/evenements.py:99
+msgid "Bonjour {nom}, votre paiement de {montant} pour la commande {reference} n'a pas abouti. Vous pouvez réessayer depuis votre commande."
+msgstr "Hello {nom}, your payment of {montant} for order {reference} did not go through. You can try again from your order."
+
+#: apps/notifications/evenements.py:103
+msgid "Anomalie de paiement : commande {reference}"
+msgstr "Payment anomaly: order {reference}"
+
+#: apps/notifications/evenements.py:104
+msgid "Le paiement de {montant} de {nom} pour la commande {reference} présente une anomalie : rien n'a été encaissé. Vérifiez-le dans le tableau de bord."
+msgstr "The payment of {montant} from {nom} for order {reference} shows an anomaly: nothing has been collected. Please check it in the dashboard."
+
+#: apps/notifications/models.py:28
+msgid "Paiement reçu"
+msgstr "Payment received"
+
+#: apps/notifications/models.py:29
+msgid "Paiement reçu (équipe)"
+msgstr "Payment received (team)"
+
+#: apps/notifications/models.py:30
+msgid "Paiement non abouti"
+msgstr "Payment unsuccessful"
+
+#: apps/notifications/models.py:31
+msgid "Anomalie de paiement"
+msgstr "Payment anomaly"
+
+#: apps/paiements/models.py:16
+msgid "Mobile Money"
+msgstr "Mobile Money"
+
+#: apps/paiements/models.py:17
+msgid "Carte ou lien de paiement"
+msgstr "Card or payment link"
+
+#: apps/paiements/models.py:18
+msgid "Règlement hors ligne"
+msgstr "Offline payment"
+
+#: apps/paiements/models.py:23
+msgid "Réussi"
+msgstr "Successful"
+
+#: apps/paiements/models.py:24
+msgid "Échoué"
+msgstr "Failed"
+
+#: apps/paiements/models.py:25
+msgid "Expiré"
+msgstr "Expired"
+
+#: apps/paiements/models.py:27
+msgid "Anomalie"
+msgstr "Anomaly"
+
+#: apps/paiements/models.py:31
+msgid "Numéro de téléphone refusé par l'opérateur."
+msgstr "Phone number refused by the operator."
+
+#: apps/paiements/models.py:32
+msgid "Paiement refusé ou non validé."
+msgstr "Payment refused or not confirmed."
+
+#: apps/paiements/models.py:33
+msgid "Le délai pour valider le paiement est dépassé."
+msgstr "The time allowed to confirm the payment has run out."
+
+#: apps/paiements/models.py:34
+msgid "Le montant reçu ne correspond pas à la demande."
+msgstr "The amount received does not match the request."
+
+#: apps/paiements/models.py:35
+msgid "Cause inconnue."
+msgstr "Unknown cause."
+
+#: apps/paiements/models.py:39
+msgid "Espèces"
+msgstr "Cash"
+
+#: apps/paiements/models.py:40
+msgid "Virement"
+msgstr "Bank transfer"
+
+#: apps/paiements/models.py:41
+msgid "Chèque"
+msgstr "Cheque"
+
+#: apps/paiements/models.py:42
+msgid "Autre"
+msgstr "Other"
+
+#: apps/paiements/services.py:358
+msgid "Cette commande ne peut pas être payée pour le moment : le contrat doit être signé et il doit rester un montant à payer."
+msgstr "This order cannot be paid for now: the contract must be signed and an amount must remain to be paid."
+
+#: apps/paiements/services.py:363
+msgid "Le paiement en ligne est momentanément indisponible. Réessayez dans quelques minutes."
+msgstr "Online payment is temporarily unavailable. Please try again in a few minutes."
+
+#: apps/paiements/services.py:113
+msgid "Paiement introuvable."
+msgstr "Payment not found."
+
+#: apps/paiements/services.py:408
+msgid "Le paiement en ligne n'est pas disponible pour le moment."
+msgstr "Online payment is not available at the moment."
+
+#: apps/paiements/services.py:469
+msgid "Ce paiement ne peut pas être annulé."
+msgstr "This payment cannot be cancelled."
+
+#: apps/paiements/services.py:488
+msgid "Ce paiement ne peut pas être revérifié."
+msgstr "This payment cannot be rechecked."
+
+#: apps/paiements/services.py:348
+msgid "Saisissez un numéro de téléphone mobile camerounais valide (par exemple 6 99 00 11 22)."
+msgstr "Enter a valid Cameroonian mobile phone number (for example 6 99 00 11 22)."
+
+#: apps/paiements/services.py:386
+msgid "Vous avez lancé trop de paiements : réessayez dans une heure."
+msgstr "You have started too many payments: try again in an hour."
+
+#: apps/paiements/services.py:389
+msgid "Un paiement est déjà en cours pour cette commande."
+msgstr "A payment is already in progress for this order."
+
+#: apps/paiements/services.py:353
+msgid "Le montant doit être compris entre %(min)s et %(max)s FCFA."
+msgstr "The amount must be between %(min)s and %(max)s FCFA."
+
+#: apps/paiements/services.py:410
+msgid "Choisissez Mobile Money ou le paiement par carte."
+msgstr "Choose Mobile Money or card payment."
+
+#: apps/paiements/services.py:496
+msgid "Choisissez un mode de règlement."
+msgstr "Choose a payment method."
+
+#: apps/paiements/services.py:499
+msgid "La note est trop longue (300 caractères au plus)."
+msgstr "The note is too long (300 characters at most)."
+
+#: apps/paiements/views.py:95
+msgid "Signature du webhook invalide."
+msgstr "Invalid webhook signature."
+
+#: apps/statistiques/indicateurs.py:70
+msgid "La date de début doit précéder la date de fin."
+msgstr "The start date must be before the end date."
+
+#: apps/statistiques/indicateurs.py:57
+msgid "Date invalide : utilisez le format AAAA-MM-JJ."
+msgstr "Invalid date: use the YYYY-MM-DD format."
+
+#: apps/statistiques/indicateurs.py:72
+msgid "La période ne peut pas dépasser %(jours)s jours."
+msgstr "The period cannot exceed %(jours)s days."
+
+#: apps/statistiques/indicateurs.py:169
+msgid "Le nombre de mois doit être compris entre 1 et %(max)s."
+msgstr "The number of months must be between 1 and %(max)s."

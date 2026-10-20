@@ -85,8 +85,29 @@ TEXTES = {
         _("Une nouveauté du CIR"),
         _("Bonjour {nom}, découvrez la dernière nouveauté du CIR."),
     ),
+    T.PAIEMENT_RECU: (
+        _("Paiement reçu pour la commande {reference}"),
+        _("Bonjour {nom}, nous avons bien reçu votre paiement de {montant} pour la commande {reference}. "
+          "Merci de votre confiance."),
+    ),
+    T.PAIEMENT_RECU_EQUIPE: (
+        _("Paiement reçu : commande {reference}"),
+        _("{nom} a réglé {montant} pour la commande {reference}."),
+    ),
+    T.PAIEMENT_ECHOUE: (
+        _("Paiement non abouti : commande {reference}"),
+        _("Bonjour {nom}, votre paiement de {montant} pour la commande {reference} n'a pas abouti. "
+          "Vous pouvez réessayer depuis votre commande."),
+    ),
+    T.PAIEMENT_ANOMALIE: (
+        _("Anomalie de paiement : commande {reference}"),
+        _("Le paiement de {montant} de {nom} pour la commande {reference} présente une anomalie : rien n'a été "
+          "encaissé. Vérifiez-le dans le tableau de bord."),
+    ),
 }
-EVENEMENTS = tuple(TEXTES)
+# Événements sans e-mail : ils n'ont pas de modèle de message à personnaliser
+SANS_EMAIL = (T.PAIEMENT_ECHOUE,)
+EVENEMENTS = tuple(e for e in TEXTES if e not in SANS_EMAIL)
 
 
 def variables_de(donnees):
@@ -134,7 +155,8 @@ def lien(evenement, donnees, equipe):
     """Chemin du site (client) ou du tableau de bord (équipe) ouvert par la notification."""
     commande = donnees.get("commande")
     if evenement in (T.COMMANDE_CREEE, T.COMMANDE_NOUVELLE, T.PROPOSITION_RECUE, T.PROPOSITION_CLIENT,
-                     T.CONTRAT_SIGNE, T.ETAPE_CHANGEE, T.DEVIS_ENVOYE):
+                     T.CONTRAT_SIGNE, T.ETAPE_CHANGEE, T.DEVIS_ENVOYE, T.PAIEMENT_RECU, T.PAIEMENT_RECU_EQUIPE,
+                     T.PAIEMENT_ECHOUE, T.PAIEMENT_ANOMALIE):
         return f"/commandes/{commande}" if commande else "/commandes"
     if evenement == T.DEMANDE_RENDU_NOUVELLE:
         return "/devis"

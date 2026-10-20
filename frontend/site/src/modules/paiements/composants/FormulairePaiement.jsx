@@ -39,8 +39,11 @@ export default function FormulairePaiement({ commande, reste, telephoneInitial =
       setEtat({ envoi: false, erreur: null });
       surCree(paiement);
     } catch (erreur) {
-      setErreurs(erreursChamps(erreur));
-      setEtat({ envoi: false, erreur: messageCreation(erreur) });
+      const brut = erreursChamps(erreur);
+      const champs = Object.fromEntries(Object.entries(brut).filter(([nom]) => ['montant', 'telephone'].includes(nom)));
+      setErreurs(champs);
+      // Erreur liée à un champ : affichée sous le champ seulement (pas deux fois).
+      setEtat({ envoi: false, erreur: Object.keys(champs).length ? null : messageCreation(erreur) });
       if (codeErreur(erreur) === 'paiement_en_cours') surEnCours?.();
     } finally {
       verrou.current = false;

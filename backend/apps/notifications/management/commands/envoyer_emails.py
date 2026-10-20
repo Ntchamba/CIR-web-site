@@ -4,7 +4,7 @@
     python manage.py envoyer_emails --boucle   # toutes les 20 secondes (second service Railway, « worker »)
 
 Chaque tour : nouveautés à annoncer, appels sans réponse à passer en « manqué », pièces jointes orphelines à purger,
-e-mails des messages non lus, puis envoi de la file.
+e-mails des messages non lus, paiements CamPay en attente à revérifier, puis envoi de la file.
 """
 import logging
 import signal
@@ -15,6 +15,7 @@ from django.core.management.base import BaseCommand
 from apps.appels import services as appels
 from apps.messagerie import pieces_jointes
 from apps.notifications import taches
+from apps.paiements import services as paiements
 
 journal = logging.getLogger("cir.notifications")
 PAUSE_SECONDES = 20
@@ -23,7 +24,7 @@ PAUSE_SECONDES = 20
 def une_passe():
     """Un tour complet. Une étape en panne n'empêche pas les suivantes. Renvoie le nombre d'e-mails envoyés."""
     etapes = (taches.notifier_actualites, appels.expirer_appels, pieces_jointes.purger_non_rattachees,
-              taches.preparer_emails_messages)
+              taches.preparer_emails_messages, paiements.reverifier_en_attente)
     for etape in etapes:
         try:
             etape()

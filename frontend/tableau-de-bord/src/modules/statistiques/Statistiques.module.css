@@ -1,0 +1,68 @@
+.page { max-width: 1200px; display: grid; gap: var(--esp-5); }
+.bloc { display: grid; gap: var(--esp-4); align-content: start; }
+.titreBloc { font-family: var(--police-titre); font-size: 20px; font-weight: 500; }
+.vide { color: var(--encre-3); }
+.intervalle { color: var(--encre-3); font-size: 14px; }
+
+/* Période */
+.periode { display: grid; gap: var(--esp-4); }
+.choixPeriode { display: flex; flex-wrap: wrap; gap: var(--esp-2); }
+.choix {
+  min-height: var(--cible-tactile); padding: 0 var(--esp-4); border: 1px solid var(--filet); border-radius: var(--pastille);
+  background: var(--blanc); color: var(--encre-2); font: inherit; font-weight: 600; cursor: pointer;
+}
+.choix:hover { border-color: var(--encre); color: var(--encre); }
+.choixActif { background: var(--encre); border-color: var(--encre); color: var(--blanc); }
+.choixActif:hover { color: var(--blanc); }
+.datesLibres { display: flex; flex-wrap: wrap; gap: var(--esp-3); align-items: flex-end; }
+.erreurPeriode { color: var(--danger); font-weight: 600; }
+
+/* Cartes */
+.indicateurs { display: grid; gap: var(--esp-4); margin: 0; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+.indicateur { display: grid; gap: var(--esp-1); align-content: start; }
+.indicateur dt { font-size: 14px; color: var(--encre-3); }
+.indicateur dd { margin: 0; font-family: var(--police-titre); font-size: 28px; font-weight: 500; overflow-wrap: anywhere; }
+.indicateur small { color: var(--encre-3); }
+
+/* À traiter */
+.aTraiter { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--esp-2); grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.lienATraiter {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--esp-3);
+  min-height: var(--cible-tactile); padding: var(--esp-2) var(--esp-4);
+  border: 1px solid var(--filet-2); border-radius: var(--rayon-s); background: var(--blanc);
+  color: var(--encre); text-decoration: none; font-weight: 500;
+}
+.lienATraiter:hover { border-color: var(--bleu); }
+.lienATraiter strong { min-width: 28px; padding: 1px 8px; border-radius: var(--pastille); background: var(--corail); color: var(--encre); text-align: center; }
+.zero { color: var(--encre-3); }
+.zero strong { background: var(--fond-2); color: var(--encre-2); }
+
+/* Graphiques */
+.graphiques { display: grid; gap: var(--esp-5); grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.figure { margin: 0; display: grid; gap: var(--esp-3); min-width: 0; }
+.graphique { width: 100%; height: auto; max-height: 320px; }
+.etiquette { font-size: 11px; fill: var(--encre-3); }
+.grille { stroke: var(--filet-2); stroke-width: 1; }
+.axe { stroke: var(--champ); stroke-width: 1; }
+.serieBleue { fill: var(--bleu); background: var(--bleu); }
+.serieCorail { fill: var(--corail); background: var(--corail); }
+.serieEncre { fill: var(--encre); background: var(--encre); }
+.legende { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--esp-2) var(--esp-4); color: var(--encre-2); font-size: 14px; }
+.legende li { display: inline-flex; align-items: center; gap: var(--esp-2); }
+.pastilleLegende { display: inline-block; width: 14px; height: 14px; border-radius: 3px; }
+@media (prefers-reduced-motion: no-preference) {
+  .barre { transform-box: fill-box; transform-origin: bottom; animation: croitre 450ms ease-out both; }
+  @keyframes croitre { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+}
+
+/* Répartitions et produits */
+.deuxColonnes { display: grid; gap: var(--esp-5); grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.repartition { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--esp-3); }
+.repartition li { display: grid; gap: var(--esp-3); align-items: center; grid-template-columns: minmax(110px, 1fr) minmax(60px, 2fr) auto; }
+.piste { display: block; height: 10px; border-radius: 5px; background: var(--fond-2); overflow: hidden; }
+.remplissage { display: block; height: 100%; background: var(--bleu); border-radius: 5px; }
+.top { margin: 0; padding-left: var(--esp-5); display: grid; gap: var(--esp-2); }
+.top li { padding-left: var(--esp-1); }
+.top li > * { vertical-align: middle; }
+.top strong { margin-left: var(--esp-3); }
+.top small { color: var(--encre-3); }

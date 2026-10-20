@@ -19,3 +19,6 @@
   padding: 4px 12px; border-radius: var(--pastille);
   background: var(--st-negociation-f); color: var(--st-negociation-t); font-size: 13px; font-weight: 600;
 }
+
+.apercu { display: grid; gap: var(--esp-4); margin-top: var(--esp-6); }
+.titreApercu { font-family: var(--police-titre); font-size: 22px; font-weight: 500; }
