@@ -16,6 +16,7 @@ from apps.commandes import negociation
 from apps.commandes.etapes import EQUIPE, Etat
 from apps.commandes.models import Commande
 from apps.noyau.medias import preparer_images
+from apps.noyau.verrous import verrouiller_compte
 
 from . import calcul
 from .models import (ETATS_VISIBLES_CLIENT, DemandeRendu, Devis, EtatDemande, EtatDevis, ImageDemande, LigneDevis)
@@ -177,6 +178,7 @@ def resume_demandes():
 
 
 def _verifier_quota(client):
+    verrouiller_compte(client)  # deux envois simultanés du même client passent l'un après l'autre
     depuis = timezone.now() - timedelta(days=1)
     if DemandeRendu.objects.filter(client=client, cree_le__gte=depuis).count() >= QUOTA_DEMANDES_PAR_JOUR:
         raise Throttled(detail=_("Vous avez déjà envoyé %(nombre)s demandes de rendu aujourd'hui. "
@@ -207,6 +209,7 @@ def _effacer(images):
             image.image.storage.delete(image.image.name)
 
 
+@transaction.atomic
 def deposer_demande(client, donnees, fichiers=()):
     """BF-11 : un client demande un rendu sur mesure (description, type, surface, produit, commande, photos)."""
     _verifier_quota(client)

@@ -13,6 +13,7 @@ from rest_framework.exceptions import PermissionDenied, Throttled, ValidationErr
 
 from apps.catalogue.models import Design, ImageProduit, Produit
 from apps.comptes.services import peut_commander
+from apps.noyau.verrous import verrouiller_compte
 from apps.selection import services as selection
 
 from . import negociation
@@ -109,6 +110,7 @@ def _verifier_droit_de_commander(utilisateur):
 
 
 def _verifier_quota(client):
+    verrouiller_compte(client)  # deux envois simultanés du même client passent l'un après l'autre
     depuis = timezone.now() - timedelta(days=1)
     if Commande.objects.filter(client=client, cree_le__gte=depuis).count() >= QUOTA_COMMANDES_PAR_JOUR:
         raise Throttled(detail=_("Vous avez déjà passé %(nombre)s commandes aujourd'hui. Réessayez demain.")

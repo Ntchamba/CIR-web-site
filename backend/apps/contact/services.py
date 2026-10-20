@@ -4,12 +4,14 @@ from datetime import timedelta
 
 from django.core.exceptions import ValidationError as ErreurDjango
 from django.core.validators import validate_email
+from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from rest_framework.exceptions import Throttled, ValidationError
 
 from apps.catalogue.models import Produit
 from apps.noyau.langues import langue_active
+from apps.noyau.verrous import verrouiller_compte
 
 from .models import Creneau, DemandeContact, EtatContact, TypeDemande
 
@@ -52,6 +54,7 @@ def _message(valeur, visiteur):
 
 
 def _verifier_quota_compte(utilisateur):
+    verrouiller_compte(utilisateur)  # deux envois simultanés du même compte passent l'un après l'autre
     depuis = timezone.now() - timedelta(days=1)
     if DemandeContact.objects.filter(auteur=utilisateur, cree_le__gte=depuis).count() >= QUOTA_COMPTE_PAR_JOUR:
         raise Throttled(detail=_("Vous avez déjà envoyé %(nombre)s messages aujourd'hui. Réessayez demain.")
@@ -62,6 +65,7 @@ def demandes_de(utilisateur):
     return DemandeContact.objects.filter(auteur=utilisateur).select_related("produit")
 
 
+@transaction.atomic
 def creer_demande(donnees, utilisateur=None):
     """Enregistre une demande de contact (question ou rappel).
 

@@ -7,6 +7,7 @@ from django.utils.translation import gettext as _
 from rest_framework.exceptions import PermissionDenied, Throttled, ValidationError
 
 from apps.noyau.langues import langue_active
+from apps.noyau.verrous import verrouiller_compte
 from apps.noyau.medias import effacer_apres_validation, enregistrer_avec_images, preparer_remplacement, \
     supprimer_avec_fichiers
 
@@ -110,6 +111,7 @@ def peut_temoigner(utilisateur):
                 and not getattr(utilisateur, "est_equipe", False))
 
 
+@transaction.atomic
 def deposer_temoignage(utilisateur, *, texte, note, ville="", type_chantier=""):
     """BF-04 : un client dépose un témoignage, en attente de validation par l'équipe.
 
@@ -117,6 +119,7 @@ def deposer_temoignage(utilisateur, *, texte, note, ville="", type_chantier=""):
     """
     if not peut_temoigner(utilisateur):
         raise PermissionDenied(_("Seuls les clients connectés peuvent déposer un témoignage."))
+    verrouiller_compte(utilisateur)  # deux envois simultanés du même client passent l'un après l'autre
     depuis = timezone.now() - timedelta(days=1)
     if temoignages_de(utilisateur).filter(cree_le__gte=depuis).count() >= QUOTA_TEMOIGNAGES_PAR_JOUR:
         raise Throttled(detail=_("Vous avez déjà déposé %(nombre)s témoignages aujourd'hui. Réessayez demain.")
