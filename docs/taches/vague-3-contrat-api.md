@@ -161,7 +161,8 @@ Serveur → client :
   "appel": <Appel>}` (client et équipe concernés).
 - `{"type": "erreur", "code": "<code>", "detail": "<texte traduit>"}` avec les codes `non_authentifie`, `message_vide`,
   `trop_long`, `trop_de_messages`, `conversation_inconnue`, `interdit`, `format_invalide`. Une erreur n'ferme pas la
-  connexion (sauf authentification).
+  connexion (sauf authentification). Pour une trame `envoyer` refusée, l'erreur reprend `cle_client` si elle a été fournie
+  (le front repère ainsi le message optimiste en échec).
 
 Groupes Channels : chaque connexion rejoint `utilisateur_<id>` ; l'équipe rejoint aussi `equipe`. Les modules publient
 uniquement par `apps/noyau/direct.py` : `publier_utilisateur(utilisateur_id, type, donnees)` et `publier_equipe(type,
@@ -202,13 +203,13 @@ API client `/api/appels/` (`EstClient`) :
 - `POST <id>/annuler/` (état `sonne`) et `POST <id>/terminer/` (état `en_cours`) → `{appel}`.
 
 API équipe `/api/admin/appels/` (`EstEquipe`) :
-- `GET /` paginé `?etat=&search=` : historique (les appels manqués en tête avec un champ `rappel: {telephone, lien_messagerie}`).
+- `GET /` paginé `?etat=&search=` : historique (les appels manqués en tête avec un champ `rappel: {telephone, lien_messagerie}` ; `lien_messagerie` = chemin du tableau de bord `/messagerie?client=<id du client>`).
 - `GET en-attente/` → `[<Appel>]` appels qui sonnent (pour l'ouverture de page et la reprise après coupure).
 - `POST <id>/repondre/` → `{appel, jitsi: {domaine, app_id, salle, jeton}}` avec un jeton **modérateur** ; passe l'appel
   à `en_cours`, prévient le client (`appel_mis_a_jour`) et les autres membres (`appel_mis_a_jour`, pour arrêter leur
   sonnerie).
 - `POST <id>/refuser/`, `POST <id>/terminer/`.
-- `GET usage/` → `{mois: "2026-10", utilisateurs_actifs, limite_gratuite, depasse: bool, proche: bool}`
+- `GET usage/` → `{mois: "2026-10", utilisateurs_actifs, limite_gratuite, configure: bool (Jitsi configuré), depasse: bool, proche: bool}`
   (`proche` à partir de 80 % de la limite gratuite) : nombre de **clients distincts** ayant eu un appel `en_cours` ou
   `termine` ce mois-ci (aide à rester dans l'offre gratuite de 25 utilisateurs actifs).
 - `GET resume/` → `{en_attente, manques_non_vus}` (pastille du menu ; un manqué est « vu » quand l'équipe ouvre la liste).
@@ -320,8 +321,7 @@ API client `/api/notifications/` (`EstClient`) :
 API équipe `/api/admin/notifications/` (`EstEquipe`) :
 - Les mêmes routes pour **ses propres** notifications (`GET /`, `non-lues/`, `<id>/lue/`, `lues/`).
 - `GET/PATCH preferences/` → `{email_equipe: bool}` (champ `Utilisateur.email_equipe`, défaut vrai).
-- Super-administrateur seulement (`EstSuperAdmin`) : `GET modeles/` (tous les événements avec, par langue, le texte par
-  défaut et le modèle enregistré), `PUT modeles/<evenement>/<langue>/` `{sujet, introduction}`, `DELETE
+- Super-administrateur seulement (`EstSuperAdmin`) : `GET modeles/` (liste `[{evenement, libelle, variables, langues: [{langue, defaut: {sujet, introduction}, modele: {sujet, introduction}|null}]}]`, les 5 langues dans l'ordre fr, en, zh, de, ja), `PUT modeles/<evenement>/<langue>/` `{sujet, introduction}`, `DELETE
   modeles/<evenement>/<langue>/` (retour au texte par défaut), `POST modeles/apercu/` `{evenement, langue, sujet?,
   introduction?}` → `{sujet, corps_html, corps_texte}` avec des valeurs d'exemple (jamais de vrai client) ;
   `GET envois/` paginé `?etat=` avec `{id, destinataire_email (masqué : j***@exemple.cm), evenement, etat, tentatives,

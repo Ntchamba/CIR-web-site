@@ -32,8 +32,12 @@ export const nonLus = ({ signal } = {}) => api.get('/api/messagerie/non-lus/', {
  * suffit donc pas. Le jeton n'est envoyé qu'au serveur de l'API. Renvoie le contenu (Blob).
  */
 export async function recupererFichier(url) {
-  const absolue = /^https?:\/\//.test(url);
-  if (absolue && !url.startsWith(`${api.baseUrl}/`)) throw new ErreurApi(403);
+  if (typeof url !== 'string') throw new ErreurApi(403);
+  const absolue = /^https?:\/\//i.test(url);
+  // Le jeton ne part que vers l'API : adresse absolue de l'API, ou chemin du site (jamais « //hôte » ni « hôte »).
+  if (absolue ? !url.startsWith(`${api.baseUrl}/`) : (!url.startsWith('/') || url.startsWith('//') || url.includes('\\'))) {
+    throw new ErreurApi(403);
+  }
   const adresse = absolue ? url : api.baseUrl + url;
   const demander = () => fetch(adresse, {
     headers: { Authorization: `Bearer ${api.jetons.lire()?.acces ?? ''}`, 'Accept-Language': langueApi() },

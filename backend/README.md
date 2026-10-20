@@ -16,7 +16,7 @@ python manage.py createsuperuser     # premier super-administrateur (e-mail + mo
 python manage.py runserver           # http://127.0.0.1:8000 (ASGI via daphne)
 ```
 
-Tests : `python manage.py test`. Vérification : `curl http://127.0.0.1:8000/api/sante/`.
+Tests : `python manage.py test` (applications `apps/` et intégrations `integrations/`). Vérification : `curl http://127.0.0.1:8000/api/sante/`.
 
 ## Langues (fiche `docs/decisions/7-multilingue.md`)
 

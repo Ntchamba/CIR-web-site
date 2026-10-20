@@ -61,6 +61,7 @@ class ConsommateurDirect(AsyncWebsocketConsumer):
         self.utilisateur = None
         self.groupes = []
         self.derniere_ecriture = 0.0
+        self.cle_erreur = None  # `cle_client` de la trame `envoyer` en cours : reprise dans ses erreurs
         self.langue = self._langue_de_la_requete()
         await self.accept()
         self.minuteur = asyncio.create_task(self._attendre_authentification())
@@ -95,8 +96,11 @@ class ConsommateurDirect(AsyncWebsocketConsumer):
 
     async def _erreur(self, code, detail=None):
         with translation.override(code_django(self.langue)):
-            await self._envoyer({"type": "erreur", "code": code,
-                                 "detail": detail if detail is not None else _("Trame refusée.")})
+            trame = {"type": "erreur", "code": code,
+                     "detail": detail if detail is not None else _("Trame refusée.")}
+            if self.cle_erreur:
+                trame["cle_client"] = self.cle_erreur
+            await self._envoyer(trame)
 
     async def _fermer(self, code):
         try:
@@ -144,10 +148,14 @@ class ConsommateurDirect(AsyncWebsocketConsumer):
             if gestionnaire is None:
                 await self._erreur("format_invalide")
                 return
+            cle = trame.get("cle_client")
+            self.cle_erreur = cle if type_trame == "envoyer" and isinstance(cle, str) and cle else None
             try:
                 await gestionnaire(trame)
             except APIException as erreur:
                 await self._erreur_api(erreur)
+            finally:
+                self.cle_erreur = None
 
     async def _erreur_api(self, erreur):
         if isinstance(erreur, NotFound):
@@ -156,8 +164,10 @@ class ConsommateurDirect(AsyncWebsocketConsumer):
             code, detail = "interdit", str(erreur.detail)
         else:
             code, detail = code_et_detail(erreur)
-        await self._envoyer({"type": "erreur", "code": code if code in CODES_ERREUR else "format_invalide",
-                             "detail": detail})
+        trame = {"type": "erreur", "code": code if code in CODES_ERREUR else "format_invalide", "detail": detail}
+        if self.cle_erreur:
+            trame["cle_client"] = self.cle_erreur
+        await self._envoyer(trame)
 
     async def _authentifier(self, trame):
         jeton = trame.get("jeton")

@@ -126,7 +126,7 @@ function Salle() {
         });
         apiJitsi.current = instance;
         // L'interface Jitsi (bouton raccrocher) termine aussi l'appel côté CIR.
-        const fin = () => raccrocherRef.current();
+        const fin = () => vivant && raccrocherRef.current();
         instance.addListener?.('readyToClose', fin);
         instance.addListener?.('videoConferenceLeft', fin);
         setStatut('ouvert');

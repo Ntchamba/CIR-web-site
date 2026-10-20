@@ -1,5 +1,5 @@
 // Jitsi JaaS : le script externe n'est chargé qu'au lancement d'un appel (jamais au chargement du site).
-const DOMAINE = /^[a-z0-9]([a-z0-9.-]*[a-z0-9])?$/i;
+const DOMAINE = /^([a-z0-9-]+\.)*8x8\.vc$/i; // JaaS uniquement : le script n'est jamais chargé depuis un autre domaine
 const APP_ID = /^[A-Za-z0-9_-]{1,128}(\/[A-Za-z0-9_-]{1,128})*$/;
 
 let enCours = null;
