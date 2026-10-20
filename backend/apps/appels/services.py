@@ -265,7 +265,7 @@ def en_attente():
 
 
 def historique(parametres):
-    """Historique de l'équipe : `?etat=` `?search=` ; les appels manqués d'abord."""
+    """Historique de l'équipe : `?etat=` `?search=` ; les appels manqués **non vus** d'abord."""
     expirer_appels()
     qs = avec_relations(Appel.objects.all())
     etat = parametres.get("etat", "").strip()
@@ -275,7 +275,8 @@ def historique(parametres):
     if recherche:
         qs = qs.filter(Q(reference__icontains=recherche) | Q(client__nom_complet__icontains=recherche)
                        | Q(client__email__icontains=recherche) | Q(client__telephone__icontains=recherche))
-    manque_d_abord = Case(When(etat=EtatAppel.MANQUE, then=Value(0)), default=Value(1), output_field=IntegerField())
+    manque_d_abord = Case(When(etat=EtatAppel.MANQUE, manque_vu=False, then=Value(0)), default=Value(1),
+                          output_field=IntegerField())
     return qs.order_by(manque_d_abord, "-cree_le", "-id")
 
 

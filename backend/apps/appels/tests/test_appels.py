@@ -255,6 +255,16 @@ class EquipeTests(BaseAppels):
         r = self.client.post(f"{ADMIN}{self.appel.pk}/terminer/")
         self.assertEqual(r.data["appel"]["etat"], "termine")
 
+    def test_manques_vus_ne_restent_pas_en_tete(self):
+        recent = Appel.objects.create(client=self.client_b, type="audio", salle=salles.nouvelle_salle(), etat="termine")
+        self.vieillir(self.appel, 100)
+        self.assertEqual(self.client.get(ADMIN).data["results"][0]["id"], self.appel.pk)
+        self.assertEqual(self.client.post(ADMIN + "vu/").data, {"marques": 1})
+        self.assertEqual([a["id"] for a in self.client.get(ADMIN).data["results"]], [recent.pk, self.appel.pk])
+        self.assertEqual(self.client.post(ADMIN + "vu/").data, {"marques": 0})
+        self.se_connecter(self.client_a)
+        self.assertEqual(self.client.post(ADMIN + "vu/").status_code, 403)
+
     def test_historique_manques_en_tete_avec_rappel(self):
         termine = Appel.objects.create(client=self.client_b, type="audio", salle=salles.nouvelle_salle(),
                                        etat="termine")
@@ -271,7 +281,9 @@ class EquipeTests(BaseAppels):
         self.assertEqual(self.client.get(ADMIN + "resume/").data, {"en_attente": 1, "manques_non_vus": 0})
         self.vieillir(self.appel, 100)
         self.assertEqual(self.client.get(ADMIN + "resume/").data, {"en_attente": 0, "manques_non_vus": 1})
-        self.client.get(ADMIN)  # l'équipe ouvre la liste
+        self.client.get(ADMIN)  # ouvrir la liste ne marque rien : c'est POST vu/ qui le fait
+        self.assertEqual(self.client.get(ADMIN + "resume/").data["manques_non_vus"], 1)
+        self.client.post(ADMIN + "vu/")
         self.assertEqual(self.client.get(ADMIN + "resume/").data, {"en_attente": 0, "manques_non_vus": 0})
 
     def test_usage_jaas(self):

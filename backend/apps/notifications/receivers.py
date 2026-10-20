@@ -196,6 +196,6 @@ def sur_appel_manque(sender, appel, **kwargs):
 # --- Nouveautés (BF-07) ---
 
 @receiver(actualite_publiee)
-@securise
 def sur_actualite_publiee(sender, actualite, **kwargs):
+    # Pas de `securise` : un échec doit annuler la diffusion et laisser `notifiee_le` vide (nouvel essai).
     services.diffuser_nouveaute(actualite)

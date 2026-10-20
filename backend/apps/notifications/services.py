@@ -342,3 +342,17 @@ def _diffuser_lot(clients, donnees):
         if client.recevoir_nouveautes:
             mettre_en_file(client, T.NOUVEAUTE, {**donnees, "nom": client.nom_complet},
                            cle_unique=f"nouveaute:{donnees['actualite']}:{client.pk}")
+
+
+def texte_erreur_envoi(code):
+    """Texte (langue de la requête) d'un code d'erreur enregistré dans `EnvoiEmail.derniere_erreur`."""
+    textes = {
+        "destinataire_invalide": _("Destinataire sans adresse valide ou compte désactivé."),
+        "erreur_inattendue": _("Erreur inattendue pendant l'envoi."),
+        "GmailErreurTemporaire": _("Gmail est indisponible ou injoignable pour le moment (nouvel essai prévu)."),
+        "GmailErreurDefinitive": _("Gmail a refusé l'envoi (adresse refusée ou configuration à vérifier)."),
+        "GmailNonConfigure": _("Gmail n'est pas configuré."),
+    }
+    if not code:
+        return ""
+    return textes.get(code, _("Erreur d'envoi."))

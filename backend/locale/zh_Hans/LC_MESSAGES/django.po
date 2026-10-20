@@ -1003,3 +1003,75 @@ msgstr "您已退订"
 #: apps/notifications/views.py:89
 msgid "Vous ne recevrez plus les nouveautés du CIR par e-mail. Vous pouvez changer d'avis à tout moment dans les notifications de votre compte."
 msgstr "您将不再通过电子邮件收到 CIR 的最新动态。您可以随时在账户的通知设置中重新开启。"
+
+#: apps/notifications/models.py:14
+msgid "Commande enregistrée"
+msgstr "订单已登记"
+
+#: apps/notifications/models.py:15
+msgid "Nouvelle commande"
+msgstr "新订单"
+
+#: apps/notifications/models.py:16
+msgid "Proposition reçue"
+msgstr "已收到方案"
+
+#: apps/notifications/models.py:17
+msgid "Réponse du client"
+msgstr "客户回复"
+
+#: apps/notifications/models.py:19
+msgid "Étape de commande"
+msgstr "订单阶段"
+
+#: apps/notifications/models.py:21
+msgid "Nouvelle demande de rendu"
+msgstr "新的效果定制申请"
+
+#: apps/notifications/models.py:22
+msgid "Demande de rendu traitée"
+msgstr "效果定制申请已处理"
+
+#: apps/notifications/models.py:23
+msgid "Nouvelle demande de contact"
+msgstr "新的联系请求"
+
+#: apps/notifications/models.py:24
+msgid "Demande de contact traitée"
+msgstr "联系请求已处理"
+
+#: apps/notifications/models.py:25
+msgid "Nouveau message"
+msgstr "新消息"
+
+#: apps/notifications/models.py:26
+msgid "Appel manqué"
+msgstr "未接来电"
+
+#: apps/notifications/models.py:27
+msgid "Nouveauté"
+msgstr "最新动态"
+
+#: apps/notifications/services.py:350
+msgid "Destinataire sans adresse valide ou compte désactivé."
+msgstr "收件人没有有效地址或账户已停用。"
+
+#: apps/notifications/services.py:351
+msgid "Erreur inattendue pendant l'envoi."
+msgstr "发送时出现意外错误。"
+
+#: apps/notifications/services.py:352
+msgid "Gmail est indisponible ou injoignable pour le moment (nouvel essai prévu)."
+msgstr "Gmail 目前不可用或无法连接（将自动重试）。"
+
+#: apps/notifications/services.py:353
+msgid "Gmail a refusé l'envoi (adresse refusée ou configuration à vérifier)."
+msgstr "Gmail 拒绝了发送（地址被拒绝或需检查配置）。"
+
+#: apps/notifications/services.py:354
+msgid "Gmail n'est pas configuré."
+msgstr "Gmail 尚未配置。"
+
+#: apps/notifications/services.py:358
+msgid "Erreur d'envoi."
+msgstr "发送错误。"

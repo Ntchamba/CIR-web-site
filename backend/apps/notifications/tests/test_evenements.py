@@ -354,12 +354,23 @@ class NouveautesTests(BaseNotifications):
         self.assertEqual(EnvoiEmail.objects.count(), 0)
         self.assertEqual(Notification.objects.filter(type="nouveaute").count(), 2)
 
-    def test_une_panne_n_empeche_pas_de_marquer_l_actualite(self):
-        with mock.patch.object(services, "diffuser_nouveaute", side_effect=RuntimeError), \
+    def test_echec_de_diffusion_laisse_notifiee_le_vide_puis_reessaie_sans_doublon(self):
+        vrai = services.diffuser_nouveaute
+
+        def diffusion_partielle(actualite):
+            vrai(actualite)  # tout est créé, puis la panne survient
+            raise RuntimeError("panne")
+
+        with mock.patch.object(services, "diffuser_nouveaute", side_effect=diffusion_partielle), \
                 self.assertLogs("cir.notifications", level="ERROR"):
-            self.assertEqual(taches.notifier_actualites(), 1)
+            self.assertEqual(taches.notifier_actualites(), 0)
         self.actualite.refresh_from_db()
-        self.assertIsNotNone(self.actualite.notifiee_le)
+        self.assertIsNone(self.actualite.notifiee_le)
+        self.assertEqual((Notification.objects.count(), EnvoiEmail.objects.count()), (0, 0))  # tout est annulé
+        self.assertEqual(taches.notifier_actualites(), 1)  # nouvel essai au tour suivant
+        self.assertEqual(Notification.objects.filter(type="nouveaute").count(), 2)
+        self.assertEqual(EnvoiEmail.objects.count(), 1)
+        self.assertEqual(taches.notifier_actualites(), 0)
 
     def test_actualites_existantes_a_la_migration_sont_marquees(self):
         import importlib

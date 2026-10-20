@@ -24,9 +24,11 @@ function Conversation({ selection, selectionId, surRetour, surLu }) {
   const direct = useDirect();
   const fil = useFil(selectionId);
   const client = selection?.client || null;
+  // Conversation absente de la liste affichée : le nom vient d'un message du client, s'il y en a un.
+  const nomDuFil = client ? '' : fil.messages.find((m) => m.auteur_role === 'client' && m.auteur_nom)?.auteur_nom || '';
   return (
     <section className={styles.conversationOuverte} aria-label={t('messagerie.conversationAvec', { nom: client?.nom_complet || '' })}>
-      <ContexteClient client={client} surRetour={surRetour} />
+      <ContexteClient client={client} nom={nomDuFil} surRetour={surRetour} />
       <FilMessages conversationId={selectionId} fil={fil} surLu={(jusquA) => surLu(selectionId, jusquA)} />
       <SaisieMessage key={selectionId} clientId={client?.id} surEnvoi={fil.envoyer}
         surEcrit={() => direct.etat === 'connecte' && direct.envoyer({ type: 'ecrit', conversation: selectionId })} />

@@ -71,7 +71,7 @@ class EnvoiTests(BaseTaches):
             self.assertEqual(envoi.tentatives, numero)
             ecart = envoi.prochaine_tentative - avant
             self.assertLess(abs(ecart - delai), timedelta(seconds=5))
-            self.assertIn("503", envoi.derniere_erreur)
+            self.assertEqual(envoi.derniere_erreur, "GmailErreurTemporaire")
         EnvoiEmail.objects.filter(pk=envoi.pk).update(prochaine_tentative=timezone.now() - timedelta(seconds=1))
         self.assertEqual(taches.traiter(envoi.pk), "echec")
         envoi.refresh_from_db()
@@ -82,7 +82,7 @@ class EnvoiTests(BaseTaches):
         envoi = fabriquer()
         self.assertEqual(taches.traiter(envoi.pk), "echec")
         envoi.refresh_from_db()
-        self.assertEqual((envoi.tentatives, envoi.derniere_erreur), (1, "Envoi refusé par Gmail (code 400)."))
+        self.assertEqual((envoi.tentatives, envoi.derniere_erreur), (1, "GmailErreurDefinitive"))
 
     def test_erreur_inattendue_traitee_comme_temporaire_sans_detail(self):
         self.envoyer_mock.side_effect = RuntimeError("secret-token-123")
@@ -90,7 +90,7 @@ class EnvoiTests(BaseTaches):
         with self.assertLogs("cir.notifications", level="ERROR"):
             self.assertEqual(taches.traiter(envoi.pk), "en_attente")
         envoi.refresh_from_db()
-        self.assertNotIn("secret-token-123", envoi.derniere_erreur)
+        self.assertEqual(envoi.derniere_erreur, "erreur_inattendue")
         self.assertEqual(envoi.tentatives, 1)
 
     def test_gmail_non_configure_les_lignes_restent_en_attente_sans_tentative(self):
@@ -119,6 +119,8 @@ class EnvoiTests(BaseTaches):
         desactive = fabriquer(utilisateur=self.client_a)
         for envoi in (invalide, injecte, desactive):
             self.assertEqual(taches.traiter(envoi.pk), "annule")
+            envoi.refresh_from_db()
+            self.assertEqual(envoi.derniere_erreur, "destinataire_invalide")
         self.envoyer_mock.assert_not_called()
 
     @override_settings(GMAIL_LIMITE_JOUR=2)

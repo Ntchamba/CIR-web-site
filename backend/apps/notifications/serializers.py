@@ -34,12 +34,17 @@ class ApercuSerializer(serializers.Serializer):
 
 class EnvoiSerializer(serializers.ModelSerializer):
     destinataire_email = serializers.SerializerMethodField()
+    derniere_erreur = serializers.SerializerMethodField()
+    derniere_erreur_code = serializers.CharField(source="derniere_erreur", read_only=True)
 
     class Meta:
         model = EnvoiEmail
-        fields = ["id", "destinataire_email", "evenement", "etat", "tentatives", "derniere_erreur", "cree_le",
-                  "envoye_le"]
+        fields = ["id", "destinataire_email", "evenement", "etat", "tentatives", "derniere_erreur",
+                  "derniere_erreur_code", "cree_le", "envoye_le"]
         read_only_fields = fields
+
+    def get_derniere_erreur(self, envoi):
+        return str(services.texte_erreur_envoi(envoi.derniere_erreur))
 
     def get_destinataire_email(self, envoi):
         return services.masquer_email(envoi.destinataire_email)

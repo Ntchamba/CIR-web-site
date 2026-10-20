@@ -27,3 +27,5 @@ export const terminerAppel = (id) => api.post(`${BASE}${encodeURIComponent(id)}/
 export const usageAppels = ({ signal } = {}) => api.get(`${BASE}usage/`, { signal });
 /** → { en_attente, manques_non_vus } */
 export const resumeAppels = ({ signal } = {}) => api.get(`${BASE}resume/`, { signal });
+/** Marque les appels manqués comme vus (ouverture de la page). → { marques: n } */
+export const marquerManquesVus = () => api.post(`${BASE}vu/`, {});

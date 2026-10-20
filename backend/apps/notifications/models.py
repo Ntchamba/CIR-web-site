@@ -5,25 +5,26 @@ partir de `type` et `donnees` (voir `evenements.py`).
 """
 from django.conf import settings
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from apps.noyau.langues import Langue
 
 
 class TypeNotification(models.TextChoices):
-    COMMANDE_CREEE = "commande_creee", "Commande enregistrée"
-    COMMANDE_NOUVELLE = "commande_nouvelle", "Nouvelle commande"
-    PROPOSITION_RECUE = "proposition_recue", "Proposition reçue"
-    PROPOSITION_CLIENT = "proposition_client", "Réponse du client"
-    CONTRAT_SIGNE = "contrat_signe", "Contrat signé"
-    ETAPE_CHANGEE = "etape_changee", "Étape de commande"
-    DEVIS_ENVOYE = "devis_envoye", "Devis envoyé"
-    DEMANDE_RENDU_NOUVELLE = "demande_rendu_nouvelle", "Nouvelle demande de rendu"
-    DEMANDE_RENDU_REPONDUE = "demande_rendu_repondue", "Demande de rendu traitée"
-    CONTACT_NOUVEAU = "contact_nouveau", "Nouvelle demande de contact"
-    CONTACT_REPONDU = "contact_repondu", "Demande de contact traitée"
-    MESSAGE_NOUVEAU = "message_nouveau", "Nouveau message"
-    APPEL_MANQUE = "appel_manque", "Appel manqué"
-    NOUVEAUTE = "nouveaute", "Nouveauté"
+    COMMANDE_CREEE = "commande_creee", _("Commande enregistrée")
+    COMMANDE_NOUVELLE = "commande_nouvelle", _("Nouvelle commande")
+    PROPOSITION_RECUE = "proposition_recue", _("Proposition reçue")
+    PROPOSITION_CLIENT = "proposition_client", _("Réponse du client")
+    CONTRAT_SIGNE = "contrat_signe", _("Contrat signé")
+    ETAPE_CHANGEE = "etape_changee", _("Étape de commande")
+    DEVIS_ENVOYE = "devis_envoye", _("Devis envoyé")
+    DEMANDE_RENDU_NOUVELLE = "demande_rendu_nouvelle", _("Nouvelle demande de rendu")
+    DEMANDE_RENDU_REPONDUE = "demande_rendu_repondue", _("Demande de rendu traitée")
+    CONTACT_NOUVEAU = "contact_nouveau", _("Nouvelle demande de contact")
+    CONTACT_REPONDU = "contact_repondu", _("Demande de contact traitée")
+    MESSAGE_NOUVEAU = "message_nouveau", _("Nouveau message")
+    APPEL_MANQUE = "appel_manque", _("Appel manqué")
+    NOUVEAUTE = "nouveaute", _("Nouveauté")
 
 
 class Notification(models.Model):

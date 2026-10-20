@@ -11,6 +11,7 @@ import MessageErreur from '@partage/ui/MessageErreur.jsx';
 import { date } from '@partage/utils/format.js';
 
 import { useTraduction } from '@/i18n/index.js';
+import { useAuth } from '@/modules/connexion/AuthContext.jsx';
 
 import { estReel } from '../useFil.js';
 import { heure, jour } from './formats.js';
@@ -21,11 +22,16 @@ const SEUIL_BAS = 60; // px
 
 function Bulle({ message, lu, surReessayer }) {
   const { t } = useTraduction();
+  const { utilisateur } = useAuth();
   const propre = message.auteur_role === 'equipe';
+  // Message de l'équipe écrit par un autre membre : son nom est affiché (id si le serveur le donne, sinon le nom).
+  const idAuteur = message.auteur_id ?? (typeof message.auteur === 'number' ? message.auteur : message.auteur?.id);
+  const autreMembre = propre && message.auteur_nom && (idAuteur != null && utilisateur?.id != null
+    ? idAuteur !== utilisateur.id : message.auteur_nom !== utilisateur?.nom_complet);
   return (
     <li className={`${styles.ligneMessage} ${propre ? styles.propre : styles.autre}`}>
       <div className={`${styles.bulle} ${message.etat === 'echec' ? styles.bulleEchec : ''}`}>
-        {!propre && message.auteur_nom && <strong className={styles.auteur}>{message.auteur_nom}</strong>}
+        {(!propre || autreMembre) && message.auteur_nom && <strong className={styles.auteur}>{message.auteur_nom}</strong>}
         {message.commande?.reference && (
           <span className={styles.aPropos}>{t('messagerie.aPropos', { reference: message.commande.reference })}</span>
         )}

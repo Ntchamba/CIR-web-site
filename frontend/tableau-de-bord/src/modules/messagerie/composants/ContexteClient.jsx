@@ -9,7 +9,7 @@ import { useTraduction } from '@/i18n/index.js';
 
 import styles from '../Messagerie.module.css';
 
-export default function ContexteClient({ client, surRetour }) {
+export default function ContexteClient({ client, nom, surRetour }) {
   const { t } = useTraduction();
   return (
     <header className={styles.contexte}>
@@ -27,7 +27,7 @@ export default function ContexteClient({ client, surRetour }) {
           </p>
         </div>
       ) : (
-        <h2 className={styles.nomClient}>{t('messagerie.conversation')}</h2>
+        <h2 className={styles.nomClient}>{nom || t('messagerie.conversation')}</h2>
       )}
     </header>
   );

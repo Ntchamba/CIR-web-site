@@ -7,6 +7,7 @@ app_name = "appels_admin"
 urlpatterns = [
     path("", v.HistoriqueView.as_view(), name="historique"),
     path("en-attente/", v.EnAttenteView.as_view(), name="en-attente"),
+    path("vu/", v.VuView.as_view(), name="vu"),
     path("usage/", v.UsageView.as_view(), name="usage"),
     path("resume/", v.ResumeView.as_view(), name="resume"),
     path("<int:pk>/repondre/", v.RepondreView.as_view(), name="repondre"),

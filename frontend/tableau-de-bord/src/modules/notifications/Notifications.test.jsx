@@ -164,6 +164,13 @@ describe('ModelesEmailsPage (super-administrateur)', { timeout: 15000 }, () => {
     expect(screen.getByText('Un modèle personnalisé remplace ce texte par défaut.')).toBeInTheDocument();
   });
 
+  it("affiche tel quel le libellé de l'événement traduit par le serveur", async () => {
+    installerDirect();
+    simulerSuper([['GET', 'notifications/modeles/', [{ ...MODELES[0], libelle: 'Order registered (server)' }]]]);
+    rendre('/notifications?onglet=modeles');
+    expect(await screen.findByRole('option', { name: 'Order registered (server)' })).toBeInTheDocument();
+  });
+
   it('change d\'événement et de langue, rétablit le texte par défaut après confirmation', async () => {
     installerDirect();
     const simule = simulerSuper([
@@ -228,6 +235,17 @@ describe('EnvoisEmails (super-administrateur)', () => {
     expect(boutons).toHaveLength(1); // seulement pour l'envoi en échec
     await userEvent.setup().click(boutons[0]);
     await waitFor(() => expect(appels(simule, 'POST', 'envois/8/reessayer/')).toHaveLength(1));
+  });
+
+  it("affiche l'erreur déjà traduite par le serveur", async () => {
+    installerDirect();
+    simulerSuper([
+      ['GET', 'envois/resume/', { en_attente: 0, envoye: 0, echec: 1, annule: 0, gmail_configure: true }],
+      ['GET', '/api/admin/notifications/envois/', page([ENVOI(8, 'echec', { derniere_erreur: 'Quota journalier atteint', derniere_erreur_code: 'quota' })])],
+    ]);
+    rendre('/notifications?onglet=envois');
+    expect(await screen.findByText('Quota journalier atteint')).toBeInTheDocument();
+    expect(screen.queryByText('quota')).not.toBeInTheDocument();
   });
 
   it("avertit quand Gmail n'est pas configuré", async () => {

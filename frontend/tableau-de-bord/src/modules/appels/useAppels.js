@@ -6,7 +6,7 @@ import { useCriteres, useRecherche } from '@/composants/useCriteres.js';
 import useListe from '@/composants/useListe.js';
 import { useDirect } from '@/layout/direct.js';
 
-import { listerAppels, usageAppels } from './api.js';
+import { listerAppels, marquerManquesVus, usageAppels } from './api.js';
 
 export const ETATS = ['sonne', 'en_cours', 'termine', 'manque', 'refuse', 'annule'];
 
@@ -19,8 +19,10 @@ export default function useAppels() {
   const { recharger } = liste;
   const { rafraichir } = direct;
 
-  // Ouvrir la liste vaut « vu » pour les appels manqués (côté serveur) : la pastille du menu se recale.
-  useEffect(() => { if (!liste.chargement) rafraichir(); }, [liste.chargement, rafraichir]);
+  // Ouvrir la page : les manqués sont marqués « vus » (le serveur ne le fait plus à la lecture), puis la pastille se recale.
+  useEffect(() => {
+    marquerManquesVus().catch(() => {}).then(() => rafraichir());
+  }, [rafraichir]);
 
   // Un appel change d'état en direct : l'historique et la jauge se relisent.
   useEffect(() => direct.abonner((trame) => {

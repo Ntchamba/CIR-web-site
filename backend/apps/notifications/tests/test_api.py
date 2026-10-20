@@ -230,6 +230,14 @@ class ModelesTests(BaseVague3):
         self.assertNotIn("Alice", r.content.decode())  # jamais de vrai client
         self.assertEqual(ModeleEmail.objects.count(), 0)  # rien d'enregistré
 
+    def test_libelle_traduit_selon_la_langue(self):
+        for langue, attendu in (("fr", "Commande enregistrée"), ("en", "Order recorded"), ("zh-hans", "订单已登记"),
+                                ("de", "Bestellung erfasst"), ("ja", "注文受付")):
+            with self.subTest(langue=langue):
+                r = self.client.get(ADMIN + "modeles/", HTTP_ACCEPT_LANGUAGE=langue)
+                ligne = next(e for e in r.data if e["evenement"] == "commande_creee")
+                self.assertEqual(ligne["libelle"], attendu)
+
     def test_apercu_par_defaut_et_erreurs(self):
         r = self.client.post(ADMIN + "modeles/apercu/", {"evenement": "etape_changee", "langue": "de"}, format="json")
         self.assertEqual(r.status_code, 200)
@@ -245,7 +253,7 @@ class EnvoisTests(BaseVague3):
         self.se_connecter(self.super_admin)
         base = {"evenement": "commande_creee", "sujet": "S", "corps_texte": "T", "prochaine_tentative": "2026-10-20T10:00:00Z"}
         self.e1 = EnvoiEmail.objects.create(destinataire_email="jean@exemple.cm", cle_unique="1", etat="echec",
-                                            derniere_erreur="Envoi refusé (code 400).", **base)
+                                            derniere_erreur="GmailErreurDefinitive", **base)
         EnvoiEmail.objects.create(destinataire_email="x@exemple.cm", cle_unique="2", **base)
         EnvoiEmail.objects.create(destinataire_email="y@exemple.cm", cle_unique="3", etat="envoye", **base)
 
@@ -255,7 +263,13 @@ class EnvoisTests(BaseVague3):
         ligne = next(e for e in r.data["results"] if e["id"] == self.e1.pk)
         self.assertEqual(ligne["destinataire_email"], "j***@exemple.cm")
         self.assertEqual(set(ligne), {"id", "destinataire_email", "evenement", "etat", "tentatives", "derniere_erreur",
-                                      "cree_le", "envoye_le"})
+                                      "derniere_erreur_code", "cree_le", "envoye_le"})
+        self.assertEqual(ligne["derniere_erreur_code"], "GmailErreurDefinitive")
+        self.assertIn("refusé l'envoi", ligne["derniere_erreur"])
+        en = self.client.get(ADMIN + "envois/", HTTP_ACCEPT_LANGUAGE="en").data["results"]
+        self.assertIn("refused", next(e for e in en if e["id"] == self.e1.pk)["derniere_erreur"])
+        autre = next(e for e in r.data["results"] if e["id"] != self.e1.pk)
+        self.assertEqual((autre["derniere_erreur"], autre["derniere_erreur_code"]), ("", ""))
         self.assertNotIn("jean@", r.content.decode())
         self.assertEqual(self.client.get(ADMIN + "envois/?etat=echec").data["count"], 1)
 

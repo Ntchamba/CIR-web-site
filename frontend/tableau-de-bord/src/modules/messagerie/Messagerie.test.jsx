@@ -33,6 +33,12 @@ async function ouvrirConversation() {
   return u;
 }
 
+async function ouvrirConversationSimple() {
+  await userEvent.setup().click(await screen.findByRole('button', { name: /Awa Nana/ }));
+  await screen.findByRole('log');
+  await screen.findByText(/D'une collègue/);
+}
+
 const zoneTexte = () => screen.getByLabelText('Votre message');
 
 describe('MessageriePage', { timeout: 15000 }, () => {
@@ -73,6 +79,27 @@ describe('MessageriePage', { timeout: 15000 }, () => {
     etat.mockReturnValue('visible');
     act(() => { document.dispatchEvent(new Event('visibilitychange')); });
     await waitFor(() => expect(appels(simule, 'POST', 'conversations/5/lu/')).toHaveLength(1));
+  });
+
+  it("affiche le nom d'un autre membre de l'équipe au-dessus de ses messages, pas celui du membre connecté", async () => {
+    installerDirect();
+    simulerApi(routes([], { results: [
+      message(1, 'equipe', 'De moi', { auteur_nom: 'Jean Mbarga' }),
+      message(2, 'equipe', 'D\'une collègue', { auteur_nom: 'Rose Eto' }),
+    ], a_plus: false }));
+    rendre('/messagerie');
+    await ouvrirConversationSimple();
+    const fil = screen.getByRole('log');
+    expect(within(fil).getByText('Rose Eto')).toBeInTheDocument();
+    expect(within(fil).queryByText('Jean Mbarga')).not.toBeInTheDocument();
+  });
+
+  it("affiche au moins le nom du client quand ?conversation= n'est pas dans la liste", async () => {
+    installerDirect();
+    simulerApi(routes([['GET', /conversations\/\?/, page([])], ['GET', '/api/admin/messagerie/conversations/', page([])]]));
+    rendre('/messagerie?conversation=5');
+    expect(await screen.findByRole('heading', { level: 2, name: 'Awa Nana' })).toBeInTheDocument();
+    expect(await screen.findByText('Bonjour Awa, avec plaisir.')).toBeInTheDocument();
   });
 
   it("n'interprète jamais le texte d'un message comme du HTML", async () => {

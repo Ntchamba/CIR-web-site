@@ -208,6 +208,15 @@ describe('AppelsEntrantsPage', () => {
     await waitFor(() => expect(appels(simule, 'GET', '/api/admin/appels/resume/').length).toBeGreaterThan(1));
   });
 
+  it("marque les manqués comme vus à l'ouverture puis relit la pastille", async () => {
+    installerDirect();
+    const simule = simulerApi([['POST', '/api/admin/appels/vu/', { marques: 2 }]]);
+    rendre('/appels');
+    await waitFor(() => expect(appels(simule, 'POST', '/api/admin/appels/vu/')).toHaveLength(1));
+    const posts = simule.mock.calls.findIndex(([x, o = {}]) => o.method === 'POST' && String(x).includes('/appels/vu/'));
+    await waitFor(() => expect(simule.mock.calls.slice(posts + 1).some(([x]) => String(x).includes('/api/admin/appels/resume/'))).toBe(true));
+  });
+
   it("montre la jauge d'usage : 18 sur 25, sans alerte sous 80 %", async () => {
     installerDirect();
     simulerApi([

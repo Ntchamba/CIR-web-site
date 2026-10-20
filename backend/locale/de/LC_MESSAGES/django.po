@@ -1003,3 +1003,75 @@ msgstr "Sie sind abgemeldet"
 #: apps/notifications/views.py:89
 msgid "Vous ne recevrez plus les nouveautés du CIR par e-mail. Vous pouvez changer d'avis à tout moment dans les notifications de votre compte."
 msgstr "Sie erhalten die Neuigkeiten des CIR nicht mehr per E-Mail. Sie können es sich jederzeit in den Benachrichtigungen Ihres Kontos anders überlegen."
+
+#: apps/notifications/models.py:14
+msgid "Commande enregistrée"
+msgstr "Bestellung erfasst"
+
+#: apps/notifications/models.py:15
+msgid "Nouvelle commande"
+msgstr "Neue Bestellung"
+
+#: apps/notifications/models.py:16
+msgid "Proposition reçue"
+msgstr "Angebot erhalten"
+
+#: apps/notifications/models.py:17
+msgid "Réponse du client"
+msgstr "Antwort des Kunden"
+
+#: apps/notifications/models.py:19
+msgid "Étape de commande"
+msgstr "Bestellphase"
+
+#: apps/notifications/models.py:21
+msgid "Nouvelle demande de rendu"
+msgstr "Neue Anfrage zur Oberflächengestaltung"
+
+#: apps/notifications/models.py:22
+msgid "Demande de rendu traitée"
+msgstr "Anfrage zur Oberflächengestaltung bearbeitet"
+
+#: apps/notifications/models.py:23
+msgid "Nouvelle demande de contact"
+msgstr "Neue Kontaktanfrage"
+
+#: apps/notifications/models.py:24
+msgid "Demande de contact traitée"
+msgstr "Kontaktanfrage bearbeitet"
+
+#: apps/notifications/models.py:25
+msgid "Nouveau message"
+msgstr "Neue Nachricht"
+
+#: apps/notifications/models.py:26
+msgid "Appel manqué"
+msgstr "Verpasster Anruf"
+
+#: apps/notifications/models.py:27
+msgid "Nouveauté"
+msgstr "Neuigkeit"
+
+#: apps/notifications/services.py:350
+msgid "Destinataire sans adresse valide ou compte désactivé."
+msgstr "Empfänger ohne gültige Adresse oder mit deaktiviertem Konto."
+
+#: apps/notifications/services.py:351
+msgid "Erreur inattendue pendant l'envoi."
+msgstr "Unerwarteter Fehler beim Senden."
+
+#: apps/notifications/services.py:352
+msgid "Gmail est indisponible ou injoignable pour le moment (nouvel essai prévu)."
+msgstr "Gmail ist im Moment nicht verfügbar oder nicht erreichbar (neuer Versuch geplant)."
+
+#: apps/notifications/services.py:353
+msgid "Gmail a refusé l'envoi (adresse refusée ou configuration à vérifier)."
+msgstr "Gmail hat den Versand abgelehnt (Adresse abgelehnt oder Konfiguration prüfen)."
+
+#: apps/notifications/services.py:354
+msgid "Gmail n'est pas configuré."
+msgstr "Gmail ist nicht konfiguriert."
+
+#: apps/notifications/services.py:358
+msgid "Erreur d'envoi."
+msgstr "Fehler beim Senden."

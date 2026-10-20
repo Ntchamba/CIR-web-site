@@ -49,7 +49,7 @@ export default function ModelesEmailsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cle, langue]);
 
-  const libelleEvenement = (code) => (existe(`notifications.evenements.${code}`) ? t(`notifications.evenements.${code}`) : code);
+  const libelleEvenement = (code) => evenements.find((e) => e.evenement === code)?.libelle || (existe(`notifications.evenements.${code}`) ? t(`notifications.evenements.${code}`) : code);
   const inconnues = [...new Set([...variablesInconnues(sujet), ...variablesInconnues(introduction)])];
 
   async function enregistrer(e) {

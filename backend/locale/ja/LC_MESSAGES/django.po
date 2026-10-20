@@ -1003,3 +1003,75 @@ msgstr "配信を停止しました"
 #: apps/notifications/views.py:89
 msgid "Vous ne recevrez plus les nouveautés du CIR par e-mail. Vous pouvez changer d'avis à tout moment dans les notifications de votre compte."
 msgstr "今後、CIR のお知らせはメールで届きません。アカウントの通知設定から、いつでも再開できます。"
+
+#: apps/notifications/models.py:14
+msgid "Commande enregistrée"
+msgstr "注文受付"
+
+#: apps/notifications/models.py:15
+msgid "Nouvelle commande"
+msgstr "新規注文"
+
+#: apps/notifications/models.py:16
+msgid "Proposition reçue"
+msgstr "提案を受信"
+
+#: apps/notifications/models.py:17
+msgid "Réponse du client"
+msgstr "お客様の返答"
+
+#: apps/notifications/models.py:19
+msgid "Étape de commande"
+msgstr "注文の段階"
+
+#: apps/notifications/models.py:21
+msgid "Nouvelle demande de rendu"
+msgstr "新しい仕上がりのご依頼"
+
+#: apps/notifications/models.py:22
+msgid "Demande de rendu traitée"
+msgstr "仕上がりのご依頼を対応済み"
+
+#: apps/notifications/models.py:23
+msgid "Nouvelle demande de contact"
+msgstr "新しいお問い合わせ"
+
+#: apps/notifications/models.py:24
+msgid "Demande de contact traitée"
+msgstr "お問い合わせを対応済み"
+
+#: apps/notifications/models.py:25
+msgid "Nouveau message"
+msgstr "新着メッセージ"
+
+#: apps/notifications/models.py:26
+msgid "Appel manqué"
+msgstr "不在着信"
+
+#: apps/notifications/models.py:27
+msgid "Nouveauté"
+msgstr "お知らせ"
+
+#: apps/notifications/services.py:350
+msgid "Destinataire sans adresse valide ou compte désactivé."
+msgstr "有効なアドレスがないか、アカウントが無効のため送信できません。"
+
+#: apps/notifications/services.py:351
+msgid "Erreur inattendue pendant l'envoi."
+msgstr "送信中に予期しないエラーが発生しました。"
+
+#: apps/notifications/services.py:352
+msgid "Gmail est indisponible ou injoignable pour le moment (nouvel essai prévu)."
+msgstr "Gmail に現在接続できません（再試行が予定されています）。"
+
+#: apps/notifications/services.py:353
+msgid "Gmail a refusé l'envoi (adresse refusée ou configuration à vérifier)."
+msgstr "Gmail が送信を拒否しました（宛先の拒否、または設定の確認が必要です）。"
+
+#: apps/notifications/services.py:354
+msgid "Gmail n'est pas configuré."
+msgstr "Gmail が設定されていません。"
+
+#: apps/notifications/services.py:358
+msgid "Erreur d'envoi."
+msgstr "送信エラー。"

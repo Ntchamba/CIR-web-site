@@ -1003,3 +1003,75 @@ msgstr "You are unsubscribed"
 #: apps/notifications/views.py:89
 msgid "Vous ne recevrez plus les nouveautés du CIR par e-mail. Vous pouvez changer d'avis à tout moment dans les notifications de votre compte."
 msgstr "You will no longer receive CIR news by e-mail. You can change your mind at any time in the notifications of your account."
+
+#: apps/notifications/models.py:14
+msgid "Commande enregistrée"
+msgstr "Order recorded"
+
+#: apps/notifications/models.py:15
+msgid "Nouvelle commande"
+msgstr "New order"
+
+#: apps/notifications/models.py:16
+msgid "Proposition reçue"
+msgstr "Proposal received"
+
+#: apps/notifications/models.py:17
+msgid "Réponse du client"
+msgstr "Customer reply"
+
+#: apps/notifications/models.py:19
+msgid "Étape de commande"
+msgstr "Order stage"
+
+#: apps/notifications/models.py:21
+msgid "Nouvelle demande de rendu"
+msgstr "New finish request"
+
+#: apps/notifications/models.py:22
+msgid "Demande de rendu traitée"
+msgstr "Finish request handled"
+
+#: apps/notifications/models.py:23
+msgid "Nouvelle demande de contact"
+msgstr "New contact request"
+
+#: apps/notifications/models.py:24
+msgid "Demande de contact traitée"
+msgstr "Contact request handled"
+
+#: apps/notifications/models.py:25
+msgid "Nouveau message"
+msgstr "New message"
+
+#: apps/notifications/models.py:26
+msgid "Appel manqué"
+msgstr "Missed call"
+
+#: apps/notifications/models.py:27
+msgid "Nouveauté"
+msgstr "News"
+
+#: apps/notifications/services.py:350
+msgid "Destinataire sans adresse valide ou compte désactivé."
+msgstr "Recipient without a valid address or with a disabled account."
+
+#: apps/notifications/services.py:351
+msgid "Erreur inattendue pendant l'envoi."
+msgstr "Unexpected error while sending."
+
+#: apps/notifications/services.py:352
+msgid "Gmail est indisponible ou injoignable pour le moment (nouvel essai prévu)."
+msgstr "Gmail is unavailable or unreachable at the moment (a new attempt is scheduled)."
+
+#: apps/notifications/services.py:353
+msgid "Gmail a refusé l'envoi (adresse refusée ou configuration à vérifier)."
+msgstr "Gmail refused the sending (address refused or configuration to check)."
+
+#: apps/notifications/services.py:354
+msgid "Gmail n'est pas configuré."
+msgstr "Gmail is not configured."
+
+#: apps/notifications/services.py:358
+msgid "Erreur d'envoi."
+msgstr "Sending error."

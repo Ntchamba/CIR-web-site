@@ -59,7 +59,8 @@ def _adresse_valide(adresse):
 
 
 def _erreur_courte(erreur):
-    return str(erreur)[:300]
+    """Code stable de l'erreur (nom de la classe, jamais son message : aucun secret) ; traduit à la lecture."""
+    return type(erreur).__name__[:100]
 
 
 def _afficher_en_console(envoi):
@@ -70,7 +71,7 @@ def _afficher_en_console(envoi):
 def traiter(pk):
     """Tente l'envoi d'une ligne de la file. Renvoie son état final, ou None si elle n'était pas à envoyer."""
     with transaction.atomic():
-        envoi = (EnvoiEmail.objects.select_for_update(skip_locked=True)
+        envoi = (EnvoiEmail.objects.select_for_update(skip_locked=True, of=("self",))
                  .select_related("utilisateur")
                  .filter(pk=pk, etat=EtatEnvoi.EN_ATTENTE, prochaine_tentative__lte=timezone.now()).first())
         if envoi is None:  # déjà traitée, ou verrouillée par un autre processus
@@ -78,7 +79,7 @@ def traiter(pk):
         utilisateur = envoi.utilisateur
         if (utilisateur is not None and not utilisateur.is_active) or not _adresse_valide(envoi.destinataire_email):
             envoi.etat = EtatEnvoi.ANNULE
-            envoi.derniere_erreur = "Destinataire sans adresse valide ou compte désactivé."
+            envoi.derniere_erreur = "destinataire_invalide"
             envoi.save(update_fields=["etat", "derniere_erreur"])
             return envoi.etat
         if not gmail.configure():
@@ -101,9 +102,9 @@ def traiter(pk):
             envoi.tentatives += 1
         except GmailErreurTemporaire as erreur:
             _reprendre_plus_tard(envoi, _erreur_courte(erreur))
-        except Exception as erreur:  # noqa: BLE001 - imprévu : traité comme une erreur temporaire, sans détail sensible
+        except Exception:  # noqa: BLE001 - imprévu : traité comme une erreur temporaire, sans détail sensible
             journal.exception("Envoi d'e-mail %s : erreur inattendue.", pk)
-            _reprendre_plus_tard(envoi, f"Erreur inattendue ({type(erreur).__name__}).")
+            _reprendre_plus_tard(envoi, "erreur_inattendue")
         else:
             envoi.etat, envoi.envoye_le, envoi.derniere_erreur = EtatEnvoi.ENVOYE, timezone.now(), ""
         envoi.save(update_fields=["etat", "envoye_le", "message_id", "tentatives", "prochaine_tentative",
@@ -195,12 +196,15 @@ def notifier_actualites():
     candidates = Actualite.objects.filter(publie=True, publie_le__lte=maintenant, notifiee_le__isnull=True)
     annoncees = 0
     for pk in list(candidates.order_by("publie_le", "pk").values_list("pk", flat=True)):
-        with transaction.atomic():
-            actualite = (Actualite.objects.select_for_update(skip_locked=True)
-                         .filter(pk=pk, publie=True, publie_le__lte=maintenant, notifiee_le__isnull=True).first())
-            if actualite is None:  # annoncée entre-temps par un autre processus
-                continue
-            actualite_publiee.send(sender=Actualite, actualite=actualite)
-            Actualite.objects.filter(pk=pk).update(notifiee_le=timezone.now())
-            annoncees += 1
+        try:
+            with transaction.atomic():
+                actualite = (Actualite.objects.select_for_update(skip_locked=True)
+                             .filter(pk=pk, publie=True, publie_le__lte=maintenant, notifiee_le__isnull=True).first())
+                if actualite is None:  # annoncée entre-temps par un autre processus
+                    continue
+                actualite_publiee.send(sender=Actualite, actualite=actualite)
+                Actualite.objects.filter(pk=pk).update(notifiee_le=timezone.now())
+                annoncees += 1
+        except Exception:  # noqa: BLE001 - tout est annulé (aucun doublon) ; nouvel essai au tour suivant
+            journal.exception("Nouveauté %s non annoncée : nouvel essai au prochain tour.", pk)
     return annoncees

@@ -203,7 +203,8 @@ API client `/api/appels/` (`EstClient`) :
 - `POST <id>/annuler/` (état `sonne`) et `POST <id>/terminer/` (état `en_cours`) → `{appel}`.
 
 API équipe `/api/admin/appels/` (`EstEquipe`) :
-- `GET /` paginé `?etat=&search=` : historique (les appels manqués en tête avec un champ `rappel: {telephone, lien_messagerie}` ; `lien_messagerie` = chemin du tableau de bord `/messagerie?client=<id du client>`).
+- `GET /` paginé `?etat=&search=` : historique (les appels manqués **non vus** en tête avec un champ `rappel: {telephone, lien_messagerie}` ; `lien_messagerie` = chemin du tableau de bord `/messagerie?client=<id du client>`).
+- `POST vu/` → `{marques: n}` : l'équipe a ouvert la liste, les appels manqués deviennent « vus » (le tableau de bord l'appelle à l'ouverture de la page ; `GET /` ne marque rien).
 - `GET en-attente/` → `[<Appel>]` appels qui sonnent (pour l'ouverture de page et la reprise après coupure).
 - `POST <id>/repondre/` → `{appel, jitsi: {domaine, app_id, salle, jeton}}` avec un jeton **modérateur** ; passe l'appel
   à `en_cours`, prévient le client (`appel_mis_a_jour`) et les autres membres (`appel_mis_a_jour`, pour arrêter leur
@@ -212,7 +213,7 @@ API équipe `/api/admin/appels/` (`EstEquipe`) :
 - `GET usage/` → `{mois: "2026-10", utilisateurs_actifs, limite_gratuite, configure: bool (Jitsi configuré), depasse: bool, proche: bool}`
   (`proche` à partir de 80 % de la limite gratuite) : nombre de **clients distincts** ayant eu un appel `en_cours` ou
   `termine` ce mois-ci (aide à rester dans l'offre gratuite de 25 utilisateurs actifs).
-- `GET resume/` → `{en_attente, manques_non_vus}` (pastille du menu ; un manqué est « vu » quand l'équipe ouvre la liste).
+- `GET resume/` → `{en_attente, manques_non_vus}` (pastille du menu ; un manqué est « vu » après `POST vu/`).
 
 Webhook : `POST /api/appels/webhooks/jaas/` (sans authentification JWT, protégé par `integrations.jaas.webhooks.verifier` ;
 503 si le secret n'est pas configuré, 403 s'il est faux, 204 sinon). Les événements inconnus sont ignorés.
@@ -242,7 +243,7 @@ leurs services, avec tests) :
 
 Nouveautés (BF-07) : ajouter `Actualite.notifiee_le` (null). La commande `notifier_actualites` (lancée par la boucle
 d'envoi) repère les actualités publiées et visibles dont `notifiee_le` est vide, émet `actualite_publiee` **une seule
-fois** puis renseigne `notifiee_le`. Les nouveautés partent par e-mail **uniquement** aux clients qui ont activé
+fois** puis renseigne `notifiee_le` ; si la diffusion échoue, tout est annulé, l'erreur est journalisée et `notifiee_le` reste vide (nouvel essai au tour suivant, sans doublon). Les nouveautés partent par e-mail **uniquement** aux clients qui ont activé
 `recevoir_nouveautes` (désactivé par défaut : consentement), avec lien de désabonnement ; elles apparaissent dans le
 centre de notifications de tous les clients.
 
@@ -321,11 +322,11 @@ API client `/api/notifications/` (`EstClient`) :
 API équipe `/api/admin/notifications/` (`EstEquipe`) :
 - Les mêmes routes pour **ses propres** notifications (`GET /`, `non-lues/`, `<id>/lue/`, `lues/`).
 - `GET/PATCH preferences/` → `{email_equipe: bool}` (champ `Utilisateur.email_equipe`, défaut vrai).
-- Super-administrateur seulement (`EstSuperAdmin`) : `GET modeles/` (liste `[{evenement, libelle, variables, langues: [{langue, defaut: {sujet, introduction}, modele: {sujet, introduction}|null}]}]`, les 5 langues dans l'ordre fr, en, zh, de, ja), `PUT modeles/<evenement>/<langue>/` `{sujet, introduction}`, `DELETE
+- Super-administrateur seulement (`EstSuperAdmin`) : `GET modeles/` (liste `[{evenement, libelle (traduit selon `Accept-Language`), variables, langues: [{langue, defaut: {sujet, introduction}, modele: {sujet, introduction}|null}]}]`, les 5 langues dans l'ordre fr, en, zh, de, ja), `PUT modeles/<evenement>/<langue>/` `{sujet, introduction}`, `DELETE
   modeles/<evenement>/<langue>/` (retour au texte par défaut), `POST modeles/apercu/` `{evenement, langue, sujet?,
   introduction?}` → `{sujet, corps_html, corps_texte}` avec des valeurs d'exemple (jamais de vrai client) ;
   `GET envois/` paginé `?etat=` avec `{id, destinataire_email (masqué : j***@exemple.cm), evenement, etat, tentatives,
-  derniere_erreur, cree_le, envoye_le}` ; `GET envois/resume/` → `{en_attente, envoye, echec, annule, gmail_configure}` ;
+  derniere_erreur (texte traduit, selon `Accept-Language`), derniere_erreur_code (code stable : `destinataire_invalide`, `erreur_inattendue`, `GmailErreurTemporaire`, `GmailErreurDefinitive`…), cree_le, envoye_le}` ; `GET envois/resume/` → `{en_attente, envoye, echec, annule, gmail_configure}` ;
   `POST envois/<id>/reessayer/` (état `echec` seulement).
 
 ## Partage (frontend/partage), fourni par le coordinateur

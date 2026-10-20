@@ -15,9 +15,16 @@ class HistoriqueView(APIView):
     def get(self, request):
         paginateur = PaginationStandard()
         page = paginateur.paginate_queryset(services.historique(request.query_params), request, view=self)
-        reponse = paginateur.get_paginated_response(AppelEquipeSerializer(page, many=True).data)
-        services.marquer_manques_vus()  # l'équipe a ouvert la liste
-        return reponse
+        return paginateur.get_paginated_response(AppelEquipeSerializer(page, many=True).data)
+
+
+class VuView(APIView):
+    """L'équipe a ouvert la liste : les appels manqués sont « vus » (le tableau de bord l'appelle à l'ouverture)."""
+
+    permission_classes = [EstEquipe]
+
+    def post(self, request):
+        return Response({"marques": services.marquer_manques_vus()})
 
 
 class EnAttenteView(APIView):
