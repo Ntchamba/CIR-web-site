@@ -1,0 +1,10 @@
+{{ titre }}
+
+{{ corps_texte }}
+{% if lien %}
+{% if libelle_lien %}{{ libelle_lien }} : {% endif %}{{ lien }}
+{% endif %}
+{% if pied %}--
+{{ pied }}
+{% endif %}{% if lien_desabonnement %}{{ lien_desabonnement }}
+{% endif %}

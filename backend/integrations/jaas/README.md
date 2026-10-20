@@ -10,3 +10,9 @@ changer de prestataire ne doit toucher que ce dossier.
 
 Règles : clés lues dans les variables d'environnement, jamais dans le code ; appels réseau
 simulés (mock) dans les tests.
+
+## Tâches (vague 3)
+
+- [x] `jetons.py` : `configure`, `parametres_client`, `creer_jeton` (RS256, modérateur, aucune fonction payante)
+- [x] `webhooks.py` : `verifier` (temps constant), `analyser`
+- [x] `erreurs.py`, tests dans `tests/` (`python -m unittest discover -s integrations/jaas/tests -t .` depuis `backend/`)
