@@ -1,0 +1,67 @@
+/* Module paiements : bloc de la commande, page de paiement, attente, reçu imprimable. */
+.page { display: flex; flex-direction: column; gap: 24px; }
+.bloc {
+  display: flex; flex-direction: column; gap: 14px; padding: clamp(16px, 3vw, 24px);
+  border: 1px solid var(--filet); border-radius: var(--rayon-l); background: var(--blanc);
+}
+.bloc h2 { font-size: 22px; }
+.bloc h3 { font-size: 18px; }
+.enteteBloc { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.meta { margin: 0; font-size: 14px; color: var(--encre-2); }
+.gras { margin: 0; font-weight: 700; }
+.alerte { margin: 0; font-weight: 600; font-size: 14px; color: var(--danger); }
+.rangee { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.chiffres { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px 20px; }
+.chiffres div { display: flex; flex-direction: column; gap: 2px; }
+.chiffres dt { font-size: 13px; color: var(--encre-2); }
+.chiffres dd { margin: 0; font-weight: 700; overflow-wrap: anywhere; }
+.liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.ligne { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding-bottom: 10px; border-bottom: 1px solid var(--filet-2); }
+.lien { display: inline-flex; align-items: center; min-height: var(--cible-tactile); font-weight: 600; }
+
+.pastille { display: inline-block; padding: 4px 12px; border-radius: var(--pastille); font-size: 13px; font-weight: 700; white-space: nowrap; background: var(--fond-2); color: var(--encre-2); }
+.statut_paye, .etat_reussi { background: var(--succes-fond); color: var(--succes); }
+.statut_partiel, .etat_en_attente { background: var(--st-negociation-f); color: var(--st-negociation-t); }
+.statut_non_paye, .etat_echoue, .etat_expire, .etat_annule { background: var(--st-nouvelle-f); color: var(--st-nouvelle-t); }
+.etat_anomalie { background: var(--st-contrat-f); color: var(--st-contrat-t); }
+
+/* Formulaire */
+.formulaire { display: flex; flex-direction: column; gap: 20px; max-width: 560px; }
+.groupe { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.groupe legend { padding: 0; margin-bottom: 6px; font-weight: 700; }
+.choix {
+  display: flex; align-items: center; gap: 12px; min-height: var(--cible-tactile); padding: 6px 12px;
+  border: 1px solid var(--champ); border-radius: var(--rayon-s); background: var(--blanc); cursor: pointer;
+}
+.choix input { width: 22px; height: 22px; flex-shrink: 0; accent-color: var(--bleu); }
+.choix:has(input:checked) { border-color: var(--bleu); box-shadow: 0 0 0 1px var(--bleu); }
+
+/* Attente et états finaux */
+.attente { display: flex; align-items: flex-start; gap: 16px; padding: 16px; border-radius: var(--rayon); background: var(--fond); }
+.attente p { margin: 0 0 6px; }
+.ussd { font-family: var(--police-texte); font-size: 20px; letter-spacing: 0.04em; overflow-wrap: anywhere; }
+.roue {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+  border: 3px solid var(--filet); border-top-color: var(--bleu); animation: tourner 900ms linear infinite;
+}
+@keyframes tourner { to { transform: rotate(360deg); } }
+.ok { border-color: var(--succes); background: var(--succes-fond); }
+.echec { border-color: var(--danger-filet); background: var(--danger-fond); }
+.verif { border-color: var(--st-contrat-t); background: var(--st-contrat-f); }
+.ok p, .echec p, .verif p { margin: 4px 0; }
+
+/* Reçu */
+.recu {
+  display: flex; flex-direction: column; gap: 20px; padding: clamp(18px, 4vw, 32px);
+  border: 1px dashed var(--champ); border-radius: var(--rayon); background: var(--blanc);
+}
+.recuEntete h2 { font-size: 22px; margin-top: 8px; }
+.recuEmetteur { margin: 0; font-family: var(--police-titre); font-size: 24px; font-weight: 600; }
+.recuMontant { font-size: 24px; font-family: var(--police-titre); }
+
+@media (prefers-reduced-motion: reduce) {
+  .roue { animation: none; border-top-color: var(--bleu); border-right-color: var(--bleu); }
+}
+@media (max-width: 520px) {
+  .rangee > * { flex: 1 1 100%; justify-content: center; }
+}

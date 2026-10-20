@@ -1,5 +1,5 @@
 .page { max-width: 1200px; display: grid; gap: var(--esp-5); }
-.filtres { display: grid; gap: var(--esp-4); align-items: end; grid-template-columns: minmax(0, 2fr) auto auto; }
+.filtres { display: grid; gap: var(--esp-4); align-items: end; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto auto; }
 @media (max-width: 720px) { .filtres { grid-template-columns: 1fr; } }
 .caseAction {
   display: inline-flex; align-items: center; gap: var(--esp-2); min-height: var(--cible-tactile); font-weight: 500; cursor: pointer;

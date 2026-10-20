@@ -13,11 +13,13 @@ from decimal import Decimal, InvalidOperation
 from urllib.parse import urlparse
 
 import requests
+from django.conf import settings
 
 from .erreurs import CampayErreurDefinitive, CampayErreurTemporaire, CampayNonConfigure
 from .telephone import TelephoneInvalide, normaliser
 
 journal = logging.getLogger(__name__)
+
 
 BASE_DEFAUT = "https://www.campay.net/api"
 DELAI = 15
@@ -195,7 +197,8 @@ def _adresse_retour_valide(url) -> bool:
     analyse = urlparse(url)
     if analyse.scheme == "https":
         return bool(analyse.hostname)
-    return analyse.scheme == "http" and analyse.hostname == "localhost"
+    # http://localhost seulement en développement (DEBUG) : jamais en production.
+    return bool(settings.DEBUG) and analyse.scheme == "http" and analyse.hostname == "localhost"
 
 
 def lien_paiement(*, montant, description, reference_externe, url_retour, url_echec) -> str:

@@ -49,6 +49,19 @@ class SignatureTests(TestCase):
         self.assertFalse(webhooks.verifier_signature(
             {"signature": jwt.encode({"x": 1}, CLE, algorithm="HS512")}))
 
+    def test_pas_encore_valide_refuse(self):
+        import time
+        self.assertFalse(webhooks.verifier_signature({"signature": signature(nbf=int(time.time()) + 3600)}))
+
+    def test_signature_avec_espaces_autour(self):
+        self.assertTrue(webhooks.verifier_signature({"signature": "  " + signature() + "\n"}))
+
+    def test_charge_modifiee_refusee(self):
+        en_tete, _, reste = signature().partition(".")
+        autre = signature(admin=True).split(".")[1]
+        self.assertFalse(webhooks.verifier_signature(
+            {"signature": f"{en_tete}.{autre}.{reste.split('.')[1]}"}))
+
     def test_cle_non_configuree(self):
         s = signature()
         for env in ({}, {"CAMPAY_WEBHOOK_KEY": ""}, {"CAMPAY_WEBHOOK_KEY": "  "}):

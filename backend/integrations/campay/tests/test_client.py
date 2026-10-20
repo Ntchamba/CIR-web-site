@@ -1,3 +1,4 @@
+from django.test import override_settings
 """Tests du client CamPay : réseau toujours simulé."""
 import socket
 from unittest import TestCase, mock
@@ -262,9 +263,15 @@ class LienTests(Base):
             with self.assertRaises(CampayErreurDefinitive, msg=str(url)):
                 self.lien(url_echec=url)
 
+    @override_settings(DEBUG=True)
     def test_localhost_accepte_en_developpement(self):
         self.poster(rep(200, {"link": "https://campay.test/pay/abc"}))
         self.lien(url_retour="http://localhost:5173/x", url_echec="http://localhost:5173/y")
+
+    @override_settings(DEBUG=False)
+    def test_localhost_refuse_en_production(self):
+        with self.assertRaises(CampayErreurDefinitive):
+            self.lien(url_retour="http://localhost:5173/x", url_echec="http://localhost:5173/y")
 
     def test_reponse_sans_lien_https(self):
         for corps in ({}, {"link": "http://pirate.test"}, {"link": "javascript:x"}):

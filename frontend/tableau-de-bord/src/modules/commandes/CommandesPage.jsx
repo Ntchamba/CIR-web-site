@@ -13,6 +13,7 @@ import usePageMeta from '@partage/utils/usePageMeta.js';
 import LiensContact from '@/composants/LiensContact.jsx';
 import Onglets from '@/composants/Onglets.jsx';
 import { PastilleEtape, PastilleUrgente } from '@/composants/PastilleEtat.jsx';
+import { PastilleStatutPaiement } from '@/modules/paiements/composants/PastillesPaiement.jsx';
 import { TAILLE_PAGE } from '@/composants/useListe.js';
 import gestion from '@/composants/Gestion.module.css';
 import { useTraduction } from '@/i18n/index.js';
@@ -26,7 +27,7 @@ export default function CommandesPage() {
   const { search } = useLocation();
   const {
     elements, total, suivante, precedente, page, chargement, erreur, recharger, etat, action, resume, client,
-    saisie, changerSaisie, choisirEtat, basculerAction, allerALaPage, effacer, filtre,
+    saisie, changerSaisie, choisirEtat, paiement, choisirPaiement, basculerAction, allerALaPage, effacer, filtre,
   } = useCommandes();
   const pages = Math.max(1, Math.ceil(total / TAILLE_PAGE));
 
@@ -48,6 +49,9 @@ export default function CommandesPage() {
           onSubmit={(e) => e.preventDefault()}>
           <Champ libelle={t('commandes.rechercher')} name="q" type="search" value={saisie} autoComplete="off"
             onChange={(e) => changerSaisie(e.target.value)} placeholder={t('commandes.exempleRecherche')} />
+          <Champ libelle={t('commandes.filtrePaiement')} name="paiement" value={paiement}
+            options={[['', t('commandes.tousPaiements')], ...['non_paye', 'partiel', 'paye'].map((c) => [c, t(`paiements.statuts.${c}`)])]}
+            onChange={(e) => choisirPaiement(e.target.value)} />
           <label className={styles.caseAction}>
             <input type="checkbox" name="action" checked={action} onChange={(e) => basculerAction(e.target.checked)} />
             {t('commandes.actionRequise')}
@@ -79,6 +83,7 @@ export default function CommandesPage() {
                     <th scope="col">{t('commandes.colonnes.type')}</th>
                     <th scope="col">{t('commandes.colonnes.surface')}</th>
                     <th scope="col">{t('commandes.colonnes.montant')}</th>
+                    <th scope="col">{t('commandes.colonnes.paiement')}</th>
                     <th scope="col">{t('commandes.colonnes.etape')}</th>
                     <th scope="col">{t('commandes.colonnes.activite')}</th>
                   </tr>
@@ -100,6 +105,7 @@ export default function CommandesPage() {
                       <td>{t(`commandes.types.${c.type_batiment}`)}</td>
                       <td>{surface(c.surface_m2)}</td>
                       <td>{fcfa(c.montant_convenu)}</td>
+                      <td><PastilleStatutPaiement statut={c.statut_paiement === 'non_applicable' ? null : c.statut_paiement} /></td>
                       <td>
                         <span className={styles.etapeCellule}>
                           <PastilleEtape etat={c.etat} />

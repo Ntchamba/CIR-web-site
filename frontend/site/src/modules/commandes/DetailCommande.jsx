@@ -13,6 +13,7 @@ import usePageMeta from '@partage/utils/usePageMeta.js';
 import { useTraduction } from '@/i18n/index.js';
 import BoutonAppel from '@/modules/appels/composants/BoutonAppel.jsx';
 import ApercuDevis from '@/modules/devis/composants/ApercuDevis.jsx';
+import BlocPaiement from '@/modules/paiements/composants/BlocPaiement.jsx';
 
 import ActionsCommande from './composants/ActionsCommande.jsx';
 import BadgeEtape from './composants/BadgeEtape.jsx';
@@ -55,6 +56,8 @@ export default function DetailCommande() {
   }
 
   const devis = commande.devis || [];
+  // Bloc « Paiement » : dès que le serveur indique un statut de paiement (rien à montrer pour une commande annulée sans règlement).
+  const afficherPaiement = Boolean(commande.statut_paiement) && !(commande.etat === 'annulee' && commande.statut_paiement === 'non_applicable');
   const convenu = commande.montant_convenu !== null && commande.montant_convenu !== undefined;
   return (
     <div className={`conteneur section ${styles.page}`}>
@@ -111,6 +114,7 @@ export default function DetailCommande() {
               {commande.signe_le && <p className={styles.meta}>{t('commandes.detail.signeLe', { date: date(commande.signe_le) })}</p>}
             </section>
           )}
+          {afficherPaiement && <BlocPaiement commande={commande} onActualiser={actualiser} />}
           <LignesCommande lignes={commande.lignes} />
           <section aria-labelledby="titre-chantier" className={styles.bloc}>
             <h2 id="titre-chantier">{t('commandes.detail.chantier')}</h2>

@@ -37,6 +37,8 @@ class Commande(ReferenceMixin, models.Model):
     prix_m2_convenu = models.PositiveIntegerField("prix au m² convenu (FCFA)", null=True, blank=True)
     delai_convenu_jours = models.PositiveIntegerField("délai convenu (jours)", null=True, blank=True)
     signe_le = models.DateTimeField("signé le", null=True, blank=True)
+    # Somme déjà encaissée (FCFA) : modifiée uniquement par apps/paiements/services.py, dans la transaction de l'encaissement
+    montant_paye = models.PositiveIntegerField("montant payé (FCFA)", default=0)
     notes_internes = models.TextField("notes internes", blank=True)  # équipe seulement, jamais envoyées au client
     cree_le = models.DateTimeField("créée le", auto_now_add=True)
     modifie_le = models.DateTimeField("modifiée le", auto_now=True)

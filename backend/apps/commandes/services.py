@@ -6,7 +6,7 @@ from datetime import timedelta
 from decimal import Decimal
 
 from django.db import transaction
-from django.db.models import BooleanField, Count, Exists, ExpressionWrapper, OuterRef, Prefetch, Q
+from django.db.models import BooleanField, Count, Exists, ExpressionWrapper, F, OuterRef, Prefetch, Q
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from rest_framework.exceptions import PermissionDenied, Throttled, ValidationError
@@ -16,7 +16,7 @@ from apps.comptes.services import peut_commander
 from apps.noyau.verrous import verrouiller_compte
 from apps.selection import services as selection
 
-from . import negociation, signals
+from . import negociation, reglement, signals
 from .etapes import CLIENT, EQUIPE, ETATS_NEGOCIABLES, Etat, changer_etat
 from .models import ChangementEtat, Commande, EtatProposition, LigneCommande, Proposition
 
@@ -65,7 +65,7 @@ def avec_detail(qs):
 
 
 def filtrer_equipe(qs, parametres):
-    """Filtres de la liste de l'équipe : ?etat= ?type= ?client= ?action_requise=1."""
+    """Filtres de la liste de l'équipe : ?etat= ?type= ?client= ?action_requise=1 ?paiement=non_paye|partiel|paye."""
     etat = parametres.get("etat", "").strip()
     if etat in Etat.values:
         qs = qs.filter(etat=etat)
@@ -77,6 +77,15 @@ def filtrer_equipe(qs, parametres):
         qs = qs.filter(client_id=int(client))
     if parametres.get("action_requise", "").strip() in ("1", "true", "vrai"):
         qs = qs.filter(action_requise=True)
+    paiement = parametres.get("paiement", "").strip()
+    if paiement in reglement.STATUTS:
+        qs = qs.filter(etat__in=reglement.ETATS_PAIEMENT, montant_convenu__isnull=False)
+        if paiement == reglement.PAYE:
+            qs = qs.filter(montant_paye__gte=F("montant_convenu"))
+        elif paiement == reglement.PARTIEL:
+            qs = qs.filter(montant_paye__gt=0, montant_paye__lt=F("montant_convenu"))
+        else:
+            qs = qs.filter(montant_paye=0, montant_convenu__gt=0)
     return qs
 
 

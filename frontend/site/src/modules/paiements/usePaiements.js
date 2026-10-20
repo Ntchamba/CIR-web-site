@@ -89,3 +89,8 @@ export function useSuiviPaiement(initial) {
 
   return { paiement, setPaiement, verifier };
 }
+
+/** Reçu d'un paiement réussi. */
+export function useRecu(id) {
+  return useDonnees(({ signal }) => paiements.recu(id, { signal }), [id]);
+}

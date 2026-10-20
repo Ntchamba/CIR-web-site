@@ -12,8 +12,8 @@ export const ETAPES = ['nouvelle', 'negociation', 'contrat_signe', 'travaux', 't
 export const ONGLETS = [...ETAPES, 'annulee'];
 
 export default function useCommandes() {
-  const { valeurs, page, modifier } = useCriteres(['etat', 'q', 'action', 'client']);
-  const criteres = { etat: valeurs.etat, recherche: valeurs.q, actionRequise: valeurs.action, client: valeurs.client, page };
+  const { valeurs, page, modifier } = useCriteres(['etat', 'q', 'action', 'client', 'paiement']);
+  const criteres = { etat: valeurs.etat, recherche: valeurs.q, actionRequise: valeurs.action, client: valeurs.client, paiement: valeurs.paiement, page };
   const liste = useListe(listerCommandes, criteres);
   const resume = useChargement((signal) => resumeCommandes({ signal }), []);
   const [saisie, changerSaisie, effacerSaisie] = useRecherche(valeurs.q, (q) => modifier({ q }));
@@ -24,14 +24,16 @@ export default function useCommandes() {
     action: valeurs.action === '1',
     recherche: valeurs.q,
     client: valeurs.client,
+    paiement: valeurs.paiement,
     resume: resume.donnees || {},
     saisie,
     changerSaisie,
     choisirEtat: (etat) => modifier({ etat }),
+    choisirPaiement: (paiement) => modifier({ paiement }),
     basculerAction: (actif) => modifier({ action: actif ? '1' : '' }),
     allerALaPage: (n) => modifier({ page: n }),
-    effacer: () => { effacerSaisie(); modifier({ q: '', action: '', etat: '', client: '' }); },
-    filtre: Boolean(valeurs.q || valeurs.action || valeurs.etat || valeurs.client),
+    effacer: () => { effacerSaisie(); modifier({ q: '', action: '', etat: '', client: '', paiement: '' }); },
+    filtre: Boolean(valeurs.q || valeurs.action || valeurs.etat || valeurs.client || valeurs.paiement),
   };
 }
 

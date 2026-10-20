@@ -21,6 +21,8 @@ const SelectionPage = lazy(() => import('@/modules/selection/SelectionPage.jsx')
 const CommandesPage = lazy(() => import('@/modules/commandes/CommandesPage.jsx'));
 const NouvelleCommandePage = lazy(() => import('@/modules/commandes/NouvelleCommandePage.jsx'));
 const DetailCommande = lazy(() => import('@/modules/commandes/DetailCommande.jsx'));
+const PaiementPage = lazy(() => import('@/modules/paiements/PaiementPage.jsx'));
+const RecuPage = lazy(() => import('@/modules/paiements/RecuPage.jsx'));
 const DemandeRenduPage = lazy(() => import('@/modules/devis/DemandeRenduPage.jsx'));
 const ContactPage = lazy(() => import('@/modules/contact/ContactPage.jsx'));
 const MessageriePage = lazy(() => import('@/modules/messagerie/MessageriePage.jsx'));
@@ -47,6 +49,8 @@ export default function RoutesSite() {
             <Route path="commandes" element={<CommandesPage />} />
             <Route path="commandes/nouvelle" element={<NouvelleCommandePage />} />
             <Route path="commandes/:id" element={<DetailCommande />} />
+            <Route path="commandes/:id/payer" element={<PaiementPage />} />
+            <Route path="paiements/:id/recu" element={<RecuPage />} />
             <Route path="devis/demande" element={<DemandeRenduPage />} />
             <Route path="mes-demandes" element={<MesDemandesPage />} />
             <Route path="messages" element={<MessageriePage />} />

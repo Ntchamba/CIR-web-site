@@ -75,6 +75,9 @@ export default function CommandesPage() {
                 {c.montant_convenu !== null && c.montant_convenu !== undefined && (
                   <p className={styles.montantCarte}>{t('commandes.carte.montant', { montant: fcfa(c.montant_convenu) })}</p>
                 )}
+                {['partiel', 'paye'].includes(c.statut_paiement) && (
+                  <p className={styles.meta}>{t(`paiements.statut.${c.statut_paiement}`)}</p>
+                )}
                 {c.action_requise && <p className={styles.attente}>{t('commandes.carte.actionRequise')}</p>}
                 <p className={styles.meta}>{t('commandes.carte.maj', { date: date(c.modifie_le) })}</p>
               </article>

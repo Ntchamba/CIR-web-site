@@ -20,6 +20,7 @@ import LiensContact from '@/composants/LiensContact.jsx';
 import NotesInternes from '@/composants/NotesInternes.jsx';
 import { PastilleEtape, PastilleUrgente } from '@/composants/PastilleEtat.jsx';
 import { useTraduction } from '@/i18n/index.js';
+import BlocPaiements from '@/modules/paiements/composants/BlocPaiements.jsx';
 
 import { changerEtat, modifierCommande } from './api.js';
 import ContratCommande from './composants/ContratCommande.jsx';
@@ -175,6 +176,7 @@ export default function DetailCommande() {
         <div className={styles.colonne}>
           <PanneauNegociation commande={commande} surMiseAJour={actualiser} surDetail={surDetail} annoncer={setAnnonce} />
           <ContratCommande contrat={commande.contrat} />
+          <BlocPaiements commande={commande} surChangement={actualiser} annoncer={setAnnonce} />
           <DevisLies commandeId={commande.id} devis={commande.devis} peutCreer={ouverte} />
         </div>
 

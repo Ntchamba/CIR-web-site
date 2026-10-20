@@ -9,7 +9,7 @@ from rest_framework import serializers
 from apps.catalogue.prix import ChampPrix
 from apps.catalogue.serializers import ProduitCarteSerializer
 
-from . import contrats, extensions
+from . import contrats, extensions, reglement
 from .etapes import CLIENT, Etat, actions_possibles
 from .models import ChangementEtat, Commande, EtatProposition, LigneCommande, Proposition, TypeBatiment
 
@@ -18,6 +18,20 @@ DATE_HEURE = serializers.DateTimeField()
 
 def _role(serialiseur):
     return serialiseur.context.get("role", CLIENT)
+
+
+class ReglementMixin(serializers.Serializer):
+    """Règlement de la commande : entiers en FCFA (jamais de décimales)."""
+
+    montant_paye = serializers.IntegerField(read_only=True)
+    reste_a_payer = serializers.SerializerMethodField()
+    statut_paiement = serializers.SerializerMethodField()
+
+    def get_reste_a_payer(self, commande):
+        return reglement.reste_a_payer(commande)
+
+    def get_statut_paiement(self, commande):
+        return reglement.statut_paiement(commande)
 
 
 def _date(valeur):
@@ -113,7 +127,7 @@ class HistoriqueSerializer(serializers.ModelSerializer):
 
 # --- Lecture : listes ---
 
-class CommandeListeSerializer(serializers.ModelSerializer):
+class CommandeListeSerializer(ReglementMixin, serializers.ModelSerializer):
     nombre_lignes = serializers.IntegerField(read_only=True)
     action_requise = serializers.BooleanField(read_only=True)
     montant_convenu = ChampPrix(read_only=True)
@@ -121,7 +135,7 @@ class CommandeListeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Commande
         fields = ["id", "reference", "type_batiment", "etat", "surface_m2", "nombre_lignes", "montant_convenu",
-                  "action_requise", "modifie_le", "cree_le"]
+                  "montant_paye", "reste_a_payer", "statut_paiement", "action_requise", "modifie_le", "cree_le"]
         read_only_fields = fields
 
 
@@ -144,13 +158,14 @@ class CommandeListeEquipeSerializer(CommandeListeSerializer):
 
     class Meta(CommandeListeSerializer.Meta):
         fields = ["id", "reference", "type_batiment", "etat", "surface_m2", "nombre_lignes", "montant_convenu",
-                  "client", "action_requise", "modifie_le", "cree_le"]
+                  "montant_paye", "reste_a_payer", "statut_paiement", "client", "action_requise", "modifie_le",
+                  "cree_le"]
         read_only_fields = fields
 
 
 # --- Lecture : détail ---
 
-class CommandeDetailSerializer(serializers.ModelSerializer):
+class CommandeDetailSerializer(ReglementMixin, serializers.ModelSerializer):
     adresse = serializers.SerializerMethodField()
     lignes = serializers.SerializerMethodField()
     montant_convenu = ChampPrix(read_only=True)
@@ -165,7 +180,8 @@ class CommandeDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Commande
         fields = ["id", "reference", "type_batiment", "etat", "surface_m2", "description", "adresse", "lignes",
-                  "montant_convenu", "prix_m2_convenu", "delai_convenu_jours", "signe_le", "propositions",
+                  "montant_convenu", "montant_paye", "reste_a_payer", "statut_paiement", "prix_m2_convenu",
+                  "delai_convenu_jours", "signe_le", "propositions",
                   "historique", "contrat", "devis", "action_requise", "actions_possibles", "cree_le", "modifie_le"]
         read_only_fields = fields
 

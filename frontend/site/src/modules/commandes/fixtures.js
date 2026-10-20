@@ -19,6 +19,7 @@ export const COMMANDE = {
     design: { id: 2, nom: 'Gris anthracite', couleur: '#444444' },
   }],
   montant_convenu: null, prix_m2_convenu: null, delai_convenu_jours: null, signe_le: null,
+  montant_paye: 0, reste_a_payer: null, statut_paiement: 'non_applicable',
   propositions: [PROPOSITION_EQUIPE],
   historique: [
     { de: null, vers: 'nouvelle', par: 'client', cree_le: '2026-10-15T08:00:00Z' },
@@ -36,6 +37,7 @@ export const COMMANDE_SIGNEE = {
   ...COMMANDE,
   etat: 'contrat_signe',
   montant_convenu: '510000', prix_m2_convenu: '12000', delai_convenu_jours: 10, signe_le: '2026-10-17T10:00:00Z',
+  montant_paye: 0, reste_a_payer: 510000, statut_paiement: 'non_paye',
   propositions: [{ ...PROPOSITION_EQUIPE, etat: 'acceptee', peut_repondre: false, repondu_le: '2026-10-17T10:00:00Z' }],
   historique: [
     ...COMMANDE.historique,
@@ -54,5 +56,6 @@ export const COMMANDE_SIGNEE = {
 
 export const RESUME_COMMANDE = {
   id: 7, reference: 'CIR-2026-0007', type_batiment: 'maison', etat: 'negociation', surface_m2: '42.50', nombre_lignes: 1,
-  montant_convenu: null, action_requise: true, modifie_le: '2026-10-16T09:00:00Z', cree_le: '2026-10-15T08:00:00Z',
+  montant_convenu: null, montant_paye: 0, reste_a_payer: null, statut_paiement: 'non_applicable',
+  action_requise: true, modifie_le: '2026-10-16T09:00:00Z', cree_le: '2026-10-15T08:00:00Z',
 };
