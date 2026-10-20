@@ -123,7 +123,8 @@ def recu(client, pk):
 # --- Lecture ---
 
 def disponibilite():
-    return {"configure": bool(transactions.configure())}
+    return {"configure": bool(transactions.configure()), "montant_minimum": settings.PAIEMENT_MONTANT_MINIMUM,
+            "expiration_minutes": settings.PAIEMENT_EXPIRATION_MINUTES}
 
 
 def _filtrer(qs, parametres):

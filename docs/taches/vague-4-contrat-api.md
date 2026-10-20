@@ -124,7 +124,8 @@ tous les formats de commande (client et équipe) : `montant_paye`, `reste_a_paye
 
 ### API client `/api/paiements/` (`EstClient`)
 
-- `GET disponibilite/` → `{configure: bool}`.
+- `GET disponibilite/` → `{configure: bool, montant_minimum: int, expiration_minutes: int}` (valeurs de
+  `PAIEMENT_MONTANT_MINIMUM` et `PAIEMENT_EXPIRATION_MINUTES`, renvoyées même si `configure` est faux).
 - `POST /` JSON `{commande: <id>, mode?: "mobile"|"lien", telephone?: "6 99 00 11 22", montant?: <int>}` → 201 `<Paiement>`.
   `telephone` obligatoire en mode mobile (400 `telephone` si invalide). Erreurs : 400 (`montant`, `telephone`), 404,
   409 `paiement_en_cours`, 409 `paiement_non_autorise` (étape ou rien à payer), 429 `trop_de_paiements`, 503

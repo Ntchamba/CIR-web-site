@@ -14,7 +14,7 @@ import * as paiements from '../api.js';
 import { codeErreur, messageCreation, validerPaiement } from '../regles.js';
 import styles from '../Paiements.module.css';
 
-export default function FormulairePaiement({ commande, reste, telephoneInitial = '', surCree, surEnCours }) {
+export default function FormulairePaiement({ commande, reste, minimum = null, telephoneInitial = '', surCree, surEnCours }) {
   const { t } = useTraduction();
   const [form, setForm] = useState({ choixMontant: 'reste', montant: '', mode: 'mobile', telephone: telephoneInitial });
   const [erreurs, setErreurs] = useState({});
@@ -26,7 +26,7 @@ export default function FormulairePaiement({ commande, reste, telephoneInitial =
   async function envoyer(e) {
     e.preventDefault();
     if (verrou.current) return;
-    const locales = validerPaiement(form, reste);
+    const locales = validerPaiement(form, reste, minimum);
     setErreurs(locales);
     if (Object.keys(locales).length) return;
     verrou.current = true;

@@ -818,6 +818,7 @@ export default {
       telephone: 'Saisissez un numéro mobile camerounais valide, par exemple 6 99 00 11 22.',
       montantEntier: 'Saisissez un montant entier en FCFA, supérieur à 0.',
       montantReste: 'Le montant ne peut pas dépasser le reste à payer.',
+      montantMinimum: 'Le montant minimum est de {minimum}.',
       paiement_en_cours: 'Un paiement est déjà en cours pour cette commande. Nous le reprenons.',
       paiement_non_autorise: 'Le paiement n\'est pas possible pour cette commande : le contrat n\'est pas signé ou tout est déjà payé.',
       trop_de_paiements: 'Vous avez lancé trop de paiements récemment. Réessayez dans une heure ou contactez notre équipe.',

@@ -121,7 +121,7 @@ export default function PaiementPage() {
     contenu = <Chargement />;
   } else if (paiementAffiche) {
     contenu = (
-      <SuiviPaiement key={paiementAffiche.id} paiement={paiementAffiche} commandeId={commande.id}
+      <SuiviPaiement key={paiementAffiche.id} paiement={paiementAffiche} commandeId={commande.id} expirationMinutes={dispo.expirationMinutes}
         onRecommencer={() => {
           // « Recommencer » ouvre un formulaire neuf : l'ancien paiement (final) n'est plus affiché.
           setEcarte(paiementAffiche.id);
@@ -152,7 +152,7 @@ export default function PaiementPage() {
         </section>
         <section aria-labelledby="titre-form-paiement" className={styles.bloc}>
           <h2 id="titre-form-paiement">{t('paiements.page.choisir')}</h2>
-          <FormulairePaiement commande={commande} reste={reste} telephoneInitial={utilisateur?.telephone || ''}
+          <FormulairePaiement commande={commande} reste={reste} minimum={dispo.montantMinimum} telephoneInitial={utilisateur?.telephone || ''}
             surCree={apresCreation} surEnCours={repris.relire} />
         </section>
       </>

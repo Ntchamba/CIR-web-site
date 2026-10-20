@@ -1125,6 +1125,10 @@ export default {
       message_nouveau: '新的未读消息',
       appel_manque: '未接来电（团队）',
       nouveaute: '网站新动态（已订阅的客户）',
+      paiement_recu: "已收到付款（客户）",
+      paiement_recu_equipe: "已收到付款（团队）",
+      paiement_echoue: "付款失败（客户）",
+      paiement_anomalie: "付款异常（团队）",
     },
     modeles: {
       chargement: '正在加载模板…',

@@ -1,4 +1,6 @@
 // Petites règles du module paiements : le serveur revérifie tout (montant, étape, quota).
+import { fcfa } from '@partage/utils/format.js';
+
 import { t } from '@/i18n/index.js';
 
 export const ETATS_FINAUX = ['reussi', 'echoue', 'expire', 'annule', 'anomalie'];
@@ -7,6 +9,18 @@ export const ETAPES_PAYABLES = ['contrat_signe', 'travaux', 'terminee'];
 export const RAISONS = ['numero_invalide', 'refuse', 'expire', 'montant_different', 'inconnue'];
 /** Durée d'attente annoncée à titre indicatif (PAIEMENT_EXPIRATION_MINUTES côté serveur, 15 par défaut). */
 export const ATTENTE_INDICATIVE_MS = 15 * 60 * 1000;
+
+/** Entier strictement positif, sinon null (valeur absente ou incohérente : on garde le comportement par défaut). */
+export function entierPositif(valeur) {
+  const n = typeof valeur === 'number' ? valeur : Number.NaN;
+  return Number.isInteger(n) && n > 0 ? n : null;
+}
+
+/** Durée d'attente indicative en ms : `expiration_minutes` de la disponibilité, sinon 15 minutes. */
+export const attenteMs = (expirationMinutes) => {
+  const minutes = entierPositif(expirationMinutes);
+  return minutes ? minutes * 60 * 1000 : ATTENTE_INDICATIVE_MS;
+};
 export const DELAI_VERIFICATION_MS = 4000;
 
 const entier = (v) => (v === null || v === undefined || v === '' || Number.isNaN(Number(v)) ? null : Number(v));
@@ -30,7 +44,7 @@ export function telephoneValide(texte) {
 }
 
 /** Erreurs du formulaire : { telephone?, montant? } (messages traduits). */
-export function validerPaiement({ mode, telephone, choixMontant, montant }, reste) {
+export function validerPaiement({ mode, telephone, choixMontant, montant }, reste, minimum = null) {
   const erreurs = {};
   if (mode === 'mobile' && !telephoneValide(telephone)) erreurs.telephone = t('paiements.erreurs.telephone');
   if (choixMontant === 'autre') {
@@ -38,6 +52,12 @@ export function validerPaiement({ mode, telephone, choixMontant, montant }, rest
     const valeur = /^\d+$/.test(brut) ? Number(brut) : Number.NaN;
     if (!Number.isInteger(valeur) || valeur < 1) erreurs.montant = t('paiements.erreurs.montantEntier');
     else if (reste !== null && valeur > reste) erreurs.montant = t('paiements.erreurs.montantReste');
+    else {
+      // Minimum du serveur (ou le reste s'il est plus petit) ; absent = aucun minimum côté client.
+      const plancher = entierPositif(minimum);
+      const seuil = plancher && reste !== null ? Math.min(plancher, reste) : plancher;
+      if (seuil && valeur < seuil) erreurs.montant = t('paiements.erreurs.montantMinimum', { minimum: fcfa(seuil) });
+    }
   }
   return erreurs;
 }

@@ -1125,6 +1125,10 @@ export default {
       message_nouveau: 'Neue ungelesene Nachricht',
       appel_manque: 'Verpasster Anruf (Team)',
       nouveaute: 'Neuigkeit der Website (abonnierte Kunden)',
+      paiement_recu: "Zahlung eingegangen (Kunde)",
+      paiement_recu_equipe: "Zahlung eingegangen (Team)",
+      paiement_echoue: "Zahlung fehlgeschlagen (Kunde)",
+      paiement_anomalie: "Zahlungsauffälligkeit (Team)",
     },
     modeles: {
       chargement: 'Vorlagen werden geladen …',

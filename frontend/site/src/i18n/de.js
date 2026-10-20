@@ -817,6 +817,7 @@ export default {
       telephone: 'Geben Sie eine gültige kamerunische Mobilnummer ein, zum Beispiel 6 99 00 11 22.',
       montantEntier: 'Geben Sie einen ganzen Betrag in FCFA größer als 0 ein.',
       montantReste: 'Der Betrag darf den offenen Restbetrag nicht übersteigen.',
+      montantMinimum: 'Der Mindestbetrag beträgt {minimum}.',
       paiement_en_cours: 'Für diese Bestellung läuft bereits eine Zahlung. Wir setzen sie fort.',
       paiement_non_autorise: 'Für diese Bestellung ist keine Zahlung möglich: Der Vertrag ist nicht unterzeichnet oder alles ist bereits bezahlt.',
       trop_de_paiements: 'Sie haben zu viele Zahlungen gestartet. Versuchen Sie es in einer Stunde erneut oder kontaktieren Sie unser Team.',

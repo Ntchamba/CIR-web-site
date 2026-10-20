@@ -814,6 +814,7 @@ export default {
       telephone: '有効なカメルーンの携帯番号を入力してください（例：6 99 00 11 22）。',
       montantEntier: '0 より大きい整数の金額（FCFA）を入力してください。',
       montantReste: '金額は残りの支払額を超えられません。',
+      montantMinimum: '最低金額は {minimum} です。',
       paiement_en_cours: 'この注文にはすでに支払いが進行中です。そちらを再開します。',
       paiement_non_autorise: 'この注文はお支払いできません。契約が未締結か、すでに全額支払い済みです。',
       trop_de_paiements: '最近の支払い開始回数が多すぎます。1 時間後にやり直すか、担当チームにご連絡ください。',

@@ -12,12 +12,12 @@ import { useTraduction } from '@/i18n/index.js';
 
 import * as paiements from '../api.js';
 import { adresseSure } from '../navigation.js';
-import { ATTENTE_INDICATIVE_MS, texteRaison } from '../regles.js';
+import { attenteMs, texteRaison } from '../regles.js';
 import { useSuiviPaiement } from '../usePaiements.js';
 import styles from '../Paiements.module.css';
 
 /** Compte à rebours indicatif (la décision vient du serveur, jamais de cette horloge). */
-function useReste(paiement) {
+function useReste(paiement, expirationMinutes) {
   const attend = paiement?.etat === 'en_attente';
   const [maintenant, setMaintenant] = useState(() => Date.now());
   useEffect(() => {
@@ -28,15 +28,15 @@ function useReste(paiement) {
   }, [attend]);
   const debut = new Date(paiement?.cree_le).getTime();
   if (!attend || Number.isNaN(debut)) return null;
-  return Math.max(0, Math.ceil((debut + ATTENTE_INDICATIVE_MS - maintenant) / 1000));
+  return Math.max(0, Math.ceil((debut + attenteMs(expirationMinutes) - maintenant) / 1000));
 }
 
 const horloge = (secondes) => `${Math.floor(secondes / 60)}:${String(secondes % 60).padStart(2, '0')}`;
 
-export default function SuiviPaiement({ paiement: initial, commandeId, onRecommencer }) {
+export default function SuiviPaiement({ paiement: initial, commandeId, expirationMinutes = null, onRecommencer }) {
   const { t } = useTraduction();
   const { paiement, setPaiement } = useSuiviPaiement(initial);
-  const reste = useReste(paiement);
+  const reste = useReste(paiement, expirationMinutes);
   const [annulation, setAnnulation] = useState({ envoi: false, erreur: null });
 
   async function annuler() {

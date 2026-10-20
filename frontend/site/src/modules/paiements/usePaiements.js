@@ -7,12 +7,17 @@ import useDonnees from '@/app/useDonnees.js';
 import { useDirect, useEvenementsDirect } from '@/modules/notifications/FondDirect.jsx';
 
 import * as paiements from './api.js';
-import { DELAI_VERIFICATION_MS, fusionner } from './regles.js';
+import { DELAI_VERIFICATION_MS, entierPositif, fusionner } from './regles.js';
 
 /** `configure` est vrai seulement si le serveur le dit ; en cas d'erreur, on masque le bouton (jamais d'erreur bloquante). */
 export function useDisponibilite() {
   const etat = useDonnees(({ signal }) => paiements.disponibilite({ signal }), []);
-  return { ...etat, configure: etat.donnees?.configure === true };
+  return {
+    ...etat,
+    configure: etat.donnees?.configure === true,
+    montantMinimum: entierPositif(etat.donnees?.montant_minimum),
+    expirationMinutes: entierPositif(etat.donnees?.expiration_minutes),
+  };
 }
 
 /** Paiements d'une commande, tenus à jour par la trame `paiement_mis_a_jour` et le rattrapage après une coupure. */

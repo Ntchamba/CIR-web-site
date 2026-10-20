@@ -1125,6 +1125,10 @@ export default {
       message_nouveau: 'New unread message',
       appel_manque: 'Missed call (team)',
       nouveaute: 'Site news (subscribed clients)',
+      paiement_recu: "Payment received (customer)",
+      paiement_recu_equipe: "Payment received (team)",
+      paiement_echoue: "Payment failed (customer)",
+      paiement_anomalie: "Payment anomaly (team)",
     },
     modeles: {
       chargement: 'Loading templates…',

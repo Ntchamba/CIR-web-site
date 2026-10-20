@@ -817,6 +817,7 @@ export default {
       telephone: 'Enter a valid Cameroonian mobile number, for example 6 99 00 11 22.',
       montantEntier: 'Enter a whole amount in FCFA, greater than 0.',
       montantReste: 'The amount cannot exceed the remaining balance.',
+      montantMinimum: 'The minimum amount is {minimum}.',
       paiement_en_cours: 'A payment is already in progress for this order. We are resuming it.',
       paiement_non_autorise: 'Payment is not possible for this order: the contract is not signed or everything is already paid.',
       trop_de_paiements: 'You started too many payments recently. Try again in an hour or contact our team.',

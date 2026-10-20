@@ -1126,6 +1126,10 @@ export default {
       message_nouveau: 'Nouveau message non lu',
       appel_manque: 'Appel manqué (équipe)',
       nouveaute: 'Nouveauté du site (clients abonnés)',
+      paiement_recu: "Paiement reçu (client)",
+      paiement_recu_equipe: "Paiement reçu (équipe)",
+      paiement_echoue: "Paiement échoué (client)",
+      paiement_anomalie: "Anomalie de paiement (équipe)",
     },
     modeles: {
       chargement: "Chargement des modèles…",

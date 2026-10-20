@@ -814,6 +814,7 @@ export default {
       telephone: '请输入有效的喀麦隆手机号，例如 6 99 00 11 22。',
       montantEntier: '请输入大于 0 的整数金额（FCFA）。',
       montantReste: '金额不能超过待付余款。',
+      montantMinimum: '最低金额为 {minimum}。',
       paiement_en_cours: '该订单已有一笔付款正在进行，我们将继续该笔付款。',
       paiement_non_autorise: '该订单无法付款：合同尚未签署或已全部付清。',
       trop_de_paiements: '您近期发起的付款次数过多。请一小时后重试，或联系我们的团队。',

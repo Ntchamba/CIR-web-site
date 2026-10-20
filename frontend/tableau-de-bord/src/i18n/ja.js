@@ -1125,6 +1125,10 @@ export default {
       message_nouveau: '新しい未読メッセージ',
       appel_manque: '不在着信（チーム）',
       nouveaute: 'サイトのお知らせ（購読中の顧客）',
+      paiement_recu: "入金を確認しました（顧客）",
+      paiement_recu_equipe: "入金を確認しました（チーム）",
+      paiement_echoue: "支払い失敗（顧客）",
+      paiement_anomalie: "支払いの異常（チーム）",
     },
     modeles: {
       chargement: 'テンプレートを読み込み中…',
