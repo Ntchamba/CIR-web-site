@@ -35,7 +35,7 @@ SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 X_FRAME_OPTIONS = "DENY"
 
 # Railway place un proxy devant l'application : 1 proxy de confiance par défaut.
-REST_FRAMEWORK = {**REST_FRAMEWORK, "NUM_PROXIES": int(env("DJANGO_NOMBRE_PROXIES", "1"))}  # noqa: F405
+REST_FRAMEWORK = {**REST_FRAMEWORK, "NUM_PROXIES": int(env("DJANGO_NOMBRE_PROXIES", "1") or "1")}  # noqa: F405
 
 STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
