@@ -111,6 +111,13 @@ tous les formats de commande (client et équipe) : `montant_paye`, `reste_a_paye
   paiement retrouvé par `reference_externe` ou `reference_campay`, puis **toujours** `verifier(paiement)`. Réponse 200
   `{"ok": true}` même si le paiement est inconnu (pas d'information donnée à l'appelant) ; 403 si la signature est
   absente ou fausse ; 503 `webhook_non_configure` si `CAMPAY_WEBHOOK_KEY` est vide.
+  **Paiement par lien** : il n'a pas de `reference_campay` à l'initiation. Si l'événement fournit une référence au format
+  `^[A-Za-z0-9_-]{8,64}$`, elle n'est qu'une clé de lecture non fiable : le serveur appelle `statut(<candidate>)` et ne
+  l'**adopte** (la stocke) que si la transaction renvoyée a une `reference_externe` strictement égale à celle du paiement
+  (une `reference_externe` absente n'est jamais tolérée : rien n'est adopté, le paiement reste en attente). L'adoption se
+  fait sous le verrou du paiement ; un paiement n'adopte jamais une seconde référence ; deux paiements ne partagent jamais la
+  même `reference_campay` (contrainte d'unicité). Ensuite, le flux normal `verifier` contrôle montant, devise et référence
+  externe : le webhook ne suffit jamais à créditer.
 - **Règlement hors ligne** (équipe) : mode `manuel`, créé directement `reussi` (jamais de revérification, acteur et motif
   enregistrés), même limite du reste à payer, commande à une étape autorisée.
 - **Annulation** : le client peut annuler un paiement `en_attente` **mode lien** n'ayant pas été confirmé (`annule`) ;

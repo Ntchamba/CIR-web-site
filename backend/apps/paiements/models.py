@@ -83,6 +83,9 @@ class Paiement(ReferenceMixin, models.Model):
             # Un seul paiement en attente par commande (filet de sécurité de la règle vérifiée dans services.py)
             models.UniqueConstraint(fields=["commande"], condition=models.Q(etat="en_attente"),
                                     name="paiements_un_seul_en_attente"),
+            # Deux paiements ne partagent jamais la même référence CamPay
+            models.UniqueConstraint(fields=["reference_campay"], condition=~models.Q(reference_campay=""),
+                                    name="paiements_reference_campay_unique"),
             models.CheckConstraint(condition=models.Q(montant__gt=0), name="paiements_montant_positif"),
         ]
 

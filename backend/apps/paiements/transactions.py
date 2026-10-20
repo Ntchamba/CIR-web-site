@@ -90,6 +90,11 @@ def interroger(paiement):
     return _appeler(client.statut, reference=paiement.reference_campay)
 
 
+def interroger_reference(reference):
+    """Transaction CamPay désignée par une référence **non fiable** (candidate à l'adoption, voir services)."""
+    return _appeler(client.statut, reference=reference)
+
+
 def evaluer(paiement, transaction):
     """Compare la transaction CamPay au paiement enregistré. Renvoie `(etat, raison)`.
 

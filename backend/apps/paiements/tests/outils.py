@@ -37,8 +37,8 @@ class BasePaiements(BaseVague3):
         super().setUp()
         self.campay = mock.Mock()
         self.campay.statuts = {}  # référence externe → fonction(paiement) → Transaction (par défaut : en attente)
-        self.campay.initier_collecte.return_value = Collecte(reference="ref-campay-0001", code_ussd="*126#",
-                                                             operateur="MTN")
+        self.appels_collecte = 0
+        self.campay.initier_collecte.side_effect = self._collecte
         self.campay.lien_paiement.return_value = "https://campay.example/pay/abc"
         self.campay.configure.return_value = True
         self.campay.statut.side_effect = self._statut
@@ -48,8 +48,18 @@ class BasePaiements(BaseVague3):
             self.addCleanup(patch.stop)
         self.commande = self.creer_commande_payable(self.client_a)
 
+    def _collecte(self, **arguments):
+        """Chaque collecte reçoit sa propre référence CamPay (la première : « ref-campay-0001 »)."""
+        self.appels_collecte += 1
+        reference = "ref-campay-0001" if self.appels_collecte == 1 else f"ref-campay-{self.appels_collecte:04d}"
+        return Collecte(reference=reference, code_ussd="*126#", operateur="MTN")
+
     def _statut(self, reference):
-        paiement = Paiement.objects.get(reference_campay=reference)
+        paiement = Paiement.objects.filter(reference_campay=reference).first()
+        if paiement is None:  # référence candidate d'un webhook (paiement par lien) : le paiement annoncé sans référence
+            paiement = Paiement.objects.filter(pk__in=list(self.campay.statuts)).first()
+        if paiement is None:
+            raise AssertionError(f"Référence CamPay inattendue dans le test : {reference}")
         fabrique = self.campay.statuts.get(paiement.pk)
         return fabrique(paiement) if fabrique else transaction_campay(paiement, "en_attente")
 

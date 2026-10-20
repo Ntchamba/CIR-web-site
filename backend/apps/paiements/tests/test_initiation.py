@@ -161,7 +161,7 @@ class InitierTests(BasePaiements):
         r = self.initier()
         self.assertEqual((r.status_code, r.data["code"]), (503, "paiements_indisponibles"))
         self.assertEqual(Paiement.objects.count(), 0)
-        self.campay.initier_collecte.side_effect = None  # le client peut réessayer tout de suite
+        self.campay.initier_collecte.side_effect = self._collecte  # CamPay répond de nouveau
         self.assertEqual(self.initier().status_code, 201)
 
     def test_erreur_definitive_paiement_echoue(self):
@@ -171,7 +171,7 @@ class InitierTests(BasePaiements):
         self.assertEqual((r.data["etat"], r.data["raison"]), ("echoue", "numero_invalide"))
         self.assertTrue(r.data["raison_libelle"])
         self.assertEqual(self.commande.__class__.objects.get(pk=self.commande.pk).montant_paye, 0)
-        self.campay.initier_collecte.side_effect = None
+        self.campay.initier_collecte.side_effect = self._collecte  # CamPay répond de nouveau
         self.assertEqual(self.initier().status_code, 201)  # plus de paiement en attente
 
     def test_diffusion_en_direct(self):

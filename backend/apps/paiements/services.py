@@ -9,10 +9,11 @@ webhooks et la vérification du navigateur arrivent en même temps. (SQLite igno
 Seul ce module écrit `Commande.montant_paye`.
 """
 import logging
+import re
 from datetime import timedelta
 
 from django.conf import settings
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.db.models import F, Q, Sum
 from django.utils import timezone, translation
 from django.utils.translation import gettext as _
@@ -313,8 +314,46 @@ def verifier(paiement, delai_min=0, surveiller_annule=False):
     return _appliquer(courant.pk, resultat, surveiller_annule=surveiller_annule)
 
 
+_REFERENCE_VALIDE = re.compile(r"^[A-Za-z0-9_-]{8,64}$")
+
+
+def _adopter_reference(paiement, candidate):
+    """Paiement sans référence CamPay (mode lien) : adopte celle d'un webhook **seulement si CamPay la confirme**.
+
+    La référence du webhook n'est qu'une clé de lecture non fiable. On interroge CamPay avec elle et on ne la retient
+    que si la transaction renvoyée porte une `reference_externe` strictement égale à celle du paiement (aucune
+    tolérance si elle est absente). Une référence déjà utilisée par un autre paiement est refusée, et un paiement
+    n'adopte jamais une seconde référence. Renvoie True si la référence est adoptée.
+    """
+    if not _REFERENCE_VALIDE.match(candidate or "") or Paiement.objects.filter(reference_campay=candidate).exists():
+        journal.warning("Référence CamPay candidate refusée pour le paiement %s.", paiement.pk)
+        return False
+    try:
+        trouvee = transactions.interroger_reference(candidate)
+    except (transactions.Indisponible, transactions.NonConfigure, transactions.Refuse):
+        return False
+    if not trouvee.reference_externe or trouvee.reference_externe != paiement.reference_externe:
+        journal.warning("Référence CamPay candidate non confirmée pour le paiement %s : rien n'est adopté.",
+                        paiement.pk)
+        return False
+    try:
+        with transaction.atomic():
+            _commande, verrouille = _verrouiller(paiement.pk)
+            if verrouille.reference_campay:  # déjà adoptée (webhook simultané) : une seule adoption
+                return False
+            verrouille.reference_campay = candidate
+            verrouille.save(update_fields=["reference_campay"])
+    except IntegrityError:  # la référence a été prise entre-temps par un autre paiement
+        journal.warning("Référence CamPay candidate déjà prise (paiement %s).", paiement.pk)
+        return False
+    return True
+
+
 def traiter_webhook(evenement):
-    """Webhook CamPay : retrouve le paiement (valeurs non fiables) puis le **revérifie toujours**. Renvoie le paiement ou None."""
+    """Webhook CamPay : retrouve le paiement (valeurs non fiables) puis le **revérifie toujours**. Renvoie le paiement ou None.
+
+    Un paiement par lien n'a pas de référence CamPay à l'initiation : voir `_adopter_reference`.
+    """
     paiement = None
     if evenement.reference_externe:
         paiement = Paiement.objects.filter(reference_externe=evenement.reference_externe).first()
@@ -322,6 +361,9 @@ def traiter_webhook(evenement):
         paiement = Paiement.objects.filter(reference_campay=evenement.reference).first()
     if paiement is None:
         return None
+    if (not paiement.reference_campay and evenement.reference and paiement.mode == ModePaiement.LIEN
+            and paiement.etat in (EtatPaiement.EN_ATTENTE, EtatPaiement.EXPIRE, EtatPaiement.ANNULE)):
+        _adopter_reference(paiement, evenement.reference)
     return verifier(paiement, delai_min=0, surveiller_annule=True)
 
 
@@ -444,13 +486,17 @@ def initier(client, commande_id, mode=ModePaiement.MOBILE, telephone=None, monta
                                "paiements_non_configures") from None
         raise _indisponible() from None
 
-    with transaction.atomic():
-        _commande, paiement = _verrouiller(paiement.pk)
-        champs = ["reference_campay", "code_ussd", "operateur", "lien"]
-        paiement.reference_campay, paiement.code_ussd, paiement.operateur, paiement.lien = (
-            reference, code_ussd, operateur, lien)
-        paiement.save(update_fields=champs)
-        _publier(paiement)
+    try:
+        with transaction.atomic():
+            _commande, paiement = _verrouiller(paiement.pk)
+            champs = ["reference_campay", "code_ussd", "operateur", "lien"]
+            paiement.reference_campay, paiement.code_ussd, paiement.operateur, paiement.lien = (
+                reference, code_ussd, operateur, lien)
+            paiement.save(update_fields=champs)
+            _publier(paiement)
+    except IntegrityError:  # référence CamPay déjà portée par un autre paiement : on n'en partage jamais
+        journal.error("Référence CamPay en double refusée (paiement %s).", paiement.pk)
+        return _enregistrer_echec(paiement, RaisonPaiement.INCONNUE)
     return avec_relations(Paiement.objects).get(pk=paiement.pk)
 
 
