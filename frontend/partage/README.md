@@ -5,7 +5,7 @@ Vague 0, agent `site`, vérifié par `site-testeur`.
 
 - [x] `i18n/` : traductions de l'interface en cinq langues (fr, en, zh, de, ja), fiche `docs/decisions/7-multilingue.md`
 - [x] `api/client.js` : appels HTTP + JWT, rafraîchissement automatique, erreurs dans la langue de l'interface
-- [ ] `api/socket.js` : WebSocket (vague 3)
+- [ ] `api/socket.js` : connexion en direct WebSocket (`creerConnexionDirect`, vague 3)
 - [x] `ui/` : Bouton, Champ, ChoixLangue, Chargement, EtatVide, MessageErreur, Icone (`Modale` : plus tard)
 - [x] `styles/` : `jetons.css` (couleurs, polices, espacements), `base.css`
 - [x] `utils/` : `format.js` (FCFA, dates), `usePageMeta.js` (titres et descriptions)

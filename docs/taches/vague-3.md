@@ -25,3 +25,8 @@ Chaque paire travaille dans sa propre fenêtre de contexte : l'agent code, puis 
 
 
 Une branche et une pull request par vague (ou par module si la vague est grande), vers `prototype-2`.
+
+
+## Contrat d'API
+
+Le contrat détaillé (WebSocket, API, intégrations, signaux, règles) est dans `docs/taches/vague-3-contrat-api.md`. Décision : `docs/decisions/8-echanges-en-direct.md`. Le client WebSocket commun `frontend/partage/api/socket.js` est fourni.
