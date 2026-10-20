@@ -12,8 +12,8 @@ isolation des clients, WebSocket, notifications) ; tout ce qui n'est pas redit i
    dans les variables d'environnement. **Aucun test n'appelle le réseau** (`unittest.mock`). Aucune clé réelle dans le dépôt.
 2. **Règle d'or** : une commande n'est **payée** qu'après **revérification de la transaction auprès de l'API CamPay**.
    Le contenu d'un webhook, d'une redirection ou d'une requête du navigateur n'est **jamais** une preuve : il ne sert qu'à
-   déclencher la revérification (`GET transaction`). Montant, devise et référence externe de la transaction doivent
-   correspondre au paiement enregistré, sinon le paiement est marqué `anomalie` et rien n'est encaissé.
+   déclencher la revérification (`GET transaction`). Montant et devise de la transaction doivent correspondre au paiement enregistré, et sa
+   référence externe aussi **si CamPay la renvoie** (la transaction est lue par la référence CamPay du paiement), sinon le paiement est marqué `anomalie` et rien n'est encaissé.
 3. **Paiement seulement après « Contrat signé »** : commande à l'étape `contrat_signe`, `travaux` ou `terminee`, avec un
    `montant_convenu`. Jamais pour `nouvelle`, `negociation` ou `annulee`. Jamais de montant inventé : le montant maximal
    d'un paiement est le **reste à payer** (`montant_convenu − montant_paye`).

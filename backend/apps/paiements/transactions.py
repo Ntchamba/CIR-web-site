@@ -100,7 +100,10 @@ def evaluer(paiement, transaction):
     if transaction.statut == "reussi":
         identique = (transaction.montant == paiement.montant
                      and (transaction.devise or "").upper() == paiement.devise
-                     and transaction.reference_externe == paiement.reference_externe)
+                     # La transaction est lue par la référence CamPay du paiement : si l'API ne renvoie pas la
+                     # référence externe, on ne peut pas la comparer (pas d'anomalie) ; si elle la renvoie, elle doit être la nôtre.
+                     and (not transaction.reference_externe
+                          or transaction.reference_externe == paiement.reference_externe))
         if identique:
             return EtatPaiement.REUSSI, ""
         return EtatPaiement.ANOMALIE, RaisonPaiement.MONTANT_DIFFERENT

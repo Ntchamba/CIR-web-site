@@ -68,8 +68,7 @@ class VerifierTests(EcouteSignauxMixin, BasePaiements):
         self.assertEqual(self.montant_paye(), 0)
 
     def test_anomalies_rien_encaisse(self):
-        cas = {"montant": {"montant": 99_999}, "devise": {"devise": "EUR"}, "reference": {"reference_externe": "cir-autre"},
-               "reference vide": {"reference_externe": ""}}
+        cas = {"montant": {"montant": 99_999}, "devise": {"devise": "EUR"}, "reference": {"reference_externe": "cir-autre"}}
         for nom, changements in cas.items():
             with self.subTest(nom):
                 Paiement.objects.all().delete()
@@ -80,6 +79,15 @@ class VerifierTests(EcouteSignauxMixin, BasePaiements):
                 self.assertEqual((p.etat, p.raison), ("anomalie", "montant_different"))
                 self.assertEqual(self.montant_paye(), 0)
         self.assertEqual([r[0] for r in self.recus], ["anomalie"] * len(cas))
+
+    def test_reference_externe_absente_de_la_reponse_n_est_pas_une_anomalie(self):
+        # La transaction est lue par la référence CamPay du paiement : sans référence externe renvoyée, on encaisse.
+        p = self.paiement_en_base()
+        self.annoncer(p, reference_externe="")
+        services.verifier(p)
+        p.refresh_from_db()
+        self.assertEqual(p.etat, "reussi")
+        self.assertEqual(self.montant_paye(), p.montant)
 
     def test_echoue(self):
         p = self.paiement_en_base()
