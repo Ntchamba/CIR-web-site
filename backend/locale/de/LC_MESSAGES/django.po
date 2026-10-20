@@ -662,3 +662,344 @@ msgstr "Der Gesamtbetrag überschreitet den zulässigen Höchstbetrag (%(max)s F
 #: apps/devis/calcul.py:89
 msgid "Le montant dépasse le maximum accepté (%(max)s FCFA)."
 msgstr "Der Betrag überschreitet den zulässigen Höchstwert (%(max)s FCFA)."
+
+#: apps/appels/models.py:10
+msgid "Audio"
+msgstr "Audio"
+
+#: apps/appels/models.py:11
+msgid "Vidéo"
+msgstr "Video"
+
+#: apps/appels/models.py:15
+msgid "Sonne"
+msgstr "Klingelt"
+
+#: apps/appels/models.py:17
+msgid "Terminé"
+msgstr "Beendet"
+
+#: apps/appels/models.py:18
+msgid "Manqué"
+msgstr "Verpasst"
+
+#: apps/appels/models.py:20
+msgid "Annulé"
+msgstr "Abgebrochen"
+
+#: apps/appels/services.py:147
+#: apps/appels/services.py:241
+#: apps/appels/services.py:165
+msgid "Les appels ne sont pas disponibles pour le moment."
+msgstr "Anrufe sind im Moment nicht verfügbar."
+
+#: apps/appels/services.py:176
+#: apps/appels/services.py:202
+#: apps/appels/services.py:220
+msgid "Appel introuvable."
+msgstr "Anruf nicht gefunden."
+
+#: apps/appels/services.py:227
+#: apps/appels/services.py:253
+msgid "Cet appel n'est plus disponible."
+msgstr "Dieser Anruf ist nicht mehr verfügbar."
+
+#: apps/appels/services.py:153
+msgid "Vous avez déjà un appel en cours."
+msgstr "Sie haben bereits einen laufenden Anruf."
+
+#: apps/appels/services.py:156
+msgid "Vous avez lancé trop d'appels : réessayez dans une heure."
+msgstr "Sie haben zu viele Anrufe gestartet: Versuchen Sie es in einer Stunde erneut."
+
+#: apps/appels/services.py:159
+msgid "Personne de l'équipe n'est disponible : écrivez-nous un message ou demandez à être rappelé."
+msgstr "Niemand aus dem Team ist erreichbar: Schreiben Sie uns eine Nachricht oder bitten Sie um einen Rückruf."
+
+#: apps/appels/services.py:186
+msgid "Cet appel ne peut plus être annulé."
+msgstr "Dieser Anruf kann nicht mehr abgebrochen werden."
+
+#: apps/appels/services.py:205
+msgid "Cet appel n'est pas en cours."
+msgstr "Dieser Anruf läuft nicht."
+
+#: apps/appels/services.py:226
+msgid "Un autre membre de l'équipe a déjà pris cet appel."
+msgstr "Ein anderes Teammitglied hat diesen Anruf bereits angenommen."
+
+#: apps/appels/services.py:145
+msgid "Choisissez un appel audio ou vidéo."
+msgstr "Wählen Sie einen Audio- oder Videoanruf."
+
+#: apps/appels/views.py:65
+msgid "Webhook non configuré."
+msgstr "Webhook nicht konfiguriert."
+
+#: apps/appels/views.py:68
+msgid "Secret du webhook invalide."
+msgstr "Ungültiges Webhook-Geheimnis."
+
+#: apps/messagerie/consumers.py:115
+msgid "Connexion refusée : jeton absent, invalide ou expiré."
+msgstr "Verbindung abgelehnt: Token fehlt, ist ungültig oder abgelaufen."
+
+#: apps/messagerie/consumers.py:204
+#: apps/messagerie/services.py:197
+msgid "Accès interdit à cette conversation."
+msgstr "Zugriff auf diese Unterhaltung verboten."
+
+#: apps/messagerie/consumers.py:99
+msgid "Trame refusée."
+msgstr "Nachricht abgelehnt."
+
+#: apps/messagerie/pieces_jointes.py:64
+msgid "Le fichier est vide."
+msgstr "Die Datei ist leer."
+
+#: apps/messagerie/pieces_jointes.py:72
+msgid "Type de fichier non accepté : envoyez une image (JPEG, PNG, WebP, GIF) ou un PDF."
+msgstr "Dateityp nicht akzeptiert: Senden Sie ein Bild (JPEG, PNG, WebP, GIF) oder ein PDF."
+
+#: apps/messagerie/pieces_jointes.py:66
+msgid "Fichier trop lourd (maximum %(mo)s Mo)."
+msgstr "Datei zu groß (maximal %(mo)s MB)."
+
+#: apps/messagerie/pieces_jointes.py:101
+msgid "Trop de fichiers en attente : envoyez d'abord votre message."
+msgstr "Zu viele ausstehende Dateien: Senden Sie zuerst Ihre Nachricht."
+
+#: apps/messagerie/services.py:66
+#: apps/messagerie/services.py:62
+msgid "Conversation introuvable."
+msgstr "Unterhaltung nicht gefunden."
+
+#: apps/messagerie/services.py:159
+msgid "Vous envoyez trop de messages à la fois : patientez une minute."
+msgstr "Sie senden zu viele Nachrichten auf einmal: Bitte warten Sie eine Minute."
+
+#: apps/messagerie/services.py:262
+#: apps/messagerie/services.py:270
+#: apps/messagerie/views.py:90
+msgid "Fichier introuvable."
+msgstr "Datei nicht gefunden."
+
+#: apps/messagerie/services.py:45
+msgid "Ce compte client est introuvable."
+msgstr "Dieses Kundenkonto wurde nicht gefunden."
+
+#: apps/messagerie/services.py:168
+msgid "Trois pièces jointes au plus par message."
+msgstr "Höchstens drei Anhänge pro Nachricht."
+
+#: apps/messagerie/services.py:200
+msgid "Identifiant d'envoi trop long (64 caractères au plus)."
+msgstr "Sende-Kennung zu lang (höchstens 64 Zeichen)."
+
+#: apps/messagerie/services.py:287
+msgid "Indiquez l'identifiant du dernier message lu."
+msgstr "Geben Sie die Kennung der zuletzt gelesenen Nachricht an."
+
+#: apps/messagerie/services.py:173
+msgid "Une des pièces jointes est introuvable."
+msgstr "Einer der Anhänge wurde nicht gefunden."
+
+#: apps/messagerie/services.py:211
+msgid "Écrivez un message ou joignez un fichier."
+msgstr "Schreiben Sie eine Nachricht oder fügen Sie eine Datei an."
+
+#: apps/messagerie/views.py:45
+msgid "Joignez un fichier."
+msgstr "Fügen Sie eine Datei an."
+
+#: apps/messagerie/views_admin.py:28
+msgid "Indiquez le client."
+msgstr "Geben Sie den Kunden an."
+
+#: apps/notifications/courriels.py:103
+msgid "Ouvrir dans le tableau de bord"
+msgstr "Im Dashboard öffnen"
+
+#: apps/notifications/courriels.py:103
+msgid "Voir sur le site"
+msgstr "Auf der Website ansehen"
+
+#: apps/notifications/courriels.py:74
+msgid "Référence"
+msgstr "Referenz"
+
+#: apps/notifications/courriels.py:76
+msgid "Étape"
+msgstr "Phase"
+
+#: apps/notifications/courriels.py:79
+msgid "Montant"
+msgstr "Betrag"
+
+#: apps/notifications/courriels.py:110
+msgid "Vous recevez ce message parce que vous avez accepté de recevoir les nouveautés. Pour ne plus en recevoir, ouvrez ce lien :"
+msgstr "Sie erhalten diese Nachricht, weil Sie zugestimmt haben, Neuigkeiten zu erhalten. Um sie nicht mehr zu erhalten, öffnen Sie diesen Link:"
+
+#: apps/notifications/evenements.py:30
+msgid "Votre commande {reference} est enregistrée"
+msgstr "Ihre Bestellung {reference} ist erfasst"
+
+#: apps/notifications/evenements.py:31
+msgid "Bonjour {nom}, nous avons bien reçu votre commande. L'équipe du CIR l'étudie et vous fera une proposition."
+msgstr "Guten Tag {nom}, wir haben Ihre Bestellung erhalten. Das CIR-Team prüft sie und unterbreitet Ihnen ein Angebot."
+
+#: apps/notifications/evenements.py:35
+msgid "Nouvelle commande {reference}"
+msgstr "Neue Bestellung {reference}"
+
+#: apps/notifications/evenements.py:36
+msgid "{nom} vient de passer la commande {reference}. Elle attend votre étude."
+msgstr "{nom} hat soeben die Bestellung {reference} aufgegeben. Sie wartet auf Ihre Prüfung."
+
+#: apps/notifications/evenements.py:39
+msgid "Du nouveau sur votre commande {reference}"
+msgstr "Neues zu Ihrer Bestellung {reference}"
+
+#: apps/notifications/evenements.py:40
+msgid "Bonjour {nom}, l'équipe du CIR a répondu dans la négociation de votre commande {reference}. Consultez la proposition et répondez-y."
+msgstr "Guten Tag {nom}, das CIR-Team hat in der Verhandlung zu Ihrer Bestellung {reference} geantwortet. Sehen Sie sich das Angebot an und antworten Sie darauf."
+
+#: apps/notifications/evenements.py:44
+msgid "Réponse du client sur la commande {reference}"
+msgstr "Antwort des Kunden zur Bestellung {reference}"
+
+#: apps/notifications/evenements.py:45
+msgid "{nom} a répondu dans la négociation de la commande {reference}."
+msgstr "{nom} hat in der Verhandlung zur Bestellung {reference} geantwortet."
+
+#: apps/notifications/evenements.py:48
+msgid "Contrat signé : commande {reference}"
+msgstr "Vertrag unterzeichnet: Bestellung {reference}"
+
+#: apps/notifications/evenements.py:49
+msgid "Le contrat de la commande {reference} de {nom} est signé. Montant convenu : {montant}."
+msgstr "Der Vertrag zur Bestellung {reference} von {nom} ist unterzeichnet. Vereinbarter Betrag: {montant}."
+
+#: apps/notifications/evenements.py:52
+msgid "Commande {reference} : {etape}"
+msgstr "Bestellung {reference}: {etape}"
+
+#: apps/notifications/evenements.py:53
+msgid "Bonjour {nom}, l'étape de votre commande {reference} a changé : {etape}."
+msgstr "Guten Tag {nom}, die Phase Ihrer Bestellung {reference} hat sich geändert: {etape}."
+
+#: apps/notifications/evenements.py:56
+msgid "Votre devis pour la commande {reference}"
+msgstr "Ihr Angebot zur Bestellung {reference}"
+
+#: apps/notifications/evenements.py:57
+msgid "Bonjour {nom}, l'équipe du CIR vous a envoyé un devis pour la commande {reference} (total : {montant}). Vous pouvez le consulter et y répondre dans la négociation."
+msgstr "Guten Tag {nom}, das CIR-Team hat Ihnen ein Angebot zur Bestellung {reference} geschickt (Gesamtbetrag: {montant}). Sie können es ansehen und in der Verhandlung darauf antworten."
+
+#: apps/notifications/evenements.py:61
+msgid "Nouvelle demande de rendu {reference}"
+msgstr "Neue Anfrage für eine Oberflächengestaltung {reference}"
+
+#: apps/notifications/evenements.py:62
+msgid "{nom} a déposé la demande de rendu {reference}."
+msgstr "{nom} hat die Anfrage {reference} für eine Oberflächengestaltung eingereicht."
+
+#: apps/notifications/evenements.py:65
+msgid "Réponse à votre demande de rendu {reference}"
+msgstr "Antwort auf Ihre Anfrage {reference} für eine Oberflächengestaltung"
+
+#: apps/notifications/evenements.py:66
+msgid "Bonjour {nom}, l'équipe du CIR a répondu à votre demande de rendu {reference}."
+msgstr "Guten Tag {nom}, das CIR-Team hat auf Ihre Anfrage {reference} für eine Oberflächengestaltung geantwortet."
+
+#: apps/notifications/evenements.py:69
+msgid "Nouvelle demande de contact {reference}"
+msgstr "Neue Kontaktanfrage {reference}"
+
+#: apps/notifications/evenements.py:70
+msgid "{nom} a envoyé la demande de contact {reference}."
+msgstr "{nom} hat die Kontaktanfrage {reference} gesendet."
+
+#: apps/notifications/evenements.py:73
+msgid "Réponse à votre demande {reference}"
+msgstr "Antwort auf Ihre Anfrage {reference}"
+
+#: apps/notifications/evenements.py:74
+msgid "Bonjour {nom}, l'équipe du CIR a répondu à votre demande de contact {reference}."
+msgstr "Guten Tag {nom}, das CIR-Team hat auf Ihre Kontaktanfrage {reference} geantwortet."
+
+#: apps/notifications/evenements.py:77
+msgid "Nouveau message dans la messagerie du CIR"
+msgstr "Neue Nachricht im CIR-Nachrichtenbereich"
+
+#: apps/notifications/evenements.py:78
+msgid "Des messages non lus vous attendent dans la messagerie du CIR (conversation avec {nom})."
+msgstr "Im CIR-Nachrichtenbereich warten ungelesene Nachrichten auf Sie (Unterhaltung mit {nom})."
+
+#: apps/notifications/evenements.py:81
+msgid "Appel manqué de {nom}"
+msgstr "Verpasster Anruf von {nom}"
+
+#: apps/notifications/evenements.py:82
+msgid "{nom} a essayé de joindre le CIR par un appel ({reference}) sans réponse. Pensez à le rappeler."
+msgstr "{nom} hat versucht, das CIR anzurufen ({reference}), und hat niemanden erreicht. Denken Sie an einen Rückruf."
+
+#: apps/notifications/evenements.py:85
+msgid "Une nouveauté du CIR"
+msgstr "Eine Neuigkeit vom CIR"
+
+#: apps/notifications/evenements.py:86
+msgid "Bonjour {nom}, découvrez la dernière nouveauté du CIR."
+msgstr "Guten Tag {nom}, entdecken Sie die neueste Neuigkeit vom CIR."
+
+#: apps/notifications/services.py:78
+msgid "Notification introuvable."
+msgstr "Benachrichtigung nicht gefunden."
+
+#: apps/notifications/services.py:197
+msgid "Événement inconnu."
+msgstr "Unbekanntes Ereignis."
+
+#: apps/notifications/services.py:202
+msgid "Langue inconnue."
+msgstr "Unbekannte Sprache."
+
+#: apps/notifications/services.py:302
+msgid "Envoi introuvable."
+msgstr "Versand nicht gefunden."
+
+#: apps/notifications/services.py:304
+msgid "Seul un envoi en échec peut être relancé."
+msgstr "Nur ein fehlgeschlagener Versand kann erneut versucht werden."
+
+#: apps/notifications/services.py:178
+msgid "Indiquez vrai ou faux."
+msgstr "Geben Sie wahr oder falsch an."
+
+#: apps/notifications/services.py:225
+msgid "Ce champ est obligatoire."
+msgstr "Dieses Feld ist erforderlich."
+
+#: apps/notifications/services.py:229
+msgid "Le sujet doit tenir sur une seule ligne."
+msgstr "Der Betreff muss in eine einzige Zeile passen."
+
+#: apps/notifications/services.py:227
+msgid "Ce texte est trop long (%(max)s caractères au plus)."
+msgstr "Dieser Text ist zu lang (höchstens %(max)s Zeichen)."
+
+#: apps/notifications/services.py:233
+msgid "Les accolades de ce texte sont mal formées."
+msgstr "Die geschweiften Klammern in diesem Text sind fehlerhaft."
+
+#: apps/notifications/services.py:235
+msgid "Variable non autorisée : {%(nom)s}. Variables permises : %(liste)s."
+msgstr "Variable nicht erlaubt: {%(nom)s}. Erlaubte Variablen: %(liste)s."
+
+#: apps/notifications/views.py:88
+msgid "Vous êtes désabonné"
+msgstr "Sie sind abgemeldet"
+
+#: apps/notifications/views.py:89
+msgid "Vous ne recevrez plus les nouveautés du CIR par e-mail. Vous pouvez changer d'avis à tout moment dans les notifications de votre compte."
+msgstr "Sie erhalten die Neuigkeiten des CIR nicht mehr per E-Mail. Sie können es sich jederzeit in den Benachrichtigungen Ihres Kontos anders überlegen."

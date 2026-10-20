@@ -662,3 +662,344 @@ msgstr "The total exceeds the maximum accepted amount (%(max)s FCFA)."
 #: apps/devis/calcul.py:89
 msgid "Le montant dépasse le maximum accepté (%(max)s FCFA)."
 msgstr "The amount exceeds the maximum accepted (%(max)s FCFA)."
+
+#: apps/appels/models.py:10
+msgid "Audio"
+msgstr "Audio"
+
+#: apps/appels/models.py:11
+msgid "Vidéo"
+msgstr "Video"
+
+#: apps/appels/models.py:15
+msgid "Sonne"
+msgstr "Ringing"
+
+#: apps/appels/models.py:17
+msgid "Terminé"
+msgstr "Ended"
+
+#: apps/appels/models.py:18
+msgid "Manqué"
+msgstr "Missed"
+
+#: apps/appels/models.py:20
+msgid "Annulé"
+msgstr "Cancelled"
+
+#: apps/appels/services.py:147
+#: apps/appels/services.py:241
+#: apps/appels/services.py:165
+msgid "Les appels ne sont pas disponibles pour le moment."
+msgstr "Calls are not available at the moment."
+
+#: apps/appels/services.py:176
+#: apps/appels/services.py:202
+#: apps/appels/services.py:220
+msgid "Appel introuvable."
+msgstr "Call not found."
+
+#: apps/appels/services.py:227
+#: apps/appels/services.py:253
+msgid "Cet appel n'est plus disponible."
+msgstr "This call is no longer available."
+
+#: apps/appels/services.py:153
+msgid "Vous avez déjà un appel en cours."
+msgstr "You already have a call in progress."
+
+#: apps/appels/services.py:156
+msgid "Vous avez lancé trop d'appels : réessayez dans une heure."
+msgstr "You have placed too many calls: try again in an hour."
+
+#: apps/appels/services.py:159
+msgid "Personne de l'équipe n'est disponible : écrivez-nous un message ou demandez à être rappelé."
+msgstr "Nobody from the team is available: send us a message or ask to be called back."
+
+#: apps/appels/services.py:186
+msgid "Cet appel ne peut plus être annulé."
+msgstr "This call can no longer be cancelled."
+
+#: apps/appels/services.py:205
+msgid "Cet appel n'est pas en cours."
+msgstr "This call is not in progress."
+
+#: apps/appels/services.py:226
+msgid "Un autre membre de l'équipe a déjà pris cet appel."
+msgstr "Another team member has already taken this call."
+
+#: apps/appels/services.py:145
+msgid "Choisissez un appel audio ou vidéo."
+msgstr "Choose an audio or video call."
+
+#: apps/appels/views.py:65
+msgid "Webhook non configuré."
+msgstr "Webhook not configured."
+
+#: apps/appels/views.py:68
+msgid "Secret du webhook invalide."
+msgstr "Invalid webhook secret."
+
+#: apps/messagerie/consumers.py:115
+msgid "Connexion refusée : jeton absent, invalide ou expiré."
+msgstr "Connection refused: token missing, invalid or expired."
+
+#: apps/messagerie/consumers.py:204
+#: apps/messagerie/services.py:197
+msgid "Accès interdit à cette conversation."
+msgstr "Access to this conversation is forbidden."
+
+#: apps/messagerie/consumers.py:99
+msgid "Trame refusée."
+msgstr "Frame rejected."
+
+#: apps/messagerie/pieces_jointes.py:64
+msgid "Le fichier est vide."
+msgstr "The file is empty."
+
+#: apps/messagerie/pieces_jointes.py:72
+msgid "Type de fichier non accepté : envoyez une image (JPEG, PNG, WebP, GIF) ou un PDF."
+msgstr "File type not accepted: send an image (JPEG, PNG, WebP, GIF) or a PDF."
+
+#: apps/messagerie/pieces_jointes.py:66
+msgid "Fichier trop lourd (maximum %(mo)s Mo)."
+msgstr "File too large (maximum %(mo)s MB)."
+
+#: apps/messagerie/pieces_jointes.py:101
+msgid "Trop de fichiers en attente : envoyez d'abord votre message."
+msgstr "Too many pending files: send your message first."
+
+#: apps/messagerie/services.py:66
+#: apps/messagerie/services.py:62
+msgid "Conversation introuvable."
+msgstr "Conversation not found."
+
+#: apps/messagerie/services.py:159
+msgid "Vous envoyez trop de messages à la fois : patientez une minute."
+msgstr "You are sending too many messages at once: wait a minute."
+
+#: apps/messagerie/services.py:262
+#: apps/messagerie/services.py:270
+#: apps/messagerie/views.py:90
+msgid "Fichier introuvable."
+msgstr "File not found."
+
+#: apps/messagerie/services.py:45
+msgid "Ce compte client est introuvable."
+msgstr "This customer account cannot be found."
+
+#: apps/messagerie/services.py:168
+msgid "Trois pièces jointes au plus par message."
+msgstr "Three attachments at most per message."
+
+#: apps/messagerie/services.py:200
+msgid "Identifiant d'envoi trop long (64 caractères au plus)."
+msgstr "Send identifier too long (64 characters at most)."
+
+#: apps/messagerie/services.py:287
+msgid "Indiquez l'identifiant du dernier message lu."
+msgstr "Give the identifier of the last message read."
+
+#: apps/messagerie/services.py:173
+msgid "Une des pièces jointes est introuvable."
+msgstr "One of the attachments cannot be found."
+
+#: apps/messagerie/services.py:211
+msgid "Écrivez un message ou joignez un fichier."
+msgstr "Write a message or attach a file."
+
+#: apps/messagerie/views.py:45
+msgid "Joignez un fichier."
+msgstr "Attach a file."
+
+#: apps/messagerie/views_admin.py:28
+msgid "Indiquez le client."
+msgstr "Specify the customer."
+
+#: apps/notifications/courriels.py:103
+msgid "Ouvrir dans le tableau de bord"
+msgstr "Open in the dashboard"
+
+#: apps/notifications/courriels.py:103
+msgid "Voir sur le site"
+msgstr "View on the website"
+
+#: apps/notifications/courriels.py:74
+msgid "Référence"
+msgstr "Reference"
+
+#: apps/notifications/courriels.py:76
+msgid "Étape"
+msgstr "Stage"
+
+#: apps/notifications/courriels.py:79
+msgid "Montant"
+msgstr "Amount"
+
+#: apps/notifications/courriels.py:110
+msgid "Vous recevez ce message parce que vous avez accepté de recevoir les nouveautés. Pour ne plus en recevoir, ouvrez ce lien :"
+msgstr "You are receiving this message because you agreed to receive our news. To stop receiving it, open this link:"
+
+#: apps/notifications/evenements.py:30
+msgid "Votre commande {reference} est enregistrée"
+msgstr "Your order {reference} has been recorded"
+
+#: apps/notifications/evenements.py:31
+msgid "Bonjour {nom}, nous avons bien reçu votre commande. L'équipe du CIR l'étudie et vous fera une proposition."
+msgstr "Hello {nom}, we have received your order. The CIR team is reviewing it and will send you a proposal."
+
+#: apps/notifications/evenements.py:35
+msgid "Nouvelle commande {reference}"
+msgstr "New order {reference}"
+
+#: apps/notifications/evenements.py:36
+msgid "{nom} vient de passer la commande {reference}. Elle attend votre étude."
+msgstr "{nom} has just placed order {reference}. It is waiting for your review."
+
+#: apps/notifications/evenements.py:39
+msgid "Du nouveau sur votre commande {reference}"
+msgstr "News about your order {reference}"
+
+#: apps/notifications/evenements.py:40
+msgid "Bonjour {nom}, l'équipe du CIR a répondu dans la négociation de votre commande {reference}. Consultez la proposition et répondez-y."
+msgstr "Hello {nom}, the CIR team has replied in the negotiation of your order {reference}. Review the proposal and reply to it."
+
+#: apps/notifications/evenements.py:44
+msgid "Réponse du client sur la commande {reference}"
+msgstr "Customer reply on order {reference}"
+
+#: apps/notifications/evenements.py:45
+msgid "{nom} a répondu dans la négociation de la commande {reference}."
+msgstr "{nom} has replied in the negotiation of order {reference}."
+
+#: apps/notifications/evenements.py:48
+msgid "Contrat signé : commande {reference}"
+msgstr "Contract signed: order {reference}"
+
+#: apps/notifications/evenements.py:49
+msgid "Le contrat de la commande {reference} de {nom} est signé. Montant convenu : {montant}."
+msgstr "The contract for order {reference} from {nom} is signed. Agreed amount: {montant}."
+
+#: apps/notifications/evenements.py:52
+msgid "Commande {reference} : {etape}"
+msgstr "Order {reference}: {etape}"
+
+#: apps/notifications/evenements.py:53
+msgid "Bonjour {nom}, l'étape de votre commande {reference} a changé : {etape}."
+msgstr "Hello {nom}, the stage of your order {reference} has changed: {etape}."
+
+#: apps/notifications/evenements.py:56
+msgid "Votre devis pour la commande {reference}"
+msgstr "Your quote for order {reference}"
+
+#: apps/notifications/evenements.py:57
+msgid "Bonjour {nom}, l'équipe du CIR vous a envoyé un devis pour la commande {reference} (total : {montant}). Vous pouvez le consulter et y répondre dans la négociation."
+msgstr "Hello {nom}, the CIR team has sent you a quote for order {reference} (total: {montant}). You can review it and reply in the negotiation."
+
+#: apps/notifications/evenements.py:61
+msgid "Nouvelle demande de rendu {reference}"
+msgstr "New finish request {reference}"
+
+#: apps/notifications/evenements.py:62
+msgid "{nom} a déposé la demande de rendu {reference}."
+msgstr "{nom} has submitted the finish request {reference}."
+
+#: apps/notifications/evenements.py:65
+msgid "Réponse à votre demande de rendu {reference}"
+msgstr "Reply to your finish request {reference}"
+
+#: apps/notifications/evenements.py:66
+msgid "Bonjour {nom}, l'équipe du CIR a répondu à votre demande de rendu {reference}."
+msgstr "Hello {nom}, the CIR team has replied to your finish request {reference}."
+
+#: apps/notifications/evenements.py:69
+msgid "Nouvelle demande de contact {reference}"
+msgstr "New contact request {reference}"
+
+#: apps/notifications/evenements.py:70
+msgid "{nom} a envoyé la demande de contact {reference}."
+msgstr "{nom} has sent the contact request {reference}."
+
+#: apps/notifications/evenements.py:73
+msgid "Réponse à votre demande {reference}"
+msgstr "Reply to your request {reference}"
+
+#: apps/notifications/evenements.py:74
+msgid "Bonjour {nom}, l'équipe du CIR a répondu à votre demande de contact {reference}."
+msgstr "Hello {nom}, the CIR team has replied to your contact request {reference}."
+
+#: apps/notifications/evenements.py:77
+msgid "Nouveau message dans la messagerie du CIR"
+msgstr "New message in the CIR messaging"
+
+#: apps/notifications/evenements.py:78
+msgid "Des messages non lus vous attendent dans la messagerie du CIR (conversation avec {nom})."
+msgstr "Unread messages are waiting for you in the CIR messaging (conversation with {nom})."
+
+#: apps/notifications/evenements.py:81
+msgid "Appel manqué de {nom}"
+msgstr "Missed call from {nom}"
+
+#: apps/notifications/evenements.py:82
+msgid "{nom} a essayé de joindre le CIR par un appel ({reference}) sans réponse. Pensez à le rappeler."
+msgstr "{nom} tried to reach CIR by call ({reference}) and got no answer. Remember to call back."
+
+#: apps/notifications/evenements.py:85
+msgid "Une nouveauté du CIR"
+msgstr "News from CIR"
+
+#: apps/notifications/evenements.py:86
+msgid "Bonjour {nom}, découvrez la dernière nouveauté du CIR."
+msgstr "Hello {nom}, discover the latest news from CIR."
+
+#: apps/notifications/services.py:78
+msgid "Notification introuvable."
+msgstr "Notification not found."
+
+#: apps/notifications/services.py:197
+msgid "Événement inconnu."
+msgstr "Unknown event."
+
+#: apps/notifications/services.py:202
+msgid "Langue inconnue."
+msgstr "Unknown language."
+
+#: apps/notifications/services.py:302
+msgid "Envoi introuvable."
+msgstr "Delivery not found."
+
+#: apps/notifications/services.py:304
+msgid "Seul un envoi en échec peut être relancé."
+msgstr "Only a failed delivery can be retried."
+
+#: apps/notifications/services.py:178
+msgid "Indiquez vrai ou faux."
+msgstr "Give true or false."
+
+#: apps/notifications/services.py:225
+msgid "Ce champ est obligatoire."
+msgstr "This field is required."
+
+#: apps/notifications/services.py:229
+msgid "Le sujet doit tenir sur une seule ligne."
+msgstr "The subject must fit on a single line."
+
+#: apps/notifications/services.py:227
+msgid "Ce texte est trop long (%(max)s caractères au plus)."
+msgstr "This text is too long (%(max)s characters at most)."
+
+#: apps/notifications/services.py:233
+msgid "Les accolades de ce texte sont mal formées."
+msgstr "The braces in this text are malformed."
+
+#: apps/notifications/services.py:235
+msgid "Variable non autorisée : {%(nom)s}. Variables permises : %(liste)s."
+msgstr "Variable not allowed: {%(nom)s}. Allowed variables: %(liste)s."
+
+#: apps/notifications/views.py:88
+msgid "Vous êtes désabonné"
+msgstr "You are unsubscribed"
+
+#: apps/notifications/views.py:89
+msgid "Vous ne recevrez plus les nouveautés du CIR par e-mail. Vous pouvez changer d'avis à tout moment dans les notifications de votre compte."
+msgstr "You will no longer receive CIR news by e-mail. You can change your mind at any time in the notifications of your account."

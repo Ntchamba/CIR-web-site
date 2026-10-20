@@ -32,6 +32,12 @@ urlpatterns = [
     path("api/admin/devis/", include("apps.devis.urls_admin")),
     path("api/contact/", include("apps.contact.urls")),
     path("api/admin/contact/", include("apps.contact.urls_admin")),
+    path("api/messagerie/", include("apps.messagerie.urls")),
+    path("api/admin/messagerie/", include("apps.messagerie.urls_admin")),
+    path("api/appels/", include("apps.appels.urls")),
+    path("api/admin/appels/", include("apps.appels.urls_admin")),
+    path("api/notifications/", include("apps.notifications.urls")),
+    path("api/admin/notifications/", include("apps.notifications.urls_admin")),
 ]
 
 if settings.SERVIR_MEDIAS:

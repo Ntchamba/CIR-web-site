@@ -64,6 +64,26 @@ Contrat d'API : `docs/taches/vague-2-contrat-api.md`.
 - [x] Textes dans les cinq langues (`src/i18n/`), tests (`Commandes.test.jsx`, `Devis.test.jsx`, `Contact.test.jsx`, `Coque.test.jsx`)
 - [ ] Suite de tests complète (testeur)
 
+## Vague 3 : échanges en direct (agent `tableau-de-bord`, vérifié par `tableau-de-bord-testeur`)
+
+Contrat d'API : `docs/taches/vague-3-contrat-api.md`. Client WebSocket commun : `frontend/partage/api/socket.js`.
+
+- [x] Modules `messagerie`, `appels`, `notifications` passés dans « Pilotage » (`layout/menu.js`), routes à la demande
+      (`/messagerie`, `/appels`, `/notifications`)
+- [x] Direct dans la coque : `layout/FondDirect.jsx` (une connexion `/ws/` pour toute l'application, compteurs, appels qui
+      sonnent, abonnements des pages ; repli HTTP toutes les 15 s et bandeau « connexion interrompue »),
+      `layout/direct.js` (`useDirect`), pastilles du menu en direct (`layout/usePastilles.js`)
+- [x] Messagerie : liste des conversations, fil (optimiste, « Lu », « écrit… », historique, rattrapage, pièces jointes,
+      lu seulement si la page est visible), nouvelle conversation, contexte client
+- [x] Appels : bannière et sonnerie (`SonnerieAppel.jsx`, `sonnerie.js`), salle modérateur (`SalleAppel.jsx`, `jitsi.js`),
+      historique avec « Rappeler » / « Écrire », jauge d'usage JaaS (`AppelsEntrantsPage.jsx`)
+- [x] Notifications : cloche de l'en-tête (`CentreNotifications.jsx`), liste, préférence `email_equipe`, et pour le
+      super-administrateur modèles d'e-mails (`ModelesEmailsPage.jsx`) et état des envois (`EnvoisEmails.jsx`)
+- [x] Filtre `?client=` ajouté à la liste des commandes (lien « Commandes du client » de la messagerie)
+- [x] Textes dans les cinq langues (`src/i18n/`), tests (`Messagerie.test.jsx`, `Appels.test.jsx`, `Notifications.test.jsx`,
+      `Direct.test.jsx`, `AccessibiliteVague3.test.jsx`, `Vague3.test.jsx`) ; faux WebSocket : `src/test/direct-simule.js`
+- [ ] Suite de tests complète (testeur)
+
 ## Déploiement (Railway)
 
 Service à part : config file `frontend/tableau-de-bord/railway.toml`, root directory vide (racine du dépôt),

@@ -662,3 +662,344 @@ msgstr "总额超过允许的最大金额（%(max)s 法郎）。"
 #: apps/devis/calcul.py:89
 msgid "Le montant dépasse le maximum accepté (%(max)s FCFA)."
 msgstr "金额超过允许的最大值（%(max)s 法郎）。"
+
+#: apps/appels/models.py:10
+msgid "Audio"
+msgstr "语音"
+
+#: apps/appels/models.py:11
+msgid "Vidéo"
+msgstr "视频"
+
+#: apps/appels/models.py:15
+msgid "Sonne"
+msgstr "响铃中"
+
+#: apps/appels/models.py:17
+msgid "Terminé"
+msgstr "已结束"
+
+#: apps/appels/models.py:18
+msgid "Manqué"
+msgstr "未接"
+
+#: apps/appels/models.py:20
+msgid "Annulé"
+msgstr "已取消"
+
+#: apps/appels/services.py:147
+#: apps/appels/services.py:241
+#: apps/appels/services.py:165
+msgid "Les appels ne sont pas disponibles pour le moment."
+msgstr "目前无法使用通话功能。"
+
+#: apps/appels/services.py:176
+#: apps/appels/services.py:202
+#: apps/appels/services.py:220
+msgid "Appel introuvable."
+msgstr "未找到该通话。"
+
+#: apps/appels/services.py:227
+#: apps/appels/services.py:253
+msgid "Cet appel n'est plus disponible."
+msgstr "该通话已不可用。"
+
+#: apps/appels/services.py:153
+msgid "Vous avez déjà un appel en cours."
+msgstr "您已有一个正在进行的通话。"
+
+#: apps/appels/services.py:156
+msgid "Vous avez lancé trop d'appels : réessayez dans une heure."
+msgstr "您发起的通话过多，请一小时后再试。"
+
+#: apps/appels/services.py:159
+msgid "Personne de l'équipe n'est disponible : écrivez-nous un message ou demandez à être rappelé."
+msgstr "团队成员目前都不在线：请给我们留言或申请回电。"
+
+#: apps/appels/services.py:186
+msgid "Cet appel ne peut plus être annulé."
+msgstr "该通话已无法取消。"
+
+#: apps/appels/services.py:205
+msgid "Cet appel n'est pas en cours."
+msgstr "该通话未在进行中。"
+
+#: apps/appels/services.py:226
+msgid "Un autre membre de l'équipe a déjà pris cet appel."
+msgstr "团队中的其他成员已接听该通话。"
+
+#: apps/appels/services.py:145
+msgid "Choisissez un appel audio ou vidéo."
+msgstr "请选择语音或视频通话。"
+
+#: apps/appels/views.py:65
+msgid "Webhook non configuré."
+msgstr "Webhook 尚未配置。"
+
+#: apps/appels/views.py:68
+msgid "Secret du webhook invalide."
+msgstr "Webhook 密钥无效。"
+
+#: apps/messagerie/consumers.py:115
+msgid "Connexion refusée : jeton absent, invalide ou expiré."
+msgstr "连接被拒绝：令牌缺失、无效或已过期。"
+
+#: apps/messagerie/consumers.py:204
+#: apps/messagerie/services.py:197
+msgid "Accès interdit à cette conversation."
+msgstr "无权访问此会话。"
+
+#: apps/messagerie/consumers.py:99
+msgid "Trame refusée."
+msgstr "消息帧被拒绝。"
+
+#: apps/messagerie/pieces_jointes.py:64
+msgid "Le fichier est vide."
+msgstr "文件为空。"
+
+#: apps/messagerie/pieces_jointes.py:72
+msgid "Type de fichier non accepté : envoyez une image (JPEG, PNG, WebP, GIF) ou un PDF."
+msgstr "不接受此文件类型：请发送图片（JPEG、PNG、WebP、GIF）或 PDF。"
+
+#: apps/messagerie/pieces_jointes.py:66
+msgid "Fichier trop lourd (maximum %(mo)s Mo)."
+msgstr "文件过大（最大 %(mo)s MB）。"
+
+#: apps/messagerie/pieces_jointes.py:101
+msgid "Trop de fichiers en attente : envoyez d'abord votre message."
+msgstr "待发送的文件过多：请先发送您的消息。"
+
+#: apps/messagerie/services.py:66
+#: apps/messagerie/services.py:62
+msgid "Conversation introuvable."
+msgstr "未找到该会话。"
+
+#: apps/messagerie/services.py:159
+msgid "Vous envoyez trop de messages à la fois : patientez une minute."
+msgstr "您发送消息过于频繁：请等待一分钟。"
+
+#: apps/messagerie/services.py:262
+#: apps/messagerie/services.py:270
+#: apps/messagerie/views.py:90
+msgid "Fichier introuvable."
+msgstr "未找到该文件。"
+
+#: apps/messagerie/services.py:45
+msgid "Ce compte client est introuvable."
+msgstr "找不到该客户账户。"
+
+#: apps/messagerie/services.py:168
+msgid "Trois pièces jointes au plus par message."
+msgstr "每条消息最多三个附件。"
+
+#: apps/messagerie/services.py:200
+msgid "Identifiant d'envoi trop long (64 caractères au plus)."
+msgstr "发送标识过长（最多 64 个字符）。"
+
+#: apps/messagerie/services.py:287
+msgid "Indiquez l'identifiant du dernier message lu."
+msgstr "请提供最后一条已读消息的标识。"
+
+#: apps/messagerie/services.py:173
+msgid "Une des pièces jointes est introuvable."
+msgstr "找不到其中一个附件。"
+
+#: apps/messagerie/services.py:211
+msgid "Écrivez un message ou joignez un fichier."
+msgstr "请输入消息或添加附件。"
+
+#: apps/messagerie/views.py:45
+msgid "Joignez un fichier."
+msgstr "请添加文件。"
+
+#: apps/messagerie/views_admin.py:28
+msgid "Indiquez le client."
+msgstr "请指定客户。"
+
+#: apps/notifications/courriels.py:103
+msgid "Ouvrir dans le tableau de bord"
+msgstr "在管理后台中打开"
+
+#: apps/notifications/courriels.py:103
+msgid "Voir sur le site"
+msgstr "在网站上查看"
+
+#: apps/notifications/courriels.py:74
+msgid "Référence"
+msgstr "编号"
+
+#: apps/notifications/courriels.py:76
+msgid "Étape"
+msgstr "阶段"
+
+#: apps/notifications/courriels.py:79
+msgid "Montant"
+msgstr "金额"
+
+#: apps/notifications/courriels.py:110
+msgid "Vous recevez ce message parce que vous avez accepté de recevoir les nouveautés. Pour ne plus en recevoir, ouvrez ce lien :"
+msgstr "您收到此邮件是因为您同意接收我们的最新动态。如不想再收到，请打开此链接："
+
+#: apps/notifications/evenements.py:30
+msgid "Votre commande {reference} est enregistrée"
+msgstr "您的订单 {reference} 已登记"
+
+#: apps/notifications/evenements.py:31
+msgid "Bonjour {nom}, nous avons bien reçu votre commande. L'équipe du CIR l'étudie et vous fera une proposition."
+msgstr "{nom}，您好！我们已收到您的订单。CIR 团队正在审核，稍后会向您提出报价方案。"
+
+#: apps/notifications/evenements.py:35
+msgid "Nouvelle commande {reference}"
+msgstr "新订单 {reference}"
+
+#: apps/notifications/evenements.py:36
+msgid "{nom} vient de passer la commande {reference}. Elle attend votre étude."
+msgstr "{nom} 刚刚提交了订单 {reference}，等待您审核。"
+
+#: apps/notifications/evenements.py:39
+msgid "Du nouveau sur votre commande {reference}"
+msgstr "您的订单 {reference} 有新进展"
+
+#: apps/notifications/evenements.py:40
+msgid "Bonjour {nom}, l'équipe du CIR a répondu dans la négociation de votre commande {reference}. Consultez la proposition et répondez-y."
+msgstr "{nom}，您好！CIR 团队已在订单 {reference} 的洽谈中回复。请查看方案并回复。"
+
+#: apps/notifications/evenements.py:44
+msgid "Réponse du client sur la commande {reference}"
+msgstr "客户对订单 {reference} 的回复"
+
+#: apps/notifications/evenements.py:45
+msgid "{nom} a répondu dans la négociation de la commande {reference}."
+msgstr "{nom} 已在订单 {reference} 的洽谈中回复。"
+
+#: apps/notifications/evenements.py:48
+msgid "Contrat signé : commande {reference}"
+msgstr "合同已签署：订单 {reference}"
+
+#: apps/notifications/evenements.py:49
+msgid "Le contrat de la commande {reference} de {nom} est signé. Montant convenu : {montant}."
+msgstr "{nom} 的订单 {reference} 合同已签署。约定金额：{montant}。"
+
+#: apps/notifications/evenements.py:52
+msgid "Commande {reference} : {etape}"
+msgstr "订单 {reference}：{etape}"
+
+#: apps/notifications/evenements.py:53
+msgid "Bonjour {nom}, l'étape de votre commande {reference} a changé : {etape}."
+msgstr "{nom}，您好！您的订单 {reference} 的阶段已更新：{etape}。"
+
+#: apps/notifications/evenements.py:56
+msgid "Votre devis pour la commande {reference}"
+msgstr "订单 {reference} 的报价单"
+
+#: apps/notifications/evenements.py:57
+msgid "Bonjour {nom}, l'équipe du CIR vous a envoyé un devis pour la commande {reference} (total : {montant}). Vous pouvez le consulter et y répondre dans la négociation."
+msgstr "{nom}，您好！CIR 团队已向您发送订单 {reference} 的报价单（总计：{montant}）。您可以查看并在洽谈中回复。"
+
+#: apps/notifications/evenements.py:61
+msgid "Nouvelle demande de rendu {reference}"
+msgstr "新的效果定制申请 {reference}"
+
+#: apps/notifications/evenements.py:62
+msgid "{nom} a déposé la demande de rendu {reference}."
+msgstr "{nom} 提交了效果定制申请 {reference}。"
+
+#: apps/notifications/evenements.py:65
+msgid "Réponse à votre demande de rendu {reference}"
+msgstr "您的效果定制申请 {reference} 已有回复"
+
+#: apps/notifications/evenements.py:66
+msgid "Bonjour {nom}, l'équipe du CIR a répondu à votre demande de rendu {reference}."
+msgstr "{nom}，您好！CIR 团队已回复您的效果定制申请 {reference}。"
+
+#: apps/notifications/evenements.py:69
+msgid "Nouvelle demande de contact {reference}"
+msgstr "新的联系请求 {reference}"
+
+#: apps/notifications/evenements.py:70
+msgid "{nom} a envoyé la demande de contact {reference}."
+msgstr "{nom} 发送了联系请求 {reference}。"
+
+#: apps/notifications/evenements.py:73
+msgid "Réponse à votre demande {reference}"
+msgstr "您的请求 {reference} 已有回复"
+
+#: apps/notifications/evenements.py:74
+msgid "Bonjour {nom}, l'équipe du CIR a répondu à votre demande de contact {reference}."
+msgstr "{nom}，您好！CIR 团队已回复您的联系请求 {reference}。"
+
+#: apps/notifications/evenements.py:77
+msgid "Nouveau message dans la messagerie du CIR"
+msgstr "CIR 消息中心有新消息"
+
+#: apps/notifications/evenements.py:78
+msgid "Des messages non lus vous attendent dans la messagerie du CIR (conversation avec {nom})."
+msgstr "CIR 消息中心有未读消息（与 {nom} 的会话）。"
+
+#: apps/notifications/evenements.py:81
+msgid "Appel manqué de {nom}"
+msgstr "{nom} 的未接来电"
+
+#: apps/notifications/evenements.py:82
+msgid "{nom} a essayé de joindre le CIR par un appel ({reference}) sans réponse. Pensez à le rappeler."
+msgstr "{nom} 曾致电 CIR（{reference}），但无人接听。请记得回电。"
+
+#: apps/notifications/evenements.py:85
+msgid "Une nouveauté du CIR"
+msgstr "CIR 的最新动态"
+
+#: apps/notifications/evenements.py:86
+msgid "Bonjour {nom}, découvrez la dernière nouveauté du CIR."
+msgstr "{nom}，您好！快来看看 CIR 的最新动态。"
+
+#: apps/notifications/services.py:78
+msgid "Notification introuvable."
+msgstr "未找到该通知。"
+
+#: apps/notifications/services.py:197
+msgid "Événement inconnu."
+msgstr "未知事件。"
+
+#: apps/notifications/services.py:202
+msgid "Langue inconnue."
+msgstr "未知语言。"
+
+#: apps/notifications/services.py:302
+msgid "Envoi introuvable."
+msgstr "未找到该发送记录。"
+
+#: apps/notifications/services.py:304
+msgid "Seul un envoi en échec peut être relancé."
+msgstr "只有发送失败的记录才能重试。"
+
+#: apps/notifications/services.py:178
+msgid "Indiquez vrai ou faux."
+msgstr "请填写“是”或“否”。"
+
+#: apps/notifications/services.py:225
+msgid "Ce champ est obligatoire."
+msgstr "此字段为必填项。"
+
+#: apps/notifications/services.py:229
+msgid "Le sujet doit tenir sur une seule ligne."
+msgstr "主题必须为单行。"
+
+#: apps/notifications/services.py:227
+msgid "Ce texte est trop long (%(max)s caractères au plus)."
+msgstr "此文本过长（最多 %(max)s 个字符）。"
+
+#: apps/notifications/services.py:233
+msgid "Les accolades de ce texte sont mal formées."
+msgstr "此文本中的花括号格式不正确。"
+
+#: apps/notifications/services.py:235
+msgid "Variable non autorisée : {%(nom)s}. Variables permises : %(liste)s."
+msgstr "不允许的变量：{%(nom)s}。可用变量：%(liste)s。"
+
+#: apps/notifications/views.py:88
+msgid "Vous êtes désabonné"
+msgstr "您已退订"
+
+#: apps/notifications/views.py:89
+msgid "Vous ne recevrez plus les nouveautés du CIR par e-mail. Vous pouvez changer d'avis à tout moment dans les notifications de votre compte."
+msgstr "您将不再通过电子邮件收到 CIR 的最新动态。您可以随时在账户的通知设置中重新开启。"

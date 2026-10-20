@@ -662,3 +662,344 @@ msgstr "合計金額が上限（%(max)s FCFA）を超えています。"
 #: apps/devis/calcul.py:89
 msgid "Le montant dépasse le maximum accepté (%(max)s FCFA)."
 msgstr "金額が上限（%(max)s FCFA）を超えています。"
+
+#: apps/appels/models.py:10
+msgid "Audio"
+msgstr "音声"
+
+#: apps/appels/models.py:11
+msgid "Vidéo"
+msgstr "ビデオ"
+
+#: apps/appels/models.py:15
+msgid "Sonne"
+msgstr "呼び出し中"
+
+#: apps/appels/models.py:17
+msgid "Terminé"
+msgstr "終了"
+
+#: apps/appels/models.py:18
+msgid "Manqué"
+msgstr "不在着信"
+
+#: apps/appels/models.py:20
+msgid "Annulé"
+msgstr "キャンセル"
+
+#: apps/appels/services.py:147
+#: apps/appels/services.py:241
+#: apps/appels/services.py:165
+msgid "Les appels ne sont pas disponibles pour le moment."
+msgstr "現在、通話はご利用いただけません。"
+
+#: apps/appels/services.py:176
+#: apps/appels/services.py:202
+#: apps/appels/services.py:220
+msgid "Appel introuvable."
+msgstr "通話が見つかりません。"
+
+#: apps/appels/services.py:227
+#: apps/appels/services.py:253
+msgid "Cet appel n'est plus disponible."
+msgstr "この通話はもう利用できません。"
+
+#: apps/appels/services.py:153
+msgid "Vous avez déjà un appel en cours."
+msgstr "すでに通話中です。"
+
+#: apps/appels/services.py:156
+msgid "Vous avez lancé trop d'appels : réessayez dans une heure."
+msgstr "通話の発信回数が多すぎます。1時間後にもう一度お試しください。"
+
+#: apps/appels/services.py:159
+msgid "Personne de l'équipe n'est disponible : écrivez-nous un message ou demandez à être rappelé."
+msgstr "担当者が全員対応できません。メッセージを送るか、折り返しのお電話をご依頼ください。"
+
+#: apps/appels/services.py:186
+msgid "Cet appel ne peut plus être annulé."
+msgstr "この通話はもうキャンセルできません。"
+
+#: apps/appels/services.py:205
+msgid "Cet appel n'est pas en cours."
+msgstr "この通話は進行中ではありません。"
+
+#: apps/appels/services.py:226
+msgid "Un autre membre de l'équipe a déjà pris cet appel."
+msgstr "別のチームメンバーがすでにこの通話に応答しました。"
+
+#: apps/appels/services.py:145
+msgid "Choisissez un appel audio ou vidéo."
+msgstr "音声通話かビデオ通話を選んでください。"
+
+#: apps/appels/views.py:65
+msgid "Webhook non configuré."
+msgstr "Webhook が設定されていません。"
+
+#: apps/appels/views.py:68
+msgid "Secret du webhook invalide."
+msgstr "Webhook のシークレットが無効です。"
+
+#: apps/messagerie/consumers.py:115
+msgid "Connexion refusée : jeton absent, invalide ou expiré."
+msgstr "接続が拒否されました。トークンがないか、無効、または期限切れです。"
+
+#: apps/messagerie/consumers.py:204
+#: apps/messagerie/services.py:197
+msgid "Accès interdit à cette conversation."
+msgstr "この会話にはアクセスできません。"
+
+#: apps/messagerie/consumers.py:99
+msgid "Trame refusée."
+msgstr "メッセージが拒否されました。"
+
+#: apps/messagerie/pieces_jointes.py:64
+msgid "Le fichier est vide."
+msgstr "ファイルが空です。"
+
+#: apps/messagerie/pieces_jointes.py:72
+msgid "Type de fichier non accepté : envoyez une image (JPEG, PNG, WebP, GIF) ou un PDF."
+msgstr "このファイル形式は受け付けられません。画像（JPEG、PNG、WebP、GIF）または PDF を送信してください。"
+
+#: apps/messagerie/pieces_jointes.py:66
+msgid "Fichier trop lourd (maximum %(mo)s Mo)."
+msgstr "ファイルが大きすぎます（最大 %(mo)s MB）。"
+
+#: apps/messagerie/pieces_jointes.py:101
+msgid "Trop de fichiers en attente : envoyez d'abord votre message."
+msgstr "未送信のファイルが多すぎます。先にメッセージを送信してください。"
+
+#: apps/messagerie/services.py:66
+#: apps/messagerie/services.py:62
+msgid "Conversation introuvable."
+msgstr "会話が見つかりません。"
+
+#: apps/messagerie/services.py:159
+msgid "Vous envoyez trop de messages à la fois : patientez une minute."
+msgstr "一度に送信するメッセージが多すぎます。1分ほどお待ちください。"
+
+#: apps/messagerie/services.py:262
+#: apps/messagerie/services.py:270
+#: apps/messagerie/views.py:90
+msgid "Fichier introuvable."
+msgstr "ファイルが見つかりません。"
+
+#: apps/messagerie/services.py:45
+msgid "Ce compte client est introuvable."
+msgstr "このお客様アカウントが見つかりません。"
+
+#: apps/messagerie/services.py:168
+msgid "Trois pièces jointes au plus par message."
+msgstr "1通のメッセージに添付できるのは3件までです。"
+
+#: apps/messagerie/services.py:200
+msgid "Identifiant d'envoi trop long (64 caractères au plus)."
+msgstr "送信IDが長すぎます（64文字以内）。"
+
+#: apps/messagerie/services.py:287
+msgid "Indiquez l'identifiant du dernier message lu."
+msgstr "最後に読んだメッセージのIDを指定してください。"
+
+#: apps/messagerie/services.py:173
+msgid "Une des pièces jointes est introuvable."
+msgstr "添付ファイルの1つが見つかりません。"
+
+#: apps/messagerie/services.py:211
+msgid "Écrivez un message ou joignez un fichier."
+msgstr "メッセージを入力するか、ファイルを添付してください。"
+
+#: apps/messagerie/views.py:45
+msgid "Joignez un fichier."
+msgstr "ファイルを添付してください。"
+
+#: apps/messagerie/views_admin.py:28
+msgid "Indiquez le client."
+msgstr "お客様を指定してください。"
+
+#: apps/notifications/courriels.py:103
+msgid "Ouvrir dans le tableau de bord"
+msgstr "ダッシュボードで開く"
+
+#: apps/notifications/courriels.py:103
+msgid "Voir sur le site"
+msgstr "サイトで見る"
+
+#: apps/notifications/courriels.py:74
+msgid "Référence"
+msgstr "参照番号"
+
+#: apps/notifications/courriels.py:76
+msgid "Étape"
+msgstr "段階"
+
+#: apps/notifications/courriels.py:79
+msgid "Montant"
+msgstr "金額"
+
+#: apps/notifications/courriels.py:110
+msgid "Vous recevez ce message parce que vous avez accepté de recevoir les nouveautés. Pour ne plus en recevoir, ouvrez ce lien :"
+msgstr "このメールは、お知らせの受信に同意いただいたためお送りしています。今後の受信を停止するには、次のリンクを開いてください。"
+
+#: apps/notifications/evenements.py:30
+msgid "Votre commande {reference} est enregistrée"
+msgstr "ご注文 {reference} を受け付けました"
+
+#: apps/notifications/evenements.py:31
+msgid "Bonjour {nom}, nous avons bien reçu votre commande. L'équipe du CIR l'étudie et vous fera une proposition."
+msgstr "{nom} 様、ご注文を受け付けました。CIR のチームが内容を確認し、ご提案をお送りします。"
+
+#: apps/notifications/evenements.py:35
+msgid "Nouvelle commande {reference}"
+msgstr "新規注文 {reference}"
+
+#: apps/notifications/evenements.py:36
+msgid "{nom} vient de passer la commande {reference}. Elle attend votre étude."
+msgstr "{nom} 様が注文 {reference} を行いました。確認をお待ちしています。"
+
+#: apps/notifications/evenements.py:39
+msgid "Du nouveau sur votre commande {reference}"
+msgstr "ご注文 {reference} に更新があります"
+
+#: apps/notifications/evenements.py:40
+msgid "Bonjour {nom}, l'équipe du CIR a répondu dans la négociation de votre commande {reference}. Consultez la proposition et répondez-y."
+msgstr "{nom} 様、ご注文 {reference} の交渉に CIR のチームが返信しました。提案をご確認のうえ、ご返信ください。"
+
+#: apps/notifications/evenements.py:44
+msgid "Réponse du client sur la commande {reference}"
+msgstr "注文 {reference} に対するお客様の返答"
+
+#: apps/notifications/evenements.py:45
+msgid "{nom} a répondu dans la négociation de la commande {reference}."
+msgstr "{nom} 様が注文 {reference} の交渉に返信しました。"
+
+#: apps/notifications/evenements.py:48
+msgid "Contrat signé : commande {reference}"
+msgstr "契約締結：注文 {reference}"
+
+#: apps/notifications/evenements.py:49
+msgid "Le contrat de la commande {reference} de {nom} est signé. Montant convenu : {montant}."
+msgstr "{nom} 様の注文 {reference} の契約が締結されました。合意金額：{montant}。"
+
+#: apps/notifications/evenements.py:52
+msgid "Commande {reference} : {etape}"
+msgstr "注文 {reference}：{etape}"
+
+#: apps/notifications/evenements.py:53
+msgid "Bonjour {nom}, l'étape de votre commande {reference} a changé : {etape}."
+msgstr "{nom} 様、ご注文 {reference} の段階が変わりました：{etape}。"
+
+#: apps/notifications/evenements.py:56
+msgid "Votre devis pour la commande {reference}"
+msgstr "注文 {reference} のお見積り"
+
+#: apps/notifications/evenements.py:57
+msgid "Bonjour {nom}, l'équipe du CIR vous a envoyé un devis pour la commande {reference} (total : {montant}). Vous pouvez le consulter et y répondre dans la négociation."
+msgstr "{nom} 様、CIR のチームが注文 {reference} のお見積りをお送りしました（合計：{montant}）。ご確認のうえ、交渉画面からご返信いただけます。"
+
+#: apps/notifications/evenements.py:61
+msgid "Nouvelle demande de rendu {reference}"
+msgstr "新しい仕上がりのご依頼 {reference}"
+
+#: apps/notifications/evenements.py:62
+msgid "{nom} a déposé la demande de rendu {reference}."
+msgstr "{nom} 様が仕上がりのご依頼 {reference} を提出しました。"
+
+#: apps/notifications/evenements.py:65
+msgid "Réponse à votre demande de rendu {reference}"
+msgstr "仕上がりのご依頼 {reference} への回答"
+
+#: apps/notifications/evenements.py:66
+msgid "Bonjour {nom}, l'équipe du CIR a répondu à votre demande de rendu {reference}."
+msgstr "{nom} 様、仕上がりのご依頼 {reference} に CIR のチームが回答しました。"
+
+#: apps/notifications/evenements.py:69
+msgid "Nouvelle demande de contact {reference}"
+msgstr "新しいお問い合わせ {reference}"
+
+#: apps/notifications/evenements.py:70
+msgid "{nom} a envoyé la demande de contact {reference}."
+msgstr "{nom} 様がお問い合わせ {reference} を送信しました。"
+
+#: apps/notifications/evenements.py:73
+msgid "Réponse à votre demande {reference}"
+msgstr "お問い合わせ {reference} への回答"
+
+#: apps/notifications/evenements.py:74
+msgid "Bonjour {nom}, l'équipe du CIR a répondu à votre demande de contact {reference}."
+msgstr "{nom} 様、お問い合わせ {reference} に CIR のチームが回答しました。"
+
+#: apps/notifications/evenements.py:77
+msgid "Nouveau message dans la messagerie du CIR"
+msgstr "CIR のメッセージに新着があります"
+
+#: apps/notifications/evenements.py:78
+msgid "Des messages non lus vous attendent dans la messagerie du CIR (conversation avec {nom})."
+msgstr "CIR のメッセージに未読があります（{nom} 様との会話）。"
+
+#: apps/notifications/evenements.py:81
+msgid "Appel manqué de {nom}"
+msgstr "{nom} 様からの不在着信"
+
+#: apps/notifications/evenements.py:82
+msgid "{nom} a essayé de joindre le CIR par un appel ({reference}) sans réponse. Pensez à le rappeler."
+msgstr "{nom} 様が CIR に電話をかけました（{reference}）が、応答がありませんでした。折り返しのご連絡をお願いします。"
+
+#: apps/notifications/evenements.py:85
+msgid "Une nouveauté du CIR"
+msgstr "CIR からのお知らせ"
+
+#: apps/notifications/evenements.py:86
+msgid "Bonjour {nom}, découvrez la dernière nouveauté du CIR."
+msgstr "{nom} 様、CIR の最新のお知らせをご覧ください。"
+
+#: apps/notifications/services.py:78
+msgid "Notification introuvable."
+msgstr "通知が見つかりません。"
+
+#: apps/notifications/services.py:197
+msgid "Événement inconnu."
+msgstr "不明なイベントです。"
+
+#: apps/notifications/services.py:202
+msgid "Langue inconnue."
+msgstr "不明な言語です。"
+
+#: apps/notifications/services.py:302
+msgid "Envoi introuvable."
+msgstr "送信記録が見つかりません。"
+
+#: apps/notifications/services.py:304
+msgid "Seul un envoi en échec peut être relancé."
+msgstr "再試行できるのは失敗した送信のみです。"
+
+#: apps/notifications/services.py:178
+msgid "Indiquez vrai ou faux."
+msgstr "はい／いいえで指定してください。"
+
+#: apps/notifications/services.py:225
+msgid "Ce champ est obligatoire."
+msgstr "この項目は必須です。"
+
+#: apps/notifications/services.py:229
+msgid "Le sujet doit tenir sur une seule ligne."
+msgstr "件名は1行に収めてください。"
+
+#: apps/notifications/services.py:227
+msgid "Ce texte est trop long (%(max)s caractères au plus)."
+msgstr "このテキストが長すぎます（%(max)s文字以内）。"
+
+#: apps/notifications/services.py:233
+msgid "Les accolades de ce texte sont mal formées."
+msgstr "このテキストの波括弧の形式が正しくありません。"
+
+#: apps/notifications/services.py:235
+msgid "Variable non autorisée : {%(nom)s}. Variables permises : %(liste)s."
+msgstr "使用できない変数です：{%(nom)s}。使用可能な変数：%(liste)s。"
+
+#: apps/notifications/views.py:88
+msgid "Vous êtes désabonné"
+msgstr "配信を停止しました"
+
+#: apps/notifications/views.py:89
+msgid "Vous ne recevrez plus les nouveautés du CIR par e-mail. Vous pouvez changer d'avis à tout moment dans les notifications de votre compte."
+msgstr "今後、CIR のお知らせはメールで届きません。アカウントの通知設定から、いつでも再開できます。"

@@ -161,24 +161,27 @@ function Salle() {
     termine: t('appels.salle.termine'),
     annule: t('appels.salle.annule'),
   }[appel.etat];
+  let texteEtat = messageFin;
+  if (statut === 'erreur') texteEtat = t('appels.salle.erreurChargement');
+  else if (sonne) texteEtat = t('appels.salle.sonne');
+  else if (appel.etat === 'en_cours') texteEtat = t('appels.salle.connecte');
   const proposeAlternatives = appel.etat === 'manque' || appel.etat === 'refuse' || statut === 'erreur';
 
   return (
     <div className={styles.salle} role="dialog" aria-modal="true" aria-labelledby={`${id}-titre`}>
       <header className={styles.salleHaut}>
         <h2 id={`${id}-titre`}>{type === 'video' ? t('appels.salle.titreVideo') : t('appels.salle.titreAudio')}</h2>
-        <div role="status" aria-live="polite" className={`${styles.statut} ${sonne ? styles.sonne : ''}`}>
-          {sonne && statut !== 'erreur' && t('appels.salle.sonne')}
-          {appel.etat === 'en_cours' && statut !== 'erreur' && t('appels.salle.connecte')}
-          {termine && messageFin}
-          {actif && statut === 'erreur' && t('appels.salle.erreurChargement')}
-        </div>
         {actif && (
           <Bouton ref={principal} className={styles.raccrocher} onClick={raccrocher}>
             <Icone nom="raccrocher" taille={20} />&nbsp;{sonne ? t('appels.salle.annuler') : t('appels.salle.raccrocher')}
           </Bouton>
         )}
       </header>
+
+      {/* Une seule zone d'état, annoncée aux lecteurs d'écran à chaque changement. */}
+      <div role="status" aria-live="polite" className={termine || statut === 'erreur' ? styles.statutFin : `${styles.statut} ${sonne ? styles.sonne : ''}`}>
+        {texteEtat}
+      </div>
 
       {media && actif && (
         <p className={styles.alerteMedia} role="alert">
@@ -198,7 +201,6 @@ function Salle() {
 
       {(termine || statut === 'erreur') && (
         <div className={styles.fin}>
-          <p className={styles.finTexte}>{termine ? messageFin : t('appels.salle.erreurChargement')}</p>
           <div className={styles.finActions}>
             {proposeAlternatives && (
               <>

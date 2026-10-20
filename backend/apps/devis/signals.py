@@ -3,12 +3,17 @@
 Proposition acceptée → devis « accepté » ; refusée → « refusé » ; remplacée → « remplacé ». Seul un devis encore
 « envoyé » change d'état. `commandes` n'importe jamais ce module : les signaux sont l'unique lien.
 """
-from django.dispatch import receiver
+from django.dispatch import Signal, receiver
 from django.utils import timezone
 
 from apps.commandes.signals import proposition_acceptee, proposition_refusee, proposition_remplacee
 
 from .models import Devis, EtatDevis
+
+# Vague 3 : abonné = `notifications` (`devis` n'importe jamais `notifications`)
+devis_envoye = Signal()  # argument : devis
+demande_rendu_creee = Signal()  # argument : demande
+demande_rendu_repondue = Signal()  # argument : demande (réponse ou changement d'état par l'équipe)
 
 
 def _passer(proposition, etat):

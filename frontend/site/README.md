@@ -5,7 +5,7 @@ React 19 + Vite + react-router 7. Adresse : revelation-sarl.com. Vague 0 : agent
 - [x] Vite + React, alias `@` (→ `src/`) et `@partage` (→ `../partage`)
 - [x] `src/app/` : `main.jsx`, `App.jsx`, `routes.jsx` (pages chargées à la demande), `api.js` (client API)
 - [x] `src/layout/` : `Gabarit`, `Entete`, `PiedDePage` (partenaire Jiuye), `BarreOnglets` mobile
-  (Accueil, Catalogue, Réalisations, Commandes, Compte), `BientotDisponible`, `PageIntrouvable`
+  (Accueil, Catalogue, Réalisations, Commandes, Messages, Compte), `BientotDisponible`, `PageIntrouvable`
 - [x] Module `compte` (voir son README)
 - [x] Vague 1 : modules `accueil`, `catalogue`, `produit`, `vitrine`, `actualites` (voir leurs README)
 - [x] `src/app/useDonnees.js` (donnée de l'API, rechargée au changement de langue), `useListePaginee.js`
@@ -18,6 +18,9 @@ React 19 + Vite + react-router 7. Adresse : revelation-sarl.com. Vague 0 : agent
   `src/test/outils.jsx` (`simulerApi` : le gestionnaire reçoit `(corps, init, url)`, `page()`,
   `parametresDes()`, `simulerMouvementReduit()`)
 - [x] `railway.toml`, `Dockerfile`, `.env.example`
+- [x] Vague 3 : modules `messagerie`, `appels`, `notifications` (voir leurs README) : `FondDirect` (connexion `/ws/`
+  unique), `CentreNotifications` (cloche), icône Messages et onglet Messages avec pastilles, `SalleAppel` (plein
+  écran), `BoutonAppel` (messagerie, détail d'une commande, Contact), bandeau « connexion en direct interrompue »
 - [x] Multilingue (fr, en, zh, de, ja) : textes dans `src/i18n/`, choix de la langue dans l'en-tête et le pied
   de page, `?lang=en` dans une adresse partagée, langue enregistrée dans le compte du client connecté
   (voir `frontend/partage/README.md` et `docs/decisions/7-multilingue.md`)
@@ -50,6 +53,8 @@ npm start                    # sert dist/ (serve -s), port $PORT ou 3000
 | `/devis/demande` | Demande de rendu (protégée) |
 | `/contact` | Contact (publique, module `contact`) |
 | `/mes-demandes` | Demandes de contact et de rendu (protégée) |
+| `/messages` | Messagerie avec l'équipe (protégée, `?commande=<id>` présélectionne la commande) |
+| `/notifications` | Notifications et préférence nouveautés (protégée) |
 | `*` | page introuvable |
 
 ## API utilisée (back-end Django, base `VITE_API_URL`)
@@ -69,6 +74,9 @@ Toutes les requêtes envoient `Accept-Language` (langue de l'interface) : les me
 - Vague 2 (contrat `docs/taches/vague-2-contrat-api.md`) : `/api/selection/` (+ `resume/`), `/api/commandes/` (+ `<id>/`, `annuler/`,
   `propositions/`, `propositions/<id>/accepter|refuser/`), `/api/devis/<id>/`, `/api/devis/demandes-rendu/` (multipart),
   `POST /api/contact/demandes/`, `GET /api/contact/demandes/miennes/`. Erreurs traitées : 403 `adresse_incomplete`, 429, 400 par champ.
+- Vague 3 (contrat `docs/taches/vague-3-contrat-api.md`) : `/api/messagerie/` (`messages/`, `lu/`, `non-lus/`, `pieces-jointes/<id>/`),
+  `/api/notifications/` (`non-lues/`, `<id>/lue/`, `lues/`, `preferences/`), `/api/appels/` (`disponibilite/`, `<id>/`,
+  `annuler/`, `terminer/`), WebSocket `/ws/` (authentification par la première trame).
 
 ## Déploiement Railway
 

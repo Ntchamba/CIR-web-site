@@ -38,7 +38,7 @@ export default function ModelesEmailsPage() {
   const fiche = courant?.langues[langue] || { defaut: { sujet: '', introduction: '' }, modele: null };
   const enregistre = fiche.modele;
 
-  // Le brouillon repart du modèle enregistré, sinon du texte par défaut, à chaque changement de choix.
+  // Le brouillon repart du modèle enregistré, sinon du texte par défaut, à chaque changement d'événement ou de langue.
   useEffect(() => {
     setSujet((enregistre || fiche.defaut)?.sujet || '');
     setIntroduction((enregistre || fiche.defaut)?.introduction || '');
@@ -47,7 +47,7 @@ export default function ModelesEmailsPage() {
     setEchec(null);
     setApercu(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cle, langue, donnees]);
+  }, [cle, langue]);
 
   const libelleEvenement = (code) => (existe(`notifications.evenements.${code}`) ? t(`notifications.evenements.${code}`) : code);
   const inconnues = [...new Set([...variablesInconnues(sujet), ...variablesInconnues(introduction)])];
@@ -93,6 +93,9 @@ export default function ModelesEmailsPage() {
   async function retablir() {
     await retablirModele(cle, langue);
     majLocale(null);
+    setSujet(fiche.defaut?.sujet || '');
+    setIntroduction(fiche.defaut?.introduction || '');
+    setErreurs({});
     setMessage(t('notifications.modeles.retabli'));
     setApercu(null);
   }

@@ -1,5 +1,5 @@
 // Outils communs aux tests du site : faux back-end (fetch simulé) et rendu avec routeur + session.
-import { render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 
 import App from '@/app/App.jsx';
@@ -125,5 +125,55 @@ export function routesClient(extra = {}, { utilisateur = UTILISATEUR, produits =
     'GET /api/comptes/moi/': reponse(200, utilisateur),
     'GET /api/selection/resume/': reponse(200, { count: produits.length, produits }),
     ...extra,
+  };
+}
+
+/**
+ * Remplace WebSocket par un faux serveur en direct, piloté par le test.
+ *   const direct = simulerDirect();
+ *   await direct.attendreConnexion();   // le site a ouvert la connexion
+ *   direct.connecter({ non_lus: 2 });   // ouverture + trame « pret » (le site s'authentifie par la première trame)
+ *   direct.recevoir({ type: 'message', message });   direct.couper();   direct.envoyees()  // trames envoyées par le site
+ */
+export function simulerDirect() {
+  const sockets = [];
+  class FauxWebSocket {
+    constructor(adresse) {
+      this.url = adresse;
+      this.trames = [];
+      this.fermee = false;
+      sockets.push(this);
+    }
+    send(donnees) {
+      this.trames.push(JSON.parse(donnees));
+    }
+    close() {
+      this.fermee = true;
+    }
+  }
+  vi.stubGlobal('WebSocket', FauxWebSocket);
+  const courant = () => sockets.at(-1);
+  const trame = (objet) => act(() => courant().onmessage({ data: JSON.stringify(objet) }));
+  return {
+    sockets,
+    get socket() { return courant(); },
+    attendreConnexion: () => waitFor(() => expect(sockets.length).toBeGreaterThan(0)),
+    connecter(pret = {}) {
+      act(() => courant().onopen());
+      trame({ type: 'pret', utilisateur: { id: 1, role: 'client' }, non_lus: 0, notifications_non_lues: 0, ...pret });
+    },
+    recevoir: trame,
+    couper() {
+      act(() => courant().onclose());
+    },
+    envoyees: () => courant().trames,
+  };
+}
+
+/** Message de l'API de messagerie. */
+export function unMessage(id, extra = {}) {
+  return {
+    id, conversation: 1, auteur_role: 'equipe', auteur_nom: 'Équipe CIR', texte: `Message ${id}`, commande: null,
+    pieces_jointes: [], cree_le: new Date().toISOString(), lu_le: null, cle_client: '', ...extra,
   };
 }

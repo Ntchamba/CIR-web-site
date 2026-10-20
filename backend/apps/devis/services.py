@@ -18,7 +18,7 @@ from apps.commandes.models import Commande
 from apps.noyau.medias import preparer_images
 from apps.noyau.verrous import verrouiller_compte
 
-from . import calcul
+from . import calcul, signals
 from .models import (ETATS_VISIBLES_CLIENT, DemandeRendu, Devis, EtatDemande, EtatDevis, ImageDemande, LigneDevis)
 
 QUOTA_DEMANDES_PAR_JOUR = 5
@@ -151,6 +151,7 @@ def envoyer(devis, utilisateur):
     if devis.demande_id:
         DemandeRendu.objects.filter(pk=devis.demande_id).update(etat=EtatDemande.DEVIS_ENVOYE,
                                                                 modifie_le=timezone.now())
+    signals.devis_envoye.send(sender=Devis, devis=devis)
     return devis
 
 
@@ -245,12 +246,14 @@ def deposer_demande(client, donnees, fichiers=()):
     except Exception:
         _effacer(images)
         raise
+    signals.demande_rendu_creee.send(sender=DemandeRendu, demande=demande)
     return demande
 
 
 def mettre_a_jour_demande(demande, donnees):
     """L'équipe : état, réponse au client, notes internes."""
     champs = []
+    avant = (demande.etat, demande.reponse_equipe)
     for champ in ("etat", "reponse_equipe", "notes_internes"):
         if champ in donnees:
             valeur = donnees[champ]
@@ -258,4 +261,6 @@ def mettre_a_jour_demande(demande, donnees):
             champs.append(champ)
     if champs:
         demande.save(update_fields=champs + ["modifie_le"])
+        if (demande.etat, demande.reponse_equipe) != avant:  # le client est prévenu (notes internes : jamais)
+            signals.demande_rendu_repondue.send(sender=DemandeRendu, demande=demande)
     return demande

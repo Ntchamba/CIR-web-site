@@ -13,6 +13,7 @@ from apps.catalogue.models import Produit
 from apps.noyau.langues import langue_active
 from apps.noyau.verrous import verrouiller_compte
 
+from . import signals
 from .models import Creneau, DemandeContact, EtatContact, TypeDemande
 
 QUOTA_COMPTE_PAR_JOUR = 10
@@ -101,9 +102,11 @@ def creer_demande(donnees, utilisateur=None):
     creneau = ""
     if type_demande == TypeDemande.RAPPEL:
         creneau = donnees.get("creneau") or Creneau.PEU_IMPORTE
-    return DemandeContact.objects.create(
+    demande = DemandeContact.objects.create(
         auteur=utilisateur if connecte else None, nom=nom[:150], email=email, telephone=telephone,
         type=type_demande, creneau=creneau, message=message, produit=produit, langue=langue_active())
+    signals.demande_contact_creee.send(sender=DemandeContact, demande=demande)
+    return demande
 
 
 def faux_succes():
@@ -126,6 +129,7 @@ def resume_equipe():
 def mettre_a_jour(demande, donnees):
     """L'équipe : état, réponse, notes. `traitee_le` est posé en passant à « traitée » (effacé si elle est rouverte)."""
     champs = []
+    reponse_avant, etat_avant = demande.reponse_equipe, demande.etat
     for champ in ("reponse_equipe", "notes_internes"):
         if champ in donnees:
             setattr(demande, champ, (donnees[champ] or "").strip())
@@ -136,4 +140,8 @@ def mettre_a_jour(demande, donnees):
         champs += ["etat", "traitee_le"]
     if champs:
         demande.save(update_fields=champs)
+        nouvelle_reponse = demande.reponse_equipe and demande.reponse_equipe != reponse_avant
+        devenue_traitee = demande.etat == EtatContact.TRAITEE and etat_avant != EtatContact.TRAITEE
+        if nouvelle_reponse or devenue_traitee:  # notes internes seules : le client n'est pas prévenu
+            signals.demande_contact_repondue.send(sender=DemandeContact, demande=demande)
     return demande

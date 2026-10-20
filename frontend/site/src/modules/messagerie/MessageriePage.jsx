@@ -37,14 +37,14 @@ export default function MessageriePage() {
 
   return (
     <div className={`conteneur ${styles.page}`}>
-      <header className={styles.entete}>
+      <div className={styles.entete}>
         <div>
           <h1 className="titre-page">{titre}</h1>
           <p className={styles.intro}>{t('messagerie.intro')}</p>
           {nonLus > 0 && <p className={styles.nonLus} role="status">{t('messagerie.nonLus', { n: nonLus })}</p>}
         </div>
         <BoutonAppel />
-      </header>
+      </div>
       <FilMessages
         messages={conversation.messages}
         aPlus={conversation.aPlus}
