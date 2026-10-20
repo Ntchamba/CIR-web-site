@@ -115,3 +115,7 @@
   .compte span { display: none; }
   .compte { padding: 0 11px; }
 }
+
+/* Client connecté sur petit téléphone : la place va à la cloche et à la sélection ; le téléphone du CIR reste
+   dans la page Contact, le pied de page et le bouton d'appel de la messagerie. */
+@media (max-width: 480px) { .telReduit { display: none !important; } }

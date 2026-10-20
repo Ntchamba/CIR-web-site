@@ -52,7 +52,7 @@ export default function Entete() {
 
         <div className={styles.actions}>
           <ChoixLangue className={styles.langue} surChangement={retenirLangue} />
-          <a href={telephone.lien} className={styles.boutonRond}
+          <a href={telephone.lien} className={`${styles.boutonRond} ${utilisateur ? styles.telReduit : ''}`}
             aria-label={t('entete.appeler', { telephone: telephone.affichage })}>
             <Icone nom="tel" />
           </a>
