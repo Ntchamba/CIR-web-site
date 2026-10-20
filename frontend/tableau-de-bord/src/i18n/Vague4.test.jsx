@@ -61,7 +61,7 @@ describe('pages de la vague 4 dans une autre langue', () => {
     await changerLangue('de');
     rendre('/paiements');
     expect(await screen.findByRole('heading', { level: 1, name: 'Zahlungen' })).toBeInTheDocument();
-    expect(screen.getByRole('columnheader', { name: 'Zahlungsart' })).toBeInTheDocument();
+    expect(await screen.findByRole('columnheader', { name: 'Zahlungsart' })).toBeInTheDocument();
     expect(screen.getByText('Erfolgreich', { selector: 'span' })).toBeInTheDocument();
     expect(screen.getByText('Offline', { selector: 'td' })).toBeInTheDocument();
   });
