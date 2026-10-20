@@ -96,7 +96,7 @@ describe('MessageriePage', { timeout: 15000 }, () => {
 
   it("affiche au moins le nom du client quand ?conversation= n'est pas dans la liste", async () => {
     installerDirect();
-    simulerApi(routes([['GET', /conversations\/\?/, page([])], ['GET', '/api/admin/messagerie/conversations/', page([])]]));
+    simulerApi(routes([['GET', /conversations\/$/, page([])]]));
     rendre('/messagerie?conversation=5');
     expect(await screen.findByRole('heading', { level: 2, name: 'Awa Nana' })).toBeInTheDocument();
     expect(await screen.findByText('Bonjour Awa, avec plaisir.')).toBeInTheDocument();
