@@ -248,6 +248,7 @@ class MoiApiTests(Base):
         self.assertEqual(set(r.data), {
             "id", "email", "nom_complet", "telephone", "role", "est_equipe", "ville", "quartier",
             "rue_ou_repere", "adresse_complete", "adresse_formatee", "date_inscription", "langue",
+        "recevoir_nouveautes", "email_equipe",
         })
 
     def test_modification_partielle(self):

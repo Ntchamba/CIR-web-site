@@ -73,7 +73,7 @@ class CommandeTests(BaseNotifications):
         self.client_a.save()
         self.commande()
         mail = EnvoiEmail.objects.get(destinataire_email="a@exemple.cm")
-        self.assertIn("is recorded", mail.sujet)
+        self.assertIn("has been recorded", mail.sujet)
         self.assertIn("Hello Alice Client", mail.corps_texte)
         self.assertIn("View on the website", mail.corps_texte)
         equipe = EnvoiEmail.objects.get(destinataire_email="membre@cir.cm")
@@ -275,10 +275,6 @@ class RobustesseTests(BaseNotifications):
 
     def test_une_panne_de_base_dans_un_abonne_laisse_la_transaction_utilisable(self):
         from django.db import IntegrityError
-
-        def casse(*a, **k):
-            Notification.objects.create(utilisateur_id=999999, type="x")  # clé étrangère invalide à la validation
-            raise IntegrityError
 
         with mock.patch.object(services, "notifier", side_effect=IntegrityError("x")), \
                 self.assertLogs("cir.notifications", level="ERROR"):

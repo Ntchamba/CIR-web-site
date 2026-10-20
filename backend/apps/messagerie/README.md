@@ -16,8 +16,8 @@ Fichiers propres au module :
 
 ## Tâches (agent `backend`, vérifiées par `backend-testeur`)
 
-- [ ] Modèles et migrations
-- [ ] Règles métier dans `services.py` (jamais dans les vues)
-- [ ] API publique `/api/messagerie/` et API équipe `/api/admin/messagerie/`
-- [ ] Permissions
+- [x] Modèles et migrations
+- [x] Règles métier dans `services.py` (jamais dans les vues)
+- [x] API publique `/api/messagerie/` et API équipe `/api/admin/messagerie/`
+- [x] Permissions
 - [ ] Tests unitaires et d'API (écrits et lancés par `backend-testeur`)

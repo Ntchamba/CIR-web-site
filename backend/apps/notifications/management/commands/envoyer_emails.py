@@ -28,7 +28,7 @@ def une_passe():
         try:
             etape()
         except Exception:  # noqa: BLE001
-            journal.exception("Étape %s en erreur.", etape.__name__)
+            journal.exception("Étape %s en erreur.", getattr(etape, "__name__", etape))
     return taches.envoyer_en_attente()
 
 
