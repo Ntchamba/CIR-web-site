@@ -11,6 +11,7 @@ import { date, fcfa, surface } from '@partage/utils/format.js';
 import usePageMeta from '@partage/utils/usePageMeta.js';
 
 import { useTraduction } from '@/i18n/index.js';
+import BoutonAppel from '@/modules/appels/composants/BoutonAppel.jsx';
 import ApercuDevis from '@/modules/devis/composants/ApercuDevis.jsx';
 
 import ActionsCommande from './composants/ActionsCommande.jsx';
@@ -90,6 +91,15 @@ export default function DetailCommande() {
         </div>
 
         <aside className={styles.colonne} aria-label={t('commandes.detail.infos')}>
+          <section aria-labelledby="titre-echanger" className={`${styles.bloc} masquer-impression`}>
+            <h2 id="titre-echanger">{t('commandes.detail.echanger')}</h2>
+            <div className={styles.echanges}>
+              <Bouton as={Link} to={`/messages?commande=${commande.id}`} variante="contour">
+                <Icone nom="message" taille={18} />&nbsp;{t('commandes.detail.ecrire')}
+              </Bouton>
+              <BoutonAppel commande={commande.id} />
+            </div>
+          </section>
           {convenu && (
             <section aria-labelledby="titre-convenu" className={`${styles.bloc} ${styles.convenu}`}>
               <h2 id="titre-convenu">{t('commandes.detail.convenu')}</h2>

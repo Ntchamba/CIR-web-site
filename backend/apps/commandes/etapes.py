@@ -11,6 +11,8 @@ from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy
 from rest_framework.exceptions import ValidationError
 
+from . import signals
+
 
 class Etat(models.TextChoices):
     NOUVELLE = "nouvelle", gettext_lazy("Nouvelle")
@@ -91,4 +93,5 @@ def changer_etat(commande, vers, *, role, auteur=None, motif="", interne=False):
     commande.save(update_fields=["etat", "modifie_le"])
     ChangementEtat.objects.create(commande=commande, de=de, vers=vers, auteur=auteur, auteur_role=role,
                                   motif=(motif or "").strip()[:500])
+    signals.etape_changee.send(sender=type(commande), commande=commande, de=de, vers=vers, auteur=auteur)
     return commande

@@ -124,7 +124,6 @@ export default function SaisieMessage({ clientId, surEnvoi, surEcrit }) {
       )}
       <div className={styles.barreSaisie}>
         <input ref={choixFichier} type="file" accept={ACCEPT} multiple hidden tabIndex={-1} data-testid="choix-fichier"
-          aria-label={t('messagerie.saisie.joindre')}
           onChange={(e) => { ajouter(e.target.files); e.target.value = ''; }} />
         <Bouton variante="contour" onClick={() => choixFichier.current?.click()} disabled={fichiers.length >= MAX_FICHIERS}>
           {t('messagerie.saisie.joindre')}

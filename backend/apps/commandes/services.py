@@ -16,7 +16,7 @@ from apps.comptes.services import peut_commander
 from apps.noyau.verrous import verrouiller_compte
 from apps.selection import services as selection
 
-from . import negociation
+from . import negociation, signals
 from .etapes import CLIENT, EQUIPE, ETATS_NEGOCIABLES, Etat, changer_etat
 from .models import ChangementEtat, Commande, EtatProposition, LigneCommande, Proposition
 
@@ -188,6 +188,7 @@ def creer_commande(client, donnees):
         for produit, design in couples])
     if depuis_selection:
         selection.vider(client)
+    signals.commande_creee.send(sender=Commande, commande=commande)
     return commande
 
 

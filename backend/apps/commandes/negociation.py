@@ -106,6 +106,7 @@ def proposer(commande, auteur, role, donnees, devis=None):
         changer_etat(commande, Etat.NEGOCIATION, role=role, auteur=auteur, interne=True)
     else:
         commande.save(update_fields=["modifie_le"])
+    signals.proposition_creee.send(sender=Proposition, proposition=proposition)
     return proposition
 
 

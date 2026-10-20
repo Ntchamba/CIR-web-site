@@ -9,6 +9,7 @@ import MessageErreur from '@partage/ui/MessageErreur.jsx';
 import usePageMeta from '@partage/utils/usePageMeta.js';
 
 import { useTraduction } from '@/i18n/index.js';
+import PreferenceNouveautes from '@/modules/notifications/composants/PreferenceNouveautes.jsx';
 
 import { adresseComplete, extraireAdresse, initialesDe } from './adresse.js';
 import { useAuth } from './AuthContext.jsx';
@@ -102,6 +103,7 @@ export default function ProfilPage() {
           {etat.ok && <p className={styles.ok} role="status">{t('compte.profil.enregistre')}</p>}
           <Bouton type="submit" chargement={etat.envoi}>{t('compte.profil.enregistrer')}</Bouton>
         </form>
+        <div className={styles.pleineLargeur}><PreferenceNouveautes /></div>
       </div>
     </div>
   );

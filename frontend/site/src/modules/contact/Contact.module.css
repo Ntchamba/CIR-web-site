@@ -44,3 +44,5 @@
 
 @media (max-width: 900px) { .contenu { grid-template-columns: 1fr; } }
 @media (max-width: 520px) { .deuxColonnes { grid-template-columns: 1fr; } }
+
+.appel { margin-top: 12px; }

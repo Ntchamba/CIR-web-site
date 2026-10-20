@@ -108,3 +108,5 @@
   .deuxColonnes { grid-template-columns: 1fr; }
   .frise { flex-direction: column; }
 }
+
+.echanges { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px; }

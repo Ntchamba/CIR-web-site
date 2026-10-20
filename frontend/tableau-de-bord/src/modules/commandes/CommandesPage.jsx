@@ -25,7 +25,7 @@ export default function CommandesPage() {
   usePageMeta(t('commandes.titre'));
   const { search } = useLocation();
   const {
-    elements, total, suivante, precedente, page, chargement, erreur, recharger, etat, action, resume,
+    elements, total, suivante, precedente, page, chargement, erreur, recharger, etat, action, resume, client,
     saisie, changerSaisie, choisirEtat, basculerAction, allerALaPage, effacer, filtre,
   } = useCommandes();
   const pages = Math.max(1, Math.ceil(total / TAILLE_PAGE));
@@ -55,6 +55,7 @@ export default function CommandesPage() {
           </label>
           {(filtre || saisie) && <Bouton variante="texte" onClick={effacer}>{t('commandes.effacer')}</Bouton>}
         </form>
+        {client && <p className={gestion.compte}>{t('commandes.filtreClient', { id: client })}</p>}
 
         {chargement ? (
           <Chargement texte={t('commandes.chargement')} />

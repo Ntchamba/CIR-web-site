@@ -4,6 +4,7 @@ import usePageMeta from '@partage/utils/usePageMeta.js';
 
 import { useTraduction } from '@/i18n/index.js';
 import { useCoordonnees } from '@/layout/contenus.js';
+import BoutonAppel from '@/modules/appels/composants/BoutonAppel.jsx';
 
 import SectionContact from './composants/SectionContact.jsx';
 import styles from './Contact.module.css';
@@ -26,6 +27,7 @@ export default function ContactPage() {
           </a>
           {email && <a href={`mailto:${email}`}>{t('pied.email', { email })}</a>}
         </div>
+        <BoutonAppel className={styles.appel} />
       </div>
       <SectionContact />
     </>

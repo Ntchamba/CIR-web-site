@@ -1,0 +1,108 @@
+/* Messagerie : liste des conversations à gauche, fil à droite (téléphone : l'un ou l'autre en plein écran). */
+.page { max-width: 1300px; display: grid; gap: var(--esp-4); }
+.enteteMessagerie { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--esp-4); }
+.titreCarte { font-family: var(--police-titre); font-size: 20px; font-weight: 500; }
+
+.disposition {
+  display: grid; grid-template-columns: minmax(280px, 360px) 1fr; gap: var(--esp-4);
+  height: clamp(480px, calc(100vh - 230px), 900px);
+}
+.colonneListe, .colonneFil { min-height: 0; min-width: 0; display: flex; flex-direction: column; }
+.colonneListe { background: var(--blanc); border: 1px solid var(--filet); border-radius: var(--rayon); overflow: hidden; }
+.colonneFil { background: var(--blanc); border: 1px solid var(--filet); border-radius: var(--rayon); overflow: hidden; }
+.aucuneSelection { margin: auto; padding: var(--esp-5); color: var(--encre-3); text-align: center; }
+
+/* --- Liste --- */
+.liste { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+.filtres { display: grid; gap: var(--esp-2); padding: var(--esp-3); border-bottom: 1px solid var(--filet-2); }
+.conversations { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1; }
+.conversations li + li { border-top: 1px solid var(--filet-2); }
+.conversation {
+  display: grid; gap: 2px; width: 100%; min-height: var(--cible-tactile); padding: var(--esp-3) var(--esp-4);
+  border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
+}
+.conversation:hover { background: var(--fond); }
+.conversationActive { background: var(--fond-2); box-shadow: inset 3px 0 0 var(--corail); }
+.ligneHaut, .ligneBas { display: flex; align-items: center; justify-content: space-between; gap: var(--esp-2); }
+.ligneHaut small { color: var(--encre-3); white-space: nowrap; }
+.apercu { color: var(--encre-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.pastille {
+  flex-shrink: 0; min-width: 24px; padding: 1px 8px; border-radius: var(--pastille);
+  background: var(--corail); color: var(--encre); font-size: 12px; font-weight: 700; text-align: center;
+}
+
+/* --- Nouvelle conversation --- */
+.nouvelle { display: grid; gap: var(--esp-3); }
+.enteteNouvelle { display: flex; align-items: center; justify-content: space-between; gap: var(--esp-3); }
+.choixClients { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--esp-2); }
+
+/* --- Conversation ouverte --- */
+.conversationOuverte { display: flex; flex-direction: column; min-height: 0; height: 100%; }
+.contexte { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-3); padding: var(--esp-3) var(--esp-4); border-bottom: 1px solid var(--filet-2); }
+.retour {
+  display: none; align-items: center; gap: var(--esp-1); min-height: var(--cible-tactile); padding: 0 var(--esp-2);
+  border: 0; background: none; color: var(--bleu-fonce); font: inherit; font-weight: 600; cursor: pointer;
+}
+.infosClient { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-2) var(--esp-4); min-width: 0; }
+.nomClient { font-family: var(--police-titre); font-size: 20px; font-weight: 500; }
+.liensClient { display: flex; flex-wrap: wrap; gap: var(--esp-4); margin: 0; }
+.liensClient a { display: inline-flex; align-items: center; min-height: var(--cible-tactile); }
+
+.filConteneur { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.fil { flex: 1; min-height: 0; overflow-y: auto; padding: var(--esp-4); background: var(--fond); }
+.fil:focus-visible { outline: 2px solid var(--bleu); outline-offset: -2px; }
+.plus { display: flex; justify-content: center; padding-bottom: var(--esp-3); }
+.messages { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--esp-2); }
+.videFil { color: var(--encre-3); text-align: center; padding: var(--esp-5); }
+.jour { display: flex; justify-content: center; margin: var(--esp-2) 0; }
+.jour span { padding: 2px 12px; border-radius: var(--pastille); background: var(--fond-2); color: var(--encre-2); font-size: 13px; font-weight: 600; }
+.ligneMessage { display: grid; gap: 2px; }
+.propre { justify-items: end; }
+.autre { justify-items: start; }
+.bulle {
+  display: grid; gap: 4px; max-width: min(560px, 85%); padding: var(--esp-2) var(--esp-3);
+  border-radius: var(--rayon); background: var(--blanc); border: 1px solid var(--filet-2);
+}
+.propre .bulle { background: var(--bleu); border-color: var(--bleu); color: var(--blanc); }
+.bulleEchec { border-color: var(--danger) !important; }
+.auteur { font-size: 13px; color: var(--encre-2); }
+.aPropos { font-size: 13px; font-weight: 600; opacity: 0.85; }
+.texteMessage { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.meta { opacity: 0.8; font-size: 12px; }
+.lu, .echec { font-size: 12px; color: var(--encre-3); }
+.echec { color: var(--danger); font-weight: 600; margin: 0; }
+.pieceJointe { display: grid; gap: 4px; }
+.imageJointe { max-width: 100%; max-height: 240px; border-radius: var(--rayon-s); object-fit: contain; }
+.lienPiece {
+  min-height: var(--cible-tactile); padding: 0; border: 0; background: none; color: inherit; font: inherit;
+  text-decoration: underline; text-align: left; cursor: pointer; overflow-wrap: anywhere;
+}
+.erreurPiece { font-size: 13px; color: var(--danger); }
+.indicateurs { display: flex; align-items: center; justify-content: space-between; gap: var(--esp-3); min-height: 28px; padding: 0 var(--esp-4); background: var(--fond); }
+.ecrit { margin: 0; color: var(--encre-3); font-size: 13px; font-style: italic; }
+
+/* --- Saisie --- */
+.saisie { display: grid; gap: var(--esp-2); padding: var(--esp-3) var(--esp-4); border-top: 1px solid var(--filet-2); background: var(--blanc); }
+.zoneTexte {
+  width: 100%; min-height: 56px; max-height: 160px; padding: var(--esp-2) var(--esp-3); resize: vertical;
+  border: 1px solid var(--champ); border-radius: var(--rayon-s); font: inherit; color: inherit;
+}
+.barreSaisie { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-3); }
+.compteur { flex: 1; min-width: 160px; color: var(--encre-3); font-size: 13px; }
+.fichiers { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--esp-2); }
+.apercuFichier { display: inline-flex; align-items: center; gap: var(--esp-2); padding: 2px var(--esp-2); border: 1px solid var(--filet); border-radius: var(--rayon-s); font-size: 14px; }
+.apercuFichier img { object-fit: cover; border-radius: 4px; }
+.retrait { display: inline-grid; place-items: center; width: var(--cible-tactile); height: var(--cible-tactile); border: 0; background: none; color: var(--encre-2); cursor: pointer; }
+.erreursSaisie { margin: 0; padding-left: var(--esp-4); color: var(--danger); font-size: 14px; font-weight: 500; }
+
+/* --- Téléphone : liste puis fil en plein écran --- */
+@media (max-width: 760px) {
+  .disposition { grid-template-columns: 1fr; height: calc(100vh - 200px); }
+  .disposition .colonneFil { display: none; }
+  .avecFil .colonneListe { display: none; }
+  .avecFil .colonneFil { display: flex; }
+  .retour { display: inline-flex; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fil { scroll-behavior: auto; }
+}

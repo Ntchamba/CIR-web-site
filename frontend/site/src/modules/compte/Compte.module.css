@@ -48,3 +48,5 @@
 @media (max-width: 520px) {
   .groupe { padding: 14px; }
 }
+
+.pleineLargeur { grid-column: 1 / -1; }

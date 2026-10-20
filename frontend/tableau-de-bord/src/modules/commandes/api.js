@@ -3,9 +3,10 @@ import { api } from '@/app/api.js';
 
 const BASE = '/api/admin/commandes/';
 
-/** Requête de la liste : `etat`, `recherche` (référence, nom, e-mail, téléphone), `actionRequise` ('1'), `type`, `page`. */
-export function requeteCommandes({ etat = '', recherche = '', actionRequise = '', type = '', page = 1 } = {}) {
+/** Requête de la liste : `etat`, `recherche` (référence, nom, e-mail, téléphone), `actionRequise` ('1'), `type`, `client` (identifiant), `page`. */
+export function requeteCommandes({ etat = '', recherche = '', actionRequise = '', type = '', client = '', page = 1 } = {}) {
   const params = new URLSearchParams();
+  if (client) params.set('client', String(client));
   if (etat) params.set('etat', etat);
   if (type) params.set('type', type);
   if (recherche.trim()) params.set('search', recherche.trim());

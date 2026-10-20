@@ -25,6 +25,9 @@ const DetailCommande = lazy(() => import('@/modules/commandes/DetailCommande.jsx
 const DevisPage = lazy(() => import('@/modules/devis/DevisPage.jsx'));
 const EditeurDevis = lazy(() => import('@/modules/devis/EditeurDevis.jsx'));
 const DemandesPage = lazy(() => import('@/modules/contact/DemandesPage.jsx'));
+const MessageriePage = lazy(() => import('@/modules/messagerie/MessageriePage.jsx'));
+const AppelsEntrantsPage = lazy(() => import('@/modules/appels/AppelsEntrantsPage.jsx'));
+const NotificationsPage = lazy(() => import('@/modules/notifications/NotificationsPage.jsx'));
 
 export default function RoutesTableauDeBord() {
   return (
@@ -41,6 +44,9 @@ export default function RoutesTableauDeBord() {
             <Route path="devis/nouveau" element={<EditeurDevis key="nouveau" />} />
             <Route path="devis/:id" element={<EditeurDevis key="existant" />} />
             <Route path="contact" element={<DemandesPage />} />
+            <Route path="messagerie" element={<MessageriePage />} />
+            <Route path="appels" element={<AppelsEntrantsPage />} />
+            <Route path="notifications" element={<NotificationsPage />} />
             <Route path="clients" element={<ClientsPage />} />
             <Route path="clients/:id" element={<FicheClientPage />} />
             <Route path="catalogue/*" element={<CataloguePage />} />
