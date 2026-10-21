@@ -78,6 +78,15 @@ Toutes les requêtes envoient `Accept-Language` (langue de l'interface) : les me
   `/api/notifications/` (`non-lues/`, `<id>/lue/`, `lues/`, `preferences/`), `/api/appels/` (`disponibilite/`, `<id>/`,
   `annuler/`, `terminer/`), WebSocket `/ws/` (authentification par la première trame).
 
+## Habillage immersif et entrée 3D (branche `images`, décision 11)
+
+- Une seule scène fixe (le salon) dans `layout/Gabarit.jsx`, cadrée par page : cadrages dans `src/app/cameras.js`, trajet de la
+  caméra dans `src/app/camera.js`, bascule « à plat » et zoom entre pages dans `src/app/profondeur.js`, CSS dans
+  `src/styles/profondeur.css` (CSS pur, `transform`/`opacity`/`scale`). Accueil : scène épinglée, zoom puis lumière blanche.
+- Bandeaux photo : `composants/BandeauPhoto.jsx` (catalogue, réalisations, commandes). Flèche de retour (téléphone) :
+  `layout/BoutonRetour.jsx`, parents dans `src/app/parents.js`.
+- À plat avec `prefers-reduced-motion`, économie de données, appareil faible ou navigateur sans `animation-timeline`.
+
 ## Déploiement Railway
 
 Le site importe `../partage` : le `Dockerfile` est construit depuis la racine du dépôt. Réglages du service :
