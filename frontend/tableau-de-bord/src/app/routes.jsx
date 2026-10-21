@@ -29,6 +29,8 @@ const MessageriePage = lazy(() => import('@/modules/messagerie/MessageriePage.js
 const AppelsEntrantsPage = lazy(() => import('@/modules/appels/AppelsEntrantsPage.jsx'));
 const PaiementsPage = lazy(() => import('@/modules/paiements/PaiementsPage.jsx'));
 const StatistiquesPage = lazy(() => import('@/modules/statistiques/StatistiquesPage.jsx'));
+const AssistantEquipe = lazy(() => import('@/modules/assistant/AssistantEquipe.jsx'));
+const JournalAssistant = lazy(() => import('@/modules/assistant/JournalAssistant.jsx'));
 const NotificationsPage = lazy(() => import('@/modules/notifications/NotificationsPage.jsx'));
 
 export default function RoutesTableauDeBord() {
@@ -57,6 +59,8 @@ export default function RoutesTableauDeBord() {
             <Route path="vitrine/*" element={<VitrinePage />} />
             <Route path="actualites" element={<ActualitesPage />} />
             <Route path="contenus/*" element={<ContenusPage />} />
+            <Route path="assistant" element={<AssistantEquipe />} />
+            <Route path="assistant/journal" element={<JournalAssistant />} />
             <Route path="equipe" element={<RouteEquipe superAdmin><EquipePage /></RouteEquipe>} />
             {MODULES_A_VENIR.map((m) => (
               <Route key={m.chemin} path={m.chemin.slice(1)}

@@ -40,6 +40,8 @@ urlpatterns = [
     path("api/admin/notifications/", include("apps.notifications.urls_admin")),
     path("api/paiements/", include("apps.paiements.urls")),
     path("api/admin/paiements/", include("apps.paiements.urls_admin")),
+    path("api/assistant/", include("apps.assistant.urls")),
+    path("api/admin/assistant/", include("apps.assistant.urls_admin")),
     path("api/admin/statistiques/", include("apps.statistiques.urls_admin")),
 ]
 

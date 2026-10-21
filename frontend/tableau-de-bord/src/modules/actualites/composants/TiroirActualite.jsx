@@ -93,7 +93,7 @@ export default function TiroirActualite({ actualite, surFermeture, surEnregistre
         </>
       )}>
       <form id={idForm} className={gestion.formulaire} onSubmit={envoyer} noValidate aria-label={titre}>
-        <OngletsLangues valeurs={form} traductions={form.traductions} erreurs={erreurs} surChangement={changer}
+        <OngletsLangues contexteIA="actualite" valeurs={form} traductions={form.traductions} erreurs={erreurs} surChangement={changer}
           surTraductions={(traductions) => changer('traductions', traductions)}
           champs={[
             { nom: 'titre', libelle: t('actualites.titreChamp'), required: true },

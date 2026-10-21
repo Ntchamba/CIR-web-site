@@ -9,6 +9,7 @@ import usePageMeta from '@partage/utils/usePageMeta.js';
 import { TAILLE_PAGE } from '@/composants/useListe.js';
 import { useTraduction } from '@/i18n/index.js';
 import { useDirect } from '@/layout/direct.js';
+import BoutonBrouillonIA from '@/modules/assistant/composants/BoutonBrouillonIA.jsx';
 
 import ContexteClient from './composants/ContexteClient.jsx';
 import FilMessages from './composants/FilMessages.jsx';
@@ -23,6 +24,8 @@ function Conversation({ selection, selectionId, surRetour, surLu }) {
   const { t } = useTraduction();
   const direct = useDirect();
   const fil = useFil(selectionId);
+  // Texte copié depuis un brouillon de l'assistant : placé dans la zone de saisie, jamais envoyé sans geste de l'équipe.
+  const [insertion, setInsertion] = useState(null);
   const client = selection?.client || null;
   // Conversation absente de la liste affichée : le nom vient d'un message du client, s'il y en a un.
   const nomDuFil = client ? '' : fil.messages.find((m) => m.auteur_role === 'client' && m.auteur_nom)?.auteur_nom || '';
@@ -30,7 +33,12 @@ function Conversation({ selection, selectionId, surRetour, surLu }) {
     <section className={styles.conversationOuverte} aria-label={t('messagerie.conversationAvec', { nom: client?.nom_complet || '' })}>
       <ContexteClient client={client} nom={nomDuFil} surRetour={surRetour} />
       <FilMessages conversationId={selectionId} fil={fil} surLu={(jusquA) => surLu(selectionId, jusquA)} />
-      <SaisieMessage key={selectionId} clientId={client?.id} surEnvoi={fil.envoyer}
+      <div className={styles.barreBrouillon}>
+        <BoutonBrouillonIA type="reponse_message" cibleId={selectionId} libelle={t('assistant.bouton.message')}
+          libelleCopie={t('assistant.copier.saisie')}
+          surCopie={([proposition]) => setInsertion((i) => ({ n: (i?.n || 0) + 1, texte: proposition.texte }))} />
+      </div>
+      <SaisieMessage key={selectionId} clientId={client?.id} surEnvoi={fil.envoyer} insertion={insertion}
         surEcrit={() => direct.etat === 'connecte' && direct.envoyer({ type: 'ecrit', conversation: selectionId })} />
     </section>
   );

@@ -5,6 +5,8 @@ import { afterEach, beforeEach, vi } from 'vitest';
 
 import { reinitialiserI18n } from '@partage/i18n/i18n.js';
 
+import { reinitialiserStatutAssistant } from '@/modules/assistant/api.js';
+
 // Les pages sont chargées à la demande (import dynamique) : la première transformation d'une page peut dépasser
 // la seconde par défaut quand les fichiers de test tournent en parallèle sur une machine chargée.
 configure({ asyncUtilTimeout: 5000 });
@@ -24,6 +26,7 @@ afterEach(() => {
   cleanup();
   localStorage.clear();
   reinitialiserI18n(); // chaque test commence en français
+  reinitialiserStatutAssistant(); // le statut de l'assistant est gardé une minute : on repart de zéro
 });
 
 // jsdom ne sait pas faire défiler la page : on neutralise window.scrollTo.

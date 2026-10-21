@@ -8,6 +8,7 @@ import Champ from '@partage/ui/Champ.jsx';
 import Icone from '@partage/ui/Icone.jsx';
 
 import { useTraduction } from '@/i18n/index.js';
+import { ajouterTexte } from '@/modules/assistant/erreurs.js';
 
 import { ACCEPT, commandesDuClient, MAX_FICHIERS, MAX_OCTETS, MAX_TEXTE, TYPES_ACCEPTES } from '../api.js';
 import { tailleFichier } from './formats.js';
@@ -36,7 +37,7 @@ function Apercu({ fichier, surRetrait }) {
   );
 }
 
-export default function SaisieMessage({ clientId, surEnvoi, surEcrit }) {
+export default function SaisieMessage({ clientId, surEnvoi, surEcrit, insertion }) {
   const { t } = useTraduction();
   const [texte, setTexte] = useState('');
   const [fichiers, setFichiers] = useState([]);
@@ -46,6 +47,14 @@ export default function SaisieMessage({ clientId, surEnvoi, surEcrit }) {
   const dernierEcrit = useRef(0);
   const choixFichier = useRef(null);
   const id = useId();
+  const zone = useRef(null);
+
+  // Texte proposé par l'assistant et copié volontairement : ajouté à la saisie, à relire avant d'envoyer.
+  useEffect(() => {
+    if (!insertion?.texte) return;
+    setTexte((actuel) => ajouterTexte(actuel, insertion.texte).slice(0, MAX_TEXTE));
+    zone.current?.focus();
+  }, [insertion]);
 
   useEffect(() => {
     setCommandes([]);
@@ -107,7 +116,7 @@ export default function SaisieMessage({ clientId, surEnvoi, surEcrit }) {
           onChange={(e) => setCommande(e.target.value)} />
       )}
       <label htmlFor={`${id}-texte`} className="visuellement-cache">{t('messagerie.saisie.message')}</label>
-      <textarea id={`${id}-texte`} className={styles.zoneTexte} rows={2} maxLength={MAX_TEXTE} value={texte}
+      <textarea ref={zone} id={`${id}-texte`} className={styles.zoneTexte} rows={2} maxLength={MAX_TEXTE} value={texte}
         placeholder={t('messagerie.saisie.placeholder')} aria-describedby={`${id}-aide`}
         onChange={surChangement} onKeyDown={surTouche} />
       {fichiers.length > 0 && (

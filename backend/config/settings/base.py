@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     "apps.notifications",  # BF-07, BF-13 (vague 3)
     "apps.paiements",  # BF-10, BF-12 (vague 4)
     "apps.statistiques",  # BF-16 (vague 4)
+    "apps.assistant",  # O1, O4 (vague 5)
 ]
 
 MIDDLEWARE = [
@@ -215,6 +216,18 @@ JAAS_LIMITE_GRATUITE = int(env("JAAS_LIMITE_GRATUITE", "25") or "25")
 # Les clés (CAMPAY_USERNAME, CAMPAY_PASSWORD, CAMPAY_BASE_URL, CAMPAY_WEBHOOK_KEY) sont lues par integrations/campay.
 PAIEMENT_MONTANT_MINIMUM = int(env("PAIEMENT_MONTANT_MINIMUM", "100") or "100")
 PAIEMENT_EXPIRATION_MINUTES = int(env("PAIEMENT_EXPIRATION_MINUTES", "15") or "15")
+
+# --- Assistant IA (vague 5) ---
+# La clé GEMINI_API_KEY est lue par integrations/gemini ; jamais écrite dans le code ni dans les journaux.
+GEMINI_MODELE_ASSISTANT = env("GEMINI_MODELE_ASSISTANT", "gemini-2.5-flash") or "gemini-2.5-flash"
+GEMINI_MODELE_FOND = env("GEMINI_MODELE_FOND", "gemini-2.5-flash") or "gemini-2.5-flash"
+# Nombre maximal de messages d'assistant par jour pour tout le site (protège le budget)
+ASSISTANT_LIMITE_JOUR = int(env("ASSISTANT_LIMITE_JOUR", "1000") or "1000")
+# Conservation des conversations (jours)
+ASSISTANT_RETENTION_JOURS = int(env("ASSISTANT_RETENTION_JOURS", "90") or "90")
+# Dossier des prompts et des connaissances (racine du dépôt par défaut ; sur Railway, la racine du service
+# est backend/ : copier agents/ dans backend/agents/ ou renseigner ASSISTANT_AGENTS_DIR)
+ASSISTANT_AGENTS_DIR = Path(env("ASSISTANT_AGENTS_DIR") or BASE_DIR.parent / "agents")
 
 LOGGING = {
     "version": 1,

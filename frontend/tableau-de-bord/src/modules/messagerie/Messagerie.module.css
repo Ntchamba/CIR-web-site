@@ -106,3 +106,6 @@
 @media (prefers-reduced-motion: reduce) {
   .fil { scroll-behavior: auto; }
 }
+
+/* Bouton « Proposer un brouillon » (assistant IA) au-dessus de la saisie. */
+.barreBrouillon { padding: 0 var(--esp-3); max-height: 50vh; overflow-y: auto; }

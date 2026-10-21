@@ -15,6 +15,9 @@ import NotesInternes from '@/composants/NotesInternes.jsx';
 import Tiroir from '@/composants/Tiroir.jsx';
 import { useTraduction } from '@/i18n/index.js';
 
+import BoutonBrouillonIA from '@/modules/assistant/composants/BoutonBrouillonIA.jsx';
+import { ajouterTexte } from '@/modules/assistant/erreurs.js';
+
 import { modifierDemande } from '../api.js';
 import { ETATS } from '../useContact.js';
 import styles from '../Contact.module.css';
@@ -86,6 +89,9 @@ export default function TiroirDemande({ demande, surFermeture, surMiseAJour }) {
           options={ETATS.map((c) => [c, t(`contact.etats.${c}`)])} onChange={(e) => setEtat(e.target.value)} />
         <Champ libelle={t('contact.tiroir.reponse')} name="reponse_equipe" multiligne rows={4} value={reponse}
           erreur={champs.reponse_equipe} aide={t('contact.tiroir.reponseAide')} onChange={(e) => setReponse(e.target.value)} />
+        <BoutonBrouillonIA type="reponse_contact" cibleId={demande.id} libelle={t('assistant.bouton.contact')}
+          libelleCopie={t('assistant.copier.reponse')}
+          surCopie={([proposition]) => setReponse((actuelle) => ajouterTexte(actuelle, proposition.texte))} />
         {erreur && !champs.etat && !champs.reponse_equipe && <MessageErreur erreur={erreur} />}
         <div><Bouton type="submit" chargement={envoi}>{t('contact.tiroir.enregistrer')}</Bouton></div>
         <p role="status" aria-live="polite" className={annonce ? styles.annonce : 'visuellement-cache'}>{annonce}</p>

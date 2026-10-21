@@ -41,18 +41,22 @@ export default function MenuLateral({ id, ouvert, surNavigation }) {
         ))}
       </ul>
 
-      <p className={styles.section}>{t('coque.aVenir')}</p>
-      <ul className={styles.liste}>
-        {MODULES_A_VENIR.map((m) => (
-          <li key={m.chemin}>
-            <NavLink to={m.chemin} className={classeLien} onClick={surNavigation}>
-              <IconeMenu nom={m.icone} />
-              <span>{m.libelle}</span>
-              <span className={styles.bientot}>{t('coque.bientot')}</span>
-            </NavLink>
-          </li>
-        ))}
-      </ul>
+      {MODULES_A_VENIR.length > 0 && (
+        <>
+          <p className={styles.section}>{t('coque.aVenir')}</p>
+          <ul className={styles.liste}>
+            {MODULES_A_VENIR.map((m) => (
+              <li key={m.chemin}>
+                <NavLink to={m.chemin} className={classeLien} onClick={surNavigation}>
+                  <IconeMenu nom={m.icone} />
+                  <span>{m.libelle}</span>
+                  <span className={styles.bientot}>{t('coque.bientot')}</span>
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </nav>
   );
 }

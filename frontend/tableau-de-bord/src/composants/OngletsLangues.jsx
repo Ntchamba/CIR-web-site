@@ -12,6 +12,7 @@ import Champ from '@partage/ui/Champ.jsx';
 import { infosLangue, LANGUES } from '@partage/i18n/langues.js';
 
 import { useTraduction } from '@/i18n/index.js';
+import BoutonBrouillonIA from '@/modules/assistant/composants/BoutonBrouillonIA.jsx';
 
 import { languesIncompletes, LANGUE_REFERENCE, modifierTraduction, nomLangue, texteTraduit } from './langues.js';
 import styles from './Composants.module.css';
@@ -71,7 +72,7 @@ export function PastilleTraductions({ langues }) {
   );
 }
 
-export default function OngletsLangues({ champs, valeurs, traductions, surChangement, surTraductions, erreurs = {}, libelle }) {
+export default function OngletsLangues({ champs, valeurs, traductions, surChangement, surTraductions, erreurs = {}, libelle, contexteIA }) {
   const { t } = useTraduction();
   const [langue, setLangue] = useState(LANGUE_REFERENCE);
   const idPanneau = useId();
@@ -97,6 +98,13 @@ export default function OngletsLangues({ champs, valeurs, traductions, surChange
         ) : (
           <>
             <p className={styles.aideLangue}>{t('langues.facultatif', { langue: nomLangue(langue) })}</p>
+            {/* Propositions de l'assistant : copiées champ par champ, à la demande, jamais appliquées d'office. */}
+            <BoutonBrouillonIA type="traduction" contexte={contexteIA} libelle={t('assistant.bouton.traductions')}
+              libelleCopie={t('assistant.copier.champ')}
+              textes={champs.map((c) => ({ nom: c.nom, libelle: c.libelle, texte: String(valeurs?.[c.nom] ?? '') }))}
+              surCopie={(propositions) => surTraductions(propositions.reduce(
+                (acc, p) => (p.langue && p.langue !== LANGUE_REFERENCE ? modifierTraduction(acc, p.langue, p.nom, p.texte) : acc),
+                traductions || {}))} />
             {champs.map((c) => {
               const francais = String(valeurs?.[c.nom] ?? '');
               return (

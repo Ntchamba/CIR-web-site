@@ -34,12 +34,12 @@ export const MODULES_ACTIFS = [
   entree('vitrine', '/vitrine', 'realisations'),
   entree('actualites', '/actualites', 'actualites'),
   entree('contenus', '/contenus', 'contenus'),
+  entree('assistant', '/assistant', 'assistant'),
   entree('equipe', '/equipe', 'equipe', { superAdmin: true }),
 ];
 
-export const MODULES_A_VENIR = [
-  entree('assistant', '/assistant', 'assistant'),
-];
+/** Modules des vagues suivantes (vide depuis la vague 5 : tous les modules sont livrés ; la section « À venir » disparaît). */
+export const MODULES_A_VENIR = [];
 
 /** Entrées actives visibles pour cette personne. */
 export const modulesVisibles = (superAdmin) => MODULES_ACTIFS.filter((m) => !m.superAdmin || superAdmin);

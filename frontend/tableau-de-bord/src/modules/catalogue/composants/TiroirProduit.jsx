@@ -203,7 +203,7 @@ export default function TiroirProduit({ produitId, familles, surFermeture, surEn
 
             <fieldset className={gestion.bloc}>
               <legend>{t('catalogue.produit.textes')}</legend>
-              <OngletsLangues valeurs={form} traductions={form.traductions} erreurs={erreurs}
+              <OngletsLangues contexteIA="produit" valeurs={form} traductions={form.traductions} erreurs={erreurs}
                 surChangement={changer} surTraductions={(traductions) => changer('traductions', traductions)}
                 champs={[
                   champTexte('nom', { required: true }),
