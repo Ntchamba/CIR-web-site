@@ -12,6 +12,7 @@ import CentreNotifications from '@/modules/notifications/composants/CentreNotifi
 import { useDirect } from '@/modules/notifications/FondDirect.jsx';
 import { useSelection } from '@/modules/selection/SelectionContext.jsx';
 
+import BoutonRetour from './BoutonRetour.jsx';
 import { useCoordonnees } from './contenus.js';
 import styles from './Entete.module.css';
 
@@ -33,6 +34,7 @@ export default function Entete() {
   return (
     <header className={styles.entete} data-vt="entete">
       <div className={styles.barre}>
+        <BoutonRetour />
         <Link to="/" className={styles.logo} aria-label={t('entete.retourAccueil')}>
           <img src="/media/marque/logo-cir.webp" alt="" width="44" height="44" />
           <span className={styles.nom}>

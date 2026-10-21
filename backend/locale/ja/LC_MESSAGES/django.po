@@ -1380,3 +1380,19 @@ msgstr "%(fichier)s の代替テキストがありません（言語：%(langues
 #: apps/contenus/management/commands/importer_medias_reference.py
 msgid "Médias de référence : %(accueil)s média(s) de l'accueil posé(s), %(creees)s photo(s) de la sphère créée(s), %(remplacees)s remplacée(s), %(inchangees)s déjà présente(s)."
 msgstr "参照メディア：トップページのメディア %(accueil)s 件を設定、球体の写真を %(creees)s 枚作成、%(remplacees)s 枚を置換、%(inchangees)s 枚は登録済み。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Nom de fichier non autorisé dans le manifeste : %(fichier)s."
+msgstr "マニフェストで許可されていないファイル名：%(fichier)s。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Fichier hors du dossier de médias ou non ordinaire : %(fichier)s."
+msgstr "メディアフォルダ外のファイル、または通常のファイルではありません：%(fichier)s。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Le dossier ne doit pas contenir de segment « .. » : %(chemin)s."
+msgstr "フォルダに「..」を含めることはできません：%(chemin)s。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Vidéo refusée : %(fichier)s (%(raison)s) Rien n'a été importé."
+msgstr "動画が拒否されました：%(fichier)s（%(raison)s）何もインポートされませんでした。"

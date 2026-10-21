@@ -31,6 +31,7 @@ export default {
     messages: 'Nachrichten',
     messagesNonLus: { one: 'Nachrichten, {n} ungelesen', other: 'Nachrichten, {n} ungelesen' },
     retourAccueil: 'CIR, zurück zur Startseite',
+    retour: 'Zurück zur vorherigen Seite',
     appeler: 'CIR anrufen unter {telephone}',
     monCompte: 'Mein Konto',
     seConnecter: 'Anmelden',

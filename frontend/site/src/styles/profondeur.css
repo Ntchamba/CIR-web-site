@@ -126,19 +126,20 @@
 @keyframes video-fondu { from { opacity: 1; } to { opacity: 0; } }
 @keyframes scene-voile-accueil { from { opacity: 1; } to { opacity: 0.35; } }
 @keyframes scene-lumiere {
-  from { opacity: 0; scale: 0.15; }
-  to { opacity: 1; scale: 1.8; }
+  from { opacity: 0; scale: 0.04; }
+  to { opacity: 1; scale: 2.6; }
 }
 @keyframes hero-eloigne {
   from { opacity: 1; transform: perspective(var(--p3d-persp)) translate3d(0, 0, 0); }
   to { opacity: 0; transform: perspective(var(--p3d-persp)) translate3d(0, -20px, -420px); }
 }
 
-:root { --fenetres: 74% 33%; /* lumière des grandes fenêtres, en % de l'image */ --entree-h: 160vh; --zoom-fin: 3.5; }
-@media (max-width: 700px) { :root { --fenetres: 58% 31%; --entree-h: 130vh; --zoom-fin: 2.2; } }
+:root { --fx: 74%; --fy: 33%; --fenetres: var(--fx) var(--fy); /* lumière des grandes fenêtres, en % de l'image */ --entree-h: 160vh; --zoom-fin: 3.5; }
+@media (max-width: 700px) { :root { --fx: 58%; --fy: 31%; --entree-h: 130vh; --zoom-fin: 2.2; } }
 
 .scene { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background: var(--encre); }
-.scene-image, .scene-voile, .scene-lumiere { position: absolute; inset: 0; transform-origin: var(--fenetres); }
+.scene-lumiere { position: absolute; left: var(--fx); top: var(--fy); width: 240vmax; height: 240vmax; margin: -120vmax 0 0 -120vmax; transform-origin: 50% 50%; }
+.scene-image, .scene-voile { position: absolute; inset: 0; transform-origin: 50% 50%; }
 .zoom-fenetres { transform-origin: var(--fenetres); }
 .scene-image {
   background: url('/media/accueil/fond-maison-desktop.webp') center / cover no-repeat;
@@ -155,7 +156,8 @@
 .scene-voile { background: rgba(14, 42, 56, var(--voile, 0.66)); }
 .scene-lumiere {
   opacity: 0;
-  background: radial-gradient(circle farthest-corner at var(--fenetres), #ffffff 0%, #ffffff 28%, rgba(236, 245, 250, 0.97) 62%, rgba(206, 228, 240, 0.97) 100%);
+  /* Lumière blanche des fenêtres : un disque qui s'élargit (échelle) jusqu'à remplir l'écran, bords fondus. */
+  background: radial-gradient(closest-side, #ffffff 0%, #ffffff 40%, rgba(236, 245, 250, 0.96) 58%, rgba(206, 228, 240, 0) 100%);
 }
 @media (max-width: 700px) { .scene-image { background-image: url('/media/accueil/fond-maison-mobile.webp'); } }
 

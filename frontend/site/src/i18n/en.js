@@ -31,6 +31,7 @@ export default {
     messages: 'Messages',
     messagesNonLus: { one: 'Messages, {n} unread', other: 'Messages, {n} unread' },
     retourAccueil: 'CIR, back to home page',
+    retour: 'Back to the previous page',
     appeler: 'Call CIR on {telephone}',
     monCompte: 'My account',
     seConnecter: 'Sign in',

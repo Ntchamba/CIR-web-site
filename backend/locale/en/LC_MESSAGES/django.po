@@ -1380,3 +1380,19 @@ msgstr "Alternative text missing for %(fichier)s (languages: %(langues)s). Nothi
 #: apps/contenus/management/commands/importer_medias_reference.py
 msgid "Médias de référence : %(accueil)s média(s) de l'accueil posé(s), %(creees)s photo(s) de la sphère créée(s), %(remplacees)s remplacée(s), %(inchangees)s déjà présente(s)."
 msgstr "Reference media: %(accueil)s home page media set, %(creees)s sphere photo(s) created, %(remplacees)s replaced, %(inchangees)s already present."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Nom de fichier non autorisé dans le manifeste : %(fichier)s."
+msgstr "File name not allowed in the manifest: %(fichier)s."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Fichier hors du dossier de médias ou non ordinaire : %(fichier)s."
+msgstr "File outside the media folder or not a regular file: %(fichier)s."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Le dossier ne doit pas contenir de segment « .. » : %(chemin)s."
+msgstr "Thefoldermustnotcontaina\"..\"segment:%(chemin)s."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Vidéo refusée : %(fichier)s (%(raison)s) Rien n'a été importé."
+msgstr "Video rejected: %(fichier)s (%(raison)s) Nothing was imported."

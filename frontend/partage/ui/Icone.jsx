@@ -11,6 +11,7 @@ const TRACES = {
   message: 'M4 5h16v11H9l-5 4V5z',
   fleche: 'M5 12h14M13 6l6 6-6 6',
   retour: 'M19 12H5M11 6l-6 6 6 6',
+  precedent: 'M15 5l-7 7 7 7',
   coche: 'M5 12l5 5 9-10',
   carte: 'M12 21s-7-6-7-11a7 7 0 1 1 14 0c0 5-7 11-7 11zM12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
   sortie: 'M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10',

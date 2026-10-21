@@ -32,6 +32,7 @@ export default {
     messages: 'Messages',
     messagesNonLus: { one: 'Messages, {n} non lu', other: 'Messages, {n} non lus' },
     retourAccueil: "CIR, retour à l'accueil",
+    retour: 'Retour à la page précédente',
     appeler: 'Appeler le CIR au {telephone}',
     monCompte: 'Mon compte',
     seConnecter: 'Se connecter',

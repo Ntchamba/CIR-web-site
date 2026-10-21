@@ -1380,3 +1380,19 @@ msgstr "%(fichier)s 缺少替代文本（语言：%(langues)s）。未导入任�
 #: apps/contenus/management/commands/importer_medias_reference.py
 msgid "Médias de référence : %(accueil)s média(s) de l'accueil posé(s), %(creees)s photo(s) de la sphère créée(s), %(remplacees)s remplacée(s), %(inchangees)s déjà présente(s)."
 msgstr "参考媒体：已设置首页媒体 %(accueil)s 个，新建球体照片 %(creees)s 张，替换 %(remplacees)s 张，已存在 %(inchangees)s 张。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Nom de fichier non autorisé dans le manifeste : %(fichier)s."
+msgstr "清单中不允许的文件名：%(fichier)s。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Fichier hors du dossier de médias ou non ordinaire : %(fichier)s."
+msgstr "文件不在媒体文件夹内或不是普通文件：%(fichier)s。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Le dossier ne doit pas contenir de segment « .. » : %(chemin)s."
+msgstr "文件夹路径不得包含“..”段：%(chemin)s。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Vidéo refusée : %(fichier)s (%(raison)s) Rien n'a été importé."
+msgstr "视频被拒绝：%(fichier)s（%(raison)s）未导入任何内容。"

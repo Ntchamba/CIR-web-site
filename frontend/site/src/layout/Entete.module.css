@@ -120,3 +120,15 @@
 /* Client connecté sur petit téléphone : la place va à la cloche et à la sélection ; le téléphone du CIR reste
    dans la page Contact, le pied de page et le bouton d'appel de la messagerie. */
 @media (max-width: 480px) { .telReduit { display: none !important; } }
+
+/* Flèche de retour « < » : téléphone seulement (même seuil que la barre d'onglets), à gauche, avant le logo. */
+.retour {
+  display: none; align-items: center; justify-content: center; flex-shrink: 0;
+  width: var(--cible-tactile); height: var(--cible-tactile); margin-left: -8px;
+  border: 0; border-radius: 22px; background: transparent; color: var(--encre);
+}
+.retour:hover { background: rgba(127, 127, 127, 0.14); }
+@media (max-width: 900px) {
+  .retour { display: inline-flex; }
+  .barre { gap: 8px; }
+}

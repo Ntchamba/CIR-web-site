@@ -31,6 +31,7 @@ export default {
     messages: 'メッセージ',
     messagesNonLus: { one: 'メッセージ、未読 {n} 件', other: 'メッセージ、未読 {n} 件' },
     retourAccueil: 'CIR、ホームに戻る',
+    retour: '前のページに戻る',
     appeler: 'CIR に電話する（{telephone}）',
     monCompte: 'マイアカウント',
     seConnecter: 'ログイン',

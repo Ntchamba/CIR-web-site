@@ -31,6 +31,7 @@ export default {
     messages: '消息',
     messagesNonLus: { one: '消息，{n} 条未读', other: '消息，{n} 条未读' },
     retourAccueil: 'CIR，返回首页',
+    retour: '返回上一页',
     appeler: '致电 CIR：{telephone}',
     monCompte: '我的账户',
     seConnecter: '登录',

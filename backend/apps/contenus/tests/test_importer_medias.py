@@ -3,6 +3,7 @@ import json
 import shutil
 import tempfile
 from io import StringIO
+from unittest import mock
 from pathlib import Path
 
 from django.apps import apps
@@ -325,10 +326,27 @@ class ImportAdversesTests(ImporterMediasTestCase):
             self.assertEqual(PhotoSphere.objects.count(), 0)
             self.assertEqual(self.fichiers_media(), [])
 
-    def test_dossier_avec_point_point_est_accepte_s_il_existe_et_lit_seulement_le_dossier(self):
+    def test_dossier_avec_point_point_refuse(self):
         dossier = self.copie_dossier()
-        self.importer(dossier=dossier / "images" / "..")
-        self.assertEqual(PhotoSphere.objects.count(), 9)
+        with self.assertRaisesMessage(CommandError, "« .. »"):
+            self.importer(dossier=dossier / "images" / "..")
+        self.assertEqual(PhotoSphere.objects.count(), 0)
+
+    def test_echec_de_save_apres_ecriture_du_fichier_sans_orphelin(self):
+        appels = []
+        original = PhotoSphere._do_insert
+
+        def echoue_a_la_troisieme(*args, **kwargs):
+            appels.append(1)
+            if len(appels) == 3:
+                raise RuntimeError("échec simulé")
+            return original(*args, **kwargs)
+
+        with mock.patch.object(PhotoSphere, "_do_insert", autospec=True, side_effect=echoue_a_la_troisieme):
+            with self.assertRaises(RuntimeError):
+                self.importer()
+        self.assertEqual(PhotoSphere.objects.count(), 0)
+        self.assertEqual(self.fichiers_media(), [])
 
     def test_nom_de_fichier_avec_remontee_refuse(self):
         dossier = self.copie_dossier()
