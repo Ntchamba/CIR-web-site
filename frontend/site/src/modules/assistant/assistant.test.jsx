@@ -362,7 +362,7 @@ describe('avis et équipe', () => {
     await screen.findByText('Réponse');
     await userEvent.click(screen.getByRole('button', { name: 'Réponse utile' }));
     expect(await screen.findByText('Merci pour votre avis.')).toBeInTheDocument();
-    expect(appels(fetch, 'POST', '/api/assistant/messages/9/avis/')[0][0]).toEqual({ utile: true });
+    expect(appels(fetch, 'POST', '/api/assistant/messages/9/avis/')[0][0]).toEqual({ utile: true, cle: CLE });
     expect(screen.queryByRole('button', { name: 'Réponse peu utile' })).toBeNull();
   });
 
