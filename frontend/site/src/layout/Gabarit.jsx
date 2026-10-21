@@ -4,6 +4,7 @@ import { Outlet, useLocation } from 'react-router';
 
 import Chargement from '@partage/ui/Chargement.jsx';
 
+import { useCamera } from '@/app/camera.js';
 import { useProfondeur } from '@/app/profondeur.js';
 import { PAGES_A_BANDEAU } from '@/composants/bandeau.js';
 import { useTraduction } from '@/i18n/index.js';
@@ -18,16 +19,6 @@ import styles from './Gabarit.module.css';
 // L'assistant est dans un chunk séparé, demandé seulement quand le navigateur est au repos : il ne retarde pas la page.
 const BulleAssistant = lazy(() => import('@/modules/assistant/BulleAssistant.jsx'));
 
-/** Cadrage de la scène selon la page (voir styles/profondeur.css). */
-export function cameraDe(chemin) {
-  if (chemin === '/') return 'accueil';
-  if (chemin === '/catalogue' || chemin.startsWith('/catalogue/')) return 'catalogue';
-  if (chemin === '/realisations') return 'realisations';
-  if (chemin === '/commandes' || chemin.startsWith('/commandes/')) return 'commandes';
-  if (['/connexion', '/inscription', '/compte'].includes(chemin)) return 'compte';
-  return 'interne';
-}
-
 export default function Gabarit() {
   const { t } = useTraduction();
   const { pathname } = useLocation();
@@ -37,11 +28,14 @@ export default function Gabarit() {
 
   // Entrée en profondeur : `data-plat` sur <html> quand la page doit rester à plat (voir app/profondeur.js).
   useProfondeur();
+  // Caméra : se déplace vers le cadrage de la page (app/cameras.js, app/camera.js). Après le retour en haut de page.
 
   // Haut de page à chaque changement de page (avant l'affichage : le zoom entre pages montre déjà le haut).
   useLayoutEffect(() => {
     if (typeof window.scrollTo === 'function') window.scrollTo(0, 0);
   }, [pathname]);
+
+  const refScene = useCamera(pathname);
 
   const [assistantPret, setAssistantPret] = useState(false);
   useEffect(() => {
@@ -54,10 +48,10 @@ export default function Gabarit() {
   }, []);
 
   return (
-    <div className={styles.page} data-cam={cameraDe(pathname)}>
+    <div className={styles.page}>
       {/* Scène : le salon (dernière image de la vidéo), un seul élément pour toute l'application, derrière toutes les
           pages (décoratif). Sa « caméra » change selon la page (variables --cam-*, styles/profondeur.css). */}
-      <div className="scene" aria-hidden="true">
+      <div className="scene" ref={refScene} aria-hidden="true">
         <div className="scene-image" />
         <div className="scene-voile" />
         <div className="scene-lumiere" />
