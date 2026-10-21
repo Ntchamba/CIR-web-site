@@ -245,3 +245,172 @@ class ImportErreursTests(ImporterMediasTestCase):
         (dossier / "video/fond.mp4").unlink()
         with translation.override("de"), self.assertRaisesMessage(CommandError, "Mediendatei fehlt"):
             self.importer(dossier=dossier)
+
+
+class ImportAdversesTests(ImporterMediasTestCase):
+    """Cas adverses : --dossier, chemins sortants, échec au milieu, forçage, taille."""
+
+    def compter_autres(self):
+        autres = [m for m in apps.get_models() if m not in (ContenuAccueil, PhotoSphere)]
+        return {m: m.objects.count() for m in autres}
+
+    def ecrire_manifeste(self, dossier, modifier):
+        chemin = dossier / "medias.json"
+        manifeste = json.loads(chemin.read_text(encoding="utf-8"))
+        modifier(manifeste)
+        chemin.write_text(json.dumps(manifeste), encoding="utf-8")
+
+    def test_aucune_ligne_ailleurs_ni_realisation_ni_produit(self):
+        avant = self.compter_autres()
+        self.importer()
+        self.importer("--forcer")
+        self.assertEqual(self.compter_autres(), avant)
+
+    def test_forcer_supprime_les_anciens_fichiers_et_garde_les_ids(self):
+        self.importer()
+        anciens = set(self.fichiers_media())
+        self.importer("--forcer")
+        nouveaux = set(self.fichiers_media())
+        self.assertEqual(len(nouveaux), 11)
+        self.assertEqual(PhotoSphere.objects.count(), 9)
+        for photo in PhotoSphere.objects.all():
+            self.assertTrue(Path(photo.image.path).is_file())
+        self.assertTrue(anciens.isdisjoint(nouveaux) or len(nouveaux) == 11)
+
+    def test_forcer_en_echec_conserve_les_anciens_fichiers(self):
+        self.importer()
+        avant = self.fichiers_media()
+        photos = list(PhotoSphere.objects.values_list("id", "image", "alt"))
+        dossier = self.copie_dossier()
+        (dossier / "images/atelier-pose.webp").write_bytes(b"pas une image")
+        with self.assertRaises(Exception):
+            self.importer("--forcer", dossier=dossier)
+        self.assertEqual(self.fichiers_media(), avant)
+        self.assertEqual(list(PhotoSphere.objects.values_list("id", "image", "alt")), photos)
+
+    def test_echec_au_milieu_nettoie_les_fichiers_ecrits(self):
+        dossier = self.copie_dossier()
+        (dossier / "images/parking-vert.webp").write_bytes(b"pas une image")  # 5e photo : 4 déjà écrites
+        with self.assertRaises(Exception):
+            self.importer(dossier=dossier)
+        self.assertEqual(PhotoSphere.objects.count(), 0)
+        self.assertFalse(ContenuAccueil.charger().video_fond)
+        self.assertFalse(ContenuAccueil.charger().image_affiche)
+        self.assertEqual(self.fichiers_media(), [])
+
+    def test_manifeste_invalide_formes_diverses(self):
+        dossier = self.copie_dossier()
+        for contenu in ("[]", '{"fichiers": 3}', '{"fichiers": [1]}', '{"fichiers": [{"usage": "sphere"}]}',
+                        '{"fichiers": [{"usage": "sphere", "fichier": 5}]}'):
+            (dossier / "medias.json").write_text(contenu, encoding="utf-8")
+            with self.assertRaisesMessage(CommandError, "Manifeste illisible"):
+                self.importer(dossier=dossier)
+        self.assertEqual(self.fichiers_media(), [])
+        self.assertEqual(PhotoSphere.objects.count(), 0)
+
+    def test_alt_vide_ou_absent_refuse(self):
+        for alt in (None, "texte", {"fr": "x"}, {c: "  " for c in CODES_LANGUES}):
+            dossier = self.copie_dossier()
+
+            def modifier(m, alt=alt):
+                for e in m["fichiers"]:
+                    if e["fichier"].endswith("salon-pose.webp"):
+                        if alt is None:
+                            del e["alt"]
+                        else:
+                            e["alt"] = alt
+            self.ecrire_manifeste(dossier, modifier)
+            with self.assertRaisesMessage(CommandError, "salon-pose.webp"):
+                self.importer(dossier=dossier)
+            self.assertEqual(PhotoSphere.objects.count(), 0)
+            self.assertEqual(self.fichiers_media(), [])
+
+    def test_dossier_avec_point_point_est_accepte_s_il_existe_et_lit_seulement_le_dossier(self):
+        dossier = self.copie_dossier()
+        self.importer(dossier=dossier / "images" / "..")
+        self.assertEqual(PhotoSphere.objects.count(), 9)
+
+    def test_nom_de_fichier_avec_remontee_refuse(self):
+        dossier = self.copie_dossier()
+        secret = dossier.parent / "secret.webp"
+        shutil.copy(DOSSIER / "images/gradins.webp", secret)
+
+        def modifier(m):
+            for e in m["fichiers"]:
+                if e["fichier"].endswith("gradins.webp"):
+                    e["fichier"] = "../secret.webp"
+        self.ecrire_manifeste(dossier, modifier)
+        with self.assertRaises(CommandError):
+            self.importer(dossier=dossier)
+        self.assertEqual(PhotoSphere.objects.count(), 0)
+        self.assertEqual(self.fichiers_media(), [])
+
+    def test_nom_de_fichier_absolu_refuse(self):
+        dossier = self.copie_dossier()
+        cible = str(DOSSIER / "images/gradins.webp")
+
+        def modifier(m):
+            for e in m["fichiers"]:
+                if e["fichier"].endswith("gradins.webp"):
+                    e["fichier"] = cible
+        self.ecrire_manifeste(dossier, modifier)
+        with self.assertRaises(CommandError):
+            self.importer(dossier=dossier)
+        self.assertEqual(PhotoSphere.objects.count(), 0)
+
+    def test_lien_symbolique_sortant_refuse(self):
+        dossier = self.copie_dossier()
+        hors = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, hors, ignore_errors=True)
+        shutil.copy(DOSSIER / "images/gradins.webp", hors / "externe.webp")
+        (dossier / "images/gradins.webp").unlink()
+        (dossier / "images/gradins.webp").symlink_to(hors / "externe.webp")
+        with self.assertRaises(CommandError):
+            self.importer(dossier=dossier)
+        self.assertEqual(PhotoSphere.objects.count(), 0)
+        self.assertEqual(self.fichiers_media(), [])
+
+    def test_manifeste_lien_symbolique_sortant_refuse(self):
+        dossier = self.copie_dossier()
+        hors = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, hors, ignore_errors=True)
+        shutil.copy(DOSSIER / "medias.json", hors / "medias.json")
+        (dossier / "medias.json").unlink()
+        (dossier / "medias.json").symlink_to(hors / "medias.json")
+        with self.assertRaises(CommandError):
+            self.importer(dossier=dossier)
+        self.assertEqual(PhotoSphere.objects.count(), 0)
+
+    def test_video_invalide_refusee(self):
+        dossier = self.copie_dossier()
+        (dossier / "video/fond.mp4").write_bytes(b"ceci n'est pas une video")
+        with self.assertRaises(Exception):
+            self.importer(dossier=dossier)
+        self.assertFalse(ContenuAccueil.charger().video_fond)
+        self.assertEqual(PhotoSphere.objects.count(), 0)
+
+    def test_image_trop_lourde_refusee(self):
+        dossier = self.copie_dossier()
+        with Image.open(dossier / "images/atelier-pose.webp") as image:
+            image.resize((9000, 5000)).save(dossier / "images/atelier-pose.webp", "WEBP", quality=1)
+        with self.assertRaises(Exception):
+            self.importer(dossier=dossier)
+        self.assertEqual(PhotoSphere.objects.count(), 0)
+        self.assertEqual(self.fichiers_media(), [])
+
+    def test_taille_totale_des_medias(self):
+        total = sum(p.stat().st_size for p in DOSSIER.rglob("*") if p.is_file())
+        self.assertLess(total, 5 * 1024 * 1024)
+        self.importer()
+        poids = sum((self.media / f).stat().st_size for f in self.fichiers_media())
+        self.assertLess(poids, 3 * 1024 * 1024)
+
+    def test_alt_importes_exacts_et_sans_chiffre_ou_nom_propre(self):
+        self.importer()
+        manifeste = json.loads((DOSSIER / "medias.json").read_text(encoding="utf-8"))
+        attendus = {Path(e["fichier"]).stem: e["alt"] for e in manifeste["fichiers"] if e["usage"] == "sphere"}
+        for photo, nom in zip(PhotoSphere.objects.all(), SPHERE):
+            for langue in CODES_LANGUES:
+                self.assertEqual(photo.traduit("alt", langue), attendus[nom][langue])
+        for nom in ("Jiuye", "Douala", "Cameroun", "CIR"):
+            self.assertFalse(any(nom in t for a in attendus.values() for t in a.values()), nom)

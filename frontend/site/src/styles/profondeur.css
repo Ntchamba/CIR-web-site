@@ -75,26 +75,27 @@
       will-change: transform, scale;
     }
     /* Accueil : zoom jusqu'à la lumière des fenêtres, puis la lumière blanche remplit l'écran. */
-    html:not([data-plat]) .page[data-cam='accueil'] .scene-image {
+    html:not([data-plat]) [data-cam='accueil'] .scene-image {
       animation: scene-zoom-fenetres cubic-bezier(0.55, 0, 0.8, 0.5) both;
       animation-timeline: scroll(root block);
       animation-range: 0px var(--entree-h);
     }
-    html:not([data-plat]) .page[data-cam='accueil'] .scene-voile {
+    html:not([data-plat]) [data-cam='accueil'] .scene-voile {
       animation: scene-voile-accueil linear both;
       animation-timeline: scroll(root block);
       animation-range: 0px var(--entree-h);
     }
-    html:not([data-plat]) .page[data-cam='accueil'] .scene-lumiere {
+    html:not([data-plat]) [data-cam='accueil'] .scene-lumiere {
       opacity: 1;
       animation: scene-lumiere ease-in both;
       animation-timeline: scroll(root block);
       animation-range: calc(var(--entree-h) * 0.35) var(--entree-h);
     }
+    /* La vidéo (même image que la scène à la fin) zoome pareil, puis s'efface : la scène et la lumière prennent le relais. */
     html:not([data-plat]) .zoom-fenetres {
-      animation: scene-zoom-fenetres cubic-bezier(0.55, 0, 0.8, 0.5) both;
-      animation-timeline: scroll(root block);
-      animation-range: 0px var(--entree-h);
+      animation: scene-zoom-fenetres cubic-bezier(0.55, 0, 0.8, 0.5) both, video-fondu linear both;
+      animation-timeline: scroll(root block), scroll(root block);
+      animation-range: 0px var(--entree-h), calc(var(--entree-h) * 0.12) calc(var(--entree-h) * 0.3);
     }
     /* Titre et sphère s'estompent et s'éloignent pendant le zoom. */
     html:not([data-plat]) .hero-eloigne {
@@ -122,6 +123,7 @@
 /* ---- Scène (décor persistant) : le salon, cadré par page ---- */
 @keyframes scene-avance { from { scale: 1; } to { scale: 1.12; } }
 @keyframes scene-zoom-fenetres { from { scale: 1; } to { scale: var(--zoom-fin); } }
+@keyframes video-fondu { from { opacity: 1; } to { opacity: 0; } }
 @keyframes scene-voile-accueil { from { opacity: 1; } to { opacity: 0.35; } }
 @keyframes scene-lumiere {
   from { opacity: 0; scale: 0.15; }
@@ -149,8 +151,7 @@
     )
     scale(var(--cam-zoom));
 }
-.page[data-cam='accueil'] .scene-image { transform-origin: var(--fenetres); }
-.page:not([data-cam='accueil']) .scene-image { transform-origin: 50% 50%; }
+[data-cam='accueil'] .scene-image { transform-origin: var(--fenetres); }
 .scene-voile { background: rgba(14, 42, 56, var(--voile, 0.66)); }
 .scene-lumiere {
   opacity: 0;
@@ -161,5 +162,5 @@
 /* Caméra : les variables --cam-* sont posées sur .scene par app/camera.js (cadrages dans app/cameras.js). */
 .scene { --cam-x: 50; --cam-y: 50; --cam-zoom: 1; --voile: 0.66; --cam-x-pc: calc(var(--cam-x) * 1%); --cam-y-pc: calc(var(--cam-y) * 1%); }
 /* Accueil, à plat : voile sombre à gauche (lecture du titre), comme sur la vidéo. */
-.page[data-cam='accueil'] .scene-voile { background: linear-gradient(90deg, rgba(14, 42, 56, 0.88) 0%, rgba(14, 42, 56, 0.55) 55%, rgba(14, 42, 56, 0.25) 100%); opacity: 1; }
-html[data-plat] .page[data-cam='accueil'] .scene-voile { background: rgba(14, 42, 56, 0.72); }
+[data-cam='accueil'] .scene-voile { background: linear-gradient(90deg, rgba(14, 42, 56, 0.88) 0%, rgba(14, 42, 56, 0.55) 55%, rgba(14, 42, 56, 0.25) 100%); opacity: 1; }
+html[data-plat] [data-cam='accueil'] .scene-voile { background: rgba(14, 42, 56, 0.72); }
