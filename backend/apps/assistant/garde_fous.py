@@ -384,7 +384,7 @@ def _liens_cites(texte, autorises, deja):
 # --- Noms propres -----------------------------------------------------------------------------------------
 
 _JIUYE = re.compile(r"\bjiu[\s\-·.]?ye\b", re.IGNORECASE)
-_CIR = re.compile(r"(?<![\w])cir(?![\w\-/])", re.IGNORECASE)
+_CIR = re.compile(r"(?<![\w\-@./])cir(?![\w\-/@])", re.IGNORECASE)
 NOMS_A_CONSERVER = ("Jiuye", "CIR")
 
 

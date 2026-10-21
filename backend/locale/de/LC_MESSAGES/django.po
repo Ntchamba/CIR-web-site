@@ -1267,3 +1267,92 @@ msgstr "Der Zeitraum darf %(jours)s Tage nicht überschreiten."
 #: apps/statistiques/indicateurs.py:169
 msgid "Le nombre de mois doit être compris entre 1 et %(max)s."
 msgstr "Die Anzahl der Monate muss zwischen 1 und %(max)s liegen."
+
+
+#: apps/assistant/garde_fous.py:47
+msgid "Je ne peux pas répondre à cette demande. Vous pouvez écrire à l'équipe du CIR."
+msgstr "Ich kann diese Anfrage nicht beantworten. Sie können dem CIR-Team schreiben."
+
+#: apps/assistant/garde_fous.py:43
+msgid "Je ne peux pas donner de prix ferme : l'équipe vous répondra par un devis."
+msgstr "Ich kann keinen verbindlichen Preis nennen: Das Team antwortet Ihnen mit einem Angebot."
+
+#: apps/assistant/garde_fous.py:45
+msgid "Je ne peux ni passer, ni confirmer, ni signer, ni payer, ni modifier quoi que ce soit : seule l'équipe du CIR le fait. Vous pouvez lui écrire ou demander un devis."
+msgstr "Ich kann nichts aufgeben, bestätigen, unterschreiben, bezahlen oder ändern: Das kann nur das CIR-Team. Sie können ihm schreiben oder ein Angebot anfordern."
+
+#: apps/assistant/services.py:154
+msgid "Vous avez envoyé beaucoup de messages : patientez un moment avant de réessayer."
+msgstr "Sie haben viele Nachrichten gesendet: Bitte warten Sie einen Moment, bevor Sie es erneut versuchen."
+
+#: apps/assistant/services.py:222
+msgid "L'assistant est momentanément indisponible. Réessayez dans un instant."
+msgstr "Der Assistent ist vorübergehend nicht verfügbar. Bitte versuchen Sie es gleich noch einmal."
+
+#: apps/assistant/services.py:221
+msgid "L'assistant n'est pas disponible pour le moment."
+msgstr "Der Assistent ist im Moment nicht verfügbar."
+
+#: apps/assistant/services.py:179
+msgid "L'assistant a atteint sa limite pour aujourd'hui. Écrivez à l'équipe ou réessayez demain."
+msgstr "Der Assistent hat sein Limit für heute erreicht. Schreiben Sie dem Team oder versuchen Sie es morgen erneut."
+
+#: apps/assistant/services.py:310
+msgid "Vous avez déjà donné votre avis sur cette réponse."
+msgstr "Sie haben diese Antwort bereits bewertet."
+
+#: apps/assistant/services.py:513
+msgid "Ce brouillon a déjà été traité."
+msgstr "Dieser Entwurf wurde bereits bearbeitet."
+
+#: apps/assistant/services.py:70
+msgid "Écrivez votre question."
+msgstr "Schreiben Sie Ihre Frage."
+
+#: apps/assistant/services.py:72
+msgid "Le message est trop long (1000 caractères au plus)."
+msgstr "Die Nachricht ist zu lang (höchstens 1000 Zeichen)."
+
+#: apps/assistant/services.py:293
+msgid "Indiquez si la réponse était utile (vrai ou faux)."
+msgstr "Geben Sie an, ob die Antwort hilfreich war (wahr oder falsch)."
+
+#: apps/assistant/services.py:391
+msgid "Type de brouillon inconnu."
+msgstr "Unbekannter Entwurfstyp."
+
+#: apps/assistant/services.py:409
+msgid "Indiquez l'identifiant de la demande ou de la conversation."
+msgstr "Geben Sie die Kennung der Anfrage oder der Unterhaltung an."
+
+#: apps/assistant/services.py:507
+msgid "État inconnu : accepte, modifie ou rejete."
+msgstr "Unbekannter Status: accepte, modifie oder rejete."
+
+#: apps/assistant/services.py:535
+msgid "Le contenu d'une réponse est un objet {texte}."
+msgstr "Der Inhalt einer Antwort ist ein Objekt {texte}."
+
+#: apps/assistant/services.py:538
+msgid "Le texte est trop long (5000 caractères au plus)."
+msgstr "Der Text ist zu lang (höchstens 5000 Zeichen)."
+
+#: apps/assistant/services.py:396
+msgid "Saisissez le texte français à traduire."
+msgstr "Geben Sie den zu übersetzenden französischen Text ein."
+
+#: apps/assistant/services.py:401
+msgid "Choisissez parmi : en, zh, de, ja."
+msgstr "Wählen Sie aus: en, zh, de, ja."
+
+#: apps/assistant/services.py:404
+msgid "Contexte inconnu : produit, actualite ou autre."
+msgstr "Unbekannter Kontext: produit, actualite oder autre."
+
+#: apps/assistant/services.py:527
+msgid "Le contenu d'une traduction est un objet {langue: texte}."
+msgstr "Der Inhalt einer Übersetzung ist ein Objekt {langue: texte}."
+
+#: apps/assistant/services.py:517
+msgid "Le texte modifié est obligatoire."
+msgstr "Der geänderte Text ist erforderlich."

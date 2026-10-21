@@ -385,6 +385,27 @@ describe('BoutonBrouillonIA : onglets de traductions', () => {
     expect(screen.getByLabelText('Nom (Deutsch)')).toHaveValue('Epoxidboden');
   });
 
+  it('une traduction déjà saisie n’est jamais écrasée (ajout en dessous) et le français n’entre jamais dans une traduction', async () => {
+    localStorage.setItem('cir-tdb.jetons', JSON.stringify({ acces: 'a', rafraichissement: 'r' }));
+    simulerApi([
+      statut(),
+      ['POST', '/api/admin/assistant/brouillons/', { ...BROUILLON, id: 31, type: 'traduction', contenu: { fr: 'Sol époxy', en: 'Epoxy floor' } }],
+      ['PATCH', '/api/admin/assistant/brouillons/', { ...BROUILLON, etat: 'accepte' }],
+    ]);
+    render(<Harnais />);
+    const u = userEvent.setup();
+    await u.click(screen.getByRole('tab', { name: /English/ }));
+    await u.type(screen.getByLabelText('Nom (English)'), 'Mon texte');
+    await u.click(await screen.findByRole('button', { name: 'Proposer des traductions' }));
+    const volet = await screen.findByRole('region', { name: "Brouillon de l'assistant" });
+    // Aucun champ « français » proposé dans le volet de traduction.
+    expect(within(volet).queryByLabelText(/Français/)).not.toBeInTheDocument();
+    await u.click(within(volet).getAllByRole('button', { name: /Copier dans le champ/ })[0]);
+    expect(screen.getByLabelText('Nom (English)')).toHaveValue('Mon texte Epoxy floor');
+    await u.click(screen.getByRole('tab', { name: /Français/ }));
+    expect(screen.getByLabelText('Nom')).toHaveValue('Sol époxy');
+  });
+
   it('actif tant qu’un champ français est rempli ; masqué si non configuré', async () => {
     localStorage.setItem('cir-tdb.jetons', JSON.stringify({ acces: 'a', rafraichissement: 'r' }));
     simulerApi([statut()]);

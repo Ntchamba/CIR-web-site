@@ -34,7 +34,7 @@ TEXTE_MAX = 1000
 LIMITE_VISITEUR_HEURE = 20
 LIMITE_CLIENT_HEURE = 60
 LIMITE_CLIENT_JOUR = 200
-LIMITE_BROUILLONS_HEURE = 30
+LIMITE_BROUILLONS_HEURE = 60
 RETENTION_JOURNAL_JOURS = 180
 RETENTION_BROUILLONS_JOURS = 180
 TEXTE_BROUILLON_MAX = 5000
@@ -333,7 +333,7 @@ def resume_journal():
     lignes = JournalAssistant.objects.filter(cree_le__gte=depuis).values("resultat").order_by().annotate(n=Count("id"))
     for ligne in lignes:
         comptes[ligne["resultat"]] = ligne["n"]
-    return {"jours": 30, "resultats": comptes}
+    return comptes
 
 
 def consulter_conversations(super_admin, code):
@@ -418,7 +418,7 @@ def _reserver_brouillon(membre, type_, cible_type, cible_id, langue):
         if recents >= LIMITE_BROUILLONS_HEURE:
             raise _erreur_trop_de_messages()
         return Brouillon.objects.create(type=type_, cible_type=cible_type, cible_id=cible_id, langue=langue,
-                                        contenu="", cree_par=membre)
+                                        contenu={}, cree_par=membre)
 
 
 def creer_brouillon(membre, donnees):
@@ -493,7 +493,7 @@ def creer_brouillon(membre, donnees):
     else:
         sortie = orchestrateur.controler(texte, langue=langue, suivi=suivi) if texte else \
             garde_fous.Sortie("", [], garde_fous.CONTENU)
-        contenu, codes = sortie.texte, [sortie.bloque]
+        contenu, codes = {"texte": sortie.texte}, [sortie.bloque]
     brouillon.contenu = contenu
     brouillon.bloque = garde_fous.code_le_plus_grave(codes)
     brouillon.save(update_fields=["contenu", "bloque"])
@@ -529,12 +529,14 @@ def _contenu_valide(brouillon, contenu):
         if any(len(v) > TEXTE_BROUILLON_MAX for v in propre.values()):
             raise ValidationError({"contenu": [_("Le texte est trop long (5000 caractères au plus).")]})
         return propre
-    if not isinstance(contenu, str):
-        raise ValidationError({"contenu": [_("Le contenu doit être un texte.")]})
-    propre = _CONTROLES.sub("", contenu).strip()
+    if isinstance(contenu, str):  # tolérance : un simple texte vaut {"texte": …}
+        contenu = {"texte": contenu}
+    if not isinstance(contenu, dict) or set(contenu) != {"texte"} or not isinstance(contenu["texte"], str):
+        raise ValidationError({"contenu": [_("Le contenu d'une réponse est un objet {texte}.")]})
+    propre = _CONTROLES.sub("", contenu["texte"]).strip()
     if len(propre) > TEXTE_BROUILLON_MAX:
         raise ValidationError({"contenu": [_("Le texte est trop long (5000 caractères au plus).")]})
-    return propre
+    return {"texte": propre}
 
 
 # --- Rétention --------------------------------------------------------------------------------------------

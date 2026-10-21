@@ -28,7 +28,8 @@ function propositionsDe(brouillon, source) {
   if (typeof contenu === 'string') return contenu.trim() ? [{ cle: `b${brouillon.id}`, brouillon, nom: source?.nom || '', langue: '', texte: contenu }] : [];
   if (contenu && typeof contenu === 'object') {
     return Object.entries(contenu)
-      .filter(([, texte]) => typeof texte === 'string' && texte.trim())
+      // Le français est la langue de référence : jamais proposé comme traduction.
+      .filter(([langue, texte]) => langue !== 'fr' && typeof texte === 'string' && texte.trim())
       .map(([langue, texte]) => ({ cle: `b${brouillon.id}-${langue}`, brouillon, nom: source?.nom || '', source, langue, texte }));
   }
   return [];

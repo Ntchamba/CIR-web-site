@@ -1267,3 +1267,92 @@ msgstr "时间段不能超过 %(jours)s 天。"
 #: apps/statistiques/indicateurs.py:169
 msgid "Le nombre de mois doit être compris entre 1 et %(max)s."
 msgstr "月份数必须在 1 到 %(max)s 之间。"
+
+
+#: apps/assistant/garde_fous.py:47
+msgid "Je ne peux pas répondre à cette demande. Vous pouvez écrire à l'équipe du CIR."
+msgstr "我无法回答这个请求。您可以联系 CIR 团队。"
+
+#: apps/assistant/garde_fous.py:43
+msgid "Je ne peux pas donner de prix ferme : l'équipe vous répondra par un devis."
+msgstr "我无法给出确定的价格：团队会通过报价单回复您。"
+
+#: apps/assistant/garde_fous.py:45
+msgid "Je ne peux ni passer, ni confirmer, ni signer, ni payer, ni modifier quoi que ce soit : seule l'équipe du CIR le fait. Vous pouvez lui écrire ou demander un devis."
+msgstr "我无法下单、确认、签署、支付或修改任何内容：只有 CIR 团队可以。您可以联系他们或申请报价。"
+
+#: apps/assistant/services.py:154
+msgid "Vous avez envoyé beaucoup de messages : patientez un moment avant de réessayer."
+msgstr "您发送的消息较多：请稍候再试。"
+
+#: apps/assistant/services.py:222
+msgid "L'assistant est momentanément indisponible. Réessayez dans un instant."
+msgstr "助手暂时不可用，请稍后再试。"
+
+#: apps/assistant/services.py:221
+msgid "L'assistant n'est pas disponible pour le moment."
+msgstr "助手目前不可用。"
+
+#: apps/assistant/services.py:179
+msgid "L'assistant a atteint sa limite pour aujourd'hui. Écrivez à l'équipe ou réessayez demain."
+msgstr "助手今天已达到使用上限。请联系团队，或明天再试。"
+
+#: apps/assistant/services.py:310
+msgid "Vous avez déjà donné votre avis sur cette réponse."
+msgstr "您已对这条回答给出过评价。"
+
+#: apps/assistant/services.py:513
+msgid "Ce brouillon a déjà été traité."
+msgstr "此草稿已处理。"
+
+#: apps/assistant/services.py:70
+msgid "Écrivez votre question."
+msgstr "请输入您的问题。"
+
+#: apps/assistant/services.py:72
+msgid "Le message est trop long (1000 caractères au plus)."
+msgstr "消息过长（最多 1000 个字符）。"
+
+#: apps/assistant/services.py:293
+msgid "Indiquez si la réponse était utile (vrai ou faux)."
+msgstr "请说明回答是否有用（真或假）。"
+
+#: apps/assistant/services.py:391
+msgid "Type de brouillon inconnu."
+msgstr "未知的草稿类型。"
+
+#: apps/assistant/services.py:409
+msgid "Indiquez l'identifiant de la demande ou de la conversation."
+msgstr "请提供请求或对话的编号。"
+
+#: apps/assistant/services.py:507
+msgid "État inconnu : accepte, modifie ou rejete."
+msgstr "未知状态：accepte、modifie 或 rejete。"
+
+#: apps/assistant/services.py:535
+msgid "Le contenu d'une réponse est un objet {texte}."
+msgstr "回复内容应为对象 {texte}。"
+
+#: apps/assistant/services.py:538
+msgid "Le texte est trop long (5000 caractères au plus)."
+msgstr "文本过长（最多 5000 个字符）。"
+
+#: apps/assistant/services.py:396
+msgid "Saisissez le texte français à traduire."
+msgstr "请输入要翻译的法语文本。"
+
+#: apps/assistant/services.py:401
+msgid "Choisissez parmi : en, zh, de, ja."
+msgstr "请从以下选项中选择：en、zh、de、ja。"
+
+#: apps/assistant/services.py:404
+msgid "Contexte inconnu : produit, actualite ou autre."
+msgstr "未知的上下文：produit、actualite 或 autre。"
+
+#: apps/assistant/services.py:527
+msgid "Le contenu d'une traduction est un objet {langue: texte}."
+msgstr "翻译内容应为对象 {langue: texte}。"
+
+#: apps/assistant/services.py:517
+msgid "Le texte modifié est obligatoire."
+msgstr "必须提供修改后的文本。"

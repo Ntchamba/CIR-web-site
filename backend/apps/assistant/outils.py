@@ -141,17 +141,16 @@ def fiche_produit(contexte, reference):
     langue = contexte.langue
     champs = ("accroche", "description", "domaine_application", "performances", "preparation",
               "methode_application", "dosage", "conditions_chantier")
-    fiche = _carte_produit(produit, langue)
-    fiche.pop("resume")
-    fiche.update({c: _court(produit.traduit(c, langue)) for c in champs if produit.traduit(c, langue)})
-    fiche.update({
+    carte = _carte_produit(produit, langue)
+    carte.pop("resume")
+    textes = {c: _court(produit.traduit(c, langue)) for c in champs if produit.traduit(c, langue)}
+    return carte | textes | {
         "usages": produit.usages, "unite_prix": produit.unite_prix,
         "caracteristiques": [{"libelle": c.traduit("libelle", langue), "valeur": c.traduit("valeur", langue)}
                              for c in produit.caracteristiques.all()],
         "designs": [d.traduit("nom", langue) for d in produit.designs.all()],
         "couches": [{"nom": c.traduit("nom", langue), "epaisseur": c.epaisseur} for c in produit.couches.all()],
-    })
-    return fiche
+    }
 
 
 def lister_familles(contexte):
@@ -170,7 +169,7 @@ def rechercher_realisations(contexte, requete=""):
 
 
 def lire_contenu_accueil():
-    """Contenu de l'accueil s'il existe (lecture seule : pas de get_or_create)."""
+    """Contenu de l'accueil s'il existe (lecture seule : sans création de ligne)."""
     return ContenuAccueil.objects.filter(pk=1).first()
 
 
@@ -309,7 +308,7 @@ def montants_de(resultat):
     if isinstance(resultat, dict):
         for cle, valeur in resultat.items():
             if cle in CHAMPS_MONTANTS and isinstance(valeur, int) and not isinstance(valeur, bool):
-                montants.add(valeur)
+                montants |= {valeur}
             else:
                 montants |= montants_de(valeur)
     elif isinstance(resultat, list):

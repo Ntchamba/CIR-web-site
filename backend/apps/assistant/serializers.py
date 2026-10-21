@@ -41,13 +41,16 @@ class MessageAdminSerializer(serializers.ModelSerializer):
 
 
 class ConversationAdminSerializer(serializers.ModelSerializer):
-    utilisateur = serializers.IntegerField(source="utilisateur_id", read_only=True)  # identifiant seulement
+    utilisateur = serializers.SerializerMethodField()  # vrai si le message vient d'un compte (jamais d'identité)
     nombre_messages = serializers.SerializerMethodField()
 
     class Meta:
         model = ConversationAssistant
         fields = ["cle", "utilisateur", "langue", "contexte", "nombre_messages", "cree_le", "derniere_activite_le"]
         read_only_fields = fields
+
+    def get_utilisateur(self, conversation):
+        return conversation.utilisateur_id is not None
 
     def get_nombre_messages(self, conversation):
         annote = getattr(conversation, "nombre_messages", None)

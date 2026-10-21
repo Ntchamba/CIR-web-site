@@ -13,6 +13,7 @@ import { infosLangue, LANGUES } from '@partage/i18n/langues.js';
 
 import { useTraduction } from '@/i18n/index.js';
 import BoutonBrouillonIA from '@/modules/assistant/composants/BoutonBrouillonIA.jsx';
+import { ajouterTexte } from '@/modules/assistant/erreurs.js';
 
 import { languesIncompletes, LANGUE_REFERENCE, modifierTraduction, nomLangue, texteTraduit } from './langues.js';
 import styles from './Composants.module.css';
@@ -103,7 +104,14 @@ export default function OngletsLangues({ champs, valeurs, traductions, surChange
               libelleCopie={t('assistant.copier.champ')}
               textes={champs.map((c) => ({ nom: c.nom, libelle: c.libelle, texte: String(valeurs?.[c.nom] ?? '') }))}
               surCopie={(propositions) => surTraductions(propositions.reduce(
-                (acc, p) => (p.langue && p.langue !== LANGUE_REFERENCE ? modifierTraduction(acc, p.langue, p.nom, p.texte) : acc),
+                (acc, p) => {
+                if (!p.langue || p.langue === LANGUE_REFERENCE) return acc; // jamais le français dans une traduction
+                // Une traduction déjà saisie n'est pas écrasée : la proposition est ajoutée en dessous.
+                const existant = texteTraduit(acc, p.langue, p.nom);
+                if (existant.trim() === p.texte.trim()) return acc;
+                return modifierTraduction(acc, p.langue, p.nom, !existant.trim() ? p.texte
+                  : champs.find((c) => c.nom === p.nom)?.multiligne ? ajouterTexte(existant, p.texte) : `${existant.trimEnd()} ${p.texte}`);
+              },
                 traductions || {}))} />
             {champs.map((c) => {
               const francais = String(valeurs?.[c.nom] ?? '');

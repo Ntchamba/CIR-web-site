@@ -76,7 +76,7 @@ class Brouillon(models.Model):
     cible_type = models.CharField(max_length=30, blank=True)  # demande_contact, conversation_messagerie, texte
     cible_id = models.PositiveIntegerField(null=True, blank=True)
     langue = models.CharField(max_length=5, choices=Langue.choices, default=LANGUE_PAR_DEFAUT)
-    contenu = models.JSONField(default=str, blank=True)  # texte, ou {langue: texte} pour une traduction
+    contenu = models.JSONField(default=dict, blank=True)  # {"texte"} pour une réponse, {langue: texte} pour une traduction
     etat = models.CharField(max_length=10, choices=EtatBrouillon.choices, default=EtatBrouillon.PROPOSE,
                             db_index=True)
     cree_par = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True,

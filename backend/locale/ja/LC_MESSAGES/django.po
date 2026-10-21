@@ -1267,3 +1267,92 @@ msgstr "期間は %(jours)s 日を超えられません。"
 #: apps/statistiques/indicateurs.py:169
 msgid "Le nombre de mois doit être compris entre 1 et %(max)s."
 msgstr "月数は 1 から %(max)s の間でなければなりません。"
+
+
+#: apps/assistant/garde_fous.py:47
+msgid "Je ne peux pas répondre à cette demande. Vous pouvez écrire à l'équipe du CIR."
+msgstr "このご依頼にはお答えできません。CIR のチームにご連絡ください。"
+
+#: apps/assistant/garde_fous.py:43
+msgid "Je ne peux pas donner de prix ferme : l'équipe vous répondra par un devis."
+msgstr "確定価格をお伝えすることはできません。チームが見積書でご回答します。"
+
+#: apps/assistant/garde_fous.py:45
+msgid "Je ne peux ni passer, ni confirmer, ni signer, ni payer, ni modifier quoi que ce soit : seule l'équipe du CIR le fait. Vous pouvez lui écrire ou demander un devis."
+msgstr "注文・確認・署名・支払い・変更はできません。これらは CIR のチームだけが行います。チームに連絡するか、見積りをご依頼ください。"
+
+#: apps/assistant/services.py:154
+msgid "Vous avez envoyé beaucoup de messages : patientez un moment avant de réessayer."
+msgstr "メッセージが多くなっています。しばらくしてからもう一度お試しください。"
+
+#: apps/assistant/services.py:222
+msgid "L'assistant est momentanément indisponible. Réessayez dans un instant."
+msgstr "アシスタントは一時的にご利用いただけません。しばらくしてからもう一度お試しください。"
+
+#: apps/assistant/services.py:221
+msgid "L'assistant n'est pas disponible pour le moment."
+msgstr "アシスタントは現在ご利用いただけません。"
+
+#: apps/assistant/services.py:179
+msgid "L'assistant a atteint sa limite pour aujourd'hui. Écrivez à l'équipe ou réessayez demain."
+msgstr "アシスタントは本日の上限に達しました。チームにご連絡いただくか、明日もう一度お試しください。"
+
+#: apps/assistant/services.py:310
+msgid "Vous avez déjà donné votre avis sur cette réponse."
+msgstr "この回答にはすでに評価をいただいています。"
+
+#: apps/assistant/services.py:513
+msgid "Ce brouillon a déjà été traité."
+msgstr "この下書きはすでに処理されています。"
+
+#: apps/assistant/services.py:70
+msgid "Écrivez votre question."
+msgstr "ご質問を入力してください。"
+
+#: apps/assistant/services.py:72
+msgid "Le message est trop long (1000 caractères au plus)."
+msgstr "メッセージが長すぎます（最大 1000 文字）。"
+
+#: apps/assistant/services.py:293
+msgid "Indiquez si la réponse était utile (vrai ou faux)."
+msgstr "回答が役に立ったかどうかを指定してください（true または false）。"
+
+#: apps/assistant/services.py:391
+msgid "Type de brouillon inconnu."
+msgstr "不明な下書きの種類です。"
+
+#: apps/assistant/services.py:409
+msgid "Indiquez l'identifiant de la demande ou de la conversation."
+msgstr "依頼または会話の ID を指定してください。"
+
+#: apps/assistant/services.py:507
+msgid "État inconnu : accepte, modifie ou rejete."
+msgstr "不明な状態です：accepte、modifie、rejete のいずれかを指定してください。"
+
+#: apps/assistant/services.py:535
+msgid "Le contenu d'une réponse est un objet {texte}."
+msgstr "返信の内容はオブジェクト {texte} です。"
+
+#: apps/assistant/services.py:538
+msgid "Le texte est trop long (5000 caractères au plus)."
+msgstr "テキストが長すぎます（最大 5000 文字）。"
+
+#: apps/assistant/services.py:396
+msgid "Saisissez le texte français à traduire."
+msgstr "翻訳するフランス語のテキストを入力してください。"
+
+#: apps/assistant/services.py:401
+msgid "Choisissez parmi : en, zh, de, ja."
+msgstr "en、zh、de、ja から選んでください。"
+
+#: apps/assistant/services.py:404
+msgid "Contexte inconnu : produit, actualite ou autre."
+msgstr "不明なコンテキストです：produit、actualite、autre のいずれかを指定してください。"
+
+#: apps/assistant/services.py:527
+msgid "Le contenu d'une traduction est un objet {langue: texte}."
+msgstr "翻訳の内容はオブジェクト {langue: texte} です。"
+
+#: apps/assistant/services.py:517
+msgid "Le texte modifié est obligatoire."
+msgstr "修正後のテキストは必須です。"
