@@ -432,3 +432,75 @@ class ImportAdversesTests(ImporterMediasTestCase):
                 self.assertEqual(photo.traduit("alt", langue), attendus[nom][langue])
         for nom in ("Jiuye", "Douala", "Cameroun", "CIR"):
             self.assertFalse(any(nom in t for a in attendus.values() for t in a.values()), nom)
+
+
+class ImportContournementsTests(ImporterMediasTestCase):
+    """Tentatives de contournement des vérifications de chemin."""
+
+    def avec_nom(self, dossier, cible, nom):
+        chemin = dossier / "medias.json"
+        manifeste = json.loads(chemin.read_text(encoding="utf-8"))
+        for e in manifeste["fichiers"]:
+            if e["fichier"].endswith(cible):
+                e["fichier"] = nom
+        chemin.write_text(json.dumps(manifeste), encoding="utf-8")
+
+    def refuse(self, dossier):
+        with self.assertRaises(CommandError):
+            self.importer(dossier=dossier)
+        self.assertEqual(PhotoSphere.objects.count(), 0)
+        self.assertEqual(self.fichiers_media(), [])
+
+    def test_noms_tordus_refuses_ou_introuvables(self):
+        for nom in ("images\\..\\..\\x.webp", "images/../../x.webp", "..\\x.webp", "%2e%2e/x.webp",
+                    "images/%2e%2e/gradins.webp", "images/gradins.webp\0", "C:\\x.webp", "\\\\hote\\x.webp",
+                    "images/gradins.webp/..", "IMAGES/GRADINS.WEBP"):
+            dossier = self.copie_dossier()
+            self.avec_nom(dossier, "gradins.webp", nom)
+            with self.subTest(nom=nom):
+                self.refuse(dossier)
+
+    def test_fichier_du_manifeste_qui_est_un_dossier(self):
+        dossier = self.copie_dossier()
+        self.avec_nom(dossier, "gradins.webp", "images")
+        self.refuse(dossier)
+
+    def test_fichier_special_fifo(self):
+        import os
+        dossier = self.copie_dossier()
+        (dossier / "images/gradins.webp").unlink()
+        os.mkfifo(dossier / "images/gradins.webp")
+        self.refuse(dossier)
+
+    def test_lien_symbolique_dans_un_sous_dossier_sortant(self):
+        dossier = self.copie_dossier()
+        hors = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, hors, ignore_errors=True)
+        shutil.copy(DOSSIER / "images/gradins.webp", hors / "gradins.webp")
+        (dossier / "lien").symlink_to(hors, target_is_directory=True)
+        self.avec_nom(dossier, "gradins.webp", "lien/gradins.webp")
+        self.refuse(dossier)
+
+    def test_lien_symbolique_interne_accepte(self):
+        dossier = self.copie_dossier()
+        (dossier / "alias").symlink_to(dossier / "images", target_is_directory=True)
+        self.avec_nom(dossier, "gradins.webp", "alias/gradins.webp")
+        self.importer(dossier=dossier)
+        self.assertEqual(PhotoSphere.objects.count(), 9)
+
+    def test_dossier_lui_meme_lien_symbolique_ou_avec_point_point(self):
+        dossier = self.copie_dossier()
+        with self.assertRaises(CommandError):
+            self.importer(dossier=str(dossier / "images") + "/../")
+
+    def test_chemin_retenu_est_resolu_pas_de_course(self):
+        """Le chemin lu ensuite doit être le chemin résolu : un lien changé après la vérification ne compte plus."""
+        from apps.contenus.management.commands.importer_medias_reference import Command
+        dossier = self.copie_dossier()
+        (dossier / "alias").symlink_to(dossier / "images", target_is_directory=True)
+        manifeste = json.loads((dossier / "medias.json").read_text(encoding="utf-8"))
+        self.avec_nom(dossier, "gradins.webp", "alias/gradins.webp")
+        entrees = json.loads((dossier / "medias.json").read_text(encoding="utf-8"))["fichiers"]
+        _video, _affiche, photos = Command()._preparer(dossier, entrees)
+        for _entree, chemin in photos:
+            self.assertEqual(chemin, chemin.resolve(), chemin)
