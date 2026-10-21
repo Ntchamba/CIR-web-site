@@ -61,7 +61,8 @@
     /* Focus clavier : le bloc qui contient l'élément focalisé est ramené à plat, net et lisible. */
     html:not([data-plat]) .p3d:focus-within,
     html:not([data-plat]) .p3d-grand:focus-within,
-    html:not([data-plat]) .p3d-sortie:focus-within {
+    html:not([data-plat]) .p3d-sortie:focus-within,
+    html:not([data-plat]) .hero-eloigne:focus-within {
       animation: none;
       opacity: 1;
       transform: none;
