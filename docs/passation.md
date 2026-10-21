@@ -8,22 +8,27 @@ dans `prototype-2` (PR #2). À compléter à chaque fin de vague.
 | Vague | Contenu | État |
 | --- | --- | --- |
 | 0 Socle | Back-end `noyau` + `comptes`, site public (`partage` + module `compte`), tableau de bord (`connexion`, `equipe`, `clients`) | **Terminée, validée, fusionnée** |
-| 1 Vitrine | `catalogue`, `vitrine`, `actualites`, `contenus` (back-end, site, tableau de bord) | **À lancer** (rien de commencé) |
-| 2 Commande | `selection`, `commandes`, `devis`, `contact` | À faire |
-| 3 Échanges | `messagerie`, `appels`, `notifications` | À faire |
-| 4 Argent et pilotage | `paiements`, `statistiques` | À faire |
-| 5 IA | `assistant` (Gemini) | À faire |
+| Multilingue | Français (référence), anglais, chinois, allemand, japonais (`docs/decisions/7-multilingue.md`) | **Terminée, validée, fusionnée** |
+| 1 Vitrine | `catalogue`, `vitrine`, `actualites`, `contenus` (back-end, site, tableau de bord) | **Terminée, validée, fusionnée** |
+| 2 Commande | `selection`, `commandes`, `devis`, `contact` | **Terminée, validée, fusionnée** |
+| 3 Échanges | `messagerie`, `appels`, `notifications`, intégrations `jaas` et `gmail` | **Terminée, validée, fusionnée** |
+| 4 Argent et pilotage | `paiements`, `statistiques`, intégration `campay` | **Terminée, validée, fusionnée** |
+| 5 IA | `assistant`, intégration `gemini` | **Terminée, validée, fusionnée** (21 octobre 2026) |
+
+Chaque vague a son contrat d'API (`docs/taches/vague-<n>-contrat-api.md`) et ses décisions (`docs/decisions/`).
+Les six vagues sont faites : il reste le déploiement et les confirmations avec de vraies clés (voir « Reste à faire »).
 
 Le détail de chaque vague est dans `docs/taches/vague-<n>.md` (cases à cocher). L'architecture complète
 (arborescence, modules, choix agentique pour l'assistant) est dans `docs/architecture.md`.
 
 Tests au moment de la passation, tous verts :
-- back-end : 195 tests (`cd backend && .venv/bin/python manage.py test`) ;
-- site : 109 tests (`cd frontend/site && npm test`, build par `npm run build`) ;
-- tableau de bord : 97 tests (`cd frontend/tableau-de-bord && npm test`).
+- back-end : 1352 tests, dont ceux des intégrations (`cd backend && python manage.py test`, sans `--parallel`) ;
+  vérifiés aussi sur PostgreSQL 16 ;
+- site : 514 tests (`cd frontend/site && npm test`, build par `npm run build`) ;
+- tableau de bord : 506 tests (`cd frontend/tableau-de-bord && npm test`).
 
-Le back-end a besoin d'un environnement virtuel : `cd backend && python3 -m venv .venv && .venv/bin/pip install -e .`
-(dépendances dans `backend/pyproject.toml`), puis `cp .env.example .env`.
+Le back-end a besoin d'un environnement virtuel : `cd backend && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`
+(dépendances dans `backend/requirements.txt`), puis `cp .env.example .env` (le fichier `.env` n'est jamais versionné).
 
 ## 2. Décisions prises avec le client (jeff)
 
@@ -119,3 +124,19 @@ Suivre la section 3 avec la fiche `docs/taches/vague-1.md`. Consignes déjà pr�
 - `contenus` : textes et médias de l'accueil (vidéo de fond jouée une fois, photos de la sphère, bandeaux),
   lus par clé.
 - Aucune donnée de démonstration inventée (produits, prix, témoignages, noms de clients).
+
+
+## Reste à faire (après la vague 5, 21 octobre 2026)
+
+- **Railway** : saisir les clés dans les variables de chaque service (jamais dans le dépôt) : JaaS, Gmail, CamPay, Gemini
+  (liste dans `backend/.env.example`) ; créer le service « worker » (`python manage.py envoyer_emails --boucle`),
+  les volumes (médias et pièces jointes privées `DJANGO_PRIVATE_ROOT`) et Redis ; adresse du webhook CamPay
+  `<API_URL_PUBLIQUE>/api/paiements/webhooks/campay/`.
+- **Confirmations avec de vraies clés** (le réseau n'était pas disponible pendant le développement) : format des
+  réponses et webhooks CamPay (essai sur `demo.campay.net`), webhooks JaaS, API Gemini ; rejouer les 35 cas de
+  `backend/agents/evaluations/` avec `python manage.py evaluer_assistant`.
+- **Offre Gemini** : l'offre gratuite peut réutiliser les échanges ; prévoir l'offre payante en production
+  (`docs/decisions/10-assistant-ia.md`).
+- **Traductions** : anglais, chinois, allemand et japonais sont des traductions de travail, à faire relire par des
+  locuteurs.
+- Sitemap non fait ; pas de PDF pour les devis et contrats (feuille de style d'impression seulement).
