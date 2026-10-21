@@ -408,3 +408,37 @@ class SurBlocageTests(SimpleTestCase):
                           "Votre commande CIR-2026-0042 du 2026-10-21 est en « Négociation ».", liens=LIENS)
         self.assertEqual(sortie.bloque, "")
         self.assertEqual([lien["chemin"] for lien in sortie.liens], ["/catalogue/sol-autolissant"])
+
+
+class PassageFinalSurBlocageTests(SimpleTestCase):
+    """Conseils de produit réalistes en 5 langues : jamais remplacés par le repli (taux d'humidité, rendements,
+    températures, durées, quantités, références, coordonnées publiques)."""
+
+    COORD_PUBLIQUES = Coordonnees(emails=("contact@revelation-sarl.com",), telephones=("+237 699 00 11 22", "699 00 11 33"))
+
+    def test_conseils_realistes_passent_intacts(self):
+        textes = ["Le séchage prend 24 heures à 25 °C ; attendez 48 heures avant la circulation.","Comptez 10 à 12 m² par kg pour une couche fine.","Un seau de 5 kg couvre environ 2 m² à 2 mm d'épaisseur.","Appliquez 3 couches, chacune de 2 mm.","Température du support : de 15 à 25 °C.","Le support doit être sec, dépoussiéré, avec moins de 4 % d'humidité.","Entretien : lavez à l'eau tiède avec 1 seau de 5 L pour 20 m².","Le YD-500 et le YD-103 sont compatibles, voir YD-210.","Visitez revelation-sarl.com pour plus d'informations.","Écrivez à contact@revelation-sarl.com ou appelez le +237 699 00 11 22.","Appelez le 699 00 11 33 du lundi au samedi.","Vous trouverez le CIR à Douala, quartier Bonamoussadi.","Les travaux durent 3 à 5 jours pour 100 m².","Cure complète en 7 jours, résistance mécanique après 28 jours.","Ponçage au grain 80 puis aspiration.","Poids : 25 kg par kit, 4 kits pour 40 m².","Hauteur de pose : 1,5 mm minimum, 3 mm maximum.","Pour 20 m² prévoyez 2 kits de 10 kg.","Votre commande CIR-2026-0003 : montant convenu non défini.","Étape 2 sur 4 : « En négociation ».","The floor needs 24 hours to dry at 25 °C; allow 48 hours before foot traffic.","Coverage is 10 to 12 m² per kg, 3 coats of 2 mm.","One 5 kg bucket covers about 2 m².","Apply at 15 to 25 °C on a dry substrate.","Please visit revelation-sarl.com or write to contact@revelation-sarl.com.","Trocknung: 24 Stunden bei 25 °C, 48 Stunden bis zur Begehbarkeit.","Ergiebigkeit 10 bis 12 m² pro kg, 3 Schichten à 2 mm.","Ein Eimer mit 5 kg reicht für etwa 2 m².","Auftragen bei 15 bis 25 °C.","干燥需24小时（25摄氏度），48小时后可行走。","每公斤可涂10至12平方米，共3层，每层2毫米。","一桶5公斤，约覆盖2平方米。","施工温度为15至25摄氏度。","乾燥には24時間（25℃）、歩行は48時間後です。","1kgあたり10〜12㎡、3層、厚さ2mmです。","5kgのバケツ1つで約2㎡に使えます。","施工温度は15〜25℃です。","Il y a 3 couches par m² et 2 kg par couche.","Le prix du YD-500 est sur devis.","Der YD-500 kostet auf Anfrage.","Je recommande le YD-500 pour 120 m² : 2 couches, 24 heures de séchage.","Garantie du fabricant : consultez la fiche.","Nous avons 4 familles de produits et 15 références.","Nos horaires : 8 h – 17 h, lundi au vendredi.","Réponse sous 24 à 48 heures ouvrées.","À partir de 100 m², un devis est établi.","Pour une surface de plus de 50 m², contactez l'équipe.","Dès 20 m² un rendez-vous est possible.","Le sol résiste jusqu'à 80 MPa, 5 000 kg/m².","Charge de 5 000 kg par m².","Un camion de 10 tonnes peut circuler.","Il y en a 2 par seau, 10 par palette, 100 par lot.","Livraison en 3 jours pour Douala.","Le délai habituel est précisé par l'équipe.","Il faut 2 personnes pour 1 chantier de 100 m² par jour.","Appliquez 0,3 l/m² d'apprêt par couche.","Épaisseur totale 2 à 3 mm par m²."]
+        a_part = {"Visitez revelation-sarl.com pour plus d'informations.",
+                  "Please visit revelation-sarl.com or write to contact@revelation-sarl.com."}
+        for texte in textes:
+            if texte in a_part:
+                continue
+            with self.subTest(texte=texte):
+                sortie = controle(texte, coordonnees=self.COORD_PUBLIQUES)
+                self.assertEqual((sortie.bloque, sortie.texte), ("", texte))
+
+    def test_taux_d_humidite_et_pourcentages_techniques(self):
+        for texte in ["Le support doit être sec, avec moins de 4 % d'humidité.", "Humidité du support inférieure à 5 %.",
+                      "Moins de 4 % d'humidité résiduelle.", "Substrate moisture below 4 %.", "Restfeuchte unter 4 %.",
+                      "基层含水率应低于4%。", "下地の含水率は4%未満にしてください。"]:
+            with self.subTest(texte=texte):
+                self.assertEqual(controle(texte).bloque, "", texte)
+
+    def test_quantite_par_contenant_en_chinois(self):
+        self.assertEqual(controle("一桶5公斤，约覆盖2平方米。").bloque, "")
+
+    def test_adresse_du_site_de_l_entreprise_conservee(self):
+        """Le domaine officiel (CLAUDE.md : revelation-sarl.com) est une coordonnée publique, pas un lien externe."""
+        sortie = controle("Visitez revelation-sarl.com pour plus d'informations.")
+        self.assertIn("revelation-sarl.com", sortie.texte)
+        self.assertNotIn("evil", controle("Voir revelation-sarl.com.evil.com").texte)

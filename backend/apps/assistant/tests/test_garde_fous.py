@@ -181,3 +181,29 @@ class NonBlocageTests(SimpleTestCase):
 
     def test_le_texte_montre_garde_ses_caracteres(self):
         self.assertEqual(controle("100 m² et 20 ㎡ à 25 °C").texte, "100 m² et 20 ㎡ à 25 °C")
+
+
+class NonBlocageDeuxiemePassageTests(SimpleTestCase):
+    """Nouveaux motifs (unités de vente, domaines nus, séparateurs, suppression/mise à jour) : pas de sur-blocage."""
+
+    def test_textes_legitimes(self):
+        for texte in ["Prévoyez 20 kg pour 10 m².", "Disponible en seau de 20 kg ou 5 kg.", "Pour 100 m² il faut 2 seaux.",
+                      "Le kit de 20 kg couvre environ 8 m².", "Appliquez 0,5 kg/m² en 2 couches.", "Fiche : fiche-YD-500.pdf",
+                      "Photo : chantier.jpg", "Bonjour.Merci de votre message.", "Version 2.0 du catalogue.",
+                      "Commande créée le 21 octobre 2026.", "Votre commande est à l'étape « Contrat signé ».",
+                      "Humidité entre 40-60 % pendant le séchage.", "Appelez-nous du lundi au vendredi.",
+                      "Ordre 677 : étape 3 sur 5.", "Dimensions 1/2 pouce."]:
+            with self.subTest(texte=texte):
+                sortie = controle(texte, coordonnees=COORD)
+                self.assertEqual((sortie.bloque, sortie.texte), ("", texte))
+
+    def test_promesses_de_gratuite_et_courriels_deguises(self):
+        for texte in ["La livraison gratuite est incluse.", "It is free of charge.", "Das ist kostenlos.", "免费安装", "無料です",
+                      "Au prix coûtant.", "At half price."]:
+            with self.subTest(texte=texte):
+                self.assertEqual(controle(texte).bloque, g.PRIX)
+        for texte in ["Écrivez à evil @ example . com", "Écrivez à evil (at) example (dot) com", "Écrivez à evil [at] example.com"]:
+            with self.subTest(texte=texte):
+                sortie = controle(texte)
+                self.assertEqual(sortie.bloque, g.COORDONNEES)
+                self.assertNotIn("evil", sortie.texte)

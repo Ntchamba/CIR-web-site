@@ -30,7 +30,7 @@ from .garde_fous import Coordonnees, LienAutorise
 MAX_RESULTATS = 8
 TEXTE_MAX = 1200
 _CONTROLES = re.compile(r"[\x00-\x1f\x7f]")
-_REFERENCE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._\-]{0,29}$")
+_REFERENCE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 ._\-]{0,29}$")
 
 # Champs numériques d'un résultat dont la valeur est un montant que l'assistant peut citer
 CHAMPS_MONTANTS = frozenset({"prix_publie", "montant_convenu", "montant_paye", "reste_a_payer", "prix_m2", "total"})

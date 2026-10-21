@@ -86,7 +86,7 @@ _EXTENSIONS = (r"pdf|jpe?g|png|webp|gif|svg|docx?|xlsx?|pptx?|csv|txt|zip|rar|mp
 # Domaine « nu » : mot.mot ou mot.mot/chemin, extension alphabétique d'au moins 2 lettres, toute en minuscules ou
 # toute en majuscules (« Bonjour.Merci », oubli d'espace après un point, n'est pas un domaine). Fichiers exclus.
 _DOMAINE = re.compile(
-    rf"(?<![\w@.\-])(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+(?!(?:{_EXTENSIONS})\b)(?:[a-z]{{2,}}|[A-Z]{{2,}})\b"
+    rf"(?<![\w@.\-])(?!(?i:jiu\.ye)\b)(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+(?!(?:{_EXTENSIONS})\b)(?:[a-z]{{2,}}|[A-Z]{{2,}})\b"
     r"(?:/[^\s)>\]\"']*)?")
 _EMAIL = re.compile(r"[\w.+\-]+@[\w\-]+(?:\.[\w\-]+)+")
 # E-mail écrit pour tromper : « evil @ example . com », « evil (at) example (dot) com », « evil [at] example.com »
@@ -274,11 +274,12 @@ def contient_montant_non_autorise(texte, autorises=()):
 
 # --- Engagements ------------------------------------------------------------------------------------------
 
-_OBJETS_FR = r"(?:commande|contrat|paiement|r[èe]glement|devis|proposition|r[ée]servation|virement|acompte|facture)"
-_PARTICIPES_FR = (r"(?:pass[ée]e?s?|cr[ée]{2}e?s?|confirm[ée]e?s?|valid[ée]e?s?|sign[ée]e?s?|enregistr[ée]e?s?|"
+_OBJETS_FR = (r"(?:commande|contrat|paiement|r[èe]glement|devis|proposition|r[ée]servation|virement|acompte|facture|"
+               r"adresse|compte|profil|panier|versement)")
+_PARTICIPES_FR = (r"(?:supprim[ée]e?s?|mis(?:e|es)?\s+à\s+jour|chang[ée]e?s?|command[ée]e?s?|vers[ée]e?s?|pass[ée]e?s?|cr[ée]{2}e?s?|confirm[ée]e?s?|valid[ée]e?s?|sign[ée]e?s?|enregistr[ée]e?s?|"
                   r"annul[ée]e?s?|pay[ée]e?s?|r[ée]gl[ée]e?s?|accept[ée]e?s?|modifi[ée]e?s?|effectu[ée]e?s?|"
                   r"re[çc]ue?s?|trait[ée]e?s?|conclue?s?|d[ée]clench[ée]e?s?|pris(?:e|es)? en compte|envoy[ée]e?s?)")
-_PARTICIPES_COURTS_FR = (r"(?:pass[ée]e?s?|cr[ée]{2}e?s?|confirm[ée]e?s?|valid[ée]e?s?|enregistr[ée]e?s?|annul[ée]e?s?|"
+_PARTICIPES_COURTS_FR = (r"(?:pass[ée]e?s?|confirm[ée]e?s?|valid[ée]e?s?|enregistr[ée]e?s?|annul[ée]e?s?|"
                          r"pay[ée]e?s?|r[ée]gl[ée]e?s?|accept[ée]e?s?|effectu[ée]e?s?|re[çc]ue?s?|trait[ée]e?s?)")
 _ENGAGEMENTS = {
     "fr": [
@@ -292,18 +293,20 @@ _ENGAGEMENTS = {
         rf"(?:(?:bien|maintenant|d[ée]sormais|d[ée]j[àa]|enfin|correctement|[ée]t[ée]|d[’']être|bel\s+et\s+bien)\s+)*"
         rf"{_PARTICIPES_FR}\b",
         rf"(?:^|[.!?\n]\s*)\W*{_OBJETS_FR}\s+(?:bien\s+|d[ée]j[àa]\s+)?{_PARTICIPES_COURTS_FR}\b",
+        r"\bj[’']ai\s+(?:bien\s+|d[ée]j[àa]\s+)?ajout[ée]\b[^.!?\n]{0,40}?\b(?:à|dans)\s+(?:votre|la|le)\s+"
+        r"(?:commande|panier|s[ée]lection|devis)",
         r"\bcontrat\s+(?:est\s+|a\s+[ée]t[ée]\s+)?sign[ée]\s+(?:avec\s+succ[èe]s|et\s+valid)",
         r"\bc[’']est\s+(?:bien\s+)?(?:fait|r[ée]gl[ée]|valid[ée]|confirm[ée]|sign[ée])\b",
     ],
     "en": [
         r"\bI(?:'ve|’ve| have|'ll|’ll| will| just| hereby)?\s+(?:just\s+|now\s+|successfully\s+|already\s+)?"
         r"(?:placed|created|confirmed|validated|signed|cancell?ed|modified|processed|paid|booked|submitted|"
-        r"accepted|updated|triggered|registered)\b",
+        r"accepted|updated|triggered|registered|ordered|deleted|removed|changed)\b",
         r"\bI\s+(?:confirm|validate|sign|cancel|accept)\s+(?:your|the\s+(?:order|contract|payment))",
-        rf"\b(?:your|the)\s+(?:order|payment|contract|quote|offer|proposal|booking|deposit|invoice)s?\s+"
+        rf"\b(?:your|the)\s+(?:order|payment|contract|quote|offer|proposal|booking|deposit|invoice|account|address|profile|cart)s?\s+"
         rf"(?:is|are|has\s+been|have\s+been|was|were|is\s+now|is\s+successfully)\s+(?:now\s+|successfully\s+)?"
         rf"(?:placed|created|confirmed|validated|signed|cancell?ed|paid|processed|accepted|completed|registered|"
-        rf"modified|received|approved|submitted|successful)\b",
+        rf"modified|received|approved|submitted|successful|updated|deleted|removed|changed)\b",
         r"\bcontract\s+(?:has\s+been\s+|is\s+)?signed\s+successfully\b",
         r"(?:^|[.!?\n]\s*)\W*(?:order|payment|contract|booking|deposit|purchase|transaction)\s+(?:has\s+been\s+|was\s+|is\s+)?"
         r"(?:successfully\s+)?(?:placed|created|confirmed|received|signed|completed|processed|accepted|approved|"
@@ -313,14 +316,14 @@ _ENGAGEMENTS = {
     "de": [
         r"\bich\s+habe\b[^.!?\n]{0,60}?\b(?:bestellt|aufgegeben|erstellt|best[äa]tigt|unterschrieben|unterzeichnet|"
         r"storniert|ge[äa]ndert|bezahlt|abgeschlossen|gebucht|angenommen|gespeichert|ausgel[öo]st|überwiesen|"
-        r"registriert|validiert)\b",
+        r"registriert|validiert|gel[öo]scht|aktualisiert|entfernt|hinzugef[üu]gt)\b",
         r"\bich\s+(?:best[äa]tige|storniere|unterschreibe|unterzeichne|bezahle|buche)\b[^.!?\n]{0,40}?"
         r"\b(?:ihre|ihren|ihr|die|den|das)\b",
-        r"\b(?:ihre|ihr|ihren|die|der|das)\s+(?:bestellung|zahlung|vertrag|angebot|buchung|anzahlung|rechnung)\s+"
+        r"\b(?:ihre|ihr|ihren|die|der|das)\s+(?:bestellung|zahlung|vertrag|angebot|buchung|anzahlung|rechnung|adresse|konto|profil)\s+"
         r"(?:wurde|wurden|ist|sind)\s+(?:nun\s+|jetzt\s+|erfolgreich\s+|bereits\s+)*"
         r"(?:aufgegeben|erstellt|best[äa]tigt|unterschrieben|unterzeichnet|abgeschlossen|storniert|bezahlt|"
         r"angenommen|verbucht|durchgef[üu]hrt|eingegangen|validiert|gespeichert|registriert|ge[äa]ndert|"
-        r"akzeptiert)\b",
+        r"akzeptiert|gel[öo]scht|aktualisiert|entfernt|hinzugef[üu]gt)\b",
         r"(?:^|[.!?\n]\s*)\W*(?:die\s+|ihre\s+|der\s+|ihr\s+)?(?:bestellung|zahlung|vertrag|buchung|anzahlung|"
         r"[üu]berweisung|auftrag|rechnung)\s+(?:wurde\s+|ist\s+)?(?:nun\s+|jetzt\s+|bereits\s+)?"
         r"(?:erfolgreich|erhalten|aufgegeben|best[äa]tigt|unterschrieben|unterzeichnet|abgeschlossen|storniert|bezahlt|"
@@ -335,12 +338,17 @@ _ENGAGEMENTS = {
         r"(?:您的|你的|该|此)?(?:订单|付款|支付|合同|报价|订购|预订|定金|款项)(?:已|已经|已被|已成功|现已|均已)"
         r"(?:成功)?(?:下|提交|创建|生成|确认|签署|签订|生效|取消|修改|支付|付款|完成|接受|通过|到账|收到|登记|处理)",
         r"合同(?:现)?已(?:签|签署|签订|生效)",
+        r"(?:订单|地址|账户|账号|资料|信息|合同|付款)(?:已|已经)(?:成功)?(?:删除|更新|变更|更改|修改|取消)",
+        r"已(?:经)?(?:成功)?(?:删除|修改|更新|变更|更改|取消)(?:了)?(?:您的|你的)?(?:订单|地址|账户|账号|资料|信息|合同|付款)",
+        r"我(?:已|已经)?(?:帮您|为您|替您)?(?:成功)?(?:更新|修改|删除|更改|变更).{0,4}(?:订单|地址|账户|账号|资料|信息|合同)",
         r"已成功(?:下单|支付|签约|签署|付款|提交)",
         r"已(?:经)?(?:成功)?(?:帮您|为您|替您|为你|帮你)?(?:下单|付款|支付|签约|签署|签订)",
         r"我(?:已|已经)?(?:帮您|为您|替您|为你|帮你)?(?:付款|支付|签约|下单)",
         r"(?:支付|付款|下单|订购|签约|订单创建|订单提交|预订)(?:已)?成功",
     ],
     "ja": [
+        r"(?:ご注文|注文|契約|署名|サイン|お支払い|支払い|入金|住所|アカウント|予約|情報|登録|お手続き)(?:を|が|は)?(?:無事に)?"
+        r"(?:削除|更新|変更|完了|確認|受領|反映|登録|取消|キャンセル|確定)(?:しました|いたしました|致しました|されました)",
         r"(?:ご注文|注文|お支払い|支払い|お支払|契約|ご契約|ご予約|予約)(?:は|が|を|も)?(?:無事に)?"
         r"(?:承りました|承っております|受け付けました|受理しました)",
         r"(?:ご注文|注文|お支払い|支払い|お支払|契約|ご契約|ご予約|予約|お手続き)(?:は|が)?(?:すでに|既に)?済み(?:です|ました)",
@@ -366,7 +374,7 @@ def contient_engagement(texte):
 # --- Coordonnées ------------------------------------------------------------------------------------------
 
 _REFERENCE = re.compile(r"\b[A-Z]{2,4}-\d{4}-\d{4,6}\b")
-_DATE_ISO = re.compile(r"\b\d{4}-\d{2}-\d{2}\b|(?<![\d.])(?:0?[1-9]|[12]\d|3[01])[/.](?:0?[1-9]|1[0-2])[/.](?:\d{4}|\d{2})(?![\d.])")
+_DATE_ISO = re.compile(r"\b\d{4}-\d{2}-\d{2}\b|(?<!\d)(?<!\d\.)(?:0?[1-9]|[12]\d|3[01])[/.](?:0?[1-9]|1[0-2])[/.](?:\d{4}|\d{2})(?!\d)(?!\.\d)")
 _TELEPHONE = re.compile(r"(?<![\w/])(?:\+|00)?\d(?:[\d \u00a0.\-()/·・\u2010-\u2015\u2212]{5,}\d)")
 
 
