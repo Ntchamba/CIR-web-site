@@ -1,0 +1,23 @@
+@font-face{font-family:'Lora';font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/Lora.woff) format('woff')}
+@font-face{font-family:'Lora';font-style:italic;font-weight:400 700;font-display:swap;src:url(fonts/Lora-Italic.woff) format('woff')}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:#FFFFFF;font-family:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif}
+a{color:#1177A8}a:hover{color:#0B5C85}
+[hidden]{display:none !important}
+#app{--vh:100vh;--vh:100dvh;position:relative;background:#FFFFFF}
+.page{min-height:var(--vh);display:flex;flex-direction:column}
+.page>div{flex:1 0 auto;display:flex;flex-direction:column}
+.cir-tabbar{margin-top:auto}
+/* Sphère de photos */
+@keyframes cir-spin{from{transform:rotateX(-12deg) rotateY(0deg)}to{transform:rotateX(-12deg) rotateY(360deg)}}
+@media (prefers-reduced-motion: reduce){.cir-globe{animation:none !important}}
+.cir-globe:hover,.cir-globe:focus-within{animation-play-state:paused !important}
+.cir-tile:hover img,.cir-tile:focus-visible img{scale:1.3;box-shadow:0 18px 44px rgba(8,24,32,0.5) !important}
+.cir-tile:focus-visible{outline:none}
+/* Sur un écran d'ordinateur : la vue s'affiche dans un cadre de téléphone */
+@media (min-width: 600px){
+html,body{height:100%}
+body{background:#12222B;display:flex;align-items:center;justify-content:center}
+#app{--vh:min(844px, calc(100vh - 48px));width:390px;height:var(--vh);overflow-y:auto;overflow-x:hidden;border-radius:34px;box-shadow:0 0 0 10px #0A151B,0 0 0 11px #2F4A57,0 40px 90px rgba(0,0,0,0.55);scrollbar-width:none}
+#app::-webkit-scrollbar{display:none}
+}

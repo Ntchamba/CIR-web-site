@@ -1,0 +1,967 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CIR : vue téléphone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Figtree:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div id="app">
+<div class="page" data-page="accueil">
+<div style="font-family: 'Figtree', sans-serif; font-size: 16px; line-height: 1.55; color: #0E2A38; background: #FFFFFF">
+
+<section style="position: relative; background: #0E2A38">
+<div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden">
+<video data-video="accueil" poster="assets/img/apres.jpg" muted="true" playsinline="true" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover"><source src="assets/video/fond.mp4" type="video/mp4"><source src="assets/video/fond.webm" type="video/webm"></video></div>
+<div style="position: relative">
+<header data-fond="transparent" style="position: relative; z-index: 5; font-family: 'Figtree', sans-serif; font-size: 16px; line-height: 1.5; color: #0E2A38; background: transparent; border-bottom: 1px solid transparent">
+<div style="min-height: 64px; padding: 0 10px 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<a href="#/accueil" style="display: flex; align-items: center; gap: 10px; color: #FFFFFF; text-shadow: 0 1px 2px rgba(8, 24, 32, 0.7), 0 2px 16px rgba(8, 24, 32, 0.8); text-decoration: none">
+<img src="assets/img/logo-cir.png" alt="" style="width: 40px; height: 40px; object-fit: cover; border-radius: 10px">
+<strong style="font-family: 'Lora', serif; font-size: 19px; font-weight: 600">CIR</strong>
+</a>
+<div style="display: flex; align-items: center">
+<a href="#/contact" aria-label="Contact" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="filter: drop-shadow(0 1px 3px rgba(8, 24, 32, 0.8))"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"></path></svg></a>
+<button type="button" aria-label="Menu" aria-expanded="false" data-act="basculer" style="width: 48px; height: 48px; padding: 0; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="filter: drop-shadow(0 1px 3px rgba(8, 24, 32, 0.8))"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+</div>
+</div>
+<div data-if="ouvert" hidden>
+<nav aria-label="Navigation principale" style="position: absolute; left: 0; right: 0; top: 100%; padding: 8px 20px 24px; background: #FFFFFF; border-bottom: 1px solid #D5E0E6; box-shadow: 0 24px 40px rgba(14, 42, 56, 0.18); display: flex; flex-direction: column">
+<a href="#/accueil" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Accueil</a>
+<a href="#/catalogue" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Catalogue</a>
+<a href="#/realisations" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Réalisations</a>
+<a href="#/contact" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Contact</a>
+<a href="#/commandes" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Mes commandes</a>
+<a href="#/compte" style="margin-top: 20px; padding: 14px 24px; border-radius: 26px; background: #1177A8; text-align: center; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #FFFFFF; text-decoration: none">Se connecter</a>
+</nav>
+</div>
+</header>
+<div style="padding: 12px 20px 32px; display: flex; flex-direction: column; gap: 18px">
+<h1 style="margin: 0; font-family: 'Lora', serif; font-size: 56px; line-height: 1; font-weight: 600; letter-spacing: -0.01em; color: #FFFFFF; text-shadow: 0 1px 2px rgba(8, 24, 32, 0.6), 0 2px 24px rgba(8, 24, 32, 0.7)">Révélation<span style="color: #FF6D4C">.</span></h1>
+<p style="margin: 0; font-size: 18px; line-height: 1.45; font-weight: 500; color: #FFFFFF; text-shadow: 0 1px 2px rgba(8, 24, 32, 0.7), 0 2px 18px rgba(8, 24, 32, 0.8)">Là où naissent les sols durables : la résine époxy pour la maison, l'industrie et l'entreprise.</p>
+<a href="#/catalogue" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 14px; padding: 6px 22px 6px 6px; border: 1px solid #FFFFFF; border-radius: 32px; background: #FFFFFF; box-shadow: 0 8px 24px rgba(8, 24, 32, 0.3); font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #0E2A38; text-decoration: none">
+<span style="width: 44px; height: 44px; border-radius: 22px; background: #1177A8; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+<span>Voir le catalogue</span>
+</a>
+<div style="display: flex; justify-content: center; overflow: hidden">
+<div style="position: relative; width: 334px; height: 334px">
+<div style="position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform: scale(0.44)">
+<div style="position: absolute; left: 0; top: 0; width: 0; height: 0; perspective: 1400px">
+<div class="cir-globe" style="position: relative; width: 0; height: 0; transform-style: preserve-3d; transform: rotateX(-12deg); animation: cir-spin 40s linear infinite">
+
+<div style="position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; transform: translateY(-245px)">
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo1.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(0deg) translateZ(206px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo2.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(60deg) translateZ(206px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo3.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(120deg) translateZ(206px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo4.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(180deg) translateZ(206px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo5.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(240deg) translateZ(206px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo6.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(300deg) translateZ(206px)"></a>
+</div>
+
+<div style="position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d">
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo7.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(0deg) translateZ(320px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo8.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(36deg) translateZ(320px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo9.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(72deg) translateZ(320px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo10.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(108deg) translateZ(320px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo11.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(144deg) translateZ(320px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo12.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(180deg) translateZ(320px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo13.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(216deg) translateZ(320px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo1.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(252deg) translateZ(320px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo2.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(288deg) translateZ(320px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo3.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(324deg) translateZ(320px)"></a>
+</div>
+
+<div style="position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; transform: translateY(245px)">
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo4.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(0deg) translateZ(206px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo5.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(60deg) translateZ(206px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo6.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(120deg) translateZ(206px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo7.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(180deg) translateZ(206px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo8.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(240deg) translateZ(206px)"></a>
+<a class="cir-tile" href="#/article" aria-label="Ouvrir la fiche de ce sol" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d"><img src="assets/img/photo9.jpg" alt="" style="position: absolute; left: -100px; top: -85px; width: 200px; height: 170px; max-width: none; object-fit: cover; cursor: pointer; transition: scale 0.25s ease, box-shadow 0.25s ease; border-radius: 6px; box-shadow: 0 8px 22px rgba(14, 42, 56, 0.28); transform: rotateY(300deg) translateZ(206px)"></a>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<strong style="font-size: 17px; font-weight: 600; color: #FFFFFF; text-shadow: 0 1px 2px rgba(8, 24, 32, 0.7), 0 2px 18px rgba(8, 24, 32, 0.8)">Réalisations</strong>
+<div style="display: flex; gap: 12px">
+<a href="#/realisations" style="position: relative; flex: 1 1 0; height: 170px; border-radius: 22px; overflow: hidden; box-shadow: 0 14px 30px rgba(14, 42, 56, 0.2); display: block">
+<img src="assets/img/apres.jpg" alt="Salon avec sol en résine époxy effet marbre" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover">
+<span style="position: absolute; left: 12px; bottom: 12px; padding: 4px 12px; border-radius: 14px; background: rgba(14, 42, 56, 0.82); font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #FFFFFF">Maison</span>
+</a>
+<a href="#/realisations" style="position: relative; flex: 1 1 0; height: 170px; border-radius: 22px; overflow: hidden; box-shadow: 0 14px 30px rgba(14, 42, 56, 0.2); display: block">
+<img src="assets/img/prod-resistance.jpg" alt="Entrepôt avec sol époxy bleu" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover">
+<span style="position: absolute; left: 12px; bottom: 12px; padding: 4px 12px; border-radius: 14px; background: rgba(14, 42, 56, 0.82); font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #FFFFFF">Industrie</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+
+<section style="background: #FFFFFF">
+<div style="padding: 56px 20px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; margin-bottom: 28px; text-align: center">
+<span style="font-family: 'Lora', serif; font-style: italic; font-size: 16px; color: #1177A8">Notre sélection</span>
+<h2 style="margin: 0; font-family: 'Lora', serif; font-size: 30px; line-height: 1.2; font-weight: 400">Produits à la une</h2>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px">
+<a href="#/article" style="display: flex; flex-direction: column; gap: 10px; color: #0E2A38; text-decoration: none; text-align: center">
+<img src="assets/img/prod-autolissant.jpg" alt="Sol autolissant époxy" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">Sol autolissant époxy</span><span style="font-size: 14px; color: #2F4A57">[PRIX] FCFA / m²</span></span>
+</a>
+<a href="#/article" style="display: flex; flex-direction: column; gap: 10px; color: #0E2A38; text-decoration: none; text-align: center">
+<img src="assets/img/prod-sable.jpg" alt="Sable coloré autolissant" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">Sable coloré autolissant</span><span style="font-size: 14px; color: #2F4A57">[PRIX] FCFA / m²</span></span>
+</a>
+<a href="#/article" style="display: flex; flex-direction: column; gap: 10px; color: #0E2A38; text-decoration: none; text-align: center">
+<img src="assets/img/prod-terrazzo.jpg" alt="Terrazzo époxy" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">Terrazzo époxy</span><span style="font-size: 14px; color: #2F4A57">[PRIX] FCFA / m²</span></span>
+</a>
+<a href="#/article" style="display: flex; flex-direction: column; gap: 10px; color: #0E2A38; text-decoration: none; text-align: center">
+<img src="assets/img/prod-resistance.jpg" alt="Finition haute résistance" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">Finition haute résistance</span><span style="font-size: 14px; color: #2F4A57">[PRIX] FCFA / m²</span></span>
+</a>
+</div>
+<div style="margin-top: 24px; text-align: center"><a href="#/catalogue" style="display: inline-block; padding: 13px 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase">Voir tout le catalogue</a></div>
+</div>
+</section>
+
+<section style="background: #F3F7F9">
+<div style="padding: 56px 20px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; margin-bottom: 28px; text-align: center">
+<span style="font-family: 'Lora', serif; font-style: italic; font-size: 16px; color: #1177A8">Avant, après</span>
+<h2 style="margin: 0; font-family: 'Lora', serif; font-size: 30px; line-height: 1.2; font-weight: 400">Nos réalisations</h2>
+</div>
+<div style="display: flex; flex-direction: column; gap: 20px">
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 8px">
+<img src="assets/img/avant.jpg" alt="La pièce avant les travaux : dalle de béton brut fissurée" style="display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover">
+<figcaption style="font-family: 'Lora', serif; font-size: 16px; text-align: center">Avant : béton brut</figcaption>
+</figure>
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 8px">
+<img src="assets/img/apres.jpg" alt="La même pièce après la pose : sol en résine époxy brillant" style="display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover">
+<figcaption style="font-family: 'Lora', serif; font-size: 16px; text-align: center">Après : résine époxy</figcaption>
+</figure>
+</div>
+<div style="margin-top: 28px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px">
+<a href="#/realisations" style="display: flex; flex-direction: column; gap: 10px; color: #0E2A38; text-decoration: none; text-align: center">
+<img src="assets/img/real-ecole.jpg" alt="Hall d'établissement scolaire" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">[Nom du chantier]</span><span style="font-size: 14px; color: #2F4A57">Entreprise · [Ville]</span></span>
+</a>
+<a href="#/realisations" style="display: flex; flex-direction: column; gap: 10px; color: #0E2A38; text-decoration: none; text-align: center">
+<img src="assets/img/real-allee.jpg" alt="Allée extérieure" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">[Nom du chantier]</span><span style="font-size: 14px; color: #2F4A57">Maison · [Ville]</span></span>
+</a>
+</div>
+<div style="margin-top: 24px; text-align: center"><a href="#/realisations" style="display: inline-block; padding: 13px 4px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase">Toutes les réalisations</a></div>
+</div>
+</section>
+
+<section style="background: #FFFFFF">
+<div style="padding: 56px 20px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; margin-bottom: 28px; text-align: center">
+<span style="font-family: 'Lora', serif; font-style: italic; font-size: 16px; color: #1177A8">Ils nous ont fait confiance</span>
+<h2 style="margin: 0; font-family: 'Lora', serif; font-size: 30px; line-height: 1.2; font-weight: 400">Témoignages</h2>
+</div>
+<div style="display: flex; flex-direction: column; gap: 32px">
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 12px; text-align: center">
+<blockquote style="margin: 0; font-family: 'Lora', serif; font-style: italic; font-size: 19px; line-height: 1.5">« [Témoignage d'un client du CIR : deux ou trois phrases à fournir.] »</blockquote>
+<figcaption style="font-size: 14px; color: #2F4A57">[Nom du client] · Maison · [Ville]</figcaption>
+</figure>
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 12px; text-align: center">
+<blockquote style="margin: 0; font-family: 'Lora', serif; font-style: italic; font-size: 19px; line-height: 1.5">« [Témoignage d'un client du CIR : deux ou trois phrases à fournir.] »</blockquote>
+<figcaption style="font-size: 14px; color: #2F4A57">[Nom du client] · Industrie · [Ville]</figcaption>
+</figure>
+</div>
+</div>
+</section>
+
+<section id="contact" style="background: #0E2A38; color: #FFFFFF">
+<div style="padding: 56px 20px; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 14px">
+<span style="font-family: 'Lora', serif; font-style: italic; font-size: 16px; color: #7FDDF0">Contact</span>
+<h2 style="margin: 0; font-family: 'Lora', serif; font-size: 30px; line-height: 1.2; font-weight: 400">Parlons de votre sol</h2>
+<p style="margin: 0; color: #D5E0E6">Une question, un prix à négocier ou un rendu particulier en tête ? Écrivez à l'équipe.</p>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div><div style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #7FDDF0">Adresse</div><div>Total Nkolmbong, Douala, Cameroun</div></div>
+<div><div style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #7FDDF0">Téléphone</div><div>(00237) 678 829 313</div></div>
+<div><div style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #7FDDF0">WhatsApp</div><div>(00237) 622 191 931<br>(00237) 699 811 635</div></div>
+</div>
+<a href="https://wa.me/237622191931" style="display: inline-block; padding: 13px 24px; border: 1px solid #FFFFFF; border-radius: 26px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #FFFFFF; text-decoration: none">Écrire sur WhatsApp</a>
+</div>
+<form style="background: #FFFFFF; color: #0E2A38; border-radius: 18px; padding: 24px 20px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="mc-nom" style="font-size: 14px; color: #2F4A57">Nom complet</label>
+<input id="mc-nom" type="text" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="mc-tel" style="font-size: 14px; color: #2F4A57">Téléphone ou WhatsApp</label>
+<input id="mc-tel" type="tel" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="mc-type" style="font-size: 14px; color: #2F4A57">Votre projet concerne</label>
+<select id="mc-type" style="height: 48px; padding: 0 14px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38; background: #FFFFFF"><option>Une maison</option><option>Une industrie</option><option>Une entreprise</option></select>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="mc-msg" style="font-size: 14px; color: #2F4A57">Votre message</label>
+<textarea id="mc-msg" rows="4" placeholder="Surface, couleurs, rendu souhaité…" style="box-sizing: border-box; width: 100%; height: 120px; padding: 14px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38; resize: vertical"></textarea>
+</div>
+<button type="button" style="min-height: 48px; padding: 0 28px; border: 0; border-radius: 26px; background: #1177A8; font: inherit; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #FFFFFF; cursor: pointer">Envoyer le message</button>
+</form>
+</div>
+</section>
+
+<footer style="font-family: 'Figtree', sans-serif; font-size: 15px; line-height: 1.55; color: #0E2A38; background: #FFFFFF; border-top: 1px solid #D5E0E6">
+<div style="max-width: 1200px; margin: 0 auto; padding: 56px 24px 32px; display: flex; flex-wrap: wrap; gap: 40px 64px">
+<div style="flex: 2 1 300px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 14px">
+<img src="assets/img/logo-cir.png" alt="" style="width: 56px; height: 56px; object-fit: cover; border-radius: 14px">
+<span style="font-family: 'Lora', serif; font-size: 22px; font-weight: 500; line-height: 1.2">Complexe Industriel<br>Révélation SARL</span>
+</div>
+<span style="color: #2F4A57">Total Nkolmbong, Douala, Cameroun<br>Téléphone : (00237) 678 829 313<br>WhatsApp : (00237) 622 191 931 · (00237) 699 811 635</span>
+</div>
+<nav aria-label="Liens du pied de page" style="flex: 1 1 160px; display: flex; flex-direction: column">
+<a href="#/accueil" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Accueil</a>
+<a href="#/catalogue" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Catalogue</a>
+<a href="#/realisations" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Réalisations</a>
+<a href="#/contact" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Contact</a>
+<a href="#/commandes" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Mes commandes</a>
+</nav>
+<div style="flex: 1 1 180px; display: flex; flex-direction: column; align-items: flex-start; gap: 14px">
+<span style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #2F4A57">Entreprise partenaire</span>
+<img src="assets/img/logo-jiuye.png" alt="Jiuye" style="height: 128px; width: auto">
+</div>
+</div>
+<div style="max-width: 1200px; margin: 0 auto; padding: 20px 24px 28px; border-top: 1px solid #D5E0E6; font-size: 13px; color: #2F4A57">© 2026 Complexe Industriel Révélation SARL. Distributeur Jiuye en Afrique centrale.</div>
+</footer>
+<div class="cir-tabbar" style="position: sticky; bottom: 0; z-index: 6">
+<nav aria-label="Navigation principale" style="font-family: 'Figtree', sans-serif; background: #FFFFFF; border-top: 1px solid #D5E0E6; box-shadow: 0 -8px 24px rgba(14, 42, 56, 0.1); display: flex">
+<a href="#/accueil" aria-current="page" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid #FF6D4C; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #1177A8; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1177A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4v-9z"></path></svg>
+<span>Accueil</span>
+</a>
+<a href="#/catalogue" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h7v7H4V4zM13 4h7v7h-7V4zM4 13h7v7H4v-7zM13 13h7v7h-7v-7z"></path></svg>
+<span>Catalogue</span>
+</a>
+<a href="#/realisations" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v14H4V5zM4 16l5-5 4 4 3-3 4 4M15 9h.01"></path></svg>
+<span>Réalisations</span>
+</a>
+<a href="#/commandes" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v17H7V4zM10 9h4M10 13h4M10 17h2"></path></svg>
+<span>Commandes</span>
+</a>
+<a href="#/compte" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"></path></svg>
+<span>Compte</span>
+</a>
+</nav>
+</div>
+</div>
+</div>
+<div class="page" data-page="catalogue" hidden>
+<div style="font-family: 'Figtree', sans-serif; font-size: 16px; line-height: 1.55; color: #0E2A38; background: #F3F7F9">
+<header data-fond="clair" style="position: relative; z-index: 5; font-family: 'Figtree', sans-serif; font-size: 16px; line-height: 1.5; color: #0E2A38; background: #F3F7F9; border-bottom: 1px solid #D5E0E6">
+<div style="min-height: 64px; padding: 0 10px 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<a href="#/accueil" style="display: flex; align-items: center; gap: 10px; color: #0E2A38; text-shadow: none; text-decoration: none">
+<img src="assets/img/logo-cir.png" alt="" style="width: 40px; height: 40px; object-fit: cover; border-radius: 10px">
+<strong style="font-family: 'Lora', serif; font-size: 19px; font-weight: 600">CIR</strong>
+</a>
+<div style="display: flex; align-items: center">
+<a href="#/contact" aria-label="Contact" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0E2A38" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="filter: none"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"></path></svg></a>
+<button type="button" aria-label="Menu" aria-expanded="false" data-act="basculer" style="width: 48px; height: 48px; padding: 0; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0E2A38" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="filter: none"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+</div>
+</div>
+<div data-if="ouvert" hidden>
+<nav aria-label="Navigation principale" style="position: absolute; left: 0; right: 0; top: 100%; padding: 8px 20px 24px; background: #FFFFFF; border-bottom: 1px solid #D5E0E6; box-shadow: 0 24px 40px rgba(14, 42, 56, 0.18); display: flex; flex-direction: column">
+<a href="#/accueil" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Accueil</a>
+<a href="#/catalogue" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Catalogue</a>
+<a href="#/realisations" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Réalisations</a>
+<a href="#/contact" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Contact</a>
+<a href="#/commandes" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Mes commandes</a>
+<a href="#/compte" style="margin-top: 20px; padding: 14px 24px; border-radius: 26px; background: #1177A8; text-align: center; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #FFFFFF; text-decoration: none">Se connecter</a>
+</nav>
+</div>
+</header>
+<main>
+
+<div style="padding: 24px 20px 20px; text-align: center">
+<h1 style="margin: 0; font-family: 'Lora', serif; font-style: italic; font-size: 34px; line-height: 1.3; font-weight: 500; color: #1177A8">Catalogue</h1>
+</div>
+
+<div style="position: relative; height: 220px; overflow: hidden">
+<img src="assets/img/apres.jpg" alt="Salon lumineux avec un sol en résine époxy effet marbre" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover">
+<div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: rgba(14, 42, 56, 0.38)"></div>
+<div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center">
+<p style="margin: 0; font-family: 'Lora', serif; font-size: 28px; line-height: 1.2; color: #FFFFFF">Des sols durables,<br>des sols uniques</p>
+</div>
+</div>
+
+<div style="padding: 24px 0 0; display: flex; flex-direction: column; gap: 14px">
+<div role="group" aria-label="Pour quel sol ?" style="display: flex; gap: 8px; padding: 0 20px; overflow-x: auto">
+<button type="button" aria-pressed="true" style="flex-shrink: 0; min-height: 44px; padding: 0 18px; border: 1px solid #0E2A38; border-radius: 22px; background: #0E2A38; font: inherit; font-size: 15px; font-weight: 600; color: #FFFFFF; cursor: pointer">Tous les sols</button>
+<button type="button" aria-pressed="false" style="flex-shrink: 0; min-height: 44px; padding: 0 18px; border: 1px solid #8FA5B0; border-radius: 22px; background: #FFFFFF; font: inherit; font-size: 15px; color: #0E2A38; cursor: pointer">Maison</button>
+<button type="button" aria-pressed="false" style="flex-shrink: 0; min-height: 44px; padding: 0 18px; border: 1px solid #8FA5B0; border-radius: 22px; background: #FFFFFF; font: inherit; font-size: 15px; color: #0E2A38; cursor: pointer">Industrie</button>
+<button type="button" aria-pressed="false" style="flex-shrink: 0; min-height: 44px; padding: 0 18px; border: 1px solid #8FA5B0; border-radius: 22px; background: #FFFFFF; font: inherit; font-size: 15px; color: #0E2A38; cursor: pointer">Entreprise</button>
+<button type="button" aria-pressed="false" style="flex-shrink: 0; min-height: 44px; padding: 0 18px; border: 1px solid #8FA5B0; border-radius: 22px; background: #FFFFFF; font: inherit; font-size: 15px; color: #0E2A38; cursor: pointer">Extérieur</button>
+</div>
+<div style="padding: 0 20px; display: flex; flex-direction: column; gap: 6px">
+<label for="mcat-fam" style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #2F4A57">Famille</label>
+<select id="mcat-fam" style="height: 48px; padding: 0 14px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38; background: #FFFFFF"><option>Finitions</option><option>Primaires époxy</option><option>Sans solvant</option><option>À base d'eau</option><option>Marquage</option><option>Sols spéciaux</option></select>
+</div>
+</div>
+
+<div style="padding: 32px 20px 24px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px">
+<a href="#/article" style="display: flex; flex-direction: column; gap: 10px; color: #0E2A38; text-decoration: none; text-align: center">
+<img src="assets/img/prod-autolissant.jpg" alt="Sol autolissant époxy" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">Sol autolissant époxy</span><span style="font-size: 14px; color: #2F4A57">[PRIX] FCFA / m²</span></span>
+</a>
+<a href="#/article" style="display: flex; flex-direction: column; gap: 10px; color: #0E2A38; text-decoration: none; text-align: center">
+<img src="assets/img/prod-sable.jpg" alt="Sable coloré autolissant" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">Sable coloré autolissant</span><span style="font-size: 14px; color: #2F4A57">[PRIX] FCFA / m²</span></span>
+</a>
+<a href="#/article" style="display: flex; flex-direction: column; gap: 10px; color: #0E2A38; text-decoration: none; text-align: center">
+<img src="assets/img/prod-terrazzo.jpg" alt="Terrazzo époxy" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">Terrazzo époxy</span><span style="font-size: 14px; color: #2F4A57">[PRIX] FCFA / m²</span></span>
+</a>
+<a href="#/article" style="display: flex; flex-direction: column; gap: 10px; color: #0E2A38; text-decoration: none; text-align: center">
+<img src="assets/img/prod-lisse.jpg" alt="Finition époxy lisse" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">Finition époxy lisse</span><span style="font-size: 14px; color: #2F4A57">[PRIX] FCFA / m²</span></span>
+</a>
+<a href="#/article" style="display: flex; flex-direction: column; gap: 10px; color: #0E2A38; text-decoration: none; text-align: center">
+<img src="assets/img/prod-mate.jpg" alt="Finition époxy mate" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">Finition époxy mate</span><span style="font-size: 14px; color: #2F4A57">[PRIX] FCFA / m²</span></span>
+</a>
+<a href="#/article" style="display: flex; flex-direction: column; gap: 10px; color: #0E2A38; text-decoration: none; text-align: center">
+<img src="assets/img/prod-antiderapant.jpg" alt="Finition antidérapante" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">Finition antidérapante</span><span style="font-size: 14px; color: #2F4A57">[PRIX] FCFA / m²</span></span>
+</a>
+<a href="#/article" style="display: flex; flex-direction: column; gap: 10px; color: #0E2A38; text-decoration: none; text-align: center">
+<img src="assets/img/prod-antiuv.jpg" alt="Peinture de sol anti-UV" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">Peinture de sol anti-UV</span><span style="font-size: 14px; color: #2F4A57">[PRIX] FCFA / m²</span></span>
+</a>
+<a href="#/article" style="display: flex; flex-direction: column; gap: 10px; color: #0E2A38; text-decoration: none; text-align: center">
+<img src="assets/img/prod-resistance.jpg" alt="Finition haute résistance" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">Finition haute résistance</span><span style="font-size: 14px; color: #2F4A57">[PRIX] FCFA / m²</span></span>
+</a>
+</div>
+
+<nav aria-label="Pagination" style="padding: 0 20px 48px; display: flex; align-items: center; justify-content: center; gap: 4px; font-family: 'Lora', serif; font-size: 19px">
+<a href="#/catalogue" aria-current="page" style="min-width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #0E2A38; text-decoration: underline; text-underline-offset: 6px; text-decoration-color: #FF6D4C; text-decoration-thickness: 2px">1</a>
+<a href="#/catalogue" style="min-width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #2F4A57; text-decoration: none">2</a>
+<a href="#/catalogue" style="min-width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #2F4A57; text-decoration: none">3</a>
+<a href="#/catalogue" style="height: 44px; padding: 0 12px; display: flex; align-items: center; font-style: italic; color: #1177A8; text-decoration: none">Suivant</a>
+</nav>
+
+</main>
+<footer style="font-family: 'Figtree', sans-serif; font-size: 15px; line-height: 1.55; color: #0E2A38; background: #FFFFFF; border-top: 1px solid #D5E0E6">
+<div style="max-width: 1200px; margin: 0 auto; padding: 56px 24px 32px; display: flex; flex-wrap: wrap; gap: 40px 64px">
+<div style="flex: 2 1 300px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 14px">
+<img src="assets/img/logo-cir.png" alt="" style="width: 56px; height: 56px; object-fit: cover; border-radius: 14px">
+<span style="font-family: 'Lora', serif; font-size: 22px; font-weight: 500; line-height: 1.2">Complexe Industriel<br>Révélation SARL</span>
+</div>
+<span style="color: #2F4A57">Total Nkolmbong, Douala, Cameroun<br>Téléphone : (00237) 678 829 313<br>WhatsApp : (00237) 622 191 931 · (00237) 699 811 635</span>
+</div>
+<nav aria-label="Liens du pied de page" style="flex: 1 1 160px; display: flex; flex-direction: column">
+<a href="#/accueil" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Accueil</a>
+<a href="#/catalogue" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Catalogue</a>
+<a href="#/realisations" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Réalisations</a>
+<a href="#/contact" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Contact</a>
+<a href="#/commandes" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Mes commandes</a>
+</nav>
+<div style="flex: 1 1 180px; display: flex; flex-direction: column; align-items: flex-start; gap: 14px">
+<span style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #2F4A57">Entreprise partenaire</span>
+<img src="assets/img/logo-jiuye.png" alt="Jiuye" style="height: 128px; width: auto">
+</div>
+</div>
+<div style="max-width: 1200px; margin: 0 auto; padding: 20px 24px 28px; border-top: 1px solid #D5E0E6; font-size: 13px; color: #2F4A57">© 2026 Complexe Industriel Révélation SARL. Distributeur Jiuye en Afrique centrale.</div>
+</footer>
+<div class="cir-tabbar" style="position: sticky; bottom: 0; z-index: 6">
+<nav aria-label="Navigation principale" style="font-family: 'Figtree', sans-serif; background: #FFFFFF; border-top: 1px solid #D5E0E6; box-shadow: 0 -8px 24px rgba(14, 42, 56, 0.1); display: flex">
+<a href="#/accueil" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4v-9z"></path></svg>
+<span>Accueil</span>
+</a>
+<a href="#/catalogue" aria-current="page" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid #FF6D4C; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #1177A8; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1177A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h7v7H4V4zM13 4h7v7h-7V4zM4 13h7v7H4v-7zM13 13h7v7h-7v-7z"></path></svg>
+<span>Catalogue</span>
+</a>
+<a href="#/realisations" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v14H4V5zM4 16l5-5 4 4 3-3 4 4M15 9h.01"></path></svg>
+<span>Réalisations</span>
+</a>
+<a href="#/commandes" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v17H7V4zM10 9h4M10 13h4M10 17h2"></path></svg>
+<span>Commandes</span>
+</a>
+<a href="#/compte" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"></path></svg>
+<span>Compte</span>
+</a>
+</nav>
+</div>
+</div>
+</div>
+<div class="page" data-page="article" hidden>
+<div style="position: relative; height: var(--vh); min-height: 600px; overflow: hidden; background: #081820; font-family: 'DM Mono', monospace; font-size: 12px; line-height: 1.6; letter-spacing: 0.06em; text-transform: uppercase; color: #FFFFFF">
+
+<img src="assets/img/apres.jpg" alt="Salon avec un sol autolissant en résine époxy, brillant, effet marbre" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 50%">
+<div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: linear-gradient(180deg, rgba(8, 24, 32, 0.82) 0%, rgba(8, 24, 32, 0.45) 30%, rgba(8, 24, 32, 0.08) 46%, rgba(8, 24, 32, 0.72) 68%, rgba(8, 24, 32, 0.92) 100%)"></div>
+
+<button type="button" aria-label="Ouvrir les options de commande" data-act="ouvrir" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; padding: 0; border: 0; background: transparent; cursor: pointer"></button>
+
+<div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; padding: 12px 20px 24px; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none">
+
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; gap: 16px; pointer-events: auto">
+<a href="#/catalogue" style="padding: 13px 0; color: #FFFFFF; text-decoration: none">[←] Catalogue</a>
+<a href="#/commandes" style="padding: 13px 0; color: #FFFFFF; text-decoration: none">Mes commandes [01]</a>
+</div>
+<h1 style="margin: 0; font-family: 'Lora', serif; font-size: 40px; line-height: 1.05; font-weight: 500; letter-spacing: 0.01em">Sol autolissant<br>époxy</h1>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; gap: 24px; padding-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.7)"><span>Produit du moment</span><span>Finition</span></div>
+<div>YD-500 · brillant, effet miroir, sans joints</div>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 12px"><span>Conseils utiles</span><span style="width: 10px; height: 10px; border-radius: 5px; background: #FFFFFF"></span></div>
+<p style="margin: 0; color: #E6EEF2">Une surface lisse et brillante, sans joints, dans une grande variété de couleurs. Non toxique et sans odeur. Touchez l'image pour commander ou personnaliser.</p>
+<div style="display: flex; justify-content: space-between; gap: 24px; padding: 10px 0; border-top: 1px solid rgba(255, 255, 255, 0.7); border-bottom: 1px solid rgba(255, 255, 255, 0.7)"><span>Prix</span><span>[PRIX] FCFA / m²</span></div>
+<button type="button" data-act="ouvrir" style="min-height: 50px; padding: 0 18px; border: 1px solid #FFFFFF; background: rgba(8, 24, 32, 0.55); display: flex; align-items: center; justify-content: space-between; gap: 16px; font: inherit; letter-spacing: 0.06em; text-transform: uppercase; color: #FFFFFF; cursor: pointer; pointer-events: auto"><span>Commander ou personnaliser</span><span>[+]</span></button>
+<div style="display: flex; justify-content: space-between; gap: 16px; pointer-events: auto">
+<a href="#/article" style="padding: 13px 0; color: #FFFFFF; text-decoration: none">[←] Préc.</a>
+<a href="#/article" style="padding: 13px 0; color: #FFFFFF; text-decoration: none">Suiv. [→]</a>
+</div>
+</div>
+
+</div>
+
+<div data-if="ouvert" hidden>
+<button type="button" aria-label="Fermer les options" data-act="fermer" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; padding: 0; border: 0; background: rgba(8, 24, 32, 0.5); cursor: pointer"></button>
+<aside aria-label="Options et commande" style="position: absolute; left: 0; right: 0; top: 76px; bottom: 0; box-sizing: border-box; overflow-y: auto; padding: 8px 20px 24px; border-radius: 22px 22px 0 0; background: #F3F7F9; box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.35); display: flex; flex-direction: column; gap: 12px; font-family: 'Figtree', sans-serif; font-size: 15px; line-height: 1.5; letter-spacing: 0; text-transform: none; color: #0E2A38">
+
+<div style="align-self: center; width: 44px; height: 4px; border-radius: 2px; background: #B6C6CF"></div>
+
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 16px">
+<span style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #2F4A57">YD-500 · Finitions</span>
+<button type="button" aria-label="Fermer" data-act="fermer" style="width: 44px; height: 44px; margin-right: -12px; padding: 0; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E2A38" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 style="margin: 0; font-family: 'Lora', serif; font-size: 24px; line-height: 1.2; font-weight: 500">Sol autolissant époxy</h2>
+<span style="font-family: 'Lora', serif; font-size: 18px">[PRIX] FCFA / m²</span>
+<span style="font-size: 13px; color: #2F4A57">Prix indicatif, négociable avec l'équipe</span>
+</div>
+
+<div style="display: flex; gap: 12px">
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<label for="mop-couleur" style="font-size: 13px; color: #2F4A57">Couleur</label>
+<select id="mop-couleur" style="height: 46px; padding: 0 8px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38; background: #FFFFFF"><option>Choisir</option></select>
+</div>
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<label for="mop-surface" style="font-size: 13px; color: #2F4A57">Surface (m²)</label>
+<input id="mop-surface" type="number" placeholder="Ex. 80" style="box-sizing: border-box; width: 100%; height: 46px; padding: 0 12px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38">
+</div>
+</div>
+
+<div role="group" aria-label="Type de bâtiment" style="display: flex; border: 1px solid #8FA5B0; border-radius: 8px; overflow: hidden; background: #FFFFFF">
+<button type="button" aria-pressed="true" style="flex: 1 1 0; min-height: 44px; padding: 0; border: 0; background: #0E2A38; font: inherit; font-weight: 600; color: #FFFFFF; cursor: pointer">Maison</button>
+<button type="button" aria-pressed="false" style="flex: 1 1 0; min-height: 44px; padding: 0; border: 0; border-left: 1px solid #8FA5B0; background: transparent; font: inherit; color: #0E2A38; cursor: pointer">Industrie</button>
+<button type="button" aria-pressed="false" style="flex: 1 1 0; min-height: 44px; padding: 0; border: 0; border-left: 1px solid #8FA5B0; background: transparent; font: inherit; color: #0E2A38; cursor: pointer">Entreprise</button>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 10px">
+<a href="#/commandes" style="display: flex; align-items: center; justify-content: center; min-height: 50px; border-radius: 26px; background: #1177A8; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #FFFFFF; text-decoration: none">Lancer la commande</a>
+<button type="button" style="min-height: 48px; border: 1px solid #0E2A38; border-radius: 26px; background: transparent; font: inherit; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #0E2A38; cursor: pointer">Sélectionner ce produit</button>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+
+<button type="button" style="min-height: 56px; padding: 0 10px; border: 1px solid #D5E0E6; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; gap: 8px; font: inherit; font-size: 13px; line-height: 1.25; text-align: left; color: #0E2A38; cursor: pointer">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1177A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M3 12V4h8l10 10-8 8L3 12zM7.5 7.5h.01"></path></svg>
+<span>Négocier le prix</span>
+</button>
+
+<button type="button" style="min-height: 56px; padding: 0 10px; border: 1px solid #D5E0E6; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; gap: 8px; font: inherit; font-size: 13px; line-height: 1.25; text-align: left; color: #0E2A38; cursor: pointer">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1177A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M4 5h16v11H9l-5 4V5z"></path></svg>
+<span>Envoyer un message</span>
+</button>
+
+<button type="button" style="min-height: 56px; padding: 0 10px; border: 1px solid #D5E0E6; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; gap: 8px; font: inherit; font-size: 13px; line-height: 1.25; text-align: left; color: #0E2A38; cursor: pointer">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1177A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.7-1.2A9 9 0 1 0 12 3z"></path></svg>
+<span>Nous contacter sur WhatsApp</span>
+</button>
+
+<button type="button" style="min-height: 56px; padding: 0 10px; border: 1px solid #D5E0E6; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; gap: 8px; font: inherit; font-size: 13px; line-height: 1.25; text-align: left; color: #0E2A38; cursor: pointer">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1177A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"></path></svg>
+<span>Appeler l'équipe</span>
+</button>
+
+<button type="button" style="min-height: 56px; padding: 0 10px; border: 1px solid #D5E0E6; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; gap: 8px; font: inherit; font-size: 13px; line-height: 1.25; text-align: left; color: #0E2A38; cursor: pointer">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1177A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 2-2s-1-1.5-1-2.5 1-1.5 2-1.5h2a4 4 0 0 0 4-4c0-4.4-4-8-9-8zM7.5 11h.01M10 7.5h.01M14.5 7.5h.01"></path></svg>
+<span>Demander un rendu particulier</span>
+</button>
+
+<button type="button" style="min-height: 56px; padding: 0 10px; border: 1px solid #D5E0E6; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; gap: 8px; font: inherit; font-size: 13px; line-height: 1.25; text-align: left; color: #0E2A38; cursor: pointer">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1177A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M7 3h8l4 4v14H7V3zM14 3v5h5M10 12h6M10 16h6"></path></svg>
+<span>Demander un devis</span>
+</button>
+
+<button type="button" style="min-height: 56px; padding: 0 10px; border: 1px solid #D5E0E6; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; gap: 8px; font: inherit; font-size: 13px; line-height: 1.25; text-align: left; color: #0E2A38; cursor: pointer">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1177A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M4 6h16v14H4V6zM4 10h16M8 3v4M16 3v4"></path></svg>
+<span>Visite du chantier</span>
+</button>
+
+<button type="button" style="min-height: 56px; padding: 0 10px; border: 1px solid #D5E0E6; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; gap: 8px; font: inherit; font-size: 13px; line-height: 1.25; text-align: left; color: #0E2A38; cursor: pointer">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1177A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M4 7h10M18 7h2M4 17h4M12 17h8M14 4v6M8 14v6"></path></svg>
+<span>Fiche technique</span>
+</button>
+
+<button type="button" style="min-height: 56px; padding: 0 10px; border: 1px solid #D5E0E6; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; gap: 8px; font: inherit; font-size: 13px; line-height: 1.25; text-align: left; color: #0E2A38; cursor: pointer">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1177A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M4 5h16v14H4V5zM4 16l5-5 4 4 3-3 4 4M15 9h.01"></path></svg>
+<span>Réalisations avec ce produit</span>
+</button>
+
+<button type="button" style="min-height: 56px; padding: 0 10px; border: 1px solid #D5E0E6; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; gap: 8px; font: inherit; font-size: 13px; line-height: 1.25; text-align: left; color: #0E2A38; cursor: pointer">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1177A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM10 8.5l6 3.5-6 3.5v-7z"></path></svg>
+<span>Voir la démo</span>
+</button>
+
+</div>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 20px; font-size: 14px">
+<a href="#/article" style="padding: 11px 0; color: #1177A8">Télécharger la fiche (PDF)</a>
+<a href="#/article" style="padding: 11px 0; color: #1177A8">Partager</a>
+</div>
+</aside>
+</div>
+
+</div>
+</div>
+<div class="page" data-page="realisations" hidden>
+<div style="font-family: 'Figtree', sans-serif; font-size: 16px; line-height: 1.55; color: #0E2A38; background: #F3F7F9">
+<header data-fond="clair" style="position: relative; z-index: 5; font-family: 'Figtree', sans-serif; font-size: 16px; line-height: 1.5; color: #0E2A38; background: #F3F7F9; border-bottom: 1px solid #D5E0E6">
+<div style="min-height: 64px; padding: 0 10px 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<a href="#/accueil" style="display: flex; align-items: center; gap: 10px; color: #0E2A38; text-shadow: none; text-decoration: none">
+<img src="assets/img/logo-cir.png" alt="" style="width: 40px; height: 40px; object-fit: cover; border-radius: 10px">
+<strong style="font-family: 'Lora', serif; font-size: 19px; font-weight: 600">CIR</strong>
+</a>
+<div style="display: flex; align-items: center">
+<a href="#/contact" aria-label="Contact" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0E2A38" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="filter: none"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"></path></svg></a>
+<button type="button" aria-label="Menu" aria-expanded="false" data-act="basculer" style="width: 48px; height: 48px; padding: 0; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0E2A38" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="filter: none"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+</div>
+</div>
+<div data-if="ouvert" hidden>
+<nav aria-label="Navigation principale" style="position: absolute; left: 0; right: 0; top: 100%; padding: 8px 20px 24px; background: #FFFFFF; border-bottom: 1px solid #D5E0E6; box-shadow: 0 24px 40px rgba(14, 42, 56, 0.18); display: flex; flex-direction: column">
+<a href="#/accueil" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Accueil</a>
+<a href="#/catalogue" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Catalogue</a>
+<a href="#/realisations" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Réalisations</a>
+<a href="#/contact" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Contact</a>
+<a href="#/commandes" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Mes commandes</a>
+<a href="#/compte" style="margin-top: 20px; padding: 14px 24px; border-radius: 26px; background: #1177A8; text-align: center; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #FFFFFF; text-decoration: none">Se connecter</a>
+</nav>
+</div>
+</header>
+<main>
+
+<div style="padding: 24px 20px 24px; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center">
+<h1 style="margin: 0; font-family: 'Lora', serif; font-style: italic; font-size: 34px; line-height: 1.3; font-weight: 500; color: #1177A8">Réalisations</h1>
+<p style="margin: 0; color: #2F4A57">La résine époxy en action, sur les chantiers déjà réalisés.</p>
+</div>
+
+<div style="padding: 0 20px 48px; display: flex; flex-direction: column; gap: 20px">
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 8px">
+<img src="assets/img/avant.jpg" alt="La pièce avant les travaux : dalle de béton brut fissurée" style="display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover">
+<figcaption style="font-family: 'Lora', serif; font-size: 16px; text-align: center">Avant : béton brut</figcaption>
+</figure>
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 8px">
+<img src="assets/img/apres.jpg" alt="La même pièce après la pose : sol en résine époxy brillant" style="display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover">
+<figcaption style="font-family: 'Lora', serif; font-size: 16px; text-align: center">Après : résine époxy</figcaption>
+</figure>
+</div>
+
+<section style="background: #FFFFFF">
+<div style="padding: 56px 20px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; margin-bottom: 28px; text-align: center">
+<span style="font-family: 'Lora', serif; font-style: italic; font-size: 16px; color: #1177A8">Démonstration</span>
+<h2 style="margin: 0; font-family: 'Lora', serif; font-size: 30px; line-height: 1.2; font-weight: 400">La transformation en vidéo</h2>
+</div>
+<video poster="assets/img/apres.jpg" controls="true" preload="metadata" playsinline="true" aria-label="Vidéo : une pièce en béton brut transformée par un sol en résine époxy" style="display: block; width: 100%; aspect-ratio: 16 / 9; background: #0E2A38"><source src="assets/video/fond.mp4" type="video/mp4"><source src="assets/video/fond.webm" type="video/webm"></video>
+</div>
+</section>
+
+<section>
+<div style="padding: 40px 0 56px">
+<div role="group" aria-label="Filtrer les réalisations" style="display: flex; gap: 8px; padding: 0 20px 28px; overflow-x: auto">
+<button type="button" aria-pressed="true" style="flex-shrink: 0; min-height: 44px; padding: 0 18px; border: 1px solid #0E2A38; border-radius: 22px; background: #0E2A38; font: inherit; font-size: 15px; font-weight: 600; color: #FFFFFF; cursor: pointer">Toutes</button>
+<button type="button" aria-pressed="false" style="flex-shrink: 0; min-height: 44px; padding: 0 18px; border: 1px solid #8FA5B0; border-radius: 22px; background: #FFFFFF; font: inherit; font-size: 15px; color: #0E2A38; cursor: pointer">Maisons</button>
+<button type="button" aria-pressed="false" style="flex-shrink: 0; min-height: 44px; padding: 0 18px; border: 1px solid #8FA5B0; border-radius: 22px; background: #FFFFFF; font: inherit; font-size: 15px; color: #0E2A38; cursor: pointer">Industries</button>
+<button type="button" aria-pressed="false" style="flex-shrink: 0; min-height: 44px; padding: 0 18px; border: 1px solid #8FA5B0; border-radius: 22px; background: #FFFFFF; font: inherit; font-size: 15px; color: #0E2A38; cursor: pointer">Entreprises</button>
+<button type="button" aria-pressed="false" style="flex-shrink: 0; min-height: 44px; padding: 0 18px; border: 1px solid #8FA5B0; border-radius: 22px; background: #FFFFFF; font: inherit; font-size: 15px; color: #0E2A38; cursor: pointer">Extérieur</button>
+</div>
+<div style="padding: 0 20px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px">
+<article style="display: flex; flex-direction: column; gap: 10px; text-align: center">
+<img src="assets/img/real-ecole.jpg" alt="Hall d'établissement scolaire avec sol époxy gris" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">[Nom du chantier]</span><span style="font-size: 14px; color: #2F4A57">Entreprise · [Ville]</span></span>
+</article>
+<article style="display: flex; flex-direction: column; gap: 10px; text-align: center">
+<img src="assets/img/real-allee.jpg" alt="Allée extérieure en résine" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">[Nom du chantier]</span><span style="font-size: 14px; color: #2F4A57">Maison · [Ville]</span></span>
+</article>
+<article style="display: flex; flex-direction: column; gap: 10px; text-align: center">
+<img src="assets/img/real-parking.jpg" alt="Parking souterrain avec sol époxy" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">[Nom du chantier]</span><span style="font-size: 14px; color: #2F4A57">Industrie · [Ville]</span></span>
+</article>
+<article style="display: flex; flex-direction: column; gap: 10px; text-align: center">
+<img src="assets/img/real-pose.jpg" alt="Équipe en train de poser la résine époxy" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">[Nom du chantier]</span><span style="font-size: 14px; color: #2F4A57">Industrie · [Ville]</span></span>
+</article>
+<article style="display: flex; flex-direction: column; gap: 10px; text-align: center">
+<img src="assets/img/prod-antiuv.jpg" alt="Gradins extérieurs peints en bleu et jaune" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">[Nom du chantier]</span><span style="font-size: 14px; color: #2F4A57">Extérieur · [Ville]</span></span>
+</article>
+<article style="display: flex; flex-direction: column; gap: 10px; text-align: center">
+<img src="assets/img/prod-motif.jpg" alt="Hall avec motif en terrazzo époxy" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Lora', serif; font-size: 16px; line-height: 1.3">[Nom du chantier]</span><span style="font-size: 14px; color: #2F4A57">Entreprise · [Ville]</span></span>
+</article>
+</div>
+</div>
+</section>
+
+<section style="background: #FFFFFF">
+<div style="padding: 56px 20px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; margin-bottom: 28px; text-align: center">
+<span style="font-family: 'Lora', serif; font-style: italic; font-size: 16px; color: #1177A8">Ils nous ont fait confiance</span>
+<h2 style="margin: 0; font-family: 'Lora', serif; font-size: 30px; line-height: 1.2; font-weight: 400">Témoignages</h2>
+</div>
+<div style="display: flex; flex-direction: column; gap: 32px">
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 12px; text-align: center">
+<blockquote style="margin: 0; font-family: 'Lora', serif; font-style: italic; font-size: 19px; line-height: 1.5">« [Témoignage d'un client du CIR : deux ou trois phrases à fournir.] »</blockquote>
+<figcaption style="font-size: 14px; color: #2F4A57">[Nom du client] · Maison · [Ville]</figcaption>
+</figure>
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 12px; text-align: center">
+<blockquote style="margin: 0; font-family: 'Lora', serif; font-style: italic; font-size: 19px; line-height: 1.5">« [Témoignage d'un client du CIR : deux ou trois phrases à fournir.] »</blockquote>
+<figcaption style="font-size: 14px; color: #2F4A57">[Nom du client] · Industrie · [Ville]</figcaption>
+</figure>
+</div>
+</div>
+</section>
+
+</main>
+<footer style="font-family: 'Figtree', sans-serif; font-size: 15px; line-height: 1.55; color: #0E2A38; background: #FFFFFF; border-top: 1px solid #D5E0E6">
+<div style="max-width: 1200px; margin: 0 auto; padding: 56px 24px 32px; display: flex; flex-wrap: wrap; gap: 40px 64px">
+<div style="flex: 2 1 300px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 14px">
+<img src="assets/img/logo-cir.png" alt="" style="width: 56px; height: 56px; object-fit: cover; border-radius: 14px">
+<span style="font-family: 'Lora', serif; font-size: 22px; font-weight: 500; line-height: 1.2">Complexe Industriel<br>Révélation SARL</span>
+</div>
+<span style="color: #2F4A57">Total Nkolmbong, Douala, Cameroun<br>Téléphone : (00237) 678 829 313<br>WhatsApp : (00237) 622 191 931 · (00237) 699 811 635</span>
+</div>
+<nav aria-label="Liens du pied de page" style="flex: 1 1 160px; display: flex; flex-direction: column">
+<a href="#/accueil" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Accueil</a>
+<a href="#/catalogue" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Catalogue</a>
+<a href="#/realisations" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Réalisations</a>
+<a href="#/contact" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Contact</a>
+<a href="#/commandes" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Mes commandes</a>
+</nav>
+<div style="flex: 1 1 180px; display: flex; flex-direction: column; align-items: flex-start; gap: 14px">
+<span style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #2F4A57">Entreprise partenaire</span>
+<img src="assets/img/logo-jiuye.png" alt="Jiuye" style="height: 128px; width: auto">
+</div>
+</div>
+<div style="max-width: 1200px; margin: 0 auto; padding: 20px 24px 28px; border-top: 1px solid #D5E0E6; font-size: 13px; color: #2F4A57">© 2026 Complexe Industriel Révélation SARL. Distributeur Jiuye en Afrique centrale.</div>
+</footer>
+<div class="cir-tabbar" style="position: sticky; bottom: 0; z-index: 6">
+<nav aria-label="Navigation principale" style="font-family: 'Figtree', sans-serif; background: #FFFFFF; border-top: 1px solid #D5E0E6; box-shadow: 0 -8px 24px rgba(14, 42, 56, 0.1); display: flex">
+<a href="#/accueil" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4v-9z"></path></svg>
+<span>Accueil</span>
+</a>
+<a href="#/catalogue" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h7v7H4V4zM13 4h7v7h-7V4zM4 13h7v7H4v-7zM13 13h7v7h-7v-7z"></path></svg>
+<span>Catalogue</span>
+</a>
+<a href="#/realisations" aria-current="page" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid #FF6D4C; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #1177A8; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1177A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v14H4V5zM4 16l5-5 4 4 3-3 4 4M15 9h.01"></path></svg>
+<span>Réalisations</span>
+</a>
+<a href="#/commandes" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v17H7V4zM10 9h4M10 13h4M10 17h2"></path></svg>
+<span>Commandes</span>
+</a>
+<a href="#/compte" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"></path></svg>
+<span>Compte</span>
+</a>
+</nav>
+</div>
+</div>
+</div>
+<div class="page" data-page="compte" hidden>
+<div style="font-family: 'Figtree', sans-serif; font-size: 16px; line-height: 1.55; color: #0E2A38; background: #F3F7F9">
+
+<div style="position: relative; height: 210px; overflow: hidden; background: #0E2A38; color: #FFFFFF">
+<img src="assets/img/bidons.jpg" alt="Salon au sol en résine époxy, avec deux bidons de peinture époxy au premier plan" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover">
+<div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: linear-gradient(180deg, rgba(8, 24, 32, 0.6) 0%, rgba(8, 24, 32, 0.2) 40%, rgba(8, 24, 32, 0.82) 100%)"></div>
+<div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; padding: 14px 20px 20px; display: flex; flex-direction: column; justify-content: space-between">
+<a href="#/accueil" style="align-self: flex-start; display: flex; align-items: center; gap: 10px; color: #FFFFFF; text-decoration: none">
+<img src="assets/img/logo-cir.png" alt="" style="width: 40px; height: 40px; object-fit: cover; border-radius: 10px">
+<span style="font-family: 'Lora', serif; font-size: 19px; font-weight: 600">CIR</span>
+</a>
+<p style="margin: 0; font-family: 'Lora', serif; font-size: 32px; line-height: 1.1; font-weight: 500">Votre sol, révélé<span style="color: #FF6D4C">.</span></p>
+</div>
+</div>
+
+<main style="padding: 12px 20px 40px; display: flex; flex-direction: column; gap: 18px">
+<a href="#/accueil" style="align-self: flex-start; padding: 13px 0; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none">← Retour à l'accueil</a>
+
+<div role="group" aria-label="Connexion ou inscription" style="display: flex; gap: 24px; border-bottom: 1px solid #D5E0E6">
+<button type="button" aria-pressed="false" data-act="versConnexion" style="min-height: 48px; padding: 0; margin-bottom: -1px; border: 0; border-bottom: 2px solid transparent; background: transparent; font-family: 'Lora', serif; font-size: 19px; color: #2F4A57; cursor: pointer">Se connecter</button>
+<button type="button" aria-pressed="true" data-act="versInscription" style="min-height: 48px; padding: 0; margin-bottom: -1px; border: 0; border-bottom: 2px solid #FF6D4C; background: transparent; font-family: 'Lora', serif; font-size: 19px; color: #0E2A38; cursor: pointer">Créer un compte</button>
+</div>
+
+<div data-if="estConnexion" hidden>
+<form style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="mcx-id" style="font-size: 14px; color: #2F4A57">Téléphone ou e-mail</label>
+<input id="mcx-id" type="text" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38; background: #FFFFFF">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="mcx-mdp" style="font-size: 14px; color: #2F4A57">Mot de passe</label>
+<input id="mcx-mdp" type="password" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38; background: #FFFFFF">
+</div>
+<a href="#/compte" style="align-self: flex-start; padding: 11px 0">Mot de passe oublié ?</a>
+<a href="#/commandes" style="padding: 14px 24px; border-radius: 26px; background: #1177A8; text-align: center; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #FFFFFF; text-decoration: none">Se connecter</a>
+</form>
+</div>
+
+<div data-if="estInscription">
+<form style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="min-nom" style="font-size: 14px; color: #2F4A57">Nom complet</label>
+<input id="min-nom" type="text" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38; background: #FFFFFF">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="min-tel" style="font-size: 14px; color: #2F4A57">Téléphone</label>
+<input id="min-tel" type="tel" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38; background: #FFFFFF">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="min-mail" style="font-size: 14px; color: #2F4A57">E-mail</label>
+<input id="min-mail" type="email" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38; background: #FFFFFF">
+</div>
+<fieldset style="margin: 0; padding: 14px 16px 18px; border: 1px solid #D5E0E6; border-radius: 12px; background: #FFFFFF; display: flex; flex-direction: column; gap: 14px">
+<legend style="padding: 0 8px; font-family: 'Lora', serif; font-size: 16px">Adresse, nécessaire pour commander</legend>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="min-ville" style="font-size: 14px; color: #2F4A57">Ville</label>
+<input id="min-ville" type="text" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="min-quartier" style="font-size: 14px; color: #2F4A57">Quartier</label>
+<input id="min-quartier" type="text" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="min-repere" style="font-size: 14px; color: #2F4A57">Rue ou repère</label>
+<input id="min-repere" type="text" placeholder="Face à la station Total" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38">
+</div>
+</fieldset>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="min-mdp" style="font-size: 14px; color: #2F4A57">Mot de passe</label>
+<input id="min-mdp" type="password" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38; background: #FFFFFF">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="min-mdp2" style="font-size: 14px; color: #2F4A57">Confirmer le mot de passe</label>
+<input id="min-mdp2" type="password" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38; background: #FFFFFF">
+</div>
+<label style="display: flex; align-items: flex-start; gap: 10px; min-height: 44px; font-size: 14px"><input type="checkbox" style="width: 18px; height: 18px; margin: 2px 0 0; flex-shrink: 0"><span>J'accepte que mes données servent au traitement de mes commandes.</span></label>
+<a href="#/commandes" style="padding: 14px 24px; border-radius: 26px; background: #1177A8; text-align: center; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #FFFFFF; text-decoration: none">Créer mon compte</a>
+</form>
+</div>
+</main>
+
+<div class="cir-tabbar" style="position: sticky; bottom: 0; z-index: 6">
+<nav aria-label="Navigation principale" style="font-family: 'Figtree', sans-serif; background: #FFFFFF; border-top: 1px solid #D5E0E6; box-shadow: 0 -8px 24px rgba(14, 42, 56, 0.1); display: flex">
+<a href="#/accueil" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4v-9z"></path></svg>
+<span>Accueil</span>
+</a>
+<a href="#/catalogue" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h7v7H4V4zM13 4h7v7h-7V4zM4 13h7v7H4v-7zM13 13h7v7h-7v-7z"></path></svg>
+<span>Catalogue</span>
+</a>
+<a href="#/realisations" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v14H4V5zM4 16l5-5 4 4 3-3 4 4M15 9h.01"></path></svg>
+<span>Réalisations</span>
+</a>
+<a href="#/commandes" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v17H7V4zM10 9h4M10 13h4M10 17h2"></path></svg>
+<span>Commandes</span>
+</a>
+<a href="#/compte" aria-current="page" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid #FF6D4C; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #1177A8; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1177A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"></path></svg>
+<span>Compte</span>
+</a>
+</nav>
+</div>
+</div>
+</div>
+<div class="page" data-page="commandes" hidden>
+<div style="font-family: 'Figtree', sans-serif; font-size: 16px; line-height: 1.55; color: #0E2A38; background: #F3F7F9">
+<header data-fond="clair" style="position: relative; z-index: 5; font-family: 'Figtree', sans-serif; font-size: 16px; line-height: 1.5; color: #0E2A38; background: #F3F7F9; border-bottom: 1px solid #D5E0E6">
+<div style="min-height: 64px; padding: 0 10px 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<a href="#/accueil" style="display: flex; align-items: center; gap: 10px; color: #0E2A38; text-shadow: none; text-decoration: none">
+<img src="assets/img/logo-cir.png" alt="" style="width: 40px; height: 40px; object-fit: cover; border-radius: 10px">
+<strong style="font-family: 'Lora', serif; font-size: 19px; font-weight: 600">CIR</strong>
+</a>
+<div style="display: flex; align-items: center">
+<a href="#/contact" aria-label="Contact" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0E2A38" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="filter: none"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"></path></svg></a>
+<button type="button" aria-label="Menu" aria-expanded="false" data-act="basculer" style="width: 48px; height: 48px; padding: 0; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0E2A38" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="filter: none"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+</div>
+</div>
+<div data-if="ouvert" hidden>
+<nav aria-label="Navigation principale" style="position: absolute; left: 0; right: 0; top: 100%; padding: 8px 20px 24px; background: #FFFFFF; border-bottom: 1px solid #D5E0E6; box-shadow: 0 24px 40px rgba(14, 42, 56, 0.18); display: flex; flex-direction: column">
+<a href="#/accueil" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Accueil</a>
+<a href="#/catalogue" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Catalogue</a>
+<a href="#/realisations" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Réalisations</a>
+<a href="#/contact" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Contact</a>
+<a href="#/commandes" style="padding: 13px 0; border-bottom: 1px solid #E6EEF2; font-family: 'Lora', serif; font-size: 20px; color: #0E2A38; text-decoration: none">Mes commandes</a>
+<a href="#/compte" style="margin-top: 20px; padding: 14px 24px; border-radius: 26px; background: #1177A8; text-align: center; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #FFFFFF; text-decoration: none">Se connecter</a>
+</nav>
+</div>
+</header>
+<main>
+
+<div style="padding: 24px 20px 24px; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center">
+<h1 style="margin: 0; font-family: 'Lora', serif; font-style: italic; font-size: 34px; line-height: 1.3; font-weight: 500; color: #1177A8">Mes commandes</h1>
+<p style="margin: 0; color: #2F4A57">Suivez vos travaux et négociez votre revêtement avec l'équipe.</p>
+</div>
+
+<nav aria-label="Liste de mes commandes" style="padding: 0 20px 24px; display: flex; flex-direction: column; gap: 12px">
+<a href="#/commandes" aria-current="true" style="padding: 12px; border: 2px solid #1177A8; border-radius: 14px; background: #FFFFFF; display: flex; align-items: center; gap: 12px; color: #0E2A38; text-decoration: none">
+<img src="assets/img/prod-autolissant.jpg" alt="" style="width: 60px; height: 60px; flex-shrink: 0; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 1px; min-width: 0"><span style="font-family: 'Lora', serif; font-size: 17px">Commande [N°]</span><span style="font-size: 13px; color: #2F4A57">[DATE] · Maison</span><span style="font-size: 13px; font-weight: 600">En négociation</span></span>
+</a>
+<a href="#/commandes" style="padding: 13px; border: 1px solid #D5E0E6; border-radius: 14px; background: #FFFFFF; display: flex; align-items: center; gap: 12px; color: #0E2A38; text-decoration: none">
+<img src="assets/img/prod-terrazzo.jpg" alt="" style="width: 60px; height: 60px; flex-shrink: 0; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 1px; min-width: 0"><span style="font-family: 'Lora', serif; font-size: 17px">Commande [N°]</span><span style="font-size: 13px; color: #2F4A57">[DATE] · Entreprise</span><span style="font-size: 13px; font-weight: 600">Travaux en cours</span></span>
+</a>
+<a href="#/commandes" style="padding: 13px; border: 1px solid #D5E0E6; border-radius: 14px; background: #FFFFFF; display: flex; align-items: center; gap: 12px; color: #0E2A38; text-decoration: none">
+<img src="assets/img/prod-mate.jpg" alt="" style="width: 60px; height: 60px; flex-shrink: 0; object-fit: cover">
+<span style="display: flex; flex-direction: column; gap: 1px; min-width: 0"><span style="font-family: 'Lora', serif; font-size: 17px">Commande [N°]</span><span style="font-size: 13px; color: #2F4A57">[DATE] · Maison</span><span style="font-size: 13px; font-weight: 600">Sol livré</span></span>
+</a>
+<a href="#/catalogue" style="align-self: flex-start; padding: 13px 0; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none">Nouvelle commande →</a>
+</nav>
+
+<section style="margin: 0 20px 48px; padding: 20px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 22px">
+
+<div style="display: flex; align-items: center; gap: 14px">
+<img src="assets/img/prod-autolissant.jpg" alt="Sol autolissant époxy" style="width: 72px; height: 72px; flex-shrink: 0; object-fit: cover">
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+<span style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #2F4A57">Commande [N°]</span>
+<h2 style="margin: 0; font-family: 'Lora', serif; font-size: 21px; line-height: 1.2; font-weight: 500">Sol autolissant époxy</h2>
+<span style="font-size: 14px; color: #2F4A57">YD-500 · [Surface] m² · Maison</span>
+</div>
+</div>
+
+<ol aria-label="Avancement de la commande" style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px">
+<li style="padding-left: 14px; border-left: 3px solid #1177A8; display: flex; flex-direction: column"><strong style="font-weight: 600">Demande envoyée</strong><span style="font-size: 13px; color: #2F4A57">[DATE]</span></li>
+<li style="padding-left: 14px; border-left: 3px solid #1177A8; display: flex; flex-direction: column"><strong style="font-weight: 600">Négociation</strong><span style="font-size: 13px; color: #2F4A57">Étape en cours</span></li>
+<li style="padding-left: 14px; border-left: 3px solid #D5E0E6; display: flex; flex-direction: column; color: #2F4A57"><span>Contrat signé</span><span style="font-size: 13px">À venir</span></li>
+<li style="padding-left: 14px; border-left: 3px solid #D5E0E6; display: flex; flex-direction: column; color: #2F4A57"><span>Travaux</span><span style="font-size: 13px">À venir</span></li>
+<li style="padding-left: 14px; border-left: 3px solid #D5E0E6; display: flex; flex-direction: column; color: #2F4A57"><span>Sol livré</span><span style="font-size: 13px">À venir</span></li>
+</ol>
+
+<div style="padding: 18px; border-radius: 14px; background: #F3F7F9; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 14px; color: #2F4A57">Dernière proposition de l'équipe</span>
+<span style="font-family: 'Lora', serif; font-size: 26px; line-height: 1.2">[MONTANT] FCFA</span>
+<span style="font-size: 14px; color: #2F4A57">Pose comprise · délai : [DÉLAI]</span>
+</div>
+<button type="button" style="min-height: 48px; padding: 0 20px; border: 0; border-radius: 26px; background: #1177A8; font: inherit; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #FFFFFF; cursor: pointer">Accepter</button>
+<button type="button" style="min-height: 48px; padding: 0 20px; border: 1px solid #0E2A38; border-radius: 26px; background: transparent; font: inherit; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #0E2A38; cursor: pointer">Proposer un autre prix</button>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="margin: 0; font-family: 'Lora', serif; font-size: 20px; font-weight: 400">Échanges avec l'équipe</h3>
+<div style="align-self: flex-end; max-width: 86%; padding: 12px 16px; border-radius: 16px 16px 4px 16px; background: #0E2A38; color: #FFFFFF; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 13px; color: #C9D6DD">Vous · [DATE]</span>
+<span>[Votre message : projet et prix souhaité.]</span>
+</div>
+<div style="align-self: flex-start; max-width: 86%; padding: 12px 16px; border-radius: 16px 16px 16px 4px; background: #F3F7F9; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 13px; color: #2F4A57">Équipe CIR · [DATE]</span>
+<span>[Réponse de l'équipe : prix et délai proposés.]</span>
+</div>
+<div style="align-self: flex-end; max-width: 86%; padding: 12px 16px; border-radius: 16px 16px 4px 16px; background: #0E2A38; color: #FFFFFF; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 13px; color: #C9D6DD">Vous · [DATE]</span>
+<span>[Votre message : question ou contre-proposition.]</span>
+</div>
+<form style="margin-top: 4px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="mcm-msg" style="font-size: 14px; color: #2F4A57">Votre message</label>
+<textarea id="mcm-msg" rows="2" style="box-sizing: border-box; width: 100%; height: 72px; padding: 12px 14px; border: 1px solid #8FA5B0; border-radius: 8px; font: inherit; color: #0E2A38; resize: vertical"></textarea>
+</div>
+<button type="button" style="min-height: 48px; padding: 0 20px; border: 0; border-radius: 26px; background: #1177A8; font: inherit; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #FFFFFF; cursor: pointer">Envoyer</button>
+</form>
+</div>
+</section>
+
+</main>
+<footer style="font-family: 'Figtree', sans-serif; font-size: 15px; line-height: 1.55; color: #0E2A38; background: #FFFFFF; border-top: 1px solid #D5E0E6">
+<div style="max-width: 1200px; margin: 0 auto; padding: 56px 24px 32px; display: flex; flex-wrap: wrap; gap: 40px 64px">
+<div style="flex: 2 1 300px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 14px">
+<img src="assets/img/logo-cir.png" alt="" style="width: 56px; height: 56px; object-fit: cover; border-radius: 14px">
+<span style="font-family: 'Lora', serif; font-size: 22px; font-weight: 500; line-height: 1.2">Complexe Industriel<br>Révélation SARL</span>
+</div>
+<span style="color: #2F4A57">Total Nkolmbong, Douala, Cameroun<br>Téléphone : (00237) 678 829 313<br>WhatsApp : (00237) 622 191 931 · (00237) 699 811 635</span>
+</div>
+<nav aria-label="Liens du pied de page" style="flex: 1 1 160px; display: flex; flex-direction: column">
+<a href="#/accueil" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Accueil</a>
+<a href="#/catalogue" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Catalogue</a>
+<a href="#/realisations" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Réalisations</a>
+<a href="#/contact" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Contact</a>
+<a href="#/commandes" style="padding: 10px 0; color: #0E2A38; text-decoration: none">Mes commandes</a>
+</nav>
+<div style="flex: 1 1 180px; display: flex; flex-direction: column; align-items: flex-start; gap: 14px">
+<span style="font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #2F4A57">Entreprise partenaire</span>
+<img src="assets/img/logo-jiuye.png" alt="Jiuye" style="height: 128px; width: auto">
+</div>
+</div>
+<div style="max-width: 1200px; margin: 0 auto; padding: 20px 24px 28px; border-top: 1px solid #D5E0E6; font-size: 13px; color: #2F4A57">© 2026 Complexe Industriel Révélation SARL. Distributeur Jiuye en Afrique centrale.</div>
+</footer>
+<div class="cir-tabbar" style="position: sticky; bottom: 0; z-index: 6">
+<nav aria-label="Navigation principale" style="font-family: 'Figtree', sans-serif; background: #FFFFFF; border-top: 1px solid #D5E0E6; box-shadow: 0 -8px 24px rgba(14, 42, 56, 0.1); display: flex">
+<a href="#/accueil" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4v-9z"></path></svg>
+<span>Accueil</span>
+</a>
+<a href="#/catalogue" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h7v7H4V4zM13 4h7v7h-7V4zM4 13h7v7H4v-7zM13 13h7v7h-7v-7z"></path></svg>
+<span>Catalogue</span>
+</a>
+<a href="#/realisations" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v14H4V5zM4 16l5-5 4 4 3-3 4 4M15 9h.01"></path></svg>
+<span>Réalisations</span>
+</a>
+<a href="#/commandes" aria-current="page" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid #FF6D4C; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #1177A8; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1177A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v17H7V4zM10 9h4M10 13h4M10 17h2"></path></svg>
+<span>Commandes</span>
+</a>
+<a href="#/compte" aria-current="false" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: 62px; padding: 5px 2px 7px; border-top: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 600; color: #2F4A57; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F4A57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"></path></svg>
+<span>Compte</span>
+</a>
+</nav>
+</div>
+</div>
+</div>
+</div>
+<script src="assets/site.js"></script>
+</body>
+</html>

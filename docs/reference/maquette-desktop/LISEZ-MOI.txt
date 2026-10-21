@@ -1,0 +1,10 @@
+CIR : vue ordinateur de la plateforme
+
+1. Décompressez tout le dossier (ne sortez pas index.html du dossier).
+2. Double-cliquez sur index.html : la maquette s'ouvre dans le navigateur.
+
+Pages : Accueil (vidéo + sphère de photos), Catalogue, Fiche produit (bouton « Commander ou
+personnaliser » pour le panneau d'options), Réalisations, Se connecter / Créer un compte, Mes commandes.
+
+Le dossier "assets" contient les images, la vidéo et les polices : il doit rester à côté de index.html.
+Les textes entre crochets ([PRIX], [Nom du client]…) sont à remplacer par les vraies informations.

@@ -1,0 +1,6 @@
+CIR : vue téléphone de la plateforme
+
+1. Décompressez tout le dossier (ne sortez pas index.html du dossier).
+2. Double-cliquez sur index.html : la maquette s'ouvre dans le navigateur.
+
+Le dossier "assets" contient les images, la vidéo et les polices : il doit rester à côté de index.html.

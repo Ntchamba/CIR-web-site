@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CIR : vue ordinateur</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Figtree:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<!-- Barre du haut (commune à toutes les pages sauf « compte ») -->
+<header class="entete" data-entete>
+  <div class="barre">
+    <a class="marque" href="#/accueil"><img src="assets/img/logo-cir.webp" alt=""><span><b>CIR</b><small>Complexe Industriel Révélation</small></span></a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="#/accueil" data-lien="accueil">Accueil</a>
+      <a href="#/catalogue" data-lien="catalogue article">Catalogue</a>
+      <a href="#/realisations" data-lien="realisations">Réalisations</a>
+      <a href="#/accueil/contact" data-lien="contact">Contact</a>
+      <a href="#/commandes" data-lien="commandes">Mes commandes</a>
+    </nav>
+    <a class="btn-connexion" href="#/compte">Se connecter</a>
+  </div>
+</header>
+
+<!-- ============ ACCUEIL ============ -->
+<main class="page" data-page="accueil">
+  <section class="heros">
+    <video data-video autoplay muted playsinline poster="assets/img/video-poster-1280.webp" aria-hidden="true">
+      <source src="assets/video/fond.mp4" type="video/mp4">
+      <source src="assets/video/fond.webm" type="video/webm">
+    </video>
+    <div class="voile"></div>
+    <div class="conteneur">
+      <div>
+        <h1>Révélation<i>.</i></h1>
+        <p>Là où naissent les sols durables : la résine époxy pour la maison, l'industrie et l'entreprise.</p>
+        <a class="btn-rond" href="#/catalogue"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>Voir le catalogue</a>
+      </div>
+      <div class="sphere" aria-label="Sphère de photos de sols en résine époxy"><div class="centre"><div class="globe" data-globe></div></div></div>
+    </div>
+    <a class="defiler" href="#selection" data-ancre="selection">Découvrir ↓</a>
+  </section>
+
+  <section class="section blanche" id="selection">
+    <div class="conteneur">
+      <div class="tete">
+        <div><span class="italique">Notre sélection</span><h2>Produits à la une</h2></div>
+        <a class="lien-fleche" href="#/catalogue">Voir tout le catalogue →</a>
+      </div>
+      <div class="grille-4">
+        <a class="carte-produit" href="#/article"><div class="img"><img src="assets/img/autolissant.webp" alt=""></div><h3>Sol autolissant époxy</h3><p>[PRIX] FCFA / m²</p></a>
+        <a class="carte-produit" href="#/article"><div class="img"><img src="assets/img/sable.webp" alt=""></div><h3>Sable coloré autolissant</h3><p>[PRIX] FCFA / m²</p></a>
+        <a class="carte-produit" href="#/article"><div class="img"><img src="assets/img/terrazzo.webp" alt=""></div><h3>Terrazzo époxy</h3><p>[PRIX] FCFA / m²</p></a>
+        <a class="carte-produit" href="#/article"><div class="img"><img src="assets/img/resistance.webp" alt=""></div><h3>Finition haute résistance</h3><p>[PRIX] FCFA / m²</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="conteneur">
+      <div class="tete">
+        <div><span class="italique">Avant, après</span><h2>Nos réalisations</h2></div>
+        <a class="lien-fleche" href="#/realisations">Toutes les réalisations →</a>
+      </div>
+      <div class="grille-2 duo">
+        <figure><img src="assets/img/real-avant.webp" alt="Pièce en béton brut avant les travaux"><figcaption>Avant : béton brut</figcaption></figure>
+        <figure><img src="assets/img/real-apres.webp" alt="La même pièce avec un sol en résine époxy"><figcaption>Après : résine époxy</figcaption></figure>
+      </div>
+      <div class="grille-3" style="margin-top:34px">
+        <figure class="carte-chantier"><div class="img"><img src="assets/img/real-ecole.webp" alt=""></div><h3>[Nom du chantier]</h3><p>Entreprise · [Ville]</p></figure>
+        <figure class="carte-chantier"><div class="img"><img src="assets/img/real-allee.webp" alt=""></div><h3>[Nom du chantier]</h3><p>Maison · [Ville]</p></figure>
+        <figure class="carte-chantier"><div class="img"><img src="assets/img/real-parking.webp" alt=""></div><h3>[Nom du chantier]</h3><p>Industrie · [Ville]</p></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="section blanche">
+    <div class="conteneur">
+      <div class="tete"><div><span class="italique">Ils nous ont fait confiance</span><h2>Témoignages</h2></div></div>
+      <div class="grille-2 temoins">
+        <blockquote>« [Témoignage d'un client du CIR : deux ou trois phrases à fournir.] »<cite>[Nom du client] · Maison · [Ville]</cite></blockquote>
+        <blockquote>« [Témoignage d'un client du CIR : deux ou trois phrases à fournir.] »<cite>[Nom du client] · Industrie · [Ville]</cite></blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section class="section nuit" id="contact">
+    <div class="conteneur contact">
+      <div>
+        <span class="surtitre" style="color:#8FB8CC">Contact</span>
+        <h2>Parlons de votre sol</h2>
+        <p class="intro">Une question, un prix à négocier ou un rendu particulier en tête ? Écrivez à l'équipe.</p>
+        <dl class="coord">
+          <div><dt>Adresse</dt><dd>Total Nkolmbong, Douala, Cameroun</dd></div>
+          <div><dt>Téléphone</dt><dd>(00237) 678 829 313</dd></div>
+          <div><dt>WhatsApp</dt><dd>(00237) 622 191 931<br>(00237) 699 811 635</dd></div>
+        </dl>
+        <p style="margin-top:30px"><a class="btn bleu" href="#/accueil/contact">Écrire sur WhatsApp</a></p>
+      </div>
+      <form class="formulaire" onsubmit="return false">
+        <div class="deux">
+          <label>Nom complet<input autocomplete="name"></label>
+          <label>Téléphone ou WhatsApp<input type="tel" autocomplete="tel"></label>
+        </div>
+        <label>Votre projet concerne<select><option>Une maison</option><option>Une industrie</option><option>Une entreprise</option></select></label>
+        <label>Votre message<textarea></textarea></label>
+        <button class="btn plein" type="submit">Envoyer le message</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- ============ CATALOGUE ============ -->
+<main class="page" data-page="catalogue" hidden>
+  <section class="bandeau"><img src="assets/img/bandeau-maison-1280.webp" srcset="assets/img/bandeau-maison-800.webp 800w, assets/img/bandeau-maison-1280.webp 1280w" sizes="100vw" alt=""><div><h1>Catalogue</h1><p>Des sols durables, des sols uniques.</p></div></section>
+  <div class="fond-flou">
+    <div class="conteneur catalogue">
+      <aside class="filtres" aria-label="Filtres du catalogue">
+        <input type="search" placeholder="Rechercher…" aria-label="Rechercher un produit">
+        <div><span class="surtitre">Pour quel sol ?</span>
+          <ul data-groupe>
+            <li><button aria-pressed="true">Tous les sols</button></li><li><button aria-pressed="false">Maison</button></li><li><button aria-pressed="false">Industrie</button></li><li><button aria-pressed="false">Entreprise</button></li><li><button aria-pressed="false">Extérieur</button></li>
+          </ul>
+        </div>
+        <div><span class="surtitre">Famille</span>
+          <ul data-groupe>
+            <li><button aria-pressed="true">Toutes les familles</button></li><li><button aria-pressed="false">Finitions</button></li><li><button aria-pressed="false">Primaires époxy</button></li><li><button aria-pressed="false">Sans solvant</button></li><li><button aria-pressed="false">À base d'eau</button></li><li><button aria-pressed="false">Marquage</button></li><li><button aria-pressed="false">Sols spéciaux</button></li>
+          </ul>
+        </div>
+      </aside>
+      <div>
+        <div class="grille-3">
+          <a class="carte-produit" href="#/article"><div class="img"><img src="assets/img/autolissant.webp" alt=""></div><h3>Sol autolissant époxy</h3><p>[PRIX] FCFA / m²</p></a>
+          <a class="carte-produit" href="#/article"><div class="img"><img src="assets/img/sable.webp" alt=""></div><h3>Sable coloré autolissant</h3><p>[PRIX] FCFA / m²</p></a>
+          <a class="carte-produit" href="#/article"><div class="img"><img src="assets/img/terrazzo.webp" alt=""></div><h3>Terrazzo époxy</h3><p>[PRIX] FCFA / m²</p></a>
+          <a class="carte-produit" href="#/article"><div class="img"><img src="assets/img/lisse.webp" alt=""></div><h3>Finition époxy lisse</h3><p>[PRIX] FCFA / m²</p></a>
+          <a class="carte-produit" href="#/article"><div class="img"><img src="assets/img/mate.webp" alt=""></div><h3>Finition époxy mate</h3><p>[PRIX] FCFA / m²</p></a>
+          <a class="carte-produit" href="#/article"><div class="img"><img src="assets/img/antiderapant.webp" alt=""></div><h3>Finition antidérapante</h3><p>[PRIX] FCFA / m²</p></a>
+          <a class="carte-produit" href="#/article"><div class="img"><img src="assets/img/antiuv.webp" alt=""></div><h3>Peinture de sol anti-UV</h3><p>[PRIX] FCFA / m²</p></a>
+          <a class="carte-produit" href="#/article"><div class="img"><img src="assets/img/resistance.webp" alt=""></div><h3>Finition haute résistance</h3><p>[PRIX] FCFA / m²</p></a>
+          <a class="carte-produit" href="#/article"><div class="img"><img src="assets/img/anticorrosion.webp" alt=""></div><h3>Finition anticorrosion</h3><p>[PRIX] FCFA / m²</p></a>
+          <a class="carte-produit" href="#/article"><div class="img"><img src="assets/img/motif.webp" alt=""></div><h3>Sol à motifs</h3><p>[PRIX] FCFA / m²</p></a>
+        </div>
+        <nav class="pagination" aria-label="Pages du catalogue"><a href="#/catalogue" aria-current="page">1</a><a href="#/catalogue">2</a><a href="#/catalogue">3</a><a href="#/catalogue">Suivant →</a></nav>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ============ FICHE PRODUIT ============ -->
+<main class="page" data-page="article" hidden>
+  <section class="fiche">
+    <img src="assets/img/autolissant.webp" alt="">
+    <div class="conteneur">
+      <div>
+        <a class="retour" href="#/catalogue">← Catalogue</a>
+        <p class="surtitre" style="color:rgba(255,255,255,.8);margin:26px 0 0">Finitions · Produit du moment</p>
+        <h1>Sol autolissant<br>époxy</h1>
+        <span class="ref">Réf. YD-500 · brillant, effet miroir, sans joints</span>
+        <p class="prix">[PRIX] FCFA / m²</p>
+        <p class="desc">Une surface lisse et brillante, sans joints, dans une grande variété de couleurs. Non toxique et sans odeur.</p>
+        <div class="actions">
+          <button class="btn clair" data-act="panneau">Commander ou personnaliser <span aria-hidden="true">+</span></button>
+          <button class="btn blanc">♡ Sélectionner ce produit</button>
+        </div>
+      </div>
+      <div class="visuel">
+        <img src="assets/img/autolissant.webp" alt="Sol autolissant époxy">
+        <div class="fleches"><a href="#/article">← Préc.</a><a href="#/article">Suiv. →</a></div>
+      </div>
+    </div>
+  </section>
+  <div class="voile-panneau" data-if="panneau" data-act="fermer" hidden></div>
+  <aside class="panneau" data-if="panneau" aria-label="Options de commande" hidden>
+    <button class="fermer" data-act="fermer" aria-label="Fermer">×</button>
+    <span class="surtitre">YD-500 · Finitions</span>
+    <h2>Sol autolissant époxy</h2>
+    <div class="prix-p">[PRIX] FCFA / m²</div>
+    <div class="note">Prix indicatif, négociable avec l'équipe</div>
+    <form onsubmit="return false">
+      <label>Couleur<select><option>Choisir</option><option>Bleu</option><option>Gris</option><option>Vert</option><option>Beige</option></select></label>
+      <label>Surface (m²)<input type="number" min="1" placeholder="Ex. 45"></label>
+      <div class="puces" data-groupe><button type="button" aria-pressed="true">Maison</button><button type="button" aria-pressed="false">Industrie</button><button type="button" aria-pressed="false">Entreprise</button></div>
+      <button class="btn plein" type="submit" onclick="location.hash='#/commandes'">Lancer la commande</button>
+    </form>
+    <ul class="liste-liens">
+      <li><a href="#/commandes">Négocier le prix</a></li><li><a href="#/commandes">Envoyer un message</a></li><li><a href="#/accueil/contact">Nous contacter sur WhatsApp</a></li><li><a href="#/accueil/contact">Appeler l'équipe</a></li><li><a href="#/accueil/contact">Demander un rendu particulier</a></li><li><a href="#/accueil/contact">Demander un devis</a></li><li><a href="#/accueil/contact">Visite du chantier</a></li><li><a href="#/article">Fiche technique (PDF)</a></li><li><a href="#/realisations">Réalisations avec ce produit</a></li>
+    </ul>
+  </aside>
+</main>
+
+<!-- ============ RÉALISATIONS ============ -->
+<main class="page" data-page="realisations" hidden>
+  <section class="bandeau"><img src="assets/img/bandeau-maison-1280.webp" srcset="assets/img/bandeau-maison-800.webp 800w, assets/img/bandeau-maison-1280.webp 1280w" sizes="100vw" alt=""><div><h1>Réalisations</h1><p>La résine époxy en action, sur les chantiers déjà réalisés.</p></div></section>
+  <section class="section fond-flou">
+    <div class="conteneur">
+      <div class="grille-2 duo">
+        <figure><img src="assets/img/real-avant.webp" alt="Pièce en béton brut avant les travaux"><figcaption>Avant : béton brut</figcaption></figure>
+        <figure><img src="assets/img/real-apres.webp" alt="La même pièce avec un sol en résine époxy"><figcaption>Après : résine époxy</figcaption></figure>
+      </div>
+    </div>
+  </section>
+  <section class="section blanche">
+    <div class="conteneur">
+      <div class="tete"><div><span class="italique">Démonstration</span><h2>La transformation en vidéo</h2></div></div>
+      <div class="video-demo">
+        <video controls preload="metadata" playsinline poster="assets/img/video-poster-1280.webp" aria-label="Vidéo : une pièce en béton brut transformée par un sol en résine époxy">
+          <source src="assets/video/fond.mp4" type="video/mp4"><source src="assets/video/fond.webm" type="video/webm">
+        </video>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="conteneur">
+      <div class="onglets" data-groupe><button aria-pressed="true">Toutes</button><button aria-pressed="false">Maisons</button><button aria-pressed="false">Industries</button><button aria-pressed="false">Entreprises</button><button aria-pressed="false">Extérieur</button></div>
+      <div class="grille-3">
+        <figure class="carte-chantier"><div class="img"><img src="assets/img/real-ecole.webp" alt=""></div><h3>[Nom du chantier]</h3><p>Entreprise · [Ville]</p></figure>
+        <figure class="carte-chantier"><div class="img"><img src="assets/img/real-allee.webp" alt=""></div><h3>[Nom du chantier]</h3><p>Maison · [Ville]</p></figure>
+        <figure class="carte-chantier"><div class="img"><img src="assets/img/real-parking.webp" alt=""></div><h3>[Nom du chantier]</h3><p>Industrie · [Ville]</p></figure>
+        <figure class="carte-chantier"><div class="img"><img src="assets/img/real-pose.webp" alt=""></div><h3>[Nom du chantier]</h3><p>Industrie · [Ville]</p></figure>
+        <figure class="carte-chantier"><div class="img"><img src="assets/img/real-bidons.webp" alt=""></div><h3>[Nom du chantier]</h3><p>Extérieur · [Ville]</p></figure>
+        <figure class="carte-chantier"><div class="img"><img src="assets/img/motif.webp" alt=""></div><h3>[Nom du chantier]</h3><p>Entreprise · [Ville]</p></figure>
+      </div>
+      <div class="large-bande" style="margin-top:34px"><img src="assets/img/real-terrazzo-large.webp" alt="Grand sol en terrazzo époxy"></div>
+    </div>
+  </section>
+  <section class="section blanche">
+    <div class="conteneur">
+      <div class="tete"><div><span class="italique">Ils nous ont fait confiance</span><h2>Témoignages</h2></div></div>
+      <div class="grille-2 temoins">
+        <blockquote>« [Témoignage d'un client du CIR : deux ou trois phrases à fournir.] »<cite>[Nom du client] · Maison · [Ville]</cite></blockquote>
+        <blockquote>« [Témoignage d'un client du CIR : deux ou trois phrases à fournir.] »<cite>[Nom du client] · Industrie · [Ville]</cite></blockquote>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ COMPTE ============ -->
+<main class="page" data-page="compte" hidden>
+  <div class="compte">
+    <div class="visuel">
+      <img class="fond" src="assets/img/real-bidons.webp" alt="">
+      <a class="marque" href="#/accueil"><img src="assets/img/logo-cir.webp" alt=""><span><b>CIR</b><small>Complexe Industriel Révélation</small></span></a>
+      <div><h1>Votre sol, révélé<i>.</i></h1><p style="margin-top:22px"><a href="#/accueil">← Retour à l'accueil</a></p></div>
+    </div>
+    <div class="formes">
+      <div class="boite">
+        <div class="bascule"><button aria-pressed="true" data-act="onglet" data-onglet="connexion">Se connecter</button><button aria-pressed="false" data-act="onglet" data-onglet="inscription">Créer un compte</button></div>
+        <form data-onglet-de="connexion" onsubmit="location.hash='#/commandes';return false">
+          <label>Téléphone ou e-mail<input autocomplete="username"></label>
+          <label>Mot de passe<input type="password" autocomplete="current-password"></label>
+          <a href="#/compte" style="justify-self:end;font-size:14px">Mot de passe oublié ?</a>
+          <button class="btn plein" type="submit">Se connecter</button>
+        </form>
+        <form data-onglet-de="inscription" onsubmit="location.hash='#/commandes';return false" hidden>
+          <label>Nom complet<input autocomplete="name"></label>
+          <div class="formulaire-deux" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <label>Téléphone<input type="tel" autocomplete="tel"></label>
+            <label>E-mail<input type="email" autocomplete="email"></label>
+          </div>
+          <p class="legende">Adresse, nécessaire pour commander</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <label>Ville<input autocomplete="address-level2"></label>
+            <label>Quartier<input></label>
+          </div>
+          <label>Rue ou repère<input autocomplete="street-address"></label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <label>Mot de passe<input type="password" autocomplete="new-password"></label>
+            <label>Confirmer le mot de passe<input type="password" autocomplete="new-password"></label>
+          </div>
+          <label class="case"><input type="checkbox"> J'accepte que mes données servent au traitement de mes commandes.</label>
+          <button class="btn plein" type="submit">Créer mon compte</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ============ MES COMMANDES ============ -->
+<main class="page" data-page="commandes" hidden>
+  <section class="bandeau"><img src="assets/img/bandeau-maison-1280.webp" srcset="assets/img/bandeau-maison-800.webp 800w, assets/img/bandeau-maison-1280.webp 1280w" sizes="100vw" alt=""><div><h1>Mes commandes</h1><p>Suivez vos travaux et négociez votre revêtement avec l'équipe.</p></div></section>
+  <div class="fond-flou">
+    <div class="conteneur commandes">
+      <div class="liste-cmd">
+        <button class="cmd" aria-current="true"><img src="assets/img/autolissant.webp" alt=""><span><b>Commande [N°]</b><small>Sol autolissant époxy</small><small>[DATE] · Maison</small><span class="etiquette e-nego">En négociation</span></span></button>
+        <button class="cmd"><img src="assets/img/terrazzo.webp" alt=""><span><b>Commande [N°]</b><small>Terrazzo époxy</small><small>[DATE] · Entreprise</small><span class="etiquette e-travaux">Travaux en cours</span></span></button>
+        <button class="cmd"><img src="assets/img/mate.webp" alt=""><span><b>Commande [N°]</b><small>Finition époxy mate</small><small>[DATE] · Maison</small><span class="etiquette e-livre">Sol livré</span></span></button>
+        <a class="lien-fleche" href="#/catalogue" style="text-align:center;margin-top:8px">Nouvelle commande →</a>
+      </div>
+      <article class="detail">
+        <div class="haut">
+          <div><span class="surtitre">Commande [N°] · envoyée le [DATE]</span><h2>Sol autolissant époxy</h2><span>YD-500 · [Surface] m² · Maison</span></div>
+          <span class="etiquette e-nego">En négociation</span>
+        </div>
+        <ol class="etapes">
+          <li class="fait"><b>Demande envoyée</b><small>[DATE]</small></li>
+          <li class="encours"><b>Négociation</b><small>Étape en cours</small></li>
+          <li><b>Contrat signé</b><small>À venir</small></li>
+          <li><b>Travaux</b><small>À venir</small></li>
+          <li><b>Sol livré</b><small>À venir</small></li>
+        </ol>
+        <div class="proposition">
+          <div><span class="surtitre">Dernière proposition de l'équipe</span><div class="montant">[MONTANT] FCFA</div><small>Pose comprise · délai : [DÉLAI]</small></div>
+          <div class="boutons"><button class="btn bleu">Accepter</button><button class="btn">Proposer un autre prix</button></div>
+        </div>
+        <h3 style="font-size:22px">Échanges avec l'équipe</h3>
+        <div class="fil">
+          <div class="bulle moi"><small>Vous · [DATE]</small>[Votre message : projet et prix souhaité.]</div>
+          <div class="bulle"><small>Équipe CIR · [DATE]</small>[Réponse de l'équipe : prix et délai proposés.]</div>
+          <div class="bulle moi"><small>Vous · [DATE]</small>[Votre message : question ou contre-proposition.]</div>
+        </div>
+        <form class="ecrire" onsubmit="return false"><input aria-label="Votre message" placeholder="Votre message"><button class="btn plein" type="submit">Envoyer</button></form>
+      </article>
+    </div>
+  </div>
+</main>
+
+<!-- Pied de page (commun) -->
+<footer class="pied" data-pied>
+  <div class="conteneur">
+    <div class="colonnes">
+      <div>
+        <a class="marque" href="#/accueil"><img src="assets/img/logo-cir.webp" alt=""><span><b>Complexe Industriel<br>Révélation SARL</b></span></a>
+        <p style="margin-top:20px">Total Nkolmbong, Douala, Cameroun<br>Téléphone : (00237) 678 829 313<br>WhatsApp : (00237) 622 191 931 · (00237) 699 811 635</p>
+      </div>
+      <nav aria-label="Plan du site"><b>Navigation</b><a href="#/accueil">Accueil</a><a href="#/catalogue">Catalogue</a><a href="#/realisations">Réalisations</a><a href="#/accueil/contact">Contact</a><a href="#/commandes">Mes commandes</a></nav>
+      <div><b>Entreprise partenaire</b><div class="jiuye" style="margin-top:14px"><img src="assets/img/logo-jiuye.webp" alt="Jiuye"><span>Jiuye, fabricant de résine époxy</span></div></div>
+    </div>
+    <div class="bas">© 2026 Complexe Industriel Révélation SARL. Distributeur Jiuye en Afrique centrale.</div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>
