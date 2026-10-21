@@ -17,7 +17,7 @@ import styles from '../Selection.module.css';
  * `lienSiAjoute` : une fois le produit dans la sélection, le bouton devient un lien vers elle (carte du catalogue) ;
  * la fiche produit le laisse actif pour pouvoir ajouter un autre design.
  */
-export default function BoutonSelection({ produit, design = null, nom = '', lienSiAjoute = true, taille, variante = 'contour' }) {
+export default function BoutonSelection({ produit, design = null, nom = '', lienSiAjoute = true, taille, variante = 'contour', apparence = null }) {
   const { t } = useTraduction();
   // Sans session (carte affichée hors du fournisseur de session) : pas de bouton.
   const { utilisateur, pret } = useContext(AuthContext) ?? { pret: false };
@@ -28,12 +28,21 @@ export default function BoutonSelection({ produit, design = null, nom = '', lien
   if (!pret || utilisateur?.est_equipe || !produit) return null;
 
   const libelleAccessible = nom ? t('selection.bouton.ajouterNom', { nom }) : undefined;
+  // Apparence des maquettes (fiche produit) : bouton blanc arrondi « ♡ Sélectionner ce produit » ; « panneau » : contour (téléphone).
+  const maquette = apparence === 'fiche' || apparence === 'panneau';
+  const classeMaquette = apparence === 'fiche' ? 'm-btn blanc' : 'm-btn m-btn-contour-arrondi';
+  const contenu = maquette
+    ? <>{apparence === 'fiche' && <span aria-hidden="true">♡</span>}{t('selection.bouton.selectionner')}</>
+    : <><Icone nom="selection" taille={18} />{t('selection.bouton.ajouter')}</>;
 
   if (!utilisateur) {
     const suite = encodeURIComponent(`${pathname}${search}`);
+    if (maquette) {
+      return <Link to={`/connexion?suite=${suite}`} className={classeMaquette} aria-label={libelleAccessible}>{contenu}</Link>;
+    }
     return (
       <Bouton as={Link} to={`/connexion?suite=${suite}`} variante={variante} taille={taille} aria-label={libelleAccessible}>
-        <Icone nom="selection" taille={18} />{t('selection.bouton.ajouter')}
+        {contenu}
       </Bouton>
     );
   }
@@ -57,10 +66,15 @@ export default function BoutonSelection({ produit, design = null, nom = '', lien
   }
 
   return (
-    <div className={styles.boutonSelection}>
-      <Bouton variante={variante} taille={taille} onClick={ajouter} chargement={etat.envoi} aria-label={libelleAccessible}>
-        <Icone nom="selection" taille={18} />{t('selection.bouton.ajouter')}
-      </Bouton>
+    <div className={`${styles.boutonSelection} ${apparence === 'fiche' ? styles.surFond : ''}`}>
+      {maquette ? (
+        <button type="button" className={classeMaquette} onClick={ajouter} disabled={etat.envoi} aria-busy={etat.envoi || undefined}
+          aria-label={libelleAccessible}>{contenu}</button>
+      ) : (
+        <Bouton variante={variante} taille={taille} onClick={ajouter} chargement={etat.envoi} aria-label={libelleAccessible}>
+          {contenu}
+        </Bouton>
+      )}
       <p className={etat.erreur ? styles.erreur : styles.confirme} role="status" aria-live="polite">
         {etat.erreur}
         {etat.ajoute && (

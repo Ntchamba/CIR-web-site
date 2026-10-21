@@ -1,44 +1,17 @@
+/* Barre d'onglets du bas de la maquette téléphone : blanche, trait corail sur l'onglet courant. */
 .barre { display: none; }
 
 @media (max-width: 900px) {
   .barre {
-    position: fixed;
-    inset: auto 0 0 0;
-    z-index: 40;
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    padding-bottom: env(safe-area-inset-bottom);
-    background: rgba(243, 247, 249, 0.94);
-    backdrop-filter: blur(12px);
-    border-top: 1px solid var(--filet);
-    box-shadow: 0 -6px 20px rgba(8, 24, 32, 0.06);
+    position: fixed; inset: auto 0 0 0; z-index: 40; display: flex; padding-bottom: env(safe-area-inset-bottom);
+    background: var(--blanc); border-top: 1px solid var(--filet); box-shadow: 0 -8px 24px rgba(14, 42, 56, 0.1);
   }
 }
 
 .onglet {
-  min-height: var(--hauteur-onglets);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  border-top: 2px solid transparent;
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--encre-2);
-  text-decoration: none;
+  flex: 1 1 0; min-width: 0; box-sizing: border-box; min-height: var(--hauteur-onglets); padding: 5px 2px 7px; border-top: 3px solid transparent;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  font-size: 11px; font-weight: 600; color: var(--encre-2); text-decoration: none;
 }
 .onglet:hover { color: var(--encre); }
-.actif, .actif:hover { color: var(--bleu); border-top-color: var(--corail); font-weight: 600; }
-
-.icone { position: relative; display: inline-flex; }
-.pastille {
-  position: absolute; top: -6px; right: -10px; min-width: 16px; height: 16px; padding: 0 4px;
-  display: inline-flex; align-items: center; justify-content: center;
-  border-radius: 8px; background: var(--corail); color: var(--encre); font-size: 10px; font-weight: 700;
-}
-/* Très petit écran : six onglets ne tiennent plus ; Compte reste dans l'en-tête. */
-@media (max-width: 380px) {
-  .barre { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-  .compte { display: none; }
-}
+.onglet[aria-current='page'] { color: var(--bleu); border-top-color: var(--corail); }

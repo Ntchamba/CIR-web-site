@@ -14,13 +14,13 @@ export const PLAN_LARGE = { x: 50, y: 50, zoom: 1 };
 // exactement le même cadrage (décalage de 4 à 5 % au moins).
 export const CAMERAS = [
   { motif: '/', nom: 'accueil', bureau: { x: 74, y: 33, zoom: 1 }, tel: { x: 58, y: 31, zoom: 1 } }, // large, puis zoom (défilement) sur les fenêtres
-  { motif: '/catalogue', nom: 'catalogue', bureau: { x: 22, y: 42, zoom: 2.2 }, tel: { x: 27, y: 42, zoom: 1.5 } },
-  { motif: '/selection', nom: 'selection', bureau: { x: 27, y: 46, zoom: 2.2 }, tel: { x: 31, y: 47, zoom: 1.5 } },
+  { motif: '/catalogue', nom: 'catalogue', bureau: { x: 26, y: 42, zoom: 1.7 }, tel: { x: 27, y: 42, zoom: 1.5 } },
+  { motif: '/selection', nom: 'selection', bureau: { x: 31, y: 46, zoom: 1.9 }, tel: { x: 31, y: 47, zoom: 1.5 } },
   { motif: '/catalogue/:slug', nom: 'produit', bureau: { x: 20, y: 33, zoom: 3 }, tel: { x: 14, y: 52, zoom: 1.8 } },
-  { motif: '/realisations', nom: 'realisations', bureau: { x: 72, y: 55, zoom: 2.2 }, tel: { x: 46, y: 55, zoom: 1.6 } },
+  { motif: '/realisations', nom: 'realisations', bureau: { x: 70, y: 55, zoom: 1.7 }, tel: { x: 46, y: 55, zoom: 1.6 } },
   { motif: '/actualites', nom: 'actualites', bureau: { x: 69, y: 9, zoom: 2.4 }, tel: { x: 80, y: 9, zoom: 1.7 } },
   { motif: '/actualites/:slug', nom: 'actualite', bureau: { x: 64, y: 12, zoom: 2.7 }, tel: { x: 74, y: 12, zoom: 1.8 } },
-  { motif: '/commandes', nom: 'commandes', bureau: { x: 60, y: 80, zoom: 2.2 }, tel: { x: 57, y: 82, zoom: 1.6 } },
+  { motif: '/commandes', nom: 'commandes', bureau: { x: 52, y: 66, zoom: 1.6 }, tel: { x: 57, y: 82, zoom: 1.6 } },
   { motif: '/commandes/nouvelle', nom: 'nouvelle-commande', bureau: { x: 55, y: 84, zoom: 2.5 }, tel: { x: 50, y: 85, zoom: 1.7 } },
   { motif: '/commandes/:id', nom: 'commande', bureau: { x: 65, y: 76, zoom: 2.5 }, tel: { x: 63, y: 78, zoom: 1.7 } },
   { motif: '/commandes/:id/payer', nom: 'paiement', bureau: { x: 50, y: 78, zoom: 2.8 }, tel: { x: 52, y: 76, zoom: 1.8 } },
@@ -35,7 +35,7 @@ export const CAMERAS = [
   { motif: '/compte', nom: 'compte', bureau: { x: 83, y: 46, zoom: 2.2 }, tel: { x: 83, y: 38, zoom: 1.6 } },
 ];
 
-const ECRAN_TEL = '(max-width: 700px)';
+const ECRAN_TEL = '(max-width: 900px)';
 export const estTelephone = () => typeof window !== 'undefined' && typeof window.matchMedia === 'function'
   && window.matchMedia(ECRAN_TEL).matches;
 

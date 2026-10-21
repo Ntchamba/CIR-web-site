@@ -1,5 +1,5 @@
-// BF-11 : page Contact (/contact), publique : coordonnées de l'équipe et formulaire.
-import Icone from '@partage/ui/Icone.jsx';
+// BF-11 : page Contact (/contact), publique : la section Contact de la maquette (coordonnées, WhatsApp, formulaire),
+// avec l'appel de l'équipe (fonction absente de la maquette) sous les boutons.
 import usePageMeta from '@partage/utils/usePageMeta.js';
 
 import { useTraduction } from '@/i18n/index.js';
@@ -12,24 +12,14 @@ import styles from './Contact.module.css';
 export default function ContactPage() {
   const { t } = useTraduction();
   usePageMeta(t('contact.page.titre'), t('contact.page.description'));
-  const { telephones, whatsapp, email } = useCoordonnees();
+  const { email } = useCoordonnees();
   return (
-    <>
-      <div className="conteneur section">
-        <h1 className="titre-page">{t('contact.page.titre')}</h1>
-        <p className={styles.intro}>{t('contact.page.intro')}</p>
-        <div className={styles.coordonnees}>
-          {telephones.map((tel) => (
-            <a key={tel.lien} href={tel.lien}><Icone nom="tel" taille={18} />&nbsp;{t('pied.telephone', { numero: tel.affichage })}</a>
-          ))}
-          <a href={whatsapp.lien} target="_blank" rel="noopener noreferrer">
-            <Icone nom="message" taille={18} />&nbsp;{t('pied.whatsapp', { numero: whatsapp.affichage })}
-          </a>
-          {email && <a href={`mailto:${email}`}>{t('pied.email', { email })}</a>}
+    <SectionContact niveau={1} className={styles.pageContact} id="contact-page"
+      enfants={(
+        <div className={styles.appelContact}>
+          {email && <p><a href={`mailto:${email}`}>{t('pied.email', { email })}</a></p>}
+          <BoutonAppel className={styles.appel} />
         </div>
-        <BoutonAppel className={styles.appel} />
-      </div>
-      <SectionContact />
-    </>
+      )} />
   );
 }

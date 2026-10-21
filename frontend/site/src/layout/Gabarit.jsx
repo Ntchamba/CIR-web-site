@@ -7,7 +7,7 @@ import Chargement from '@partage/ui/Chargement.jsx';
 import { useCamera } from '@/app/camera.js';
 import { useChangementDePage } from '@/app/changementDePage.js';
 import { useProfondeur } from '@/app/profondeur.js';
-import { PAGES_A_BANDEAU } from '@/composants/bandeau.js';
+import { nomDeVue } from '@/app/cameras.js';
 import { useTraduction } from '@/i18n/index.js';
 import SalleAppel from '@/modules/appels/composants/SalleAppel.jsx';
 import BandeauDirect from '@/modules/notifications/composants/BandeauDirect.jsx';
@@ -20,12 +20,16 @@ import styles from './Gabarit.module.css';
 // L'assistant est dans un chunk séparé, demandé seulement quand le navigateur est au repos : il ne retarde pas la page.
 const BulleAssistant = lazy(() => import('@/modules/assistant/BulleAssistant.jsx'));
 
+// Vues qui reproduisent une page des maquettes (accueil, catalogue, fiche produit, réalisations, compte, commandes).
+const VUES_DE_MAQUETTE = ['accueil', 'catalogue', 'produit', 'realisations', 'connexion', 'inscription', 'commandes', 'commande'];
+
 export default function Gabarit() {
   const { t } = useTraduction();
   const { pathname } = useLocation();
-  // L'accueil est une suite de salles et trois pages ont un bandeau photo (elles posent elles-mêmes leur feuille de verre) ;
-  // les autres vues reposent sur une feuille de verre posée ici.
-  const sansFeuille = pathname === '/' || PAGES_A_BANDEAU.includes(pathname);
+  // Les pages des maquettes posent elles-mêmes leur mise en page pleine largeur ; les autres vues (messagerie, paiement,
+  // notifications…) reposent sur une page claire : voile blanc flouté sur la scène du salon, comme les maquettes.
+  const vue = nomDeVue(pathname);
+  const pageDeMaquette = VUES_DE_MAQUETTE.includes(vue);
 
   // Entrée en profondeur : `data-plat` sur <html> quand la page doit rester à plat (voir app/profondeur.js).
   useProfondeur();
@@ -48,7 +52,7 @@ export default function Gabarit() {
   }, []);
 
   return (
-    <div className={styles.page}>
+    <div className={styles.page} data-vue={vue}>
       {/* Scène : le salon (dernière image de la vidéo), un seul élément pour toute l'application, derrière toutes les
           pages (décoratif). Sa « caméra » change selon la page (variables --cam-*, styles/profondeur.css). */}
       <div className="scene" ref={refScene} aria-hidden="true">
@@ -63,7 +67,7 @@ export default function Gabarit() {
         {/* Page chargée à la demande : l'en-tête et le pied de page restent affichés pendant le chargement. */}
         <Suspense fallback={<Chargement plein />}>
           <div key={pathname} className="page-entree">
-            {sansFeuille ? <Outlet /> : <div className="verre"><Outlet /></div>}
+            {pageDeMaquette ? <Outlet /> : <div className="m-fond-flou m-page-claire"><Outlet /></div>}
           </div>
         </Suspense>
       </main>

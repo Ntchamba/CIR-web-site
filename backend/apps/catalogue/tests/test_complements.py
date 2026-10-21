@@ -263,20 +263,22 @@ class DonneesDeReferenceTests(TestCase):
         self.assertEqual(Famille.objects.count(), 9)
         references = set(Produit.objects.values_list("reference", flat=True))
         self.assertEqual(references, {"YD-500", "YD-306", "YD-518", "YD-103", "YD-104", "YD-205", "YD-106W",
-                                      "YD-206W", "YD-306W"})
+                                      "YD-206W", "YD-306W", ""})
+        self.assertEqual(Produit.objects.filter(reference="").count(), 7)
         self.assertFalse(Produit.objects.exclude(prix=None).exists())
         self.assertFalse(Produit.objects.filter(en_ligne=False).exists())
         self.assertFalse(ImageProduit.objects.exists() or Design.objects.exists())
         self.assertFalse(Caracteristique.objects.exists() or Couche.objects.exists())
         self.assertEqual(set(Produit.objects.filter(a_la_une=True).values_list("reference", flat=True)),
-                         {"YD-500", "YD-306", "YD-518"})
+                         {"YD-500", "YD-306", "YD-518", ""})
+        self.assertEqual(Produit.objects.filter(a_la_une=True).count(), 4)
         for famille in Famille.objects.all():
             with self.subTest(famille=famille.nom):
                 self.assertEqual(famille.langues_incompletes(), [])
         self.assertEqual(Produit.objects.get(reference="YD-205").famille.nom, "Couche intermédiaire époxy")
         self.assertEqual(Produit.objects.get(reference="YD-306W").famille.nom, "Époxy sans solvant")
         call_command("charger_catalogue_reference", stdout=StringIO())
-        self.assertEqual((Famille.objects.count(), Produit.objects.count()), (9, 9))
+        self.assertEqual((Famille.objects.count(), Produit.objects.count()), (9, 16))
 
 
 class RechercheTraductionsTests(APITestCase):

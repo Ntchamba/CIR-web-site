@@ -1,126 +1,100 @@
-/* Module accueil. */
+/* Module accueil : haut de page de la maquette (vidéo, titre, sphère de photos), puis les sections de la maquette. */
 
-/* Bandeaux */
-.bandeaux { background: var(--corail); color: var(--encre); font-weight: 600; font-size: 15px; }
-.bandeaux ul { list-style: none; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 0 32px; }
-.bandeaux li { display: flex; align-items: center; min-height: var(--cible-tactile); text-align: center; }
-.bandeaux a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
-
-/* Haut de page : en entrée 3D, une « scène » épinglée (sticky) pendant que la scène de fond zoome vers les fenêtres
-   puis que la lumière blanche remplit l'écran (styles/profondeur.css). À plat : un haut de page normal. */
+/* En entrée 3D : une « scène » épinglée (sticky) pendant que la scène de fond zoome vers les fenêtres puis que la
+   lumière blanche remplit l'écran (styles/profondeur.css). À plat : le haut de page de la maquette, tel quel. */
 .entree { position: relative; margin-top: calc(var(--hauteur-entete) * -1); }
-@media (max-width: 900px) { .entree { margin-top: calc(var(--hauteur-entete-mobile) * -1); } }
-.cadre { position: relative; overflow: hidden; isolation: isolate; color: var(--blanc); }
+.cadre { position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; isolation: isolate; background: var(--encre); color: var(--blanc); }
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     :global(html:not([data-plat])) .entree { height: calc(100svh + var(--entree-h)); }
-    :global(html:not([data-plat])) .cadre { position: sticky; top: 0; height: 100svh; display: flex; align-items: center; }
+    :global(html:not([data-plat])) .cadre { position: sticky; top: 0; height: 100svh; min-height: 0; background: transparent; }
   }
 }
 .fondHero { position: absolute; inset: 0; z-index: -1; opacity: 1; transition: opacity 0.6s ease; }
 .fondFini { opacity: 0; }
 .fond { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.voile { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(14, 42, 56, 0.88) 0%, rgba(14, 42, 56, 0.55) 55%, rgba(14, 42, 56, 0.25) 100%); }
-.heroContenu {
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 24px;
-  width: 100%; min-height: min(100svh, 820px); padding-block: calc(var(--hauteur-entete) + 40px) 88px;
+.voile {
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(8, 24, 32, 0.55) 0%, rgba(8, 24, 32, 0.18) 50%, rgba(8, 24, 32, 0) 75%),
+    linear-gradient(180deg, rgba(8, 24, 32, 0.35) 0%, rgba(8, 24, 32, 0) 22%);
 }
-.heroSeul { grid-template-columns: minmax(0, 1fr); }
-.heroSeul .heroTexte { max-width: 720px; }
-.heroTexte { display: flex; flex-direction: column; gap: 18px; }
-.surtitreHero { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--corail); }
-.heroTexte h1 { font-size: clamp(38px, 6vw, 64px); font-style: italic; line-height: 1.1; }
-.heroTexte p { font-size: clamp(17px, 2vw, 20px); color: rgba(255, 255, 255, 0.88); max-width: 560px; }
-.actionsHero { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+.contenu {
+  position: relative; width: min(var(--large), 100% - 64px); margin-inline: auto; padding-top: 84px;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); align-items: center; gap: 24px;
+}
+.seul { grid-template-columns: minmax(0, 1fr); }
+.contenu h1 {
+  font-size: clamp(64px, 7vw, 104px); font-weight: 600; color: var(--blanc); letter-spacing: -0.01em; line-height: 1.15;
+  text-shadow: 0 1px 2px rgba(8, 24, 32, 0.6), 0 2px 30px rgba(8, 24, 32, 0.6);
+}
+.contenu h1 i { font-style: normal; color: var(--corail); }
+.contenu p { max-width: 470px; margin: 22px 0 34px; font-size: 20px; font-weight: 500; color: var(--blanc); text-shadow: 0 1px 2px rgba(8, 24, 32, 0.7), 0 2px 18px rgba(8, 24, 32, 0.8); }
+.enAttente { visibility: hidden; }
+.decouvrir {
+  position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); display: inline-flex; align-items: center; min-height: var(--cible-tactile);
+  padding: 0 12px; color: var(--blanc); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; opacity: 0.85;
+}
+.decouvrir:hover { color: var(--blanc); opacity: 1; text-decoration: underline; }
 
-/* Sphère */
-.sphere {
-  --echelle: 0.8;
-  position: relative; height: calc(640px * var(--echelle)); perspective: 1400px;
-  display: flex; align-items: center; justify-content: center;
+/* Sphère : trois anneaux qui tournent ensemble */
+.cadreSphere { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.sphere { position: relative; width: 100%; height: 620px; }
+.centre { position: absolute; left: 50%; top: 50%; width: 0; height: 0; perspective: 1600px; }
+.globe { position: relative; width: 0; height: 0; transform-style: preserve-3d; animation: tourne 46s linear infinite; }
+.anneau { position: absolute; width: 0; height: 0; transform-style: preserve-3d; }
+.tuile { position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d; }
+.tuile img {
+  position: absolute; max-width: none; object-fit: cover; border-radius: 8px; box-shadow: 0 10px 26px rgba(14, 42, 56, 0.3);
+  transition: scale 0.25s, box-shadow 0.25s; cursor: pointer;
 }
-.globe {
-  list-style: none; margin: 0; padding: 0;
-  position: relative; width: 0; height: 0; transform-style: preserve-3d;
-  scale: var(--echelle);
-  animation: tourne 48s linear infinite;
-}
+.tuile:hover img, .tuile:focus-visible img { scale: 1.25; box-shadow: 0 20px 48px rgba(8, 24, 32, 0.55); }
+.tuile:focus-visible { outline: none; }
+.tuile:focus-visible img { outline: 3px solid var(--corail); outline-offset: 2px; }
 .globe:hover, .globe:focus-within { animation-play-state: paused; }
 .globeArrete { animation-play-state: paused; }
-/* Photo focalisée au clavier : la sphère tourne pour la placer face au visiteur. */
-.globeCible { animation: none; transform: rotateX(-10deg) rotateY(var(--cible)); transition: transform 0.4s ease; }
-.cadreSphere { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.cadreSphere .sphere { width: 100%; }
+@keyframes tourne { from { transform: rotateX(-12deg) rotateY(0deg); } to { transform: rotateX(-12deg) rotateY(360deg); } }
+@media (prefers-reduced-motion: reduce) { .globe { animation: none; transform: rotateX(-12deg); } }
 .pauseSphere {
-  min-height: var(--cible-tactile); padding: 0 18px;
-  border: 1px solid rgba(255, 255, 255, 0.5); border-radius: var(--pastille); background: rgba(14, 42, 56, 0.6);
-  color: var(--blanc); font-size: 13px; font-weight: 600;
+  position: absolute; right: 0; bottom: 0; min-height: var(--cible-tactile); padding: 0 16px; border: 1px solid rgba(255, 255, 255, 0.55); border-radius: var(--pastille);
+  background: rgba(8, 24, 32, 0.45); color: var(--blanc); font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
 }
 .pauseSphere:hover { border-color: var(--blanc); }
-.tuile { position: absolute; left: -90px; top: -75px; width: 180px; height: 150px; transform-style: preserve-3d; }
-.tuile a { display: block; width: 100%; height: 100%; border-radius: 8px; backface-visibility: hidden; }
-.tuile img { backface-visibility: hidden; }
-.tuile img {
-  width: 100%; height: 100%; object-fit: cover; border-radius: 8px;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35); transition: scale 0.25s ease;
-}
-.tuile a:hover img, .tuile a:focus-visible img { scale: 1.25; }
-@keyframes tourne {
-  from { transform: rotateX(-10deg) rotateY(0deg); }
-  to { transform: rotateX(-10deg) rotateY(360deg); }
-}
-@media (prefers-reduced-motion: reduce) { .globe { animation: none; } .globeCible { transition: none; } }
-.enAttente { visibility: hidden; }
-
 .grilleSphere { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
 .grilleSphere a { display: block; border-radius: 10px; overflow: hidden; }
 .grilleSphere img { width: 100%; aspect-ratio: 6 / 5; object-fit: cover; }
 
-/* Sections */
-.grille { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; }
-.grille > li { display: flex; }
+/* Bandeaux d'annonce de l'équipe (absents des maquettes : fine barre sous le haut de page) */
+.bandeaux { background: var(--corail); color: var(--encre); font-weight: 600; font-size: 15px; }
+.bandeaux ul { list-style: none; margin: 0 auto; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 0 32px; }
+.bandeaux li { display: flex; align-items: center; min-height: var(--cible-tactile); text-align: center; }
+.bandeaux a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 
-.usages { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
-.usage {
-  height: 100%; display: flex; flex-direction: column; gap: 8px; padding: 22px;
-  border-radius: var(--rayon-l); background: var(--blanc); border: 1px solid var(--filet);
-  color: var(--encre); text-decoration: none; transition: box-shadow var(--transition), border-color var(--transition);
-}
-.usage:hover { color: var(--encre); border-color: var(--bleu); box-shadow: var(--ombre); }
-.usage strong { font-family: var(--police-titre); font-size: 22px; font-weight: 500; color: var(--bleu); }
-.usage span { color: var(--encre-2); font-size: 15px; }
+/* Téléphone : « Réalisations » (deux cartes) sous le haut de page, sur fond d'encre */
+.realisationsTel { display: none; }
 
-/* Salles : panneaux de verre posés en profondeur sous le haut de page (voir styles/global.css, section.salle) */
-.salles { padding-top: clamp(20px, 3vw, 36px); }
-.decouvrir {
-  position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%);
-  display: inline-flex; align-items: center; gap: 8px; min-height: var(--cible-tactile); padding: 0 18px;
-  border-radius: var(--pastille); background: rgba(14, 42, 56, 0.55); color: var(--blanc);
-  font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
-}
-.decouvrir:hover { color: var(--blanc); background: rgba(14, 42, 56, 0.8); }
-.decouvrir svg { transform: rotate(90deg); }
-
-/* Partenaire */
-.partenaire { color: var(--blanc); }
-.partenaireContenu { display: flex; align-items: center; gap: 40px; }
-.partenaireContenu img { flex-shrink: 0; width: 96px; height: auto; background: var(--blanc); border-radius: var(--rayon); padding: 12px; }
-.partenaireContenu h2 { font-size: clamp(26px, 3.6vw, 34px); margin-bottom: 10px; }
-.partenaireContenu p { color: rgba(255, 255, 255, 0.85); max-width: 680px; }
-.surtitreClair { display: block; margin-bottom: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--corail); }
-.lienClair { display: inline-flex; align-items: center; min-height: var(--cible-tactile); margin-top: 8px; color: var(--blanc); font-weight: 600; }
-.lienClair:hover { color: var(--corail); }
-
-@media (max-width: 1080px) {
-  .sphere { --echelle: 0.62; }
-  .usages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 1100px) {
+  .contenu { grid-template-columns: minmax(0, 1fr); }
+  .sphere { height: 560px; }
 }
 @media (max-width: 900px) {
-  .heroContenu { grid-template-columns: 1fr; min-height: 0; padding-block: calc(var(--hauteur-entete-mobile) + 32px) 72px; }
-  .sphere { --echelle: 0.5; }
-}
-@media (max-width: 520px) {
-  .usages { grid-template-columns: 1fr; }
-  .partenaireContenu { flex-direction: column; align-items: flex-start; gap: 20px; }
-  .sphere { --echelle: 0.42; }
+  .entree { margin-top: calc(var(--hauteur-entete-mobile) * -1); }
+  .cadre { align-items: flex-start; }
+  .contenu { width: 100%; padding: calc(var(--hauteur-entete-mobile) + 12px) 20px 32px; gap: 18px; display: flex; flex-direction: column; align-items: stretch; }
+  .contenu h1 { font-size: 56px; line-height: 1; text-shadow: 0 1px 2px rgba(8, 24, 32, 0.6), 0 2px 24px rgba(8, 24, 32, 0.7); }
+  .contenu p { margin: 0; max-width: none; font-size: 18px; line-height: 1.45; }
+  .contenu :global(.m-btn-rond) { align-self: flex-start; padding-right: 22px; gap: 14px; border: 1px solid var(--blanc); border-radius: 32px; box-shadow: 0 8px 24px rgba(8, 24, 32, 0.3); }
+  .contenu :global(.m-btn-rond) span { width: 44px; height: 44px; }
+  .cadreSphere { align-items: center; }
+  .pauseSphere { right: auto; left: 50%; transform: translateX(-50%); bottom: -4px; }
+  .sphere { width: 334px; height: 334px; overflow: hidden; }
+  .centre { transform: scale(0.44); perspective: 1400px; }
+  .globe { animation-duration: 40s; }
+  .decouvrir { display: none; }
+  .realisationsTel { display: block; background: var(--encre); color: var(--blanc); padding: 4px 20px 32px; }
+  .realisationsTel strong { display: block; margin-bottom: 14px; font-size: 17px; font-weight: 600; }
+  .realisationsTel ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 12px; }
+  .realisationsTel li { flex: 1 1 0; }
+  .realisationsTel a { position: relative; display: block; height: 170px; border-radius: 22px; overflow: hidden; box-shadow: 0 14px 30px rgba(14, 42, 56, 0.2); }
+  .realisationsTel img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .realisationsTel span { position: absolute; left: 12px; bottom: 12px; padding: 4px 12px; border-radius: 14px; background: rgba(14, 42, 56, 0.82); font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--blanc); }
 }

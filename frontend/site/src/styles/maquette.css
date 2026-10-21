@@ -32,6 +32,7 @@
 .m-btn.clair:hover { color: var(--blanc); }
 .m-btn.blanc { background: var(--blanc); border-color: var(--blanc); border-radius: 30px; box-shadow: 0 8px 24px rgba(8, 24, 32, 0.25); }
 .m-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.m-btn-contour-arrondi { border-radius: 26px; width: 100%; }
 .m-btn-rond {
   display: inline-flex; align-items: center; gap: 16px; padding: 6px 26px 6px 6px; border-radius: 34px;
   background: var(--blanc); color: var(--encre); font-size: 13px; font-weight: 600; letter-spacing: 0.1em;
@@ -102,6 +103,7 @@
   width: 100%; min-height: 48px; padding: 12px 14px; border: 1px solid var(--filet); border-radius: 8px; background: var(--fond);
   font-weight: 400; font-family: inherit; font-size: inherit; color: var(--encre);
 }
+.m-formulaire fieldset label { font-weight: 400; }
 .m-formulaire textarea, .m-champs textarea { min-height: 120px; resize: vertical; }
 .m-formulaire input:focus, .m-formulaire select:focus, .m-formulaire textarea:focus,
 .m-champs input:focus, .m-champs select:focus, .m-champs textarea:focus { outline: 2px solid var(--bleu); outline-offset: 1px; }
@@ -118,7 +120,8 @@
 .m-bandeau p { margin: 12px auto 0; max-width: 620px; font-family: var(--police-titre); font-size: 22px; text-shadow: 0 1px 14px rgba(8, 24, 32, 0.6); }
 
 /* ---------- Page claire générique (pages sans maquette : messagerie, paiement, notifications…) ---------- */
-.m-page-claire { padding-top: 24px; min-height: 60vh; }
+.m-page-claire { padding-top: calc(var(--hauteur-entete) + 24px); min-height: 70vh; }
+@media (max-width: 900px) { .m-page-claire { padding-top: 24px; } }
 
 /* ---------- Catalogue ---------- */
 .m-catalogue { display: grid; grid-template-columns: 230px 1fr; gap: 56px; padding: 70px 0 110px; }
@@ -346,4 +349,13 @@
   .m-bulle { max-width: 86%; border-radius: 16px 16px 16px 4px; }
   .m-bulle.moi { background: var(--encre); color: var(--blanc); border-radius: 16px 16px 4px 16px; }
   .m-bulle.moi small { color: #c9d6dd; }
+}
+
+/* Pages hors cadre : l'écran de connexion n'a ni en-tête ni pied de page (il porte son propre logo) ; la fiche produit
+   est plein écran sur téléphone (ni en-tête, ni barre d'onglets, ni pied de page). */
+[data-vue='connexion'] [data-vt='entete'], [data-vue='inscription'] [data-vt='entete'],
+[data-vue='connexion'] [data-pied], [data-vue='inscription'] [data-pied] { display: none; }
+@media (max-width: 900px) {
+  [data-vue='produit'] [data-vt='entete'], [data-vue='produit'] [data-vt='onglets'], [data-vue='produit'] [data-pied] { display: none; }
+  body:has([data-vue='produit']) { padding-bottom: 0; }
 }

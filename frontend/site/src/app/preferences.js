@@ -51,3 +51,19 @@ export const profondeurActive = () =>
 export const transitionPossible = () =>
   typeof document !== 'undefined' && typeof document.startViewTransition === 'function'
   && !mouvementReduit() && !economieDonnees() && !appareilFaible();
+
+const REQUETE_TELEPHONE = '(max-width: 900px)';
+const mediaTelephone = () => (typeof window !== 'undefined' && typeof window.matchMedia === 'function' ? window.matchMedia(REQUETE_TELEPHONE) : null);
+
+/** Crochet : vrai en affichage téléphone (mêmes 900 px que la barre d'onglets et les feuilles de style). */
+export function useEcranTelephone() {
+  return useSyncExternalStore(
+    (rappel) => {
+      const m = mediaTelephone();
+      m?.addEventListener?.('change', rappel);
+      return () => m?.removeEventListener?.('change', rappel);
+    },
+    () => Boolean(mediaTelephone()?.matches),
+    () => false,
+  );
+}

@@ -4,7 +4,10 @@ import '@fontsource-variable/lora/wght-italic.css';
 import '@fontsource-variable/figtree/index.css';
 import '@partage/styles/jetons.css';
 import '@partage/styles/base.css';
+import '@fontsource/dm-mono/400.css';
+import '@fontsource/dm-mono/500.css';
 import '../styles/global.css';
+import '../styles/maquette.css';
 import '../styles/profondeur.css';
 
 import { StrictMode } from 'react';

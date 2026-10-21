@@ -22,9 +22,10 @@ export function validerContact(form, connecte, telephoneDuCompte = false) {
   return erreurs;
 }
 
-/** Corps envoyé : seuls les champs remplis, le champ piège toujours (vide pour un humain). */
-export function corpsContact(form, produit) {
-  const corps = { type: form.type, message: form.message.trim(), site_web: form.site_web };
+/** Corps envoyé : seuls les champs remplis, le champ piège toujours (vide pour un humain). `prefixe` : ligne ajoutée avant le message (projet choisi). */
+export function corpsContact(form, produit, prefixe = '') {
+  const message = prefixe ? `${prefixe}\n${form.message.trim()}` : form.message.trim();
+  const corps = { type: form.type, message, site_web: form.site_web };
   ['nom', 'email', 'telephone'].forEach((c) => {
     if (form[c].trim()) corps[c] = form[c].trim();
   });

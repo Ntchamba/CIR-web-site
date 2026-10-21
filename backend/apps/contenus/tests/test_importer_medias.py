@@ -648,3 +648,20 @@ class ImportProduitsTests(ImporterMediasTestCase):
         manifeste = json.loads(chemin.read_text(encoding="utf-8"))
         modifier(manifeste)
         chemin.write_text(json.dumps(manifeste), encoding="utf-8")
+
+
+class CatalogueDeReferenceEtImagesTests(ImporterMediasTestCase):
+    """Test d'ensemble : catalogue de référence fusionné, puis import des médias."""
+
+    def test_six_produits_dotes_quatre_sans_image(self):
+        from apps.catalogue.models import ImageProduit, Produit
+        call_command("charger_catalogue_reference", stdout=StringIO())
+        sortie = self.importer()
+        self.assertNotIn("absent du catalogue", sortie)
+        self.assertEqual(ImageProduit.objects.count(), 6)
+        avec = set(ImageProduit.objects.values_list("produit__nom", flat=True))
+        self.assertEqual(avec, set(ImportProduitsTests.AVEC))
+        for nom in ImportProduitsTests.SANS:
+            self.assertFalse(Produit.objects.get(nom=nom).images.exists(), nom)
+        self.importer()
+        self.assertEqual(ImageProduit.objects.count(), 6)

@@ -67,11 +67,11 @@ class CommandeReferenceTests(TestCase):
         call_command("charger_catalogue_reference", stdout=StringIO())
         call_command("charger_catalogue_reference", stdout=StringIO())
         self.assertEqual(Famille.objects.count(), 9)
-        self.assertEqual(Produit.objects.count(), 9)
+        self.assertEqual(Produit.objects.count(), 16)
         self.assertFalse(Produit.objects.filter(prix__isnull=False).exists())
         self.assertTrue(all(p.en_ligne for p in Produit.objects.all()))
         self.assertEqual(set(Produit.objects.filter(a_la_une=True).values_list("reference", flat=True)),
-                         {"YD-500", "YD-306", "YD-518"})
+                         {"YD-500", "YD-306", "YD-518", ""})
         for famille in Famille.objects.all():
             self.assertEqual(famille.langues_incompletes(), [], famille.nom)
         for produit in Produit.objects.all():
@@ -83,3 +83,68 @@ class CommandeReferenceTests(TestCase):
         call_command("charger_catalogue_reference", stdout=StringIO())
         p = Produit.objects.get(reference="YD-500")
         self.assertEqual((p.nom, p.prix), ("Nom choisi", 9000))
+
+
+class FusionCatalogueMaquetteTests(TestCase):
+    def charger(self):
+        call_command("charger_catalogue_reference", stdout=StringIO())
+
+    def test_liste_finale_et_valeurs_de_depart(self):
+        self.charger()
+        attendus = {
+            "Finition époxy lisse": ("Finitions", "MI", False), "Finition époxy mate": ("Finitions", "ME", False),
+            "Finition antidérapante": ("Finitions", "IX", False),
+            "Peinture de sol anti-UV": ("Gamme à base d'eau", "X", False),
+            "Finition haute résistance": ("Époxy sans solvant", "I", True),
+            "Finition anticorrosion": ("Primaires époxy", "I", False), "Sol à motifs": ("Sols spéciaux", "ME", False),
+        }
+        for nom, (famille, usages, une) in attendus.items():
+            p = Produit.objects.get(nom=nom)
+            self.assertEqual((p.reference, p.famille.nom, "".join(u for u, c in zip("MIEX", (
+                p.pour_maison, p.pour_industrie, p.pour_entreprise, p.pour_exterieur)) if c), p.a_la_une, p.en_ligne,
+                p.prix, p.accroche, p.description), ("", famille, usages, une, True, None, "", ""), nom)
+            self.assertEqual(p.langues_incompletes(), [], nom)
+
+    def test_noms_maquette_et_texte_yd_500(self):
+        self.charger()
+        yd500, yd306 = Produit.objects.get(reference="YD-500"), Produit.objects.get(reference="YD-306")
+        self.assertEqual((yd500.nom, yd306.nom), ("Sol autolissant époxy", "Sable coloré autolissant"))
+        self.assertEqual(yd500.accroche, "brillant, effet miroir, sans joints")
+        self.assertTrue(yd500.description.startswith("Une surface lisse et brillante"))
+        self.assertEqual(yd306.accroche, "")
+        self.assertEqual(Produit.objects.get(reference="YD-518").nom, "Terrazzo époxy")
+        for code in ("en", "zh", "de", "ja"):
+            self.assertTrue(yd500.traduit("accroche", code) != yd500.accroche)
+
+    def test_ancienne_base_est_mise_a_jour_sans_ecraser_l_equipe(self):
+        self.charger()
+        anciens = {"YD-500": "Sol autolissant", "YD-306": "Sable coloré"}
+        for reference, nom in anciens.items():
+            Produit.objects.filter(reference=reference).update(nom=nom, accroche="", description="", traductions={
+                "en": {"nom": "Self-levelling floor" if reference == "YD-500" else "Coloured sand"},
+                "de": {"nom": "Nom de l'équipe"}})
+        Produit.objects.filter(reference="YD-306").update(nom="Sable coloré", prix=5000)
+        Produit.objects.filter(reference="YD-518").update(nom="Terrazzo maison")
+        Produit.objects.filter(nom="Sol à motifs").update(nom="Sol à MOTIFS")
+        self.charger()
+        yd500, yd306 = Produit.objects.get(reference="YD-500"), Produit.objects.get(reference="YD-306")
+        self.assertEqual((yd500.nom, yd306.nom, yd306.prix), ("Sol autolissant époxy", "Sable coloré autolissant", 5000))
+        self.assertEqual(yd500.traductions["en"]["nom"], "Epoxy self-levelling floor")
+        self.assertEqual(yd500.traductions["de"]["nom"], "Nom de l'équipe")
+        self.assertEqual(Produit.objects.get(reference="YD-518").nom, "Terrazzo maison")
+        self.assertEqual(Produit.objects.filter(nom__iexact="Sol à motifs").count(), 1)  # pas de doublon
+        self.assertEqual(Produit.objects.count(), 16)
+
+    def test_nom_modifie_par_l_equipe_et_textes_existants_intacts(self):
+        self.charger()
+        Produit.objects.filter(reference="YD-500").update(nom="Sol autolissant", accroche="Mon texte",
+                                                          description="Ma description")
+        Produit.objects.filter(reference="YD-306").update(nom="Mon sable")
+        self.charger()
+        yd500 = Produit.objects.get(reference="YD-500")
+        self.assertEqual((yd500.nom, yd500.accroche, yd500.description),
+                         ("Sol autolissant époxy", "Mon texte", "Ma description"))
+        self.assertEqual(Produit.objects.get(reference="YD-306").nom, "Mon sable")
+        Produit.objects.filter(reference="YD-500").update(nom="Nom de l'équipe")
+        self.charger()
+        self.assertEqual(Produit.objects.get(reference="YD-500").nom, "Nom de l'équipe")

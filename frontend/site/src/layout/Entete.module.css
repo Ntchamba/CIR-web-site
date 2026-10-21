@@ -1,134 +1,81 @@
-.entete {
-  position: fixed;
-  inset: 0 0 auto 0;
-  z-index: 50;
-  background: rgba(243, 247, 249, 0.86); /* verre : le bandeau photo passe dessous */
-  color: var(--encre);
-  box-shadow: 0 1px 0 var(--filet), 0 6px 24px rgba(8, 24, 32, 0.06);
-  backdrop-filter: saturate(1.2) blur(12px);
-  -webkit-backdrop-filter: saturate(1.2) blur(12px);
-}
-
-.barre {
-  max-width: 1320px;
-  margin: 0 auto;
-  height: var(--hauteur-entete);
-  padding: 0 var(--gouttiere);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
-
-.logo { display: flex; align-items: center; gap: 12px; min-height: var(--cible-tactile); color: inherit; text-decoration: none; }
-.logo:hover { color: inherit; }
-.logo img { width: 44px; height: 44px; border-radius: 11px; object-fit: cover; }
-.nom { display: flex; flex-direction: column; line-height: 1.15; }
-.nom strong { font-family: var(--police-titre); font-size: 20px; font-weight: 600; }
-.nom span { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--encre-2); }
-
-.nav { display: flex; align-items: center; gap: 4px 28px; }
-.lien {
-  padding: 12px 2px 10px;
-  border-bottom: 2px solid transparent;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: inherit;
-  text-decoration: none;
-  white-space: nowrap;
-}
-.lien:hover { color: inherit; border-bottom-color: currentColor; }
-.actif, .actif:hover { border-bottom-color: var(--corail); }
+/* En-tête de la maquette (ordinateur : barre fixe de 84 px ; téléphone : barre de 64 px dans le flux). */
+.entete { position: fixed; inset: 0 0 auto; z-index: 50; transition: background 0.25s, box-shadow 0.25s, color 0.25s; }
+.transparent { color: var(--blanc); }
+.clair { background: rgba(243, 247, 249, 0.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: var(--encre); box-shadow: 0 1px 0 var(--filet); }
+.barre { display: flex; align-items: center; gap: 32px; height: 84px; width: min(1320px, 100% - 64px); margin-inline: auto; }
+.marque { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; min-height: var(--cible-tactile); }
+.marque:hover { color: inherit; }
+.marque img { width: 46px; height: 46px; border-radius: 10px; object-fit: cover; }
+.marque b { display: block; font-family: var(--police-titre); font-size: 20px; line-height: 1; font-weight: 600; }
+.marque small { display: block; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; }
+.transparent .marque, .transparent .lien { text-shadow: 0 1px 2px rgba(8, 24, 32, 0.6), 0 2px 14px rgba(8, 24, 32, 0.6); }
+.nav { display: flex; gap: 28px; margin-left: auto; }
+.lien { position: relative; display: inline-flex; align-items: center; min-height: var(--cible-tactile); padding: 8px 0; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; color: inherit; }
+.lien:hover { color: inherit; }
+.lien::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--corail); transform: scaleX(0); transition: transform 0.2s; }
+.lien:hover::after, .lien[aria-current='page']::after { transform: scaleX(1); }
 
 .actions { display: flex; align-items: center; gap: 8px; }
-.langue { color: var(--encre-2); }
-.langue:hover { color: var(--encre); }
-.boutonRond {
-  width: var(--cible-tactile); height: var(--cible-tactile);
-  display: none; align-items: center; justify-content: center;
-  border-radius: 22px; color: inherit;
+.icone {
+  position: relative; display: inline-flex; align-items: center; justify-content: center; width: var(--cible-tactile); height: var(--cible-tactile);
+  border: 0; border-radius: 22px; background: transparent; color: inherit; text-decoration: none; cursor: pointer; padding: 0;
 }
-.boutonRond:hover { color: inherit; background: rgba(127, 127, 127, 0.12); }
-
-/* Sélection : icône avec le nombre de produits */
-.selection {
-  position: relative; width: var(--cible-tactile); height: var(--cible-tactile);
-  display: inline-flex; align-items: center; justify-content: center;
-  border-radius: 22px; color: inherit; text-decoration: none;
-}
-.selection:hover { color: inherit; background: rgba(127, 127, 127, 0.12); }
+.icone:hover { color: inherit; background: rgba(127, 127, 127, 0.18); }
+.transparent .icone svg { filter: drop-shadow(0 1px 3px rgba(8, 24, 32, 0.8)); }
 .compteur {
-  position: absolute; top: 4px; right: 2px; min-width: 18px; height: 18px; padding: 0 5px;
-  display: inline-flex; align-items: center; justify-content: center;
+  position: absolute; top: 4px; right: 2px; min-width: 18px; height: 18px; padding: 0 5px; display: inline-flex; align-items: center; justify-content: center;
   border-radius: 9px; background: var(--corail); color: var(--encre); font-size: 11px; font-weight: 700;
 }
-
+.langue { color: inherit; }
+.transparent .langue { text-shadow: 0 1px 2px rgba(8, 24, 32, 0.6); }
+.notifications { display: inline-flex; color: inherit; }
+.notifications button { color: inherit; }
 .connexion {
-  display: inline-flex; align-items: center; min-height: var(--cible-tactile);
-  padding: 0 22px;
-  border-radius: var(--pastille);
-  background: var(--bleu);
-  color: var(--blanc);
-  font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-  text-decoration: none;
-  white-space: nowrap;
+  display: inline-flex; align-items: center; min-height: var(--cible-tactile); padding: 13px 26px; border-radius: 30px; background: var(--bleu); color: var(--blanc);
+  font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; box-shadow: 0 8px 22px rgba(17, 119, 168, 0.35); white-space: nowrap;
 }
 .connexion:hover { background: var(--bleu-fonce); color: var(--blanc); }
 .compte {
-  display: inline-flex; align-items: center; gap: 8px; min-height: var(--cible-tactile);
-  padding: 0 16px;
-  border: 1px solid var(--champ);
-  border-radius: var(--pastille);
-  color: inherit; font-weight: 600; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px; min-height: var(--cible-tactile); padding: 0 18px; border: 1px solid currentColor; border-radius: 30px;
+  color: inherit; font-weight: 600; text-decoration: none; white-space: nowrap;
 }
-.compte:hover { color: inherit; border-color: var(--encre); }
-
-/* Messages : sur téléphone, l'onglet du bas le remplace */
-@media (max-width: 900px) { .messages { display: none; } }
-
-/* Cinq liens + langue + connexion : on resserre avant que les libellés ne passent sur deux lignes */
-@media (max-width: 1320px) {
-  .nav { gap: 4px 20px; }
-  .lien { letter-spacing: 0.06em; }
-  .nom span { display: none; }
-}
-@media (max-width: 1080px) {
-  .nav { gap: 4px 14px; }
-  .lien { font-size: 12px; letter-spacing: 0.04em; }
-  .nom span { display: none; }
-}
-@media (max-width: 900px) {
-  .barre { height: var(--hauteur-entete-mobile); }
-  .nav { display: none; }
-  .boutonRond { display: inline-flex; }
-  .logo img { width: 40px; height: 40px; border-radius: 10px; }
-  .connexion { padding: 0 16px; font-size: 12px; }
-}
-/* Petit téléphone : le choix de langue se réduit au globe (nom de la langue lu par les lecteurs d'écran ;
-   le pied de page garde la liste complète). */
-@media (max-width: 480px) {
-  .langue select { width: var(--cible-tactile); padding: 0; border-color: var(--filet); color: transparent; }
-  .langue svg { left: 50%; transform: translateX(-50%); }
-}
-@media (max-width: 420px) {
-  .compte span { display: none; }
-  .compte { padding: 0 11px; }
-}
-
-/* Client connecté sur petit téléphone : la place va à la cloche et à la sélection ; le téléphone du CIR reste
-   dans la page Contact, le pied de page et le bouton d'appel de la messagerie. */
-@media (max-width: 480px) { .telReduit { display: none !important; } }
+.compte:hover { color: inherit; background: rgba(127, 127, 127, 0.18); }
+.compteDesktop { display: inline-flex; }
+.contactTel, .menu, .langueMenu { display: none; }
 
 /* Flèche de retour « < » : téléphone seulement (même seuil que la barre d'onglets), à gauche, avant le logo. */
 .retour {
   display: none; align-items: center; justify-content: center; flex-shrink: 0;
   width: var(--cible-tactile); height: var(--cible-tactile); margin-left: -8px;
-  border: 0; border-radius: 22px; background: transparent; color: var(--encre);
+  border: 0; border-radius: 22px; background: transparent; color: inherit;
 }
 .retour:hover { background: rgba(127, 127, 127, 0.14); }
+
+@media (max-width: 1100px) { .nav { gap: 18px; } .barre { gap: 16px; } .marque small { display: none; } }
+
+/* ---------- Téléphone : barre de 64 px dans le flux, menu en liste ---------- */
 @media (max-width: 900px) {
   .retour { display: inline-flex; }
-  .barre { gap: 8px; }
+  .entete { position: relative; z-index: 50; transition: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .transparent { position: absolute; left: 0; right: 0; top: 0; background: transparent; }
+  .clair { background: var(--fond); box-shadow: none; border-bottom: 1px solid var(--filet); }
+  .ouvert { background: var(--fond); color: var(--encre); border-bottom: 1px solid var(--filet); }
+  .barre { height: 64px; width: 100%; padding: 0 10px 0 20px; gap: 12px; justify-content: space-between; }
+  .marque { gap: 10px; }
+  .marque img { width: 40px; height: 40px; }
+  .marque b { font-size: 19px; }
+  .marque small, .nav, .compteDesktop, .langue, .messages, .notifications { display: none; }
+  .actions { gap: 0; margin-left: auto; }
+  .icone { width: 48px; height: 48px; }
+  .contactTel, .menu { display: inline-flex; }
+  .liste {
+    position: absolute; left: 0; right: 0; top: 100%; display: flex; flex-direction: column; padding: 8px 20px 24px; background: var(--blanc);
+    border-bottom: 1px solid var(--filet); box-shadow: 0 24px 40px rgba(14, 42, 56, 0.18); color: var(--encre);
+  }
+  .liste a { display: flex; align-items: center; min-height: var(--cible-tactile); padding: 13px 0; border-bottom: 1px solid #e6eef2; font-family: var(--police-titre); font-size: 20px; color: var(--encre); text-decoration: none; }
+  .liste a[aria-current='page'] { color: var(--bleu); }
+  .liste a.secondaire { font-family: var(--police-texte); font-size: 16px; }
+  .langueMenu { display: flex; padding: 14px 0 0; color: var(--encre); }
+  .liste a.pilule { justify-content: center; margin-top: 20px; padding: 14px 24px; border: 0; border-radius: 26px; background: var(--bleu); font-family: var(--police-texte); font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blanc); }
 }
+@media (min-width: 901px) { .liste { display: none; } }

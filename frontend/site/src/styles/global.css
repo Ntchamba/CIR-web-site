@@ -1,50 +1,7 @@
 /* Styles généraux du site public (après jetons.css et base.css de frontend/partage). */
 
-/* Ambiance immersive (décision 11) : la page n'est jamais blanche. Sous la scène (photo de la maison, voir
-   layout/Gabarit.module.css), la couleur de l'encre. Le contenu repose sur du « verre » clair et léger : le texte
-   foncé garde un contraste AA (encre sur verre à 90 %, soit plus de 12 : 1). */
-:root {
-  --verre: rgba(243, 247, 249, 0.87);
-  --verre-fort: rgba(243, 247, 249, 0.95);
-  --verre-bord: rgba(255, 255, 255, 0.5);
-  --verre-nuit: rgba(14, 42, 56, 0.86);
-  --largeur-salle: 1320px;
-}
-body { background: var(--encre); }
-
-/* Sur le verre clair, les couleurs de texte de la charte sont légèrement renforcées : le bleu des liens et le corail
-   des surtitres gardent un contraste d'au moins 4,5 : 1 même quand le verre laisse passer la scène sombre. */
-.verre, section.salle:not(.salle-nuit) { --bleu: #0d6592; --corail-fonce: #a8361b; --encre-3: #4a616d; }
-
-/* Feuille de verre des vues internes : le texte foncé y garde un contraste AA, la scène reste visible autour. */
-.verre {
-  width: min(var(--largeur-salle), 100% - 2 * var(--gouttiere));
-  margin: 24px auto clamp(24px, 4vw, 48px);
-  min-height: 50vh;
-  border-radius: var(--rayon-l);
-  border: 1px solid var(--verre-bord);
-  background: var(--verre);
-  box-shadow: 0 24px 60px rgba(4, 16, 22, 0.35);
-}
-@media (max-width: 700px) {
-  .verre { width: calc(100% - 16px); margin-top: 12px; border-radius: var(--rayon); }
-}
-
-/* « Salle » de l'accueil : un panneau de verre posé en profondeur devant la scène. */
-section.salle {
-  position: relative;
-  width: min(var(--largeur-salle), 100% - 2 * var(--gouttiere));
-  margin: 0 auto clamp(20px, 3vw, 36px);
-  padding-block: clamp(32px, 5vw, 64px);
-  border-radius: var(--rayon-l);
-  border: 1px solid var(--verre-bord);
-  background: var(--verre);
-  box-shadow: 0 24px 60px rgba(4, 16, 22, 0.35);
-}
-section.salle.salle-nuit { background: var(--verre-nuit); border-color: rgba(255, 255, 255, 0.12); color: var(--blanc); }
-@media (max-width: 700px) {
-  section.salle { width: calc(100% - 16px); border-radius: var(--rayon); }
-}
+/* Design des maquettes : voir styles/maquette.css. Le fond de page est celui des maquettes (#F3F7F9). */
+:root { --hauteur-entete: 84px; --hauteur-entete-mobile: 64px; }
 
 .conteneur {
   width: 100%;

@@ -5,7 +5,7 @@ import { realisations } from '@/modules/vitrine/api.js';
 
 export { chargerContenusAccueil, CHEMIN_CONTENUS_ACCUEIL } from '@/layout/contenus.js';
 
-export const TAILLE_A_LA_UNE = 6;
+export const TAILLE_A_LA_UNE = 4;
 export const TAILLE_REALISATIONS = 3;
 
 /** Produits « à la une » (accueil). */

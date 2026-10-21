@@ -1,52 +1,26 @@
-// Carte d'un produit du catalogue : vignette, famille, référence, nom, accroche, usages, prix (ou « Prix sur devis »).
+// Carte d'un produit (maquettes) : grande image carrée sans cadre, nom centré en Lora, prix dessous (« Prix sur devis »
+// sans prix). Toute la carte est un lien vers la fiche ; l'image grandit jusqu'à la fiche (View Transitions).
 import { Link } from 'react-router';
 
 import { prix } from '@partage/utils/format.js';
 
 import ImageMedia from '@/composants/ImageMedia.jsx';
-import { useTraduction } from '@/i18n/index.js';
-import BoutonSelection from '@/modules/selection/composants/BoutonSelection.jsx';
-
-import { estUsage } from '../usages.js';
-
-import styles from '../Catalogue.module.css';
+import { nommerVignette, produitVu } from '@/composants/transitionProduit.js';
 
 export default function CarteProduit({ produit, niveauTitre = 3 }) {
-  const { t } = useTraduction();
   const Titre = `h${niveauTitre}`;
-  const usages = (produit.usages || []).filter(estUsage); // jamais de clé brute pour un usage inconnu
+  // Retour depuis la fiche : la vignette du produit quitté porte le nom de transition (trajet inverse).
+  const nom = produitVu() === produit.slug ? { viewTransitionName: 'produit-image' } : undefined;
   return (
-    <article className={styles.carte}>
-      <div className={styles.vignette}>
+    <Link to={`/catalogue/${produit.slug}`} state={{ apercu: produit }} className="m-carte-produit"
+      onClick={(e) => nommerVignette(e, produit.slug)}>
+      <div className="img">
         {produit.image?.url
-          ? <ImageMedia image={produit.image} largeur={640} hauteur={480} />
-          : <span className={styles.sansImage} aria-hidden="true">{produit.reference || produit.nom?.slice(0, 2)}</span>}
-        <div className={styles.pastilles}>
-          {produit.est_nouveau && <span className={styles.nouveau}>{t('catalogue.carte.nouveau')}</span>}
-          {produit.a_la_une && <span className={styles.une}>{t('catalogue.carte.aLaUne')}</span>}
-        </div>
+          ? <ImageMedia image={produit.image} alt="" largeur={640} hauteur={640} style={nom} />
+          : <span className="ref-neutre" aria-hidden="true">{produit.reference || produit.nom?.slice(0, 2)}</span>}
       </div>
-      <div className={styles.corps}>
-        <p className={styles.famille}>
-          {produit.famille?.nom}
-          {produit.reference && <span className={styles.reference}>{produit.reference}</span>}
-        </p>
-        <Titre className={styles.nomProduit}>
-          {/* Toute la carte est cliquable : le lien s'étend sur la carte (CSS). */}
-          <Link to={`/catalogue/${produit.slug}`} className={styles.lienCarte}>{produit.nom}</Link>
-        </Titre>
-        {produit.accroche && <p className={styles.accroche}>{produit.accroche}</p>}
-        {usages.length > 0 && (
-          <ul className={styles.usages} aria-label={t('catalogue.carte.usages')}>
-            {usages.map((u) => <li key={u}>{t(`usages.${u}`)}</li>)}
-          </ul>
-        )}
-        <p className={styles.prix}>{prix(produit.prix, produit.unite_prix)}</p>
-        {/* Au-dessus du lien étendu de la carte (CSS .actionsCarte) */}
-        <div className={styles.actionsCarte}>
-          <BoutonSelection produit={produit.id} nom={produit.nom} taille="petit" />
-        </div>
-      </div>
-    </article>
+      <Titre>{produit.nom}</Titre>
+      <p>{prix(produit.prix, produit.unite_prix)}</p>
+    </Link>
   );
 }

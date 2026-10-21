@@ -1,23 +1,28 @@
-// En-tête d'une section : surtitre facultatif, titre (h2), lien facultatif à droite.
+// En-tête d'une section des maquettes : surtitre en italique bleu (Lora), titre (h2), lien en capitales avec flèche à
+// droite (ordinateur). Sur téléphone l'en-tête est centré et le lien passe sous la section (LienSection).
 import { Link } from 'react-router';
 
-import Icone from '@partage/ui/Icone.jsx';
+import { useEcranTelephone } from '@/app/preferences.js';
 
-import styles from './Composants.module.css';
-
-export default function EnteteSection({ id, surtitre, titre, lien, texteLien }) {
+export default function EnteteSection({ id, surtitre, titre, lien, texteLien, niveau = 2 }) {
+  const telephone = useEcranTelephone();
+  const Titre = `h${niveau}`;
   return (
-    <div className={`${styles.enteteSection} p3d`}>
+    <div className="m-tete p3d">
       <div>
-        {surtitre && <span className={styles.surtitre}>{surtitre}</span>}
-        <h2 id={id}>{titre}</h2>
+        {surtitre && <span className="m-italique">{surtitre}</span>}
+        <Titre id={id}>{titre}</Titre>
       </div>
-      {lien && (
-        <Link to={lien} className={styles.lienSection}>
-          {texteLien}
-          <Icone nom="fleche" taille={18} />
-        </Link>
+      {lien && !telephone && (
+        <Link to={lien} className="m-lien-fleche">{texteLien} <span aria-hidden="true">→</span></Link>
       )}
     </div>
   );
+}
+
+/** Lien sous la section, au centre (téléphone) : « Voir tout le catalogue ». Rien sur ordinateur (le lien est dans l'en-tête). */
+export function LienSection({ lien, texte }) {
+  const telephone = useEcranTelephone();
+  if (!telephone || !lien) return null;
+  return <div className="m-lien-bas"><Link to={lien} className="m-lien-fleche">{texte}</Link></div>;
 }

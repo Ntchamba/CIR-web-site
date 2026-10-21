@@ -39,7 +39,7 @@ export default function NouvelleCommandePage() {
   const naviguer = useNavigate();
   const [parametres] = useSearchParams();
   const source = useLignesNouvelleCommande(parametres.get('produit') || '', parametres.get('design') || '');
-  const [form, setForm] = useState({ type_batiment: '', surface_m2: '', description: '' });
+  const [form, setForm] = useState({ type_batiment: parametres.get('type') || '', surface_m2: parametres.get('surface') || '', description: '' });
   const [erreurs, setErreurs] = useState({});
   const [etat, setEtat] = useState({ envoi: false, erreur: null, adresse: false });
 
