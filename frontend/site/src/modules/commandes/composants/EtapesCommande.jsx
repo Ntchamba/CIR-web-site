@@ -1,6 +1,6 @@
 // Frise des étapes d'une commande : liste ordonnée, étape courante annoncée (aria-current + texte caché),
 // dates tirées de l'historique ; « Annulée » à part. Les étapes viennent du serveur (`etat`, `historique`).
-import { date, dateHeure, STATUTS } from '@partage/utils/format.js';
+import { date, dateHeure } from '@partage/utils/format.js';
 
 import { useTraduction } from '@/i18n/index.js';
 
@@ -22,27 +22,28 @@ export default function EtapesCommande({ commande }) {
   const indexCourant = etapes.indexOf(commande.etat);
 
   return (
-    <section aria-labelledby="titre-etapes" className={styles.bloc}>
-      <h2 id="titre-etapes">{t('commandes.etapes.titre')}</h2>
-      <ol className={`${styles.frise} ${annulee ? styles.friseAnnulee : ''}`}>
+    <section aria-labelledby="titre-etapes">
+      <h2 id="titre-etapes" className="visuellement-cache">{t('commandes.etapes.titre')}</h2>
+      <ol className="m-etapes">
         {etapes.map((cle, i) => {
           const courante = i === indexCourant;
           const faite = i < indexCourant;
           const quand = dateDe(cle);
           return (
             <li key={cle} aria-current={courante ? 'step' : undefined}
-              className={`${styles.etape} ${courante ? styles.etapeCourante : ''} ${faite ? styles.etapeFaite : ''}`}>
-              <span className={styles.puce} aria-hidden="true">{faite ? '✓' : i + 1}</span>
-              <span className={styles.etapeTexte}>
-                <strong>{STATUTS[cle].libelle}</strong>
-                <span className="visuellement-cache">
-                  {courante ? t('commandes.etapes.courante') : faite ? t('commandes.etapes.faite') : t('commandes.etapes.aVenir')}
-                </span>
-                {quand && <time dateTime={quand}>{date(quand)}</time>}
-                {cle === 'annulee' && motifAnnulation && (
-                  <span className={styles.meta}>{t('commandes.etapes.motif', { motif: motifAnnulation })}</span>
-                )}
+              className={`${courante ? 'encours' : ''} ${faite ? 'fait' : ''} ${cle === 'annulee' ? styles.etapeAnnulee : ''}`}>
+              <b>{t(`commandes.etapes.libelles.${cle}`)}</b>
+              <span className="visuellement-cache">
+                {courante ? t('commandes.etapes.courante') : faite ? t('commandes.etapes.faite') : t('commandes.etapes.aVenir')}
               </span>
+              <small>
+                {quand && (faite || cle === 'nouvelle' || cle === 'annulee')
+                  ? <time dateTime={quand}>{date(quand)}</time>
+                  : courante ? t('commandes.etapes.visibleCourante') : faite ? t('commandes.etapes.visibleFaite') : t('commandes.etapes.visibleAVenir')}
+              </small>
+              {cle === 'annulee' && motifAnnulation && (
+                <small className={styles.meta}>{t('commandes.etapes.motif', { motif: motifAnnulation })}</small>
+              )}
             </li>
           );
         })}
@@ -55,8 +56,8 @@ export default function EtapesCommande({ commande }) {
             {historique.map((h, i) => (
               <li key={`${h.cree_le}-${i}`}>
                 {t('commandes.etapes.ligne', {
-                  de: h.de ? STATUTS[h.de]?.libelle || h.de : t('commandes.etapes.creation'),
-                  vers: STATUTS[h.vers]?.libelle || h.vers,
+                  de: h.de ? t(`commandes.etats.${h.de}`) : t('commandes.etapes.creation'),
+                  vers: t(`commandes.etats.${h.vers}`),
                   par: t(`commandes.etapes.par.${h.par === 'equipe' ? 'equipe' : 'client'}`),
                   date: dateHeure(h.cree_le),
                 })}

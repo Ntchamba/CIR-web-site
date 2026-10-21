@@ -65,6 +65,7 @@ export default {
       ville: 'City',
       quartier: 'Neighbourhood',
       rueOuRepere: 'Street or landmark',
+      confirmation: 'Confirm the password',
     },
     exemples: {
       telephone: '+237 6XX XX XX XX',
@@ -91,12 +92,14 @@ export default {
       description: 'Create your CIR account to order your epoxy resin floor coatings.',
       intro: 'Your account lets you place orders and follow your work.',
       coordonnees: 'Your contact details',
-      adresse: 'Your address',
+      adresse: 'Address, needed to order',
       adresseAide: 'It is required to place an order and for our team to visit.',
       bouton: 'Create my account',
       dejaUnCompte: 'Already have an account?',
       seConnecter: 'Sign in',
       incomplet: 'Some information is missing or incorrect. Please check the form.',
+      consentement: 'I agree that my data may be used to process my orders.',
+      groupeOnglets: 'Sign in or sign up',
     },
     profil: {
       titre: 'My account',
@@ -123,7 +126,10 @@ export default {
       villeVide: 'Enter your city.',
       quartierVide: 'Enter your neighbourhood.',
       rueVide: 'Enter a street or a well-known landmark.',
+      confirmationDifferente: 'The two passwords do not match.',
+      consentementManquant: 'Tick the box to create your account.',
     },
+    visuel: 'Your floor, revealed',
   },
   liste: {
     voirPlus: 'Show more',
@@ -283,7 +289,7 @@ export default {
   vitrine: {
     titre: 'Our projects',
     description: 'CIR projects in before-and-after photos, video demonstrations and customer testimonials.',
-    intro: 'Our projects in pictures, application on video and what our customers say.',
+    intro: 'Epoxy resin in action, on projects already completed.',
     sommaire: 'On this page',
     realisations: {
       titre: 'Our projects',
@@ -295,6 +301,7 @@ export default {
         texte: 'Photos of our projects are coming soon.',
         texteType: 'No project of this type has been published yet.',
       },
+      onglets: { tous: 'All', maison: 'Homes', industrie: 'Industries', entreprise: 'Businesses', exterieur: 'Outdoor' },
     },
     avantApres: {
       avant: 'Before',
@@ -351,6 +358,7 @@ export default {
         texteLong: 'Your testimonial cannot exceed {max} characters.',
       },
     },
+    transformation: { surtitre: 'Demonstration', titre: 'The transformation on video', alt: 'Video: a raw concrete room transformed by an epoxy resin floor' },
   },
   actualites: {
     titre: 'News',
@@ -408,7 +416,7 @@ export default {
   commandes: {
     titre: 'My orders',
     description: 'Follow your epoxy resin floor orders: stages, negotiation, quotes and contract.',
-    intro: 'Follow the progress of your orders and negotiate the price and lead time with our team.',
+    intro: 'Follow your works and negotiate your flooring with the team.',
     filtre: { etape: 'Filter by stage', toutes: 'All' },
     vide: {
       titre: "You don't have any orders yet",
@@ -422,6 +430,8 @@ export default {
       montant: 'Agreed amount: {montant}',
       maj: 'Updated on {date}',
       actionRequise: 'A reply is expected from you',
+      titre: 'Order {reference}',
+      detailMeta: '{date} · {type}',
     },
     types: { maison: 'Home', industrie: 'Industry', entreprise: 'Business' },
     nouvelle: {
@@ -474,6 +484,8 @@ export default {
       convenu: 'Agreed amount',
       signeLe: 'Contract signed on {date}',
       chantier: 'Site',
+      surtitre: 'Order {reference} · sent on {date}',
+      selectionner: 'Choose an order in the list.',
     },
     etapes: {
       titre: 'Order progress',
@@ -485,6 +497,10 @@ export default {
       creation: 'Creation',
       motif: 'Reason: {motif}',
       par: { client: 'you', equipe: 'the CIR team' },
+      libelles: { nouvelle: 'Request sent', negociation: 'Negotiation', contrat_signe: 'Contract signed', travaux: 'Works', terminee: 'Floor delivered', annulee: 'Cancelled' },
+      visibleCourante: 'Current step',
+      visibleFaite: 'Done',
+      visibleAVenir: 'Upcoming',
     },
     actions: {
       titre: 'Order actions',
@@ -553,6 +569,7 @@ export default {
       produits: 'Products',
       edite: 'Contract signed on {date}. Keep this document.',
     },
+    etats: { nouvelle: 'New', negociation: 'Under negotiation', contrat_signe: 'Contract signed', travaux: 'Works in progress', terminee: 'Floor delivered', annulee: 'Cancelled' },
   },
   devis: {
     etats: { envoye: 'Sent', accepte: 'Accepted', refuse: 'Declined', remplace: 'Replaced' },

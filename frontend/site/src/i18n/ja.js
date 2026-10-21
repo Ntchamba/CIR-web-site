@@ -65,6 +65,7 @@ export default {
       ville: '都市',
       quartier: '地区',
       rueOuRepere: '通りまたは目印',
+      confirmation: 'パスワードの確認',
     },
     exemples: {
       telephone: '+237 6XX XX XX XX',
@@ -91,12 +92,14 @@ export default {
       description: 'CIR アカウントを作成して、エポキシ樹脂床コーティングをご注文ください。',
       intro: 'アカウントがあれば、注文と施工の進捗確認ができます。',
       coordonnees: 'ご連絡先',
-      adresse: 'ご住所',
+      adresse: '住所（注文に必要です）',
       adresseAide: 'ご注文とスタッフの訪問に必要です。',
       bouton: 'アカウントを作成する',
       dejaUnCompte: 'すでにアカウントをお持ちの方',
       seConnecter: 'ログイン',
       incomplet: '未入力または誤りのある項目があります。フォームをご確認ください。',
+      consentement: '注文の処理にデータが使われることに同意します。',
+      groupeOnglets: 'ログインまたは新規登録',
     },
     profil: {
       titre: 'マイアカウント',
@@ -123,7 +126,10 @@ export default {
       villeVide: '都市を入力してください。',
       quartierVide: '地区を入力してください。',
       rueVide: '通りまたはよく知られた目印を入力してください。',
+      confirmationDifferente: '2つのパスワードが一致しません。',
+      consentementManquant: 'アカウントを作成するにはチェックを入れてください。',
     },
+    visuel: 'あなたの床、新たな輝きへ',
   },
   liste: {
     voirPlus: 'もっと見る',
@@ -280,7 +286,7 @@ export default {
   vitrine: {
     titre: '施工事例',
     description: 'CIR の施工事例（施工前後の写真）、動画デモ、お客様の声。',
-    intro: '写真で見る施工事例、動画で見る施工の様子、そしてお客様の声。',
+    intro: '施工済みの現場で活躍するエポキシ樹脂。',
     sommaire: 'このページの内容',
     realisations: {
       titre: '施工事例',
@@ -292,6 +298,7 @@ export default {
         texte: '施工現場の写真は近日公開予定です。',
         texteType: 'この種類の施工事例はまだ公開されていません。',
       },
+      onglets: { tous: 'すべて', maison: '住宅', industrie: '産業', entreprise: '企業', exterieur: '屋外' },
     },
     avantApres: {
       avant: '施工前',
@@ -348,6 +355,7 @@ export default {
         texteLong: 'ご感想は {max} 文字以内で入力してください。',
       },
     },
+    transformation: { surtitre: 'デモンストレーション', titre: '動画で見る変身', alt: '動画：コンクリートむき出しの部屋がエポキシ樹脂の床で生まれ変わる' },
   },
   actualites: {
     titre: 'ニュース',
@@ -405,7 +413,7 @@ export default {
   commandes: {
     titre: '注文一覧',
     description: 'エポキシ樹脂床材のご注文の状況（段階、交渉、見積書、契約）を確認できます。',
-    intro: 'ご注文の進み具合を確認し、価格と納期を担当チームと交渉できます。',
+    intro: '工事の進み具合を確認し、床材についてチームと交渉できます。',
     filtre: { etape: '段階で絞り込む', toutes: 'すべて' },
     vide: {
       titre: 'まだ注文がありません',
@@ -419,10 +427,12 @@ export default {
       montant: '合意金額：{montant}',
       maj: '更新日：{date}',
       actionRequise: 'お客様の返信をお待ちしています',
+      titre: '注文 {reference}',
+      detailMeta: '{date} · {type}',
     },
     types: { maison: '住宅', industrie: '工場・産業', entreprise: '事業所' },
     nouvelle: {
-      bouton: '新規注文',
+      bouton: '新しい注文',
       titre: '新規注文',
       intro: '現場の内容をご記入ください。担当チームが価格と納期の提案を返信し、交渉することができます。',
       chantier: '現場について',
@@ -471,6 +481,8 @@ export default {
       convenu: '合意金額',
       signeLe: '契約締結日：{date}',
       chantier: '現場',
+      surtitre: '注文 {reference} · {date} に送信',
+      selectionner: '一覧から注文を選んでください。',
     },
     etapes: {
       titre: '注文の進み具合',
@@ -482,6 +494,10 @@ export default {
       creation: '作成',
       motif: '理由：{motif}',
       par: { client: 'お客様', equipe: 'CIR チーム' },
+      libelles: { nouvelle: '依頼を送信', negociation: '交渉', contrat_signe: '契約済み', travaux: '工事', terminee: '引き渡し済み', annulee: 'キャンセル' },
+      visibleCourante: '現在の段階',
+      visibleFaite: '完了',
+      visibleAVenir: '予定',
     },
     actions: {
       titre: '注文の操作',
@@ -550,6 +566,7 @@ export default {
       produits: '製品',
       edite: '契約締結日：{date}。この書類は保管してください。',
     },
+    etats: { nouvelle: '新規', negociation: '交渉中', contrat_signe: '契約済み', travaux: '工事中', terminee: '引き渡し済み', annulee: 'キャンセル' },
   },
   devis: {
     etats: { envoye: '送信済み', accepte: '承諾済み', refuse: '辞退', remplace: '差し替え済み' },

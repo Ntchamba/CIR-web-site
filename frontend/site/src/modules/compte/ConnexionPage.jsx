@@ -1,9 +1,8 @@
 // BF-08 : connexion du client, puis retour à la page demandée (?suite=…).
 import { useState } from 'react';
-import { Link, Navigate, useNavigate, useSearchParams } from 'react-router';
+import { Navigate, useNavigate, useSearchParams } from 'react-router';
 
 import { erreursChamps } from '@partage/api/client.js';
-import Bouton from '@partage/ui/Bouton.jsx';
 import Champ from '@partage/ui/Champ.jsx';
 import MessageErreur from '@partage/ui/MessageErreur.jsx';
 import usePageMeta from '@partage/utils/usePageMeta.js';
@@ -11,9 +10,9 @@ import usePageMeta from '@partage/utils/usePageMeta.js';
 import { useTraduction } from '@/i18n/index.js';
 
 import { useAuth } from './AuthContext.jsx';
+import EcranCompte from './composants/EcranCompte.jsx';
 import { cheminDeSuite } from './suite.js';
 import { validerConnexion } from './validation.js';
-import styles from './Compte.module.css';
 
 export default function ConnexionPage() {
   const { t } = useTraduction();
@@ -49,25 +48,16 @@ export default function ConnexionPage() {
   }
 
   return (
-    <div className={`conteneur section ${styles.page}`}>
-      <div className={styles.carte}>
-        <h1 className="titre-page">{t('compte.connexion.titre')}</h1>
-        <p className={styles.intro}>{t('compte.connexion.intro')}</p>
-        <form onSubmit={envoyer} className={styles.champs} noValidate>
-          <Champ libelle={t('compte.champs.email')} name="email" type="email" value={form.email} onChange={changer}
-            erreur={erreurs.email} autoComplete="email" inputMode="email" required />
-          <Champ libelle={t('compte.champs.motDePasse')} name="mot_de_passe" type="password" value={form.mot_de_passe} onChange={changer}
-            erreur={erreurs.mot_de_passe} autoComplete="current-password" required />
-          <MessageErreur erreur={erreur} />
-          <Bouton type="submit" chargement={envoi} taille="large">{t('compte.connexion.bouton')}</Bouton>
-        </form>
-        <p className={styles.bascule}>
-          {t('compte.connexion.pasDeCompte')}{' '}
-          <Link to={`/inscription${parametres.get('suite') ? `?suite=${encodeURIComponent(suite)}` : ''}`}>
-            {t('compte.connexion.creer')}
-          </Link>
-        </p>
-      </div>
-    </div>
+    <EcranCompte onglet="connexion" suite={parametres.get('suite') ? suite : ''}>
+      <p className="visuellement-cache">{t('compte.connexion.intro')}</p>
+      <form onSubmit={envoyer} className="m-champs" noValidate aria-label={t('compte.connexion.titre')}>
+        <Champ libelle={t('compte.champs.email')} name="email" type="email" value={form.email} onChange={changer}
+          erreur={erreurs.email} autoComplete="email" inputMode="email" required />
+        <Champ libelle={t('compte.champs.motDePasse')} name="mot_de_passe" type="password" value={form.mot_de_passe} onChange={changer}
+          erreur={erreurs.mot_de_passe} autoComplete="current-password" required />
+        <MessageErreur erreur={erreur} />
+        <button type="submit" className="m-btn plein m-btn-compte" disabled={envoi} aria-busy={envoi || undefined}>{t('compte.connexion.bouton')}</button>
+      </form>
+    </EcranCompte>
   );
 }

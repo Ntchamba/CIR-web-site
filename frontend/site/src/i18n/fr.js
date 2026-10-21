@@ -66,6 +66,7 @@ export default {
       ville: 'Ville',
       quartier: 'Quartier',
       rueOuRepere: 'Rue ou repère',
+      confirmation: 'Confirmer le mot de passe',
     },
     exemples: {
       telephone: '+237 6XX XX XX XX',
@@ -92,12 +93,14 @@ export default {
       description: 'Créez votre compte CIR pour commander vos revêtements de sol en résine époxy.',
       intro: 'Votre compte permet de commander et de suivre vos travaux.',
       coordonnees: 'Vos coordonnées',
-      adresse: 'Votre adresse',
+      adresse: 'Adresse, nécessaire pour commander',
       adresseAide: 'Elle est nécessaire pour commander et pour la venue de notre équipe.',
       bouton: 'Créer mon compte',
       dejaUnCompte: 'Déjà un compte ?',
       seConnecter: 'Se connecter',
       incomplet: 'Certaines informations manquent ou sont incorrectes. Vérifiez le formulaire.',
+      consentement: "J'accepte que mes données servent au traitement de mes commandes.",
+      groupeOnglets: 'Connexion ou inscription',
     },
     profil: {
       titre: 'Mon compte',
@@ -124,7 +127,10 @@ export default {
       villeVide: 'Indiquez votre ville.',
       quartierVide: 'Indiquez votre quartier.',
       rueVide: 'Indiquez une rue ou un repère connu.',
+      confirmationDifferente: 'Les deux mots de passe ne sont pas identiques.',
+      consentementManquant: 'Cochez la case pour créer votre compte.',
     },
+    visuel: 'Votre sol, révélé',
   },
   liste: {
     voirPlus: 'Voir plus',
@@ -284,7 +290,7 @@ export default {
   vitrine: {
     titre: 'Réalisations',
     description: 'Chantiers du CIR en photos avant et après, démonstrations vidéo et témoignages de clients.',
-    intro: "Nos chantiers en images, la pose en vidéo et l'avis de nos clients.",
+    intro: 'La résine époxy en action, sur les chantiers déjà réalisés.',
     sommaire: 'Sur cette page',
     realisations: {
       titre: 'Nos chantiers',
@@ -296,6 +302,7 @@ export default {
         texte: 'Les photos de nos chantiers arrivent bientôt.',
         texteType: "Aucun chantier de ce type n'est encore publié.",
       },
+      onglets: { tous: 'Toutes', maison: 'Maisons', industrie: 'Industries', entreprise: 'Entreprises', exterieur: 'Extérieur' },
     },
     avantApres: {
       avant: 'Avant',
@@ -352,6 +359,7 @@ export default {
         texteLong: 'Votre témoignage ne peut pas dépasser {max} caractères.',
       },
     },
+    transformation: { surtitre: 'Démonstration', titre: 'La transformation en vidéo', alt: 'Vidéo : une pièce en béton brut transformée par un sol en résine époxy' },
   },
   actualites: {
     titre: 'Actualités',
@@ -409,7 +417,7 @@ export default {
   commandes: {
     titre: 'Mes commandes',
     description: 'Suivez vos commandes de revêtements de sol en résine époxy : étapes, négociation, devis et contrat.',
-    intro: "Suivez l'avancement de vos commandes et négociez le prix et le délai avec notre équipe.",
+    intro: "Suivez vos travaux et négociez votre revêtement avec l'équipe.",
     filtre: { etape: 'Filtrer par étape', toutes: 'Toutes' },
     vide: {
       titre: "Vous n'avez pas encore de commande",
@@ -423,6 +431,8 @@ export default {
       montant: 'Montant convenu : {montant}',
       maj: 'Mise à jour le {date}',
       actionRequise: 'Une réponse est attendue de votre part',
+      titre: 'Commande {reference}',
+      detailMeta: '{date} · {type}',
     },
     types: { maison: 'Maison', industrie: 'Industrie', entreprise: 'Entreprise' },
     nouvelle: {
@@ -475,6 +485,8 @@ export default {
       convenu: 'Montant convenu',
       signeLe: 'Contrat signé le {date}',
       chantier: 'Chantier',
+      surtitre: 'Commande {reference} · envoyée le {date}',
+      selectionner: 'Choisissez une commande dans la liste.',
     },
     etapes: {
       titre: 'Suivi de la commande',
@@ -486,6 +498,10 @@ export default {
       creation: 'Création',
       motif: 'Motif : {motif}',
       par: { client: 'vous', equipe: "l'équipe CIR" },
+      libelles: { nouvelle: 'Demande envoyée', negociation: 'Négociation', contrat_signe: 'Contrat signé', travaux: 'Travaux', terminee: 'Sol livré', annulee: 'Annulée' },
+      visibleCourante: 'Étape en cours',
+      visibleFaite: 'Terminée',
+      visibleAVenir: 'À venir',
     },
     actions: {
       titre: 'Actions sur la commande',
@@ -554,6 +570,7 @@ export default {
       produits: 'Produits',
       edite: 'Contrat signé le {date}. Conservez ce document.',
     },
+    etats: { nouvelle: 'Nouvelle', negociation: 'En négociation', contrat_signe: 'Contrat signé', travaux: 'Travaux en cours', terminee: 'Sol livré', annulee: 'Annulée' },
   },
   devis: {
     etats: { envoye: 'Envoyé', accepte: 'Accepté', refuse: 'Refusé', remplace: 'Remplacé' },

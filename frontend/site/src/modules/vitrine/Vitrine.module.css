@@ -1,21 +1,4 @@
 /* Module vitrine : réalisations, avant / après, démonstrations, témoignages. */
-.entete { margin-bottom: 12px; }
-.intro { margin-top: 8px; max-width: 700px; color: var(--encre-2); }
-.sommaire { display: flex; flex-wrap: wrap; gap: 4px 24px; }
-.sommaire a { display: inline-flex; align-items: center; min-height: var(--cible-tactile); font-weight: 600; }
-
-.section { padding-top: 48px; scroll-margin-top: calc(var(--hauteur-entete) + 12px); }
-.titreSection { margin-bottom: 20px; font-size: clamp(26px, 3.6vw, 34px); }
-
-.puces { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
-.puce {
-  min-height: var(--cible-tactile); padding: 0 16px;
-  border: 1px solid var(--champ); border-radius: var(--pastille); background: var(--blanc);
-  font-size: 14px; font-weight: 600;
-}
-.puce:hover { border-color: var(--encre); }
-.puce[aria-pressed='true'] { background: var(--encre); border-color: var(--encre); color: var(--blanc); }
-
 /* Réalisations */
 .grilleRealisations { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
 .grilleRealisations > li { display: flex; }
@@ -77,8 +60,8 @@
 .duree { position: absolute; right: 12px; bottom: 12px; padding: 2px 8px; border-radius: 6px; background: rgba(0, 0, 0, 0.7); font-size: 13px; }
 
 /* Témoignages */
-.dispositionTemoignages { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 32px; align-items: start; }
-.grilleTemoignages { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+.dispositionTemoignages { display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px; align-items: start; }
+.grilleTemoignages { margin: 0; }
 .temoignage { margin: 0; height: 100%; display: flex; flex-direction: column; gap: 12px; padding: 20px; border-radius: var(--rayon-l); background: var(--blanc); border: 1px solid var(--filet); }
 .etoiles { color: #c98a00; letter-spacing: 2px; font-size: 18px; }
 .etoilesVides { color: var(--filet); }
@@ -87,9 +70,8 @@
 .auteur strong { color: var(--encre); font-size: 15px; }
 
 .formulaire {
-  position: sticky; top: calc(var(--hauteur-entete) + 16px);
-  display: flex; flex-direction: column; gap: 14px;
-  padding: 22px; border-radius: var(--rayon-l); background: var(--blanc); border: 1px solid var(--filet);
+  display: flex; flex-direction: column; gap: 14px; max-width: 680px;
+  padding: 38px; border-radius: 16px; background: var(--fond); border: 0; color: var(--encre);
 }
 .formulaire h3 { font-size: 22px; }
 .champs { display: flex; flex-direction: column; gap: 16px; }
@@ -123,3 +105,12 @@
   .deuxColonnes { grid-template-columns: 1fr; }
   .grilleRealisations, .grilleDemos { grid-template-columns: 1fr; }
 }
+
+/* Témoignage de la maquette : citation en Lora italique sur fond clair, auteur dessous */
+.citationMaquette {
+  margin: 0; padding: 34px 36px; border-radius: 14px; background: var(--fond);
+  font-family: var(--police-titre); font-size: 21px; font-style: italic; line-height: 1.5;
+}
+.citationMaquette p { margin: 8px 0 0; overflow-wrap: anywhere; }
+.citationMaquette cite { display: block; margin-top: 18px; font-family: var(--police-texte); font-style: normal; font-size: 14px; color: var(--encre-2); }
+@media (max-width: 900px) { .citationMaquette { padding: 0; background: none; font-size: 19px; text-align: center; } }

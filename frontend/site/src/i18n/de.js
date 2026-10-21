@@ -65,6 +65,7 @@ export default {
       ville: 'Stadt',
       quartier: 'Stadtviertel',
       rueOuRepere: 'Straße oder Orientierungspunkt',
+      confirmation: 'Passwort bestätigen',
     },
     exemples: {
       telephone: '+237 6XX XX XX XX',
@@ -91,12 +92,14 @@ export default {
       description: 'Erstellen Sie Ihr CIR-Konto, um Ihre Bodenbeschichtungen aus Epoxidharz zu bestellen.',
       intro: 'Mit Ihrem Konto können Sie bestellen und Ihre Arbeiten verfolgen.',
       coordonnees: 'Ihre Kontaktdaten',
-      adresse: 'Ihre Adresse',
+      adresse: 'Adresse, zum Bestellen erforderlich',
       adresseAide: 'Sie wird für Bestellungen und für den Besuch unseres Teams benötigt.',
       bouton: 'Mein Konto erstellen',
       dejaUnCompte: 'Bereits ein Konto?',
       seConnecter: 'Anmelden',
       incomplet: 'Einige Angaben fehlen oder sind fehlerhaft. Bitte prüfen Sie das Formular.',
+      consentement: 'Ich stimme zu, dass meine Daten zur Bearbeitung meiner Bestellungen verwendet werden.',
+      groupeOnglets: 'Anmeldung oder Registrierung',
     },
     profil: {
       titre: 'Mein Konto',
@@ -123,7 +126,10 @@ export default {
       villeVide: 'Geben Sie Ihre Stadt ein.',
       quartierVide: 'Geben Sie Ihr Stadtviertel ein.',
       rueVide: 'Geben Sie eine Straße oder einen bekannten Orientierungspunkt ein.',
+      confirmationDifferente: 'Die beiden Passwörter stimmen nicht überein.',
+      consentementManquant: 'Setzen Sie den Haken, um Ihr Konto zu erstellen.',
     },
+    visuel: 'Ihr Boden, enthüllt',
   },
   liste: {
     voirPlus: 'Mehr anzeigen',
@@ -283,7 +289,7 @@ export default {
   vitrine: {
     titre: 'Referenzen',
     description: 'Baustellen von CIR in Vorher-Nachher-Fotos, Videodemonstrationen und Kundenstimmen.',
-    intro: 'Unsere Baustellen in Bildern, die Verlegung im Video und die Meinung unserer Kunden.',
+    intro: 'Epoxidharz in Aktion, auf bereits ausgeführten Baustellen.',
     sommaire: 'Auf dieser Seite',
     realisations: {
       titre: 'Unsere Baustellen',
@@ -295,6 +301,7 @@ export default {
         texte: 'Fotos unserer Baustellen folgen in Kürze.',
         texteType: 'Für diese Art wurde noch keine Baustelle veröffentlicht.',
       },
+      onglets: { tous: 'Alle', maison: 'Häuser', industrie: 'Industrie', entreprise: 'Unternehmen', exterieur: 'Außenbereich' },
     },
     avantApres: {
       avant: 'Vorher',
@@ -351,6 +358,7 @@ export default {
         texteLong: 'Ihr Erfahrungsbericht darf höchstens {max} Zeichen enthalten.',
       },
     },
+    transformation: { surtitre: 'Demonstration', titre: 'Die Verwandlung im Video', alt: 'Video: ein Raum aus rohem Beton, verwandelt durch einen Epoxidharzboden' },
   },
   actualites: {
     titre: 'Neuigkeiten',
@@ -408,7 +416,7 @@ export default {
   commandes: {
     titre: 'Meine Bestellungen',
     description: 'Verfolgen Sie Ihre Bestellungen von Epoxidharz-Bodenbelägen: Phasen, Verhandlung, Angebote und Vertrag.',
-    intro: 'Verfolgen Sie den Fortschritt Ihrer Bestellungen und verhandeln Sie Preis und Frist mit unserem Team.',
+    intro: 'Verfolgen Sie Ihre Arbeiten und verhandeln Sie Ihren Belag mit dem Team.',
     filtre: { etape: 'Nach Phase filtern', toutes: 'Alle' },
     vide: {
       titre: 'Sie haben noch keine Bestellung',
@@ -422,6 +430,8 @@ export default {
       montant: 'Vereinbarter Betrag: {montant}',
       maj: 'Aktualisiert am {date}',
       actionRequise: 'Von Ihnen wird eine Antwort erwartet',
+      titre: 'Bestellung {reference}',
+      detailMeta: '{date} · {type}',
     },
     types: { maison: 'Wohnen', industrie: 'Industrie', entreprise: 'Unternehmen' },
     nouvelle: {
@@ -474,6 +484,8 @@ export default {
       convenu: 'Vereinbarter Betrag',
       signeLe: 'Vertrag unterzeichnet am {date}',
       chantier: 'Baustelle',
+      surtitre: 'Bestellung {reference} · gesendet am {date}',
+      selectionner: 'Wählen Sie eine Bestellung in der Liste.',
     },
     etapes: {
       titre: 'Stand der Bestellung',
@@ -485,6 +497,10 @@ export default {
       creation: 'Erstellung',
       motif: 'Grund: {motif}',
       par: { client: 'Sie', equipe: 'das CIR-Team' },
+      libelles: { nouvelle: 'Anfrage gesendet', negociation: 'Verhandlung', contrat_signe: 'Vertrag unterzeichnet', travaux: 'Arbeiten', terminee: 'Boden geliefert', annulee: 'Storniert' },
+      visibleCourante: 'Aktueller Schritt',
+      visibleFaite: 'Erledigt',
+      visibleAVenir: 'Folgt',
     },
     actions: {
       titre: 'Aktionen zur Bestellung',
@@ -553,6 +569,7 @@ export default {
       produits: 'Produkte',
       edite: 'Vertrag unterzeichnet am {date}. Bewahren Sie dieses Dokument auf.',
     },
+    etats: { nouvelle: 'Neu', negociation: 'In Verhandlung', contrat_signe: 'Vertrag unterzeichnet', travaux: 'Arbeiten laufen', terminee: 'Boden geliefert', annulee: 'Storniert' },
   },
   devis: {
     etats: { envoye: 'Gesendet', accepte: 'Angenommen', refuse: 'Abgelehnt', remplace: 'Ersetzt' },

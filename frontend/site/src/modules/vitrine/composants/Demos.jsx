@@ -6,6 +6,7 @@ import EtatVide from '@partage/ui/EtatVide.jsx';
 import Icone from '@partage/ui/Icone.jsx';
 import MessageErreur from '@partage/ui/MessageErreur.jsx';
 
+import EnteteSection from '@/composants/EnteteSection.jsx';
 import ImageMedia from '@/composants/ImageMedia.jsx';
 import VoirPlus from '@/composants/VoirPlus.jsx';
 import { useTraduction } from '@/i18n/index.js';
@@ -71,8 +72,9 @@ export default function Demos() {
   const { t } = useTraduction();
   const liste = useDemos();
   return (
-    <section id="demos" className={styles.section} aria-labelledby="titre-demos">
-      <h2 id="titre-demos" className={styles.titreSection}>{t('vitrine.demos.titre')}</h2>
+    <section id="demos" className="m-section blanche" aria-labelledby="titre-demos">
+     <div className="m-conteneur">
+      <EnteteSection id="titre-demos" surtitre={t('vitrine.transformation.surtitre')} titre={t('vitrine.demos.titre')} />
       {liste.chargement && !liste.elements.length && <Chargement />}
       <MessageErreur erreur={liste.erreur} reessayer={liste.recharger} />
       {!liste.chargement && !liste.erreur && !liste.elements.length && (
@@ -94,6 +96,7 @@ export default function Demos() {
         </ul>
       )}
       <VoirPlus liste={liste} />
+     </div>
     </section>
   );
 }

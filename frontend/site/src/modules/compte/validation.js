@@ -32,6 +32,9 @@ export function validerInscription(form) {
   if (!form.mot_de_passe) erreurs.mot_de_passe = t('compte.validation.motDePasseAChoisir');
   else if (form.mot_de_passe.length < 8) erreurs.mot_de_passe = t('compte.validation.motDePasseCourt');
   else if (/^\d+$/.test(form.mot_de_passe)) erreurs.mot_de_passe = t('compte.validation.motDePasseChiffres');
+  // Champs de l'écran de la maquette (absents des anciens appels : on ne vérifie que ce qui est fourni).
+  if (form.confirmation !== undefined && form.confirmation !== form.mot_de_passe) erreurs.confirmation = t('compte.validation.confirmationDifferente');
+  if (form.consentement === false) erreurs.consentement = t('compte.validation.consentementManquant');
   return { ...erreurs, ...validerAdresse(form) };
 }
 

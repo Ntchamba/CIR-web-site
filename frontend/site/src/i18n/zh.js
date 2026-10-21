@@ -65,6 +65,7 @@ export default {
       ville: '城市',
       quartier: '街区',
       rueOuRepere: '街道或地标',
+      confirmation: '确认密码',
     },
     exemples: {
       telephone: '+237 6XX XX XX XX',
@@ -91,12 +92,14 @@ export default {
       description: '创建您的 CIR 账户，订购环氧树脂地坪涂装。',
       intro: '有了账户，您就可以下单并跟踪施工进度。',
       coordonnees: '您的联系方式',
-      adresse: '您的地址',
+      adresse: '地址（下单必填）',
       adresseAide: '下单以及我们的团队上门都需要此地址。',
       bouton: '创建我的账户',
       dejaUnCompte: '已有账户？',
       seConnecter: '登录',
       incomplet: '部分信息缺失或有误，请检查表单。',
+      consentement: '我同意将我的数据用于处理我的订单。',
+      groupeOnglets: '登录或注册',
     },
     profil: {
       titre: '我的账户',
@@ -123,7 +126,10 @@ export default {
       villeVide: '请输入您所在的城市。',
       quartierVide: '请输入您所在的街区。',
       rueVide: '请输入街道或知名地标。',
+      confirmationDifferente: '两次输入的密码不一致。',
+      consentementManquant: '请勾选此项以创建账户。',
     },
+    visuel: '您的地坪，焕然一新',
   },
   liste: {
     voirPlus: '查看更多',
@@ -280,7 +286,7 @@ export default {
   vitrine: {
     titre: '工程案例',
     description: 'CIR 工程的施工前后对比照片、视频演示和客户评价。',
-    intro: '图片展示我们的工程，视频演示施工过程，并倾听客户的评价。',
+    intro: '环氧树脂的实际应用，来自已完成的工程。',
     sommaire: '本页内容',
     realisations: {
       titre: '我们的工程',
@@ -292,6 +298,7 @@ export default {
         texte: '我们的工程照片即将上线。',
         texteType: '该类型暂无已发布的工程。',
       },
+      onglets: { tous: '全部', maison: '住宅', industrie: '工业', entreprise: '企业', exterieur: '室外' },
     },
     avantApres: {
       avant: '施工前',
@@ -348,6 +355,7 @@ export default {
         texteLong: '评价不能超过 {max} 个字符。',
       },
     },
+    transformation: { surtitre: '演示', titre: '视频中的蜕变', alt: '视频：毛坯混凝土房间被环氧树脂地坪改造' },
   },
   actualites: {
     titre: '新闻动态',
@@ -405,7 +413,7 @@ export default {
   commandes: {
     titre: '我的订单',
     description: '跟踪您的环氧树脂地坪订单：阶段、议价、报价单和合同。',
-    intro: '跟踪订单进度，并与我们的团队协商价格和工期。',
+    intro: '跟进您的施工进度，并与团队协商您的地坪方案。',
     filtre: { etape: '按阶段筛选', toutes: '全部' },
     vide: {
       titre: '您还没有订单',
@@ -419,10 +427,12 @@ export default {
       montant: '约定金额：{montant}',
       maj: '更新于 {date}',
       actionRequise: '需要您回复',
+      titre: '订单 {reference}',
+      detailMeta: '{date} · {type}',
     },
     types: { maison: '住宅', industrie: '工业', entreprise: '企业' },
     nouvelle: {
-      bouton: '新建订单',
+      bouton: '新订单',
       titre: '新建订单',
       intro: '请描述您的工程。我们的团队会回复价格和工期方案，您可以继续协商。',
       chantier: '您的工程',
@@ -471,6 +481,8 @@ export default {
       convenu: '约定金额',
       signeLe: '合同签订于 {date}',
       chantier: '工程现场',
+      surtitre: '订单 {reference} · 提交于 {date}',
+      selectionner: '请在列表中选择一个订单。',
     },
     etapes: {
       titre: '订单进度',
@@ -482,6 +494,10 @@ export default {
       creation: '创建',
       motif: '原因：{motif}',
       par: { client: '您', equipe: 'CIR 团队' },
+      libelles: { nouvelle: '已提交申请', negociation: '协商', contrat_signe: '合同已签', travaux: '施工', terminee: '地坪已交付', annulee: '已取消' },
+      visibleCourante: '当前步骤',
+      visibleFaite: '已完成',
+      visibleAVenir: '即将进行',
     },
     actions: {
       titre: '订单操作',
@@ -550,6 +566,7 @@ export default {
       produits: '产品',
       edite: '合同签订于 {date}。请妥善保存此文件。',
     },
+    etats: { nouvelle: '新订单', negociation: '协商中', contrat_signe: '合同已签', travaux: '施工中', terminee: '地坪已交付', annulee: '已取消' },
   },
   devis: {
     etats: { envoye: '已发送', accepte: '已接受', refuse: '已拒绝', remplace: '已被取代' },

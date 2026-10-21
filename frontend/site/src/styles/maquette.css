@@ -229,6 +229,22 @@
 .m-case input { width: 20px; min-height: 20px; margin-top: 3px; }
 .m-lien-simple { justify-self: end; font-size: 14px; }
 
+.m-compte-visuel > div:first-child { display: flex; align-items: center; gap: 4px; }
+.m-marque-claire { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--blanc); min-height: 44px; }
+.m-marque-claire:hover { color: var(--blanc); }
+.m-marque-claire img { width: 46px; height: 46px; border-radius: 10px; object-fit: cover; }
+.m-marque-claire b { display: block; font-family: var(--police-titre); font-size: 20px; line-height: 1; font-weight: 600; }
+.m-marque-claire small { display: block; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; }
+.m-retour-lien { margin: 22px 0 0; }
+.m-retour-lien a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; text-decoration: underline; }
+.m-retour-accueil-tel { display: none; }
+.m-champs label { font-size: 14px; font-weight: 600; }
+.m-deux { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+.m-adresse { margin: 0; padding: 0; border: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.m-adresse legend { grid-column: 1 / -1; float: left; width: 100%; padding: 0; margin: 8px 0 16px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--encre-2); }
+.m-adresse > div:last-of-type { grid-column: 1 / -1; }
+.m-btn-compte { width: 100%; }
+
 /* ---------- Commandes (liste et détail) ---------- */
 .m-commandes { display: grid; grid-template-columns: 300px 1fr; gap: 34px; padding: 60px 0 110px; align-items: start; }
 .m-liste-cmd { display: grid; gap: 14px; align-content: start; list-style: none; margin: 0; padding: 0; }
@@ -323,6 +339,14 @@
   .m-compte-visuel h1, .m-compte-visuel p.titre { font-size: 32px; line-height: 1.1; font-weight: 500; }
   .m-compte-formes { display: block; padding: 12px 20px 40px; background: var(--fond); }
   .m-compte-boite { width: 100%; }
+  .m-retour-lien { display: none; }
+  .m-retour-accueil-tel { display: inline-flex; align-items: center; min-height: 44px; margin-bottom: 8px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; }
+  .m-deux { grid-template-columns: 1fr; }
+  .m-adresse { display: flex; flex-direction: column; gap: 14px; padding: 14px 16px 18px; border: 1px solid var(--filet); border-radius: 12px; background: var(--blanc); min-width: 0; }
+  .m-adresse legend { float: none; width: auto; padding: 0 8px; margin: 0; font-family: var(--police-titre); font-size: 16px; letter-spacing: 0; text-transform: none; color: var(--encre); }
+  .m-champs label { font-weight: 400; color: var(--encre-2); }
+  .m-btn-compte { background: var(--bleu); border-color: var(--bleu); border-radius: 26px; }
+  .m-compte-visuel > div:first-child { position: relative; }
   .m-bascule { gap: 24px; margin-bottom: 18px; }
   .m-bascule a { font-size: 19px; border-bottom-width: 2px; }
   .m-retour-accueil { display: inline-flex; align-items: center; min-height: 44px; margin-bottom: 8px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; }

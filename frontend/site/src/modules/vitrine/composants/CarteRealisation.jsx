@@ -37,23 +37,21 @@ export default function CarteRealisation({ realisation, niveauTitre = 3, resume 
     r.date ? date(r.date, { month: 'long', year: 'numeric' }) : null,
   ].filter(Boolean);
   return (
-    <article className={styles.realisation}>
-      <div className={styles.visuel}>
+    <article className="m-carte-chantier">
+      <div className="img">
         {r.image_avant?.url && r.image_apres?.url
           ? <AvantApres avant={r.image_avant} apres={r.image_apres} titre={r.titre} />
           : <ImageMedia image={r.image_apres} alt={r.image_apres?.alt || r.titre} largeur={1280} hauteur={960} />}
       </div>
-      <div className={styles.corpsRealisation}>
-        <Titre className={styles.titreRealisation}>{r.titre}</Titre>
-        {details.length > 0 && <p className={styles.details}>{details.join(' · ')}</p>}
-        {!resume && <Paragraphes texte={r.description} className={styles.description} />}
-        {!resume && r.produits?.length > 0 && (
-          <p className={styles.produits}>
-            <span>{t('vitrine.realisations.produits')}</span>{' '}
-            <ListeProduits produits={r.produits} locale={locale} />
-          </p>
-        )}
-      </div>
+      <Titre>{r.titre}</Titre>
+      {details.length > 0 && <p>{details.join(' · ')}</p>}
+      {!resume && <Paragraphes texte={r.description} className={styles.description} />}
+      {!resume && r.produits?.length > 0 && (
+        <p className={styles.produits}>
+          <span>{t('vitrine.realisations.produits')}</span>{' '}
+          <ListeProduits produits={r.produits} locale={locale} />
+        </p>
+      )}
     </article>
   );
 }

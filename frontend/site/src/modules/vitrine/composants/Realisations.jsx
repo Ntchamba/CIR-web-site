@@ -30,29 +30,30 @@ export default function Realisations() {
   }
 
   return (
-    <section id="chantiers" className={`${styles.section} p3d-grand`} aria-labelledby="titre-chantiers">
-      <h2 id="titre-chantiers" className={styles.titreSection}>{t('vitrine.realisations.titre')}</h2>
-      <div role="group" aria-label={t('vitrine.realisations.filtre')} className={styles.puces}>
-        {['', ...USAGES].map((code) => (
-          <button key={code || 'tous'} type="button" className={styles.puce} aria-pressed={type === code}
-            onClick={() => choisir(code)}>
-            {code ? t(`usages.${code}`) : t('vitrine.realisations.tous')}
-          </button>
-        ))}
+    <section id="chantiers" className="m-section claire" aria-labelledby="titre-chantiers">
+      <div className="m-conteneur">
+        <h2 id="titre-chantiers" className="visuellement-cache">{t('vitrine.realisations.titre')}</h2>
+        <div role="group" aria-label={t('vitrine.realisations.filtre')} className="m-onglets">
+          {['', ...USAGES].map((code) => (
+            <button key={code || 'tous'} type="button" aria-pressed={type === code} onClick={() => choisir(code)}>
+              {t(`vitrine.realisations.onglets.${code || 'tous'}`)}
+            </button>
+          ))}
+        </div>
+        {liste.chargement && !liste.elements.length && <Chargement />}
+        <MessageErreur erreur={liste.erreur} reessayer={liste.recharger} />
+        {!liste.chargement && !liste.erreur && !liste.elements.length && (
+          <EtatVide titre={t('vitrine.realisations.vide.titre')} niveau={3}>
+            {type ? t('vitrine.realisations.vide.texteType') : t('vitrine.realisations.vide.texte')}
+          </EtatVide>
+        )}
+        {liste.elements.length > 0 && (
+          <ul className="m-grille-3">
+            {liste.elements.map((r) => <li key={r.id} className="p3d"><CarteRealisation realisation={r} /></li>)}
+          </ul>
+        )}
+        <VoirPlus liste={liste} />
       </div>
-      {liste.chargement && !liste.elements.length && <Chargement />}
-      <MessageErreur erreur={liste.erreur} reessayer={liste.recharger} />
-      {!liste.chargement && !liste.erreur && !liste.elements.length && (
-        <EtatVide titre={t('vitrine.realisations.vide.titre')} niveau={3}>
-          {type ? t('vitrine.realisations.vide.texteType') : t('vitrine.realisations.vide.texte')}
-        </EtatVide>
-      )}
-      {liste.elements.length > 0 && (
-        <ul className={styles.grilleRealisations}>
-          {liste.elements.map((r) => <li key={r.id} className="p3d"><CarteRealisation realisation={r} /></li>)}
-        </ul>
-      )}
-      <VoirPlus liste={liste} />
     </section>
   );
 }

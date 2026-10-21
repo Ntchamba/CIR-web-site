@@ -31,19 +31,16 @@ export function Etoiles({ note }) {
 
 function CarteTemoignage({ temoignage: tm }) {
   const { t } = useTraduction();
-  const details = [tm.ville, estUsage(tm.type_chantier) ? t(`usages.${tm.type_chantier}`) : null].filter(Boolean);
+  const details = [tm.nom_affiche, estUsage(tm.type_chantier) ? t(`usages.${tm.type_chantier}`) : null, tm.ville].filter(Boolean);
   return (
-    <figure className={styles.temoignage}>
+    <blockquote lang={attributLang(tm.langue)} className={styles.citationMaquette}>
       <Etoiles note={tm.note} />
-      <blockquote lang={attributLang(tm.langue)} className={styles.citation}>
-        <p>{tm.texte}</p>
-      </blockquote>
-      <figcaption className={styles.auteur}>
-        <strong>{tm.nom_affiche}</strong>
-        {details.length > 0 && <span>{details.join(' · ')}</span>}
-        {tm.date && <time dateTime={tm.date}>{date(tm.date)}</time>}
-      </figcaption>
-    </figure>
+      <p>« {tm.texte} »</p>
+      <cite>
+        {details.join(' · ')}
+        {tm.date && <> · <time dateTime={tm.date}>{date(tm.date)}</time></>}
+      </cite>
+    </blockquote>
   );
 }
 
@@ -58,7 +55,7 @@ export default function Temoignages() {
         <EtatVide titre={t('vitrine.temoignages.vide.titre')} niveau={3}>{t('vitrine.temoignages.vide.texte')}</EtatVide>
       )}
       {liste.elements.length > 0 && (
-        <ul className={styles.grilleTemoignages}>
+        <ul className={`m-grille-2 m-temoins ${styles.grilleTemoignages}`}>
           {liste.elements.map((tm) => <li key={tm.id}><CarteTemoignage temoignage={tm} /></li>)}
         </ul>
       )}
