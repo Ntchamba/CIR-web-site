@@ -81,10 +81,18 @@ _IMAGE_MD = re.compile(r"!\[[^\]]*\]\([^)]*\)")
 _LIEN_MD = re.compile(r"\[([^\]]*)\]\(\s*([^)]*?)\s*\)")
 _SCHEMAS = re.compile(r"\b(?:javascript|data|vbscript|file)\s*:[^\s)>\]]*", re.IGNORECASE)
 _URL = re.compile(r"(?:\b[a-z][a-z0-9+.\-]*://|\bwww\.)[^\s)>\]\"']*", re.IGNORECASE)
+_EXTENSIONS = (r"pdf|jpe?g|png|webp|gif|svg|docx?|xlsx?|pptx?|csv|txt|zip|rar|mp[34]|mov|avi|html?|json|xml|md|py|js|css|"
+               r"heic|odt|ods|rtf|log|bak|tmp|ini|exe")
+# Domaine « nu » : mot.mot ou mot.mot/chemin, extension alphabétique d'au moins 2 lettres, toute en minuscules ou
+# toute en majuscules (« Bonjour.Merci », oubli d'espace après un point, n'est pas un domaine). Fichiers exclus.
 _DOMAINE = re.compile(
-    r"\b(?:[a-z0-9][a-z0-9\-]*\.)+(?:com|net|org|info|biz|io|co|cm|fr|de|cn|jp|ru|app|dev|me|ly|xyz|site|online|"
-    r"shop|store|top|edu|gov|eu|uk|us|ai|tv)\b(?:/[^\s)>\]\"']*)?", re.IGNORECASE)
+    rf"(?<![\w@.\-])(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+(?!(?:{_EXTENSIONS})\b)(?:[a-z]{{2,}}|[A-Z]{{2,}})\b"
+    r"(?:/[^\s)>\]\"']*)?")
 _EMAIL = re.compile(r"[\w.+\-]+@[\w\-]+(?:\.[\w\-]+)+")
+# E-mail écrit pour tromper : « evil @ example . com », « evil (at) example (dot) com », « evil [at] example.com »
+_EMAIL_OBFUSQUE = re.compile(
+    r"[\w+\-]+(?:\.[\w+\-]+)*\s*(?:@|\(at\)|\[at\]|\{at\}|\sat\s)\s*[\w\-]+(?:\s*(?:\.|\(dot\)|\[dot\]|\sdot\s)\s*[\w\-]+)+",
+    re.IGNORECASE)
 
 
 def _normaliser(texte):
@@ -141,10 +149,10 @@ def retirer_html(texte):
 # --- Montants ---------------------------------------------------------------------------------------------
 
 _NB = r"\d{1,3}(?:[   .,'’]\d{3})+(?:[.,]\d+)?|\d+(?:[.,]\d+)?"
-_MULT_LATIN = (r"(?:k|millions?|milliards?|mille|milliers?|Mio\.?|Mrd\.?|thousand|billion|tausend|Millionen|"
+_MULT_LATIN = (r"(?:k|Tsd\.?|millions?|milliards?|milles?|mille|milliers?|Mio\.?|Mrd\.?|thousand|billion|tausend|Millionen|"
                r"Million|Milliarden?)")
 _MULT_CJK = r"(?:百万|万|千|億|亿)"
-_DEVISE = (r"(?:F\.?\s?CFA|FCFA|CFA|XAF|XOF|francs?(?:\s+CFA)?|Fr\.?|F|€|EUR|euros?|Euro|\$|US\$|USD|dollars?|"
+_DEVISE = (r"(?:F\.?\s?CFA|FCFA|CFA|XAF|XOF|US\s+dollars?|bucks?|francs?(?:\s+CFA)?|Fr\.?|F|€|EUR|euros?|Euro|\$|US\$|USD|dollars?|"
            r"Dollars?|£|GBP|¥|CNY|RMB|JPY|yen|Franken|Frs\.?|円|元|块|塊|ユーロ|ドル|フラン|欧元|美元|法郎|人民币|"
            r"西非法郎|中非法郎|日元|日圆|日円|港元|英镑|韩元|美金|人民幣|ウォン|ポンド)")
 _DEVISE_AVANT = r"(?:FCFA|F\.?\s?CFA|CFA|XAF|XOF|€|EUR|\$|US\$|USD|£|GBP|¥|CNY|RMB|JPY|Euro|Dollar)"
@@ -152,10 +160,15 @@ _DEVISE_AVANT = r"(?:FCFA|F\.?\s?CFA|CFA|XAF|XOF|€|EUR|\$|US\$|USD|£|GBP|¥|C
 _APRES = re.compile(
     rf"(?<![0-9A-Za-z.,\-])(?P<n>{_NB})(?P<u>\s*(?:(?:{_MULT_LATIN}|M)\s*(?:de\s+|d')?{_DEVISE}(?![A-Za-zÀ-ÿ])"
     rf"|{_MULT_LATIN}(?![A-Za-zÀ-ÿ])"
-    rf"|{_MULT_CJK}?\s*{_DEVISE}(?![A-Za-zÀ-ÿ])))", re.IGNORECASE)
+    rf"|{_MULT_CJK}?\s*(?:(?:de|d')\s*)?{_DEVISE}(?![A-Za-zÀ-ÿ])))", re.IGNORECASE)
 _AVANT = re.compile(rf"(?<![A-Za-z]){_DEVISE_AVANT}\s*(?P<n>{_NB})(?!\d)", re.IGNORECASE)
-_PAR_M2 = re.compile(rf"(?<![0-9A-Za-z.,\-])(?P<n>{_NB})\s*(?:/|par\s+|per\s+|pro\s+|je\s+|le\s+|au\s+|the\s+|每|あたり)\s*"
-                     r"(?:m²|m2|m\^2|㎡|mètre|metre|meter|metre|平方米|平米)", re.IGNORECASE)
+_UNITES_VENTE = (r"(?:m²|m2|m\^2|㎡|sqm|sq\.?\s?m|square\s+met(?:re|er)s?|m[èe]tres?\s+carr[ée]s?|met(?:re|er)s?|m[èe]tres?|"
+                 r"quadratmeter|qm|平方米|平米|平方メートル|kilos?|kg|litres?|liters?|l|seaux?|eimer|bucket|kit|pots?|bidons?|"
+                 r"sacs?|unit[ée]s?|units?|pi[èe]ces?|st[üu]cks?|ml|laufmeter|linear\s+met(?:re|er)|公斤|千克|升|桶|件|个|個|"
+                 r"キロ|リットル|バケツ|セット)")
+_PAR_M2 = re.compile(rf"(?<![0-9A-Za-z.,\-])(?P<n>{_NB})\s*(?:/|par\s+|per\s+|pro\s+|je\s+|le\s+|la\s+|au\s+|the\s+|"
+                     rf"l[’']|每|あたり)\s*{_UNITES_VENTE}(?![A-Za-zÀ-ÿ²])", re.IGNORECASE)
+_UNITE_PUIS_PRIX = re.compile(rf"(?:每|毎|1|一)\s?(?:平方米|平米|公斤|千克|升|桶|件|个|平方メートル|キロ|個)\s*(?P<n>{_NB})")
 
 _MOTS_NOMBRES = (
     r"un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|treize|quatorze|quinze|seize|vingts?|trente|"
@@ -164,10 +177,12 @@ _MOTS_NOMBRES = (
     r"eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand|"
     r"eins|zwei|drei|vier|fünf|funf|sechs|sieben|acht|neun|zehn|elf|zwölf|zwanzig|dreißig|dreissig|vierzig|"
     r"fünfzig|sechzig|siebzig|achtzig|neunzig|hundert|tausend|[a-zäöüß]+hundert|[a-zäöüß]+tausend|millionen|"
+    r"(?:ein|zwei|drei|vier|fünf|funf|sechs|sieben|acht|neun)und(?:zwanzig|dreißig|dreissig|vierzig|fünfzig|sechzig|"
+    r"siebzig|achtzig|neunzig)|"
     r"milliards?|milliarden?|mio|mrd")
-_DEVISE_MOTS = r"(?:francs?|FCFA|CFA|XAF|euros?|dollars?|Franken|Euro|Dollar)"
+_DEVISE_MOTS = r"(?:F\.?\s?CFA|francs?|FCFA|CFA|XAF|euros?|dollars?|Franken|Euro|Dollar|bucks?)"
 _EN_LETTRES = re.compile(rf"\b(?:(?:{_MOTS_NOMBRES})(?:[\s\-]+(?:et|and|und))?[\s\-]+)+(?:(?:de|d')\s*)?{_DEVISE_MOTS}\b", re.IGNORECASE)
-_EN_LETTRES_CJK = re.compile(r"[〇零一二三四五六七八九十百千万两兩億亿]+\s*(?:元|块|塊|円|法郎|フラン|欧元|美元|ドル|ユーロ|人民币)")
+_EN_LETTRES_CJK = re.compile(r"[〇零一二三四五六七八九十百千万两兩億亿]+\s*(?:元|块|塊|円|法郎|フラン|欧元|美元|ドル|ユーロ|人民币|F\.?\s?CFA|FCFA|XAF|XOF|CFA|EUR|USD)", re.IGNORECASE)
 
 _MOT_PRIX = (r"(?:prix|tarifs?|co[uû]t[^\W\d_]*|montants?|total|budget|price[^\W\d_]*|cost[^\W\d_]*|fees?|"
              r"Preis[^\W\d_]*|Kosten|kostet|Betrag|Gesamt[^\W\d_]*|价格|价钱|费用|价位|总价|单价|报价|金额|費用|価格|値段|"
@@ -185,13 +200,16 @@ _PRIX_LETTRES_CJK = re.compile(rf"{_MOT_PRIX}[^\d\n〇零一二三四五六七�
                                r"|[〇零一二三四五六七八九十两兩]{2,})", re.IGNORECASE)
 _MOT_REMISE = (r"(?:remises?|r[ée]ductions?|rabais|ristourne|discounts?|off|Rabatt\w*|Nachlass|折扣|优惠|優惠|降价|"
                r"割引|値引き?|ディスカウント|オフ)")
-_POURCENT = (rf"(?:\d+(?:[.,]\d+)?\s?%|\d+\s?割|(?:{_MOTS_NOMBRES})(?:[\s\-]+(?:{_MOTS_NOMBRES}))*\s+"
+_POURCENT = (rf"(?:\d+(?:[.,]\d+)?\s?(?:%|pour\s?cent|per\s?cent|percent|prozent)|\d+\s?割|(?:{_MOTS_NOMBRES})(?:[\s\-]+(?:{_MOTS_NOMBRES}))*\s+"
              r"(?:pour\s?cent|per\s?cent|percent|prozent))")
 _REMISE = re.compile(rf"{_MOT_REMISE}[^\n]{{0,30}}?{_POURCENT}|{_POURCENT}[^\n]{{0,30}}?{_MOT_REMISE}", re.IGNORECASE)
-_REMISE_SEULE = re.compile(r"\d+\s?割|[一二三四五六七八九十]折|[0-9]折|打[一二三四五六七八九十0-9]折")
+_REMISE_SEULE = re.compile(r"\d+(?:[.,]\d+)?\s?%\s*(?:de\s+)?(?:moins|less|weniger|cheaper|billiger|off)\b|"
+                          r"\b(?:moins|less|minus|weniger)\s+(?:de\s+)?\d+(?:[.,]\d+)?\s?%|(?<![\d\w])[-−–]\s?\d+(?:[.,]\d+)?\s?%|"
+                          r"\b(?:gratuit(?:e|es|s)?|offert(?:e|es|s)?|free\s+of\s+charge|kostenlos|gratis|prix\s+co[uû]tant|"
+                          r"half[\s-]price|moiti[ée]\s+prix|halber\s+preis)\b|免费|免費|無料|\d+\s?割|[一二三四五六七八九十]折|[0-9]折|打[一二三四五六七八九十0-9]折")
 
 _MULTIPLICATEURS = {"k": 10**3, "mille": 10**3, "millier": 10**3, "milliers": 10**3, "thousand": 10**3,
-                    "tausend": 10**3, "million": 10**6, "millions": 10**6, "mio": 10**6, "millionen": 10**6,
+                    "tausend": 10**3, "tsd": 10**3, "milles": 10**3, "million": 10**6, "millions": 10**6, "mio": 10**6, "millionen": 10**6,
                     "milliard": 10**9, "milliards": 10**9, "mrd": 10**9, "billion": 10**9, "milliarden": 10**9,
                     "milliarde": 10**9, "百万": 10**6, "万": 10**4, "千": 10**3, "億": 10**8, "亿": 10**8}
 
@@ -221,7 +239,7 @@ def montants_du_texte(texte):
     (écrit en lettres, remise en pourcentage…)."""
     texte = _normaliser(texte)
     trouves = []
-    for motif in (_APRES, _PAR_M2):
+    for motif in (_APRES, _PAR_M2, _UNITE_PUIS_PRIX):
         for m in motif.finditer(texte):
             try:
                 valeur = _decimal(m.group("n"))
@@ -349,7 +367,7 @@ def contient_engagement(texte):
 
 _REFERENCE = re.compile(r"\b[A-Z]{2,4}-\d{4}-\d{4,6}\b")
 _DATE_ISO = re.compile(r"\b\d{4}-\d{2}-\d{2}\b|(?<![\d.])(?:0?[1-9]|[12]\d|3[01])[/.](?:0?[1-9]|1[0-2])[/.](?:\d{4}|\d{2})(?![\d.])")
-_TELEPHONE = re.compile(r"(?<![\w/])(?:\+|00)?\d(?:[\d  .\-()]{5,}\d)")
+_TELEPHONE = re.compile(r"(?<![\w/])(?:\+|00)?\d(?:[\d \u00a0.\-()/·・\u2010-\u2015\u2212]{5,}\d)")
 
 
 def _cle_telephone(valeur):
@@ -373,8 +391,19 @@ def telephones_du_texte(texte):
             if 8 <= len(re.sub(r"\D", "", m.group(0))) <= 15]
 
 
+def _forme_email(brut):
+    brut = re.sub(r"\s*(?:\(at\)|\[at\]|\{at\}|\sat\s)\s*", "@", brut, flags=re.IGNORECASE)
+    brut = re.sub(r"\s*(?:\(dot\)|\[dot\]|\sdot\s)\s*", ".", brut, flags=re.IGNORECASE)
+    return re.sub(r"\s+", "", brut).lower()
+
+
 def emails_du_texte(texte):
-    return [(m.start(), m.end(), m.group(0).lower()) for m in _EMAIL.finditer(_normaliser(texte))]
+    texte = _normaliser(texte)
+    trouves = {(m.start(), m.end(), m.group(0).lower()) for m in _EMAIL.finditer(texte)}
+    for m in _EMAIL_OBFUSQUE.finditer(texte):
+        if not any(d <= m.start() and m.end() <= f for d, f, _v in trouves):
+            trouves.add((m.start(), m.end(), _forme_email(m.group(0))))
+    return sorted(trouves)
 
 
 def masquer_coordonnees(texte, remplacement="[masqué]"):
@@ -436,7 +465,7 @@ def _traiter_liens(texte, autorises):
     texte = _IMAGE_MD.sub("", texte)
     texte = _LIEN_MD.sub(remplacer, texte)
     vue = _Vue(texte)
-    mails = [(m.start(), m.end()) for m in _EMAIL.finditer(vue.norm)]  # jugés plus loin : leur domaine reste
+    mails = [(d, f) for d, f, _v in emails_du_texte(vue.norm)]  # jugés plus loin : leur domaine reste
     zones = [(m.start(), m.end()) for motif in (_SCHEMAS, _URL) for m in motif.finditer(vue.norm)]
     zones += [(m.start(), m.end()) for m in _DOMAINE.finditer(vue.norm)
               if not any(d <= m.start() and m.end() <= f for d, f in mails)]
