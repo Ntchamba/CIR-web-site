@@ -8,6 +8,7 @@ import MessageErreur from '@partage/ui/MessageErreur.jsx';
 import { date, fcfa, STATUTS, surface } from '@partage/utils/format.js';
 import usePageMeta from '@partage/utils/usePageMeta.js';
 
+import BandeauPhoto from '@/composants/BandeauPhoto.jsx';
 import VoirPlus from '@/composants/VoirPlus.jsx';
 import { useTraduction } from '@/i18n/index.js';
 
@@ -31,14 +32,12 @@ export default function CommandesPage() {
   }, { replace: true });
 
   return (
+    <>
+    <BandeauPhoto titre={t('commandes.titre')} intro={t('commandes.intro')}>
+      <Bouton as={Link} to="/commandes/nouvelle">{t('commandes.nouvelle.bouton')}</Bouton>
+    </BandeauPhoto>
+    <div className="verre">
     <div className="conteneur section">
-      <div className={styles.entetePage}>
-        <div>
-          <h1 className="titre-page">{t('commandes.titre')}</h1>
-          <p className={styles.intro}>{t('commandes.intro')}</p>
-        </div>
-        <Bouton as={Link} to="/commandes/nouvelle">{t('commandes.nouvelle.bouton')}</Bouton>
-      </div>
 
       <div role="group" aria-label={t('commandes.filtre.etape')} className={styles.filtreEtapes}>
         {['', ...Object.keys(STATUTS)].map((cle) => (
@@ -61,7 +60,7 @@ export default function CommandesPage() {
       {liste.elements.length > 0 && (
         <ul className={styles.liste} aria-label={t('commandes.titre')}>
           {liste.elements.map((c) => (
-            <li key={c.id}>
+            <li key={c.id} className="p3d">
               <article className={`${styles.carteCommande} ${c.action_requise ? styles.carteAttente : ''}`}>
                 <div className={styles.carteHaut}>
                   <h2><Link to={`/commandes/${c.id}`}>{c.reference}</Link></h2>
@@ -87,5 +86,7 @@ export default function CommandesPage() {
       )}
       <VoirPlus liste={liste} />
     </div>
+    </div>
+    </>
   );
 }

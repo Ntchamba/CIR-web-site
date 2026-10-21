@@ -30,7 +30,7 @@ export default function Realisations() {
   }
 
   return (
-    <section id="chantiers" className={styles.section} aria-labelledby="titre-chantiers">
+    <section id="chantiers" className={`${styles.section} p3d-grand`} aria-labelledby="titre-chantiers">
       <h2 id="titre-chantiers" className={styles.titreSection}>{t('vitrine.realisations.titre')}</h2>
       <div role="group" aria-label={t('vitrine.realisations.filtre')} className={styles.puces}>
         {['', ...USAGES].map((code) => (
@@ -49,7 +49,7 @@ export default function Realisations() {
       )}
       {liste.elements.length > 0 && (
         <ul className={styles.grilleRealisations}>
-          {liste.elements.map((r) => <li key={r.id}><CarteRealisation realisation={r} /></li>)}
+          {liste.elements.map((r) => <li key={r.id} className="p3d"><CarteRealisation realisation={r} /></li>)}
         </ul>
       )}
       <VoirPlus liste={liste} />

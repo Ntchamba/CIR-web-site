@@ -1,7 +1,7 @@
 /* Module vitrine : réalisations, avant / après, démonstrations, témoignages. */
 .entete { margin-bottom: 12px; }
 .intro { margin-top: 8px; max-width: 700px; color: var(--encre-2); }
-.sommaire { display: flex; flex-wrap: wrap; gap: 4px 24px; margin-top: 16px; }
+.sommaire { display: flex; flex-wrap: wrap; gap: 4px 24px; }
 .sommaire a { display: inline-flex; align-items: center; min-height: var(--cible-tactile); font-weight: 600; }
 
 .section { padding-top: 48px; scroll-margin-top: calc(var(--hauteur-entete) + 12px); }
