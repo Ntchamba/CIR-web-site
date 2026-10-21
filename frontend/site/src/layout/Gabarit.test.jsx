@@ -34,7 +34,7 @@ describe('Gabarit : changement de page', () => {
   it('le focus passe sur le contenu principal après un changement de page (pas au premier affichage)', async () => {
     simulerApi();
     const { routeur } = demarrer('/');
-    await screen.findByRole('heading', { level: 1, name: /résine époxy/ });
+    await screen.findByRole('heading', { level: 1, name: /Révélation/ });
     expect(document.activeElement).toBe(document.body);
     await aller(routeur, '/catalogue');
     await screen.findByRole('heading', { level: 1, name: 'Catalogue' });
@@ -45,7 +45,7 @@ describe('Gabarit : changement de page', () => {
   it('annonce le titre de la nouvelle page aux lecteurs d\'écran (zone status, invisible)', async () => {
     simulerApi();
     const { routeur } = demarrer('/');
-    await screen.findByRole('heading', { level: 1, name: /résine époxy/ });
+    await screen.findByRole('heading', { level: 1, name: /Révélation/ });
     const zone = screen.getByTestId('annonce-page');
     expect(zone).toHaveAttribute('role', 'status');
     expect(zone).toHaveAttribute('aria-live', 'polite');
@@ -59,7 +59,7 @@ describe('Gabarit : changement de page', () => {
   it('la scène décorative est masquée aux lecteurs d\'écran et ne contient rien de focalisable', async () => {
     simulerApi();
     const { container } = demarrer('/connexion');
-    await screen.findByRole('heading', { level: 1, name: 'Se connecter' });
+    await screen.findByRole('heading', { level: 1, name: /Votre sol, révélé/ });
     const scene = container.querySelector('.scene');
     expect(scene).toHaveAttribute('aria-hidden', 'true');
     expect(scene.querySelectorAll('a, button, input, [tabindex]')).toHaveLength(0);
@@ -124,7 +124,7 @@ describe('Gabarit : changement de page', () => {
   it('page inconnue : 404 avec lien vers l\'accueil, focus sur le contenu', async () => {
     simulerApi();
     const { routeur } = demarrer('/');
-    await screen.findByRole('heading', { level: 1, name: /résine époxy/ });
+    await screen.findByRole('heading', { level: 1, name: /Révélation/ });
     await aller(routeur, '/page/qui/nexiste/pas');
     expect(await screen.findByRole('heading', { level: 1, name: "Cette page n'existe pas" })).toBeInTheDocument();
     expect(within(screen.getByRole('main')).getByRole('link', { name: "Retour à l'accueil" })).toHaveAttribute('href', '/');
@@ -133,30 +133,42 @@ describe('Gabarit : changement de page', () => {
 
   it('ordre de tabulation : lien d\'évitement, puis en-tête, puis contenu, puis pied de page', async () => {
     simulerApi();
-    const { container } = demarrer('/connexion');
-    await screen.findByRole('heading', { level: 1, name: 'Se connecter' });
+    const { container } = demarrer('/contact');
+    await screen.findByRole('heading', { level: 1, name: 'Parlons de votre sol' });
     const ordre = [...container.querySelectorAll('a[href], button, input, select')].filter((e) => !e.closest('[aria-hidden="true"]'));
     expect(ordre[0]).toHaveAttribute('href', '#contenu');
     const position = (e) => ordre.indexOf(e);
     const retour = screen.getByRole('button', { name: 'Retour à la page précédente' });
     const logo = screen.getAllByRole('link', { name: /Retour à l'accueil|accueil/i })[0];
     expect(position(retour)).toBeLessThan(position(logo)); // la flèche « < » vient avant le logo
-    expect(position(logo)).toBeLessThan(position(screen.getByLabelText(/E-mail/)));
-    expect(position(screen.getByLabelText(/E-mail/))).toBeLessThan(position(within(screen.getByRole('contentinfo')).getAllByRole('link')[0]));
+    expect(position(logo)).toBeLessThan(position(screen.getByLabelText(/Nom complet/)));
+    expect(position(screen.getByLabelText(/Nom complet/))).toBeLessThan(position(within(screen.getByRole('contentinfo')).getAllByRole('link')[0]));
     // la scène (pas de focus possible) et le contenu restent dans l'ordre du document
     expect(container.querySelector('.scene').compareDocumentPosition(screen.getByRole('main')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it('l\'écran de connexion n\'a ni en-tête ni pied de page (maquette) mais porte sa propre flèche de retour', async () => {
+    simulerApi();
+    const { container } = demarrer('/connexion');
+    await screen.findByRole('heading', { level: 1, name: /Votre sol, révélé/ });
+    expect(container.querySelector('header')).toBeNull();
+    expect(container.querySelector('footer')).toBeNull();
+    expect(screen.getAllByRole('button', { name: 'Retour à la page précédente' })).toHaveLength(1);
+    expect(screen.getByRole('link', { name: 'Créer un compte' })).toHaveAttribute('href', '/inscription');
+    expect(screen.getByRole('link', { name: 'Se connecter' })).toHaveAttribute('aria-current', 'page');
   });
 
   it('Tab depuis le contenu principal focalisé va au premier élément interactif du contenu', async () => {
     simulerApi();
     const { routeur } = demarrer('/');
-    await screen.findByRole('heading', { level: 1, name: /résine époxy/ });
+    await screen.findByRole('heading', { level: 1, name: /Révélation/ });
     await aller(routeur, '/connexion');
-    await screen.findByRole('heading', { level: 1, name: 'Se connecter' });
+    await screen.findByRole('heading', { level: 1, name: /Votre sol, révélé/ });
     expect(document.activeElement).toBe(screen.getByRole('main'));
     await userEvent.tab();
     expect(screen.getByRole('main').contains(document.activeElement)).toBe(true);
-    expect(document.activeElement).toBe(screen.getByLabelText(/E-mail/));
+    // Dans l'écran de connexion, le premier élément interactif du contenu est la flèche de retour (téléphone).
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Retour à la page précédente' }));
   });
 });
 
@@ -166,7 +178,7 @@ describe('Routeur de données : routes protégées et redirections', () => {
   it('sans session, une adresse profonde protégée mène à la connexion avec la suite complète (chemin + filtres)', async () => {
     simulerApi();
     const { routeur } = demarrer('/commandes/5/payer?mode=mtn');
-    expect(await screen.findByRole('heading', { level: 1, name: 'Se connecter' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: /Votre sol, révélé/ })).toBeInTheDocument();
     expect(chemin(routeur)).toBe('/connexion?suite=%2Fcommandes%2F5%2Fpayer%3Fmode%3Dmtn');
     // la redirection remplace l'entrée : le retour arrière ne reboucle pas
     expect(routeur.state.historyAction).toBe('REPLACE');
@@ -179,7 +191,7 @@ describe('Routeur de données : routes protégées et redirections', () => {
       'GET /api/selection/resume/': reponse(200, { count: 0, produits: [] }),
     });
     const { routeur } = demarrer('/commandes?filtre=en-cours');
-    await screen.findByRole('heading', { level: 1, name: 'Se connecter' });
+    await screen.findByRole('heading', { level: 1, name: /Votre sol, révélé/ });
     await userEvent.type(screen.getByLabelText(/E-mail/), 'awa@exemple.cm');
     await userEvent.type(screen.getByLabelText(/Mot de passe/), 'MotDePasse-Test-2026');
     await userEvent.click(screen.getByRole('button', { name: 'Se connecter' }));
@@ -216,7 +228,7 @@ describe('Bascule « à plat » (amélioration progressive)', () => {
     simulerApi();
     const { unmount } = demarrer('/');
     expect(document.documentElement).toHaveAttribute('data-plat');
-    await screen.findByRole('heading', { level: 1, name: /résine époxy/ });
+    await screen.findByRole('heading', { level: 1, name: /Révélation/ });
     unmount();
     expect(document.documentElement).not.toHaveAttribute('data-plat');
   });
@@ -226,7 +238,7 @@ describe('Bascule « à plat » (amélioration progressive)', () => {
     simulerMouvementReduit(false);
     vi.stubGlobal('CSS', { supports: () => true });
     demarrer('/');
-    await screen.findByRole('heading', { level: 1, name: /résine époxy/ });
+    await screen.findByRole('heading', { level: 1, name: /Révélation/ });
     expect(document.documentElement).not.toHaveAttribute('data-plat');
   });
 
@@ -237,10 +249,10 @@ describe('Bascule « à plat » (amélioration progressive)', () => {
     Object.defineProperty(navigator, 'connection', { value: { saveData: true }, configurable: true });
     try {
       demarrer('/');
-      await screen.findByRole('heading', { level: 1, name: /résine époxy/ });
+      await screen.findByRole('heading', { level: 1, name: /Révélation/ });
       expect(document.documentElement).toHaveAttribute('data-plat');
       const titres = screen.getAllByRole('heading').map((h) => h.textContent);
-      expect(titres.length).toBeGreaterThan(3);
+      expect(titres.length).toBeGreaterThan(1); // titre principal et contact ; les autres sections n'apparaissent qu'avec des données réelles
       // le titre principal vient avant les sections
       expect(screen.getAllByRole('heading')[0]).toHaveProperty('tagName', 'H1');
     } finally {

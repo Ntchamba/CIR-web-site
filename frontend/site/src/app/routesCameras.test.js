@@ -75,7 +75,7 @@ describe('routes et cadrages', () => {
   it('le cadrage de l\'accueil vise la lumière des fenêtres définie dans le CSS (--fx, --fy)', () => {
     const css = readFileSync('src/styles/profondeur.css', 'utf8');
     const bureau = /:root \{ --fx: (\d+)%; --fy: (\d+)%;/.exec(css);
-    const tel = /@media \(max-width: 700px\) \{ :root \{ --fx: (\d+)%; --fy: (\d+)%;/.exec(css);
+    const tel = /@media \(max-width: 900px\) { :root \{ --fx: (\d+)%; --fy: (\d+)%;/.exec(css);
     const accueil = CAMERAS.find((c) => c.nom === 'accueil');
     expect([accueil.bureau.x, accueil.bureau.y]).toEqual([Number(bureau[1]), Number(bureau[2])]);
     expect([accueil.tel.x, accueil.tel.y]).toEqual([Number(tel[1]), Number(tel[2])]);

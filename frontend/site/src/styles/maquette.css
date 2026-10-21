@@ -229,7 +229,7 @@
 .m-case input { width: 20px; min-height: 20px; margin-top: 3px; }
 .m-lien-simple { justify-self: end; font-size: 14px; }
 
-.m-compte-visuel > div:first-child { display: flex; align-items: center; gap: 4px; }
+.m-compte-haut { display: flex; align-items: center; gap: 4px; }
 .m-marque-claire { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--blanc); min-height: 44px; }
 .m-marque-claire:hover { color: var(--blanc); }
 .m-marque-claire img { width: 46px; height: 46px; border-radius: 10px; object-fit: cover; }
@@ -311,13 +311,15 @@
   .m-champs input:not([type='radio']):not([type='checkbox']), .m-champs select, .m-champs textarea { border-color: var(--champ); background: var(--blanc); }
   .m-bandeau { display: block; height: auto; margin-top: 0; }
   .m-bandeau::after { display: none; }
-  .m-bandeau > div { padding: 24px 20px 20px; }
+  .m-bandeau { background: var(--fond); }
+  .m-bandeau > div { padding: 24px 20px 20px; text-align: center; }
+  .m-fond-flou { background: var(--fond); }
   .m-bandeau h1 { font-size: 34px; line-height: 1.3; font-weight: 500; color: var(--bleu); text-shadow: none; }
   .m-bandeau p { margin: 0; max-width: none; font-family: var(--police-texte); font-size: 16px; color: var(--encre-2); text-shadow: none; }
   .m-fenetre-tel { position: relative; height: 220px; overflow: hidden; color: var(--blanc); display: grid; place-items: center; text-align: center; padding: 20px; }
   .m-fenetre-tel::after { content: ''; position: absolute; inset: 0; background: rgba(14, 42, 56, 0.38); }
   .m-fenetre-tel p { position: relative; z-index: 1; margin: 0; font-family: var(--police-titre); font-size: 28px; line-height: 1.2; }
-  .m-catalogue { display: block; padding: 24px 0 24px; }
+  .m-catalogue { display: block; padding: 24px 20px; }
   .m-filtres { position: static; gap: 14px; margin-bottom: 8px; }
   .m-filtres .m-puces-tel { display: flex; gap: 8px; overflow-x: auto; margin-inline: -20px; padding-inline: 20px; }
   .m-filtres .m-puces-tel button { flex-shrink: 0; min-height: 44px; padding: 0 18px; border: 1px solid var(--champ); border-radius: 22px; background: var(--blanc); font: inherit; font-size: 15px; color: var(--encre); cursor: pointer; }
@@ -333,7 +335,7 @@
   .m-onglets button { flex-shrink: 0; padding: 0 18px; border-color: var(--champ); border-radius: 22px; font-size: 15px; font-weight: 400; }
   .m-onglets button[aria-pressed='true'] { font-weight: 600; }
   .m-video-demo { border-radius: 0; box-shadow: none; }
-  .m-compte { display: block; min-height: 0; }
+  .m-compte { display: block; min-height: calc(100dvh - var(--hauteur-onglets)); background: var(--fond); }
   .m-compte-visuel { min-height: 0; height: 210px; padding: 14px 20px 20px; }
   .m-compte-visuel::after { background: linear-gradient(180deg, rgba(8, 24, 32, 0.6) 0%, rgba(8, 24, 32, 0.2) 40%, rgba(8, 24, 32, 0.82) 100%); }
   .m-compte-visuel h1, .m-compte-visuel p.titre { font-size: 32px; line-height: 1.1; font-weight: 500; }
@@ -346,7 +348,7 @@
   .m-adresse legend { float: none; width: auto; padding: 0 8px; margin: 0; font-family: var(--police-titre); font-size: 16px; letter-spacing: 0; text-transform: none; color: var(--encre); }
   .m-champs label { font-weight: 400; color: var(--encre-2); }
   .m-btn-compte { background: var(--bleu); border-color: var(--bleu); border-radius: 26px; }
-  .m-compte-visuel > div:first-child { position: relative; }
+
   .m-bascule { gap: 24px; margin-bottom: 18px; }
   .m-bascule a { font-size: 19px; border-bottom-width: 2px; }
   .m-retour-accueil { display: inline-flex; align-items: center; min-height: 44px; margin-bottom: 8px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; }
@@ -360,6 +362,7 @@
   .m-cmd .m-etiquette-etat::before { display: none; }
   .m-detail { margin: 0 20px 48px; padding: 20px; border-radius: 18px; box-shadow: none; }
   .m-detail .haut { align-items: center; }
+  .m-detail .m-surtitre { font-size: 11px; letter-spacing: 0.1em; }
   .m-detail h2 { font-size: 21px; line-height: 1.2; margin: 2px 0; }
   .m-etapes { display: flex; flex-direction: column; gap: 10px; margin: 22px 0; }
   .m-etapes li { padding-left: 14px; border-left: 3px solid var(--filet); color: var(--encre-2); display: flex; flex-direction: column; }
@@ -375,10 +378,7 @@
   .m-bulle.moi small { color: #c9d6dd; }
 }
 
-/* Pages hors cadre : l'écran de connexion n'a ni en-tête ni pied de page (il porte son propre logo) ; la fiche produit
-   est plein écran sur téléphone (ni en-tête, ni barre d'onglets, ni pied de page). */
-[data-vue='connexion'] [data-vt='entete'], [data-vue='inscription'] [data-vt='entete'],
-[data-vue='connexion'] [data-pied], [data-vue='inscription'] [data-pied] { display: none; }
+/* Fiche produit plein écran sur téléphone : ni en-tête, ni barre d'onglets, ni pied de page. */
 @media (max-width: 900px) {
   [data-vue='produit'] [data-vt='entete'], [data-vue='produit'] [data-vt='onglets'], [data-vue='produit'] [data-pied] { display: none; }
   body:has([data-vue='produit']) { padding-bottom: 0; }

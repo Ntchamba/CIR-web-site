@@ -6,8 +6,6 @@ import { MemoryRouter } from 'react-router';
 import App from '@/app/App.jsx';
 import { appels, page, parametresDes, reponse, simulerApi, simulerMouvementReduit } from '@/test/outils.jsx';
 
-import { positions } from './composants/Sphere.jsx';
-
 const CONTENU = {
   titre: 'Révélation',
   accroche: 'Là où naissent les sols durables.',
@@ -31,12 +29,13 @@ function rendre() {
   return render(<MemoryRouter initialEntries={['/']}><App /></MemoryRouter>);
 }
 
-function api(contenu, { produits = [], actualites = [], realisations = [] } = {}) {
+function api(contenu, { produits = [], actualites = [], realisations = [], temoignages = [] } = {}) {
   return simulerApi({
     'GET /api/contenus/accueil/': reponse(200, contenu),
     'GET /api/catalogue/produits/': reponse(200, page(produits)),
     'GET /api/actualites/': reponse(200, page(actualites)),
     'GET /api/vitrine/realisations/': reponse(200, page(realisations)),
+    'GET /api/vitrine/temoignages/': reponse(200, page(temoignages)),
   });
 }
 
@@ -56,7 +55,7 @@ describe('AccueilPage', () => {
     expect(within(bandeaux).getByRole('link', { name: 'Nouvelle gamme disponible' })).toHaveAttribute('href', '/catalogue');
     expect(within(bandeaux).queryByRole('link', { name: 'Lien externe' })).toBeNull();
 
-    const sphere = screen.getByRole('list', { name: 'Photos de sols en résine époxy' });
+    const sphere = screen.getByRole('group', { name: 'Photos de sols en résine époxy' });
     expect(within(sphere).getByRole('link', { name: 'Voir le produit Sol autolissant' })).toHaveAttribute('href', '/catalogue/yd-500');
     expect(within(sphere).getByRole('link', { name: 'Photo 2 : voir le catalogue' })).toHaveAttribute('href', '/catalogue');
 
@@ -64,7 +63,6 @@ describe('AccueilPage', () => {
     expect(video).toHaveAttribute('src', CONTENU.video_fond);
     expect(video).not.toHaveAttribute('loop');
     expect(video.muted).toBe(true);
-    expect(screen.getByText('Texte partenaire saisi par l’équipe.')).toBeInTheDocument();
 
     // Une seule requête de contenus pour l'en-tête, le pied de page et l'accueil
     await waitFor(() => expect(appels(fetch, 'GET', '/api/contenus/accueil/')).toHaveLength(1));
@@ -74,40 +72,46 @@ describe('AccueilPage', () => {
     api(CONTENU);
     rendre();
     const pied = screen.getByRole('contentinfo');
-    expect(await within(pied).findByRole('link', { name: 'Téléphone : +237 600 000 001' })).toHaveAttribute('href', 'tel:+237600000001');
-    expect(within(pied).getByRole('link', { name: 'WhatsApp : +237 600 000 002' })).toHaveAttribute('href', 'https://wa.me/237600000002');
+    expect(await within(pied).findByText(/Téléphone : \+237 600 000 001/)).toBeInTheDocument();
+    expect(within(pied).getByText(/WhatsApp : \+237 600 000 002/)).toBeInTheDocument();
     expect(within(pied).getByRole('link', { name: 'E-mail : contact@exemple.cm' })).toHaveAttribute('href', 'mailto:contact@exemple.cm');
-    expect(within(pied).getByText('Adresse de test')).toBeInTheDocument();
-    expect(within(screen.getByRole('banner')).getByRole('link', { name: 'Appeler le CIR au +237 600 000 001' })).toBeInTheDocument();
+    expect(within(pied).getByText(/Adresse de test, Cameroun/)).toBeInTheDocument();
+    // Section Contact de la maquette : numéros cliquables, bouton WhatsApp
+    const contact = screen.getByRole('heading', { name: 'Parlons de votre sol' }).closest('section');
+    expect(within(contact).getByRole('link', { name: '+237 600 000 001' })).toHaveAttribute('href', 'tel:+237600000001');
+    expect(within(contact).getByRole('link', { name: 'Écrire sur WhatsApp' })).toHaveAttribute('href', 'https://wa.me/237600000002');
+    expect(within(contact).getByText('Adresse de test')).toBeInTheDocument();
+    // Téléphone : l'icône du combiné mène à Contact (maquette)
+    expect(within(screen.getByRole('banner')).getAllByRole('link', { name: 'Contact' })).toHaveLength(2);
   });
 
   it('contenus vides ou API injoignable : textes par défaut traduits et coordonnées de secours', async () => {
     api(VIDE);
     rendre();
-    expect(await screen.findByRole('heading', { level: 1, name: 'Des sols en résine époxy faits pour durer' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: 'Révélation.' })).toBeInTheDocument();
+    expect(screen.getByText("Là où naissent les sols durables : la résine époxy pour la maison, l'industrie et l'entreprise.")).toBeInTheDocument();
     expect(screen.queryByRole('complementary', { name: 'Annonces' })).toBeNull();
-    expect(screen.queryByRole('list', { name: 'Photos de sols en résine époxy' })).toBeNull();
+    expect(screen.queryByRole('group', { name: 'Photos de sols en résine époxy' })).toBeNull();
     expect(screen.queryByTestId('video-fond')).toBeNull();
     const pied = screen.getByRole('contentinfo');
-    expect(within(pied).getByRole('link', { name: 'Téléphone : +237 6 99 81 16 35' })).toBeInTheDocument();
-    expect(within(pied).getByRole('link', { name: 'WhatsApp : +237 622 191 931' })).toBeInTheDocument();
-    expect(within(pied).getByText('Total Nkolmbong, Douala')).toBeInTheDocument();
+    expect(within(pied).getByText(/Téléphone : \+237 6 99 81 16 35 · \+237 6 78 82 93 13 · \+237 6 56 43 58 46/)).toBeInTheDocument();
+    expect(within(pied).getByText(/WhatsApp : \+237 622 191 931/)).toBeInTheDocument();
+    expect(within(pied).getByText(/Total Nkolmbong, Douala, Cameroun/)).toBeInTheDocument();
     // Pas de section sans données (aucun produit, chantier ni actualité inventé)
     expect(screen.queryByRole('heading', { name: 'Produits à la une' })).toBeNull();
-    expect(screen.queryByRole('heading', { name: 'Dernières nouvelles' })).toBeNull();
-    expect(screen.queryByRole('heading', { name: 'Nos derniers chantiers' })).toBeNull();
-    expect(screen.getByRole('link', { name: /Maison/ })).toHaveAttribute('href', '/catalogue?usage=maison');
+    expect(screen.queryByRole('heading', { name: 'Nos réalisations' })).toBeNull();
+    expect(screen.queryByRole('heading', { name: 'Témoignages' })).toBeNull();
   });
 
-  it('mouvement réduit : affiche au lieu de la vidéo, grille de photos au lieu de la sphère', async () => {
+  it('mouvement réduit : affiche au lieu de la vidéo, sphère immobile', async () => {
     simulerMouvementReduit();
     api(CONTENU);
     rendre();
     await screen.findByRole('heading', { level: 1, name: 'Révélation' });
     expect(screen.queryByTestId('video-fond')).toBeNull();
     expect(screen.getByTestId('affiche-fond')).toHaveAttribute('src', CONTENU.image_affiche.url);
-    const grille = screen.getByRole('list', { name: 'Photos de sols en résine époxy' });
-    expect(grille.querySelector('img')).toHaveAttribute('loading', 'lazy');
+    const sphere = screen.getByRole('group', { name: 'Photos de sols en résine époxy' }); // sphère immobile, même géométrie
+    expect(sphere.querySelector('img')).toHaveAttribute('loading', 'lazy');
   });
 
   it('sections à la une, actualités (3 dernières) et réalisations', async () => {
@@ -118,20 +122,45 @@ describe('AccueilPage', () => {
     });
     rendre();
     expect(await screen.findByRole('heading', { name: 'Produits à la une' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Sol autolissant' })).toHaveAttribute('href', '/catalogue/yd-500');
+    expect(screen.getByRole('link', { name: /Sol autolissant/ })).toHaveAttribute('href', '/catalogue/yd-500');
+    expect(screen.getByText('Prix sur devis')).toBeInTheDocument(); // jamais de prix inventé
     expect(await screen.findByRole('link', { name: 'Une actualité' })).toBeInTheDocument();
     expect(await screen.findByRole('heading', { name: 'Un chantier' })).toBeInTheDocument();
-    expect(Object.fromEntries(parametresDes(fetch, '/api/catalogue/produits/')[0])).toEqual({ a_la_une: '1', taille: '6' });
+    expect(screen.getByText('Industrie · Douala')).toBeInTheDocument();
+    expect(Object.fromEntries(parametresDes(fetch, '/api/catalogue/produits/')[0])).toEqual({ a_la_une: '1', taille: '4' });
     expect(parametresDes(fetch, '/api/actualites/')[0].get('taille')).toBe('3');
     expect(parametresDes(fetch, '/api/vitrine/realisations/')[0].get('taille')).toBe('3');
   });
 });
 
-describe('positions de la sphère', () => {
-  it('un anneau jusqu’à 8 photos, trois anneaux au-delà, chaque photo placée une fois', () => {
-    expect(new Set(positions(6).map((p) => p.y))).toEqual(new Set([0]));
-    const trois = positions(20);
-    expect(trois).toHaveLength(20);
-    expect(new Set(trois.map((p) => p.y)).size).toBe(3);
+describe('maquette : avant / après et témoignages', () => {
+  it('« Avant, après » : béton brut (affiche de la vidéo) et salon (dernière image), masqués sans affiche', async () => {
+    api(CONTENU, { realisations: [] });
+    rendre();
+    expect(await screen.findByRole('heading', { name: 'Nos réalisations' })).toBeInTheDocument();
+    expect(screen.getByText('Avant : béton brut')).toBeInTheDocument();
+    expect(screen.getByText('Après : résine époxy')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /dalle de béton brut fissurée/ })).toHaveAttribute('src', CONTENU.image_affiche.url);
+  });
+
+  it('sans affiche ni chantier : aucune section « Nos réalisations » (rien d’inventé)', async () => {
+    api({ ...CONTENU, image_affiche: null });
+    rendre();
+    await screen.findByRole('heading', { level: 1, name: 'Révélation' });
+    expect(screen.queryByRole('heading', { name: 'Nos réalisations' })).toBeNull();
+  });
+
+  it('témoignages publiés : deux au plus, nom · type · ville ; aucun s’il n’y en a pas', async () => {
+    api(VIDE, { temoignages: [
+      { id: 1, nom_affiche: 'Awa N.', ville: 'Douala', type_chantier: 'maison', texte: 'Très satisfaite.', note: 5, langue: 'fr', date: '2026-09-01' },
+      { id: 2, nom_affiche: 'Paul K.', ville: '', type_chantier: 'industrie', texte: 'Sol impeccable.', note: 4, langue: 'fr', date: '2026-09-02' },
+      { id: 3, nom_affiche: 'Troisième', ville: '', type_chantier: '', texte: 'Pas affiché.', note: 3, langue: 'fr', date: '2026-09-03' },
+    ] });
+    rendre();
+    expect(await screen.findByRole('heading', { name: 'Témoignages' })).toBeInTheDocument();
+    expect(screen.getByText(/Très satisfaite\./)).toBeInTheDocument();
+    expect(screen.getByText('Awa N. · Maison · Douala')).toBeInTheDocument();
+    expect(screen.getByText('Paul K. · Industrie')).toBeInTheDocument();
+    expect(screen.queryByText(/Pas affiché/)).toBeNull();
   });
 });

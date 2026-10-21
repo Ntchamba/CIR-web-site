@@ -1,5 +1,6 @@
 // Caméra : pas de fuite (trajet annulé au démontage), reprise depuis la position courante, élément absent,
 // aucun trajet au premier affichage ni sous les préférences de mouvement réduit.
+import { cadrageDe } from './cameras.js';
 import { render } from '@testing-library/react';
 
 import { deplacerCamera, useCamera } from './camera.js';
@@ -68,7 +69,7 @@ describe('caméra : crochet useCamera', () => {
     rerender(<Scene chemin="/catalogue" />);
     expect(animations).toHaveLength(0);
     expect(container.querySelector('.page').dataset.cam).toBe('catalogue');
-    expect(container.querySelector('.scene').style.getPropertyValue('--cam-zoom')).toBe('2.2');
+    expect(container.querySelector('.scene').style.getPropertyValue('--cam-zoom')).toBe(String(cadrageDe('/catalogue').zoom));
   });
 
   it('navigateur sans animation liée au défilement : cadrage immédiat', () => {

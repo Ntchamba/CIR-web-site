@@ -87,9 +87,11 @@ export default function Sphere({ photos = [] }) {
           </div>
         </div>
       </div>
-      <button type="button" className={styles.pauseSphere} aria-pressed={enPause} onClick={() => setEnPause((v) => !v)}>
-        {enPause ? t('accueil.sphere.lecture') : t('accueil.sphere.pause')}
-      </button>
+      {!reduit && (
+        <button type="button" className={styles.pauseSphere} aria-pressed={enPause} onClick={() => setEnPause((v) => !v)}>
+          {enPause ? t('accueil.sphere.lecture') : t('accueil.sphere.pause')}
+        </button>
+      )}
     </div>
   );
 }

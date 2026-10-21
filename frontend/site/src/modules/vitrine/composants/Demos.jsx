@@ -71,6 +71,8 @@ function Lecteur({ demo }) {
 export default function Demos() {
   const { t } = useTraduction();
   const liste = useDemos();
+  // Aucune démonstration publiée : la section n'apparaît pas (la vidéo de la transformation est montrée plus haut).
+  if (!liste.chargement && !liste.erreur && !liste.elements.length) return null;
   return (
     <section id="demos" className="m-section blanche" aria-labelledby="titre-demos">
      <div className="m-conteneur">

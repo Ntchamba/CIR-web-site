@@ -7,26 +7,40 @@ import Chargement from '@partage/ui/Chargement.jsx';
 import Gabarit from '@/layout/Gabarit.jsx';
 import RouteProtegee from '@/modules/compte/RouteProtegee.jsx';
 
-const PageIntrouvable = lazy(() => import('@/layout/PageIntrouvable.jsx'));
-const AccueilPage = lazy(() => import('@/modules/accueil/AccueilPage.jsx'));
-const CataloguePage = lazy(() => import('@/modules/catalogue/CataloguePage.jsx'));
-const ProduitPage = lazy(() => import('@/modules/produit/ProduitPage.jsx'));
-const VitrinePage = lazy(() => import('@/modules/vitrine/VitrinePage.jsx'));
-const ActualitesPage = lazy(() => import('@/modules/actualites/ActualitesPage.jsx'));
-const ActualitePage = lazy(() => import('@/modules/actualites/ActualitePage.jsx'));
-const ConnexionPage = lazy(() => import('@/modules/compte/ConnexionPage.jsx'));
-const InscriptionPage = lazy(() => import('@/modules/compte/InscriptionPage.jsx'));
-const ProfilPage = lazy(() => import('@/modules/compte/ProfilPage.jsx'));
-const SelectionPage = lazy(() => import('@/modules/selection/SelectionPage.jsx'));
-const CommandesPage = lazy(() => import('@/modules/commandes/CommandesPage.jsx'));
-const NouvelleCommandePage = lazy(() => import('@/modules/commandes/NouvelleCommandePage.jsx'));
-const PaiementPage = lazy(() => import('@/modules/paiements/PaiementPage.jsx'));
-const RecuPage = lazy(() => import('@/modules/paiements/RecuPage.jsx'));
-const DemandeRenduPage = lazy(() => import('@/modules/devis/DemandeRenduPage.jsx'));
-const ContactPage = lazy(() => import('@/modules/contact/ContactPage.jsx'));
-const MessageriePage = lazy(() => import('@/modules/messagerie/MessageriePage.jsx'));
-const NotificationsPage = lazy(() => import('@/modules/notifications/NotificationsPage.jsx'));
-const MesDemandesPage = lazy(() => import('@/modules/contact/MesDemandesPage.jsx'));
+// Chaque page est chargée à la demande ; une fois la page d'arrivée affichée et le navigateur au repos, les autres sont
+// préchargées en douce : un clic ne montre alors jamais d'écran de chargement (et le zoom entre pages, qui photographie la
+// nouvelle page, la trouve prête).
+const importeurs = [];
+const paresseuse = (importeur) => {
+  importeurs.push(importeur);
+  return lazy(importeur);
+};
+export function prechargerPages() {
+  const lancer = () => importeurs.forEach((importer) => { importer().catch(() => {}); });
+  if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(lancer, { timeout: 4000 });
+  else window.setTimeout(lancer, 1500);
+}
+
+const PageIntrouvable = paresseuse(() => import('@/layout/PageIntrouvable.jsx'));
+const AccueilPage = paresseuse(() => import('@/modules/accueil/AccueilPage.jsx'));
+const CataloguePage = paresseuse(() => import('@/modules/catalogue/CataloguePage.jsx'));
+const ProduitPage = paresseuse(() => import('@/modules/produit/ProduitPage.jsx'));
+const VitrinePage = paresseuse(() => import('@/modules/vitrine/VitrinePage.jsx'));
+const ActualitesPage = paresseuse(() => import('@/modules/actualites/ActualitesPage.jsx'));
+const ActualitePage = paresseuse(() => import('@/modules/actualites/ActualitePage.jsx'));
+const ConnexionPage = paresseuse(() => import('@/modules/compte/ConnexionPage.jsx'));
+const InscriptionPage = paresseuse(() => import('@/modules/compte/InscriptionPage.jsx'));
+const ProfilPage = paresseuse(() => import('@/modules/compte/ProfilPage.jsx'));
+const SelectionPage = paresseuse(() => import('@/modules/selection/SelectionPage.jsx'));
+const CommandesPage = paresseuse(() => import('@/modules/commandes/CommandesPage.jsx'));
+const NouvelleCommandePage = paresseuse(() => import('@/modules/commandes/NouvelleCommandePage.jsx'));
+const PaiementPage = paresseuse(() => import('@/modules/paiements/PaiementPage.jsx'));
+const RecuPage = paresseuse(() => import('@/modules/paiements/RecuPage.jsx'));
+const DemandeRenduPage = paresseuse(() => import('@/modules/devis/DemandeRenduPage.jsx'));
+const ContactPage = paresseuse(() => import('@/modules/contact/ContactPage.jsx'));
+const MessageriePage = paresseuse(() => import('@/modules/messagerie/MessageriePage.jsx'));
+const NotificationsPage = paresseuse(() => import('@/modules/notifications/NotificationsPage.jsx'));
+const MesDemandesPage = paresseuse(() => import('@/modules/contact/MesDemandesPage.jsx'));
 
 export default function RoutesSite() {
   return (

@@ -14,7 +14,7 @@ export default function EcranCompte({ onglet, suite = '', children }) {
     <div className="m-compte">
       <div className="m-compte-visuel">
         <div className="fenetre" aria-hidden="true" />
-        <div>
+        <div className="m-compte-haut">
           <BoutonRetour />
           <Link to="/" className="m-marque-claire" aria-label={t('entete.retourAccueil')}>
             <img src="/media/marque/logo-cir.webp" alt="" width="46" height="46" />

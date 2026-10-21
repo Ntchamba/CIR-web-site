@@ -1,4 +1,4 @@
-// Bouton « Voir plus » sous une liste paginée, avec le compte affiché et l'erreur éventuelle.
+// Bouton « Voir plus » sous une liste paginée, avec le compte affiché (tant qu'il reste des éléments) et l'erreur éventuelle.
 import Bouton from '@partage/ui/Bouton.jsx';
 import MessageErreur from '@partage/ui/MessageErreur.jsx';
 
@@ -12,7 +12,7 @@ export default function VoirPlus({ liste }) {
   if (!elements.length) return null;
   return (
     <div className={styles.voirPlus}>
-      <p className={styles.compte} aria-live="polite">{t('liste.affiches', { n: elements.length, total })}</p>
+      {suivant && <p className={styles.compte} aria-live="polite">{t('liste.affiches', { n: elements.length, total })}</p>}
       <MessageErreur erreur={erreurSuite} reessayer={erreurSuite ? voirPlus : undefined} />
       {suivant && (
         <Bouton variante="contour" onClick={voirPlus} chargement={chargementSuite}>{t('liste.voirPlus')}</Bouton>

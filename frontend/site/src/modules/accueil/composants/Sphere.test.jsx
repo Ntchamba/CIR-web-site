@@ -12,8 +12,7 @@ import { simulerMouvementReduit } from '@/test/outils.jsx';
 
 import Bandeaux from './Bandeaux.jsx';
 import Hero from './Hero.jsx';
-import Partenaire from './Partenaire.jsx';
-import Sphere, { positions } from './Sphere.jsx';
+import Sphere, { ANNEAUX_ORDINATEUR, ANNEAUX_TELEPHONE, repartir } from './Sphere.jsx';
 import VideoFond from './VideoFond.jsx';
 
 const cssAccueil = readFileSync(resolve(process.cwd(), 'src/modules/accueil/Accueil.module.css'), 'utf8');
@@ -25,11 +24,11 @@ beforeEach(() => {
 });
 
 describe('Sphere', () => {
-  it('clavier : chaque photo est un lien atteignable avec Tab, nommé, image décorative', async () => {
+  it('clavier : une seule étape de tabulation par photo (les photos répétées pour remplir la sphère sont ignorées), nommée, image décorative', async () => {
     const photos = [photo(1, { slug: 'yd-500', nom: 'Sol autolissant' }), photo(2), photo(3), photo(4), photo(5)];
     avecRouteur(<Sphere photos={photos} />);
-    const liste = screen.getByRole('list', { name: 'Photos de sols en résine époxy' });
-    const liens = within(liste).getAllByRole('link');
+    const groupe = screen.getByRole('group', { name: 'Photos de sols en résine époxy' });
+    const liens = within(groupe).getAllByRole('link'); // les doublons sont masqués (aria-hidden)
     expect(liens).toHaveLength(5);
     liens.forEach((lien) => {
       expect(lien).toHaveAccessibleName();
@@ -49,11 +48,13 @@ describe('Sphere', () => {
     expect(cssAccueil).toMatch(/@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.globe\s*\{\s*animation:\s*none/);
   });
 
-  it('mouvement réduit : grille statique, images chargées à la demande', () => {
+  it('mouvement réduit : sphère immobile (même géométrie), images chargées à la demande, pas de bouton pause', () => {
     simulerMouvementReduit();
     const { container } = avecRouteur(<Sphere photos={[photo(1), photo(2), photo(3), photo(4), photo(5)]} />);
-    expect(container.querySelector('[style*="rotateY"]')).toBeNull();
+    expect(container.querySelector('[style*="rotateY"]')).not.toBeNull();
+    expect(container.querySelector('[style*="animation: none"]')).not.toBeNull();
     container.querySelectorAll('img').forEach((img) => expect(img).toHaveAttribute('loading', 'lazy'));
+    expect(screen.queryByRole('button')).toBeNull();
   });
 
   it('moins de 4 photos : grille ; photos sans image ignorées ; aucune photo → rien (pas de photo inventée)', () => {
@@ -67,16 +68,24 @@ describe('Sphere', () => {
   it('libellés traduits au changement de langue', async () => {
     avecRouteur(<Sphere photos={[photo(1, { slug: 'yd-500', nom: 'YD-500' }), photo(2), photo(3), photo(4)]} />);
     await changerLangue('en');
-    expect(await screen.findByRole('list', { name: /./ })).not.toHaveAccessibleName('Photos de sols en résine époxy');
+    expect(await screen.findByRole('group', { name: /./ })).not.toHaveAccessibleName('Photos de sols en résine époxy');
   });
 
-  it('positions : une place par photo, aucun rayon inférieur à 200 px sur l’anneau central', () => {
-    for (const n of [1, 4, 8, 9, 13, 30]) {
-      const p = positions(n);
-      expect(p).toHaveLength(n);
-      expect(p.every((x) => Number.isFinite(x.angle) && Number.isFinite(x.y))).toBe(true);
-      expect(Math.max(...p.filter((x) => x.y === 0).map((x) => x.rayon))).toBeGreaterThanOrEqual(200);
-    }
+  it('géométrie des maquettes : 6 + 8 + 6 photos sur ordinateur, 6 + 12 + 6 sur téléphone, photos reprises en boucle', () => {
+    const photos = Array.from({ length: 9 }, (_, i) => photo(i + 1));
+    const ordi = repartir(photos, ANNEAUX_ORDINATEUR);
+    expect(ordi.map((a) => a.tuiles.length)).toEqual([6, 8, 6]);
+    expect(ordi.map((a) => a.rayon)).toEqual([235, 315, 235]);
+    expect(ordi.map((a) => a.y)).toEqual([-215, 0, 215]);
+    const tel = repartir(photos, ANNEAUX_TELEPHONE);
+    expect(tel.map((a) => a.tuiles.length)).toEqual([6, 12, 6]);
+    // chaque photo apparaît (9 emplacements « uniques », les autres sont des doublons)
+    const toutes = ordi.flatMap((a) => a.tuiles);
+    expect(toutes).toHaveLength(20);
+    expect(toutes.filter((x) => !x.doublon)).toHaveLength(9);
+    expect(new Set(toutes.map((x) => x.photo.id)).size).toBe(9);
+    // les anneaux sont régulièrement espacés
+    expect(ordi[1].tuiles.map((x) => x.angle)).toEqual([0, 45, 90, 135, 180, 225, 270, 315]);
   });
 });
 
@@ -140,26 +149,35 @@ describe('Bandeaux', () => {
   });
 });
 
-describe('Hero et Partenaire', () => {
+describe('Hero', () => {
   it('textes par défaut traduits si l’équipe n’a rien saisi, dans la langue choisie', async () => {
     await changerLangue('de');
-    avecRouteur(<><Hero contenu={{ titre: '', accroche: '' }} /><Partenaire texte="" /></>);
+    avecRouteur(<Hero contenu={{ titre: '', accroche: '' }} />);
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Révélation.');
+    expect(screen.getByText(/Hier entstehen langlebige Böden/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Katalog/ })).toHaveAttribute('href', '/catalogue');
+  });
+
+  it('maquette : « Révélation. » avec point corail, accroche, « Voir le catalogue » et « Découvrir »', () => {
+    avecRouteur(<Hero contenu={{}} />);
     const h1 = screen.getByRole('heading', { level: 1 });
-    expect(h1.textContent).not.toBe('');
-    expect(h1).not.toHaveTextContent('Des sols en résine époxy faits pour durer');
-    expect(screen.getByRole('img', { name: 'Jiuye' })).toBeInTheDocument(); // nom propre jamais traduit
+    expect(h1).toHaveTextContent('Révélation.');
+    expect(h1.querySelector('i')).toHaveTextContent('.');
+    expect(screen.getByText("Là où naissent les sols durables : la résine époxy pour la maison, l'industrie et l'entreprise.")).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Voir le catalogue' })).toHaveAttribute('href', '/catalogue');
+    expect(screen.getByRole('link', { name: /Découvrir/ })).toHaveAttribute('href', '#salles');
   });
 });
 
-describe('Sphere (corrections) : pause, focus, faces arrière', () => {
+describe('Sphere (corrections) : pause', () => {
   const cinq = () => [photo(1), photo(2), photo(3), photo(4), photo(5)];
 
-  it('bouton Pause / Lecture traduit, aria-pressed, placé après la liste dans l’ordre du clavier', async () => {
+  it('bouton Pause / Lecture traduit, aria-pressed, placé après la sphère dans l’ordre du clavier', async () => {
     const { container } = avecRouteur(<Sphere photos={cinq()} />);
     const u = userEvent.setup();
     const bouton = screen.getByRole('button', { name: 'Mettre en pause la sphère' });
     expect(bouton).toHaveAttribute('aria-pressed', 'false');
-    const globe = screen.getByRole('list');
+    const globe = screen.getByRole('group');
     expect(globe.compareDocumentPosition(bouton) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(globe).not.toHaveClass('globeArrete');
     await u.click(bouton);
@@ -177,35 +195,10 @@ describe('Sphere (corrections) : pause, focus, faces arrière', () => {
     expect(await screen.findByRole('button', { name: 'Pause the sphere' })).toBeInTheDocument();
   });
 
-  it('photo focalisée au clavier : la sphère tourne pour la placer face au visiteur, puis repart', async () => {
-    avecRouteur(<><Sphere photos={cinq()} /><a href="#apres">Après</a></>);
-    const u = userEvent.setup();
-    const globe = screen.getByRole('list');
-    const liens = within(globe).getAllByRole('link');
-    await u.tab();
-    expect(liens[0]).toHaveFocus();
-    expect(globe).toHaveClass('globeCible');
-    expect(globe.style.getPropertyValue('--cible')).toBe('0deg');
-    await u.tab();
-    expect(globe.style.getPropertyValue('--cible')).toBe(`${-positions(5)[1].angle}deg`);
-    await u.tab(); await u.tab(); await u.tab(); // dernière photo
-    await u.tab(); // bouton pause : focus sorti de la liste
-    expect(screen.getByRole('button', { name: /pause/i })).toHaveFocus();
-    expect(globe).not.toHaveClass('globeCible');
-    expect(globe.style.getPropertyValue('--cible')).toBe('');
-  });
-
-  it('CSS : faces arrière masquées, rotation vers la cible sans transition en mouvement réduit', () => {
-    expect(cssAccueil).toMatch(/\.tuile a\s*\{[^}]*backface-visibility:\s*hidden/);
+  it('CSS : pause par la classe, la photo survolée grandit, faces arrière visibles comme dans les maquettes', () => {
     expect(cssAccueil).toMatch(/\.globeArrete\s*\{\s*animation-play-state:\s*paused/);
-    expect(cssAccueil).toMatch(/\.globeCible\s*\{[^}]*animation:\s*none/);
-    expect(cssAccueil).toMatch(/prefers-reduced-motion: reduce\)\s*\{[^@]*\.globeCible\s*\{\s*transition:\s*none/);
-  });
-
-  it('mouvement réduit : pas de bouton pause (rien ne bouge)', () => {
-    simulerMouvementReduit();
-    avecRouteur(<Sphere photos={cinq()} />);
-    expect(screen.queryByRole('button')).toBeNull();
+    expect(cssAccueil).toMatch(/\.tuile:hover img[^{]*\{\s*scale:\s*1\.25/);
+    expect(cssAccueil).not.toMatch(/backface-visibility:\s*hidden/);
   });
 });
 

@@ -18,6 +18,7 @@ import { demarrerI18n } from '@/i18n/index.js';
 
 import App from './App.jsx';
 import { activerZoomEntrePages, appliquerProfondeur } from './profondeur.js';
+import { prechargerPages } from './routes.jsx';
 
 // `data-plat` est posé avant tout rendu : une page qui doit rester à plat (économie de données, appareil faible)
 // n'affiche jamais, même un instant, les effets de profondeur.
@@ -34,4 +35,6 @@ demarrerI18n({ cleStockage: 'cir-site' }).finally(() => {
       <RouterProvider router={routeur} />
     </StrictMode>,
   );
+  if (document.readyState === 'complete') prechargerPages();
+  else window.addEventListener('load', prechargerPages, { once: true });
 });

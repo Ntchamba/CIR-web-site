@@ -30,6 +30,8 @@ export default function Gabarit() {
   // notifications…) reposent sur une page claire : voile blanc flouté sur la scène du salon, comme les maquettes.
   const vue = nomDeVue(pathname);
   const pageDeMaquette = VUES_DE_MAQUETTE.includes(vue);
+  // L'écran de connexion / création de compte n'a ni en-tête ni pied de page (maquette) : il porte son propre logo.
+  const horsCadre = vue === 'connexion' || vue === 'inscription';
 
   // Entrée en profondeur : `data-plat` sur <html> quand la page doit rester à plat (voir app/profondeur.js).
   useProfondeur();
@@ -61,7 +63,7 @@ export default function Gabarit() {
         <div className="scene-lumiere" />
       </div>
       <a href="#contenu" className={styles.evitement}>{t('nav.allerAuContenu')}</a>
-      <Entete />
+      {!horsCadre && <Entete />}
       <main id="contenu" className={styles.contenu} tabIndex={-1} ref={refPrincipal}>
         <BandeauDirect />
         {/* Page chargée à la demande : l'en-tête et le pied de page restent affichés pendant le chargement. */}
@@ -72,7 +74,7 @@ export default function Gabarit() {
         </Suspense>
       </main>
       <div role="status" aria-live="polite" aria-atomic="true" className="visuellement-cache" data-testid="annonce-page">{annonce}</div>
-      <PiedDePage />
+      {!horsCadre && <PiedDePage />}
       <BarreOnglets />
       <SalleAppel />
       {assistantPret && (

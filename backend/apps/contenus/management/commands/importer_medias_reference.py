@@ -80,7 +80,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("--forcer", action="store_true", help="Remplacer les médias déjà présents en base : supprime et remplace les images importées des "
-                                 "produits concernés (les photos ajoutées par l'équipe sont conservées)."))
+                                 "produits concernés (les photos ajoutées par l'équipe sont conservées).")
         parser.add_argument("--dossier", default=None,
                             help="Dossier des médias et du manifeste medias.json (par défaut : medias_reference).")
 

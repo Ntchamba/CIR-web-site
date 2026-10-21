@@ -9,6 +9,7 @@ import ChoixLangue from '@partage/ui/ChoixLangue.jsx';
 import Icone from '@partage/ui/Icone.jsx';
 
 import { nomDeVue } from '@/app/cameras.js';
+import { useEcranTelephone } from '@/app/preferences.js';
 import { useTraduction } from '@/i18n/index.js';
 import { prenomDe } from '@/modules/compte/adresse.js';
 import { useAuth } from '@/modules/compte/AuthContext.jsx';
@@ -36,6 +37,7 @@ export default function Entete() {
   const { utilisateur, retenirLangue } = useAuth();
   const selection = useSelection();
   const { nonLusMessages } = useDirect();
+  const telephone = useEcranTelephone();
   const idMenu = useId();
   const [menuOuvert, setMenuOuvert] = useState(false);
   const [enHaut, setEnHaut] = useState(() => typeof window === 'undefined' || (window.scrollY ?? 0) < 60);
@@ -54,7 +56,9 @@ export default function Entete() {
     return () => document.removeEventListener('keydown', surTouche);
   }, [menuOuvert]);
 
-  const transparent = SUR_IMAGE.includes(nomDeVue(pathname)) && enHaut && !menuOuvert;
+  // Téléphone : seul le haut de l'accueil (sur la vidéo) a un en-tête transparent ; ailleurs il est clair.
+  const vue = nomDeVue(pathname);
+  const transparent = (telephone ? vue === 'accueil' : SUR_IMAGE.includes(vue)) && enHaut && !menuOuvert;
   const classes = [styles.entete, transparent ? styles.transparent : styles.clair, menuOuvert ? styles.ouvert : ''].join(' ');
   const compte = utilisateur
     ? <Link to="/compte" className={styles.compte}><Icone nom="compte" taille={18} /><span>{prenomDe(utilisateur) || t('entete.monCompte')}</span></Link>
