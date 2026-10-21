@@ -5,6 +5,17 @@
 Idempotente : une famille (par son nom) ou un produit (par sa référence) déjà présent n'est jamais modifié,
 sauf pour compléter les traductions vides d'une famille. Rien n'est inventé : ni prix, ni image, ni
 caractéristique ; seuls les produits dont la référence et l'usage sont clairement liés dans le cahier sont créés.
+
+Fusion avec le catalogue de la maquette du propriétaire (décision du propriétaire) :
+- les produits existants (par référence) dont le nom est encore EXACTEMENT l'ancien nom par défaut prennent le nom de
+  la maquette (YD-500 « Sol autolissant » -> « Sol autolissant époxy », YD-306 « Sable coloré » -> « Sable coloré
+  autolissant ») ; un nom déjà modifié par l'équipe n'est jamais touché ;
+- sept produits de la maquette sont ajoutés SANS référence (détection par nom, sans tenir compte de la casse), en
+  ligne, sans prix ni image ni texte ;
+- seul texte repris de la maquette : accroche et description de YD-500, posées seulement si ces champs sont vides.
+
+ATTENTION : la famille et les usages (maison, industrie, entreprise, extérieur) de ces sept produits sont des valeurs
+de départ, reprises de la démonstration du prototype 1 et rattachées aux familles du cahier : À VALIDER par l'équipe.
 """
 from django.core.management.base import BaseCommand
 from django.db import transaction
@@ -102,9 +113,10 @@ NOMS = {
     "primaire": {"en": "Epoxy primer", "zh": "环氧底漆", "de": "Epoxid-Grundierung", "ja": "エポキシプライマー"},
     "intermediaire": {"en": "Epoxy intermediate coat", "zh": "环氧中涂", "de": "Epoxid-Zwischenschicht",
                       "ja": "エポキシ中塗り"},
-    "autolissant": {"en": "Self-levelling floor", "zh": "自流平地坪", "de": "Selbstverlaufender Boden",
-                    "ja": "セルフレベリング床"},
-    "sable": {"en": "Coloured sand", "zh": "彩砂", "de": "Farbsand", "ja": "カラーサンド"},
+    "autolissant": {"en": "Epoxy self-levelling floor", "zh": "环氧自流平地坪", "de": "Selbstverlaufender Epoxidboden",
+                    "ja": "エポキシセルフレベリング床"},
+    "sable": {"en": "Self-levelling coloured sand", "zh": "自流平彩砂地坪", "de": "Selbstverlaufender Farbsand",
+              "ja": "セルフレベリング・カラーサンド"},
     "terrazzo": {"en": "Epoxy terrazzo", "zh": "环氧水磨石", "de": "Epoxid-Terrazzo", "ja": "エポキシテラゾー"},
     "primaire_ss": {"en": "Solvent-free epoxy primer", "zh": "无溶剂环氧底漆",
                     "de": "Lösemittelfreie Epoxid-Grundierung", "ja": "無溶剤エポキシプライマー"},
@@ -121,17 +133,95 @@ PRODUITS = [
     ("YD-104", 0, "Primaire époxy", _ACCROCHE_PRIMAIRE, _traductions(NOMS["primaire"], _accroche(0)), False),
     ("YD-205", 1, "Couche intermédiaire époxy", _ACCROCHE_INTERMEDIAIRE,
      _traductions(NOMS["intermediaire"], _accroche(1)), False),
-    ("YD-500", 2, "Sol autolissant", "", _traductions(NOMS["autolissant"]), True),
-    ("YD-306", 2, "Sable coloré", "", _traductions(NOMS["sable"]), True),
+    ("YD-500", 2, "Sol autolissant époxy", "", _traductions(NOMS["autolissant"]), True),
+    ("YD-306", 2, "Sable coloré autolissant", "", _traductions(NOMS["sable"]), True),
     ("YD-518", 2, "Terrazzo époxy", "", _traductions(NOMS["terrazzo"]), True),
     ("YD-106W", 3, "Primaire époxy sans solvant", "", _traductions(NOMS["primaire_ss"]), False),
     ("YD-206W", 3, "Couche intermédiaire époxy sans solvant", "", _traductions(NOMS["intermediaire_ss"]), False),
     ("YD-306W", 3, "Finition époxy sans solvant", "", _traductions(NOMS["finition_ss"]), False),
 ]
 
+# Anciens noms par défaut (avant la fusion) : (nom français, noms traduits) ; remplacés seulement s'ils sont intacts.
+ANCIENS_NOMS = {
+    "YD-500": ("Sol autolissant", {"en": "Self-levelling floor", "zh": "自流平地坪",
+                                   "de": "Selbstverlaufender Boden", "ja": "セルフレベリング床"}),
+    "YD-306": ("Sable coloré", {"en": "Coloured sand", "zh": "彩砂", "de": "Farbsand", "ja": "カラーサンド"}),
+}
+
+# Textes de la maquette pour YD-500 (posés seulement si les champs sont vides) : (champ, français, traductions)
+TEXTES_YD_500 = [
+    ("accroche", "brillant, effet miroir, sans joints", {
+        "en": "glossy, mirror effect, seamless", "zh": "光亮，镜面效果，无接缝",
+        "de": "glänzend, Spiegeleffekt, fugenlos", "ja": "光沢、鏡面効果、継ぎ目なし"}),
+    ("description", "Une surface lisse et brillante, sans joints, dans une grande variété de couleurs. "
+                    "Non toxique et sans odeur.", {
+        "en": "A smooth, glossy, seamless surface in a wide variety of colours. Non-toxic and odourless.",
+        "zh": "光滑亮泽、无接缝的表面，颜色丰富多样。无毒无味。",
+        "de": "Eine glatte, glänzende, fugenlose Oberfläche in einer großen Farbvielfalt. Ungiftig und geruchlos.",
+        "ja": "なめらかで光沢のある継ぎ目のない表面。豊富なカラーバリエーション。無毒・無臭。"}),
+]
+
+# Produits de la maquette absents du cahier : (nom, index de la famille, usages M/I/E/X, à la une, noms traduits).
+# Sans référence, sans prix, sans image, sans texte. Familles et usages : valeurs de départ À VALIDER par l'équipe.
+PRODUITS_MAQUETTE = [
+    ("Finition époxy lisse", 2, "MI", False, {"en": "Smooth epoxy finish", "zh": "环氧平涂面层",
+                                              "de": "Glatte Epoxid-Deckschicht", "ja": "エポキシ平滑仕上げ"}),
+    ("Finition époxy mate", 2, "ME", False, {"en": "Matt epoxy finish", "zh": "哑光环氧面层",
+                                             "de": "Matte Epoxid-Deckschicht", "ja": "エポキシつや消し仕上げ"}),
+    ("Finition antidérapante", 2, "IX", False, {"en": "Anti-slip finish", "zh": "防滑面层",
+                                                "de": "Rutschfeste Deckschicht", "ja": "防滑仕上げ"}),
+    ("Peinture de sol anti-UV", 4, "X", False, {"en": "Anti-UV floor paint", "zh": "抗紫外线地坪漆",
+                                                "de": "UV-beständige Bodenfarbe", "ja": "耐紫外線床用塗料"}),
+    ("Finition haute résistance", 3, "I", True, {"en": "High-resistance finish", "zh": "高耐磨面层",
+                                                 "de": "Hochbelastbare Deckschicht", "ja": "高耐久仕上げ"}),
+    ("Finition anticorrosion", 0, "I", False, {"en": "Anti-corrosion finish", "zh": "防腐面层",
+                                               "de": "Korrosionsschutz-Deckschicht", "ja": "防食仕上げ"}),
+    ("Sol à motifs", 7, "ME", False, {"en": "Patterned floor", "zh": "图案地坪",
+                                      "de": "Gemusterter Boden", "ja": "模様入り床"}),
+]
+USAGES = {"M": "pour_maison", "I": "pour_industrie", "E": "pour_entreprise", "X": "pour_exterieur"}
+
+
+PRODUITS_PAR_REFERENCE = {
+    "YD-500": {"fr": "Sol autolissant époxy", **NOMS["autolissant"]},
+    "YD-306": {"fr": "Sable coloré autolissant", **NOMS["sable"]},
+}
+
+
+def _mettre_a_jour_noms(produit):
+    """Remplace l'ancien nom par défaut (français et traductions encore intacts) par celui de la maquette."""
+    ancien = ANCIENS_NOMS.get(produit.reference)
+    if ancien is None or produit.nom != ancien[0]:
+        return False
+    nouveau = dict(PRODUITS_PAR_REFERENCE[produit.reference])
+    produit.nom = nouveau["fr"]
+    traductions = {code: dict(valeurs) for code, valeurs in (produit.traductions or {}).items()}
+    for code, ancien_nom in ancien[1].items():
+        courant = traductions.get(code, {}).get("nom")
+        if not courant or courant == ancien_nom:
+            traductions.setdefault(code, {})["nom"] = nouveau[code]
+    produit.traductions = traductions
+    return True
+
+
+def _completer_textes_yd_500(produit):
+    """Pose accroche et description de la maquette sur YD-500, champ par champ, seulement s'ils sont vides."""
+    modifie = False
+    traductions = {code: dict(valeurs) for code, valeurs in (produit.traductions or {}).items()}
+    for champ, francais, autres in TEXTES_YD_500:
+        if getattr(produit, champ).strip():
+            continue
+        setattr(produit, champ, francais)
+        for code, texte in autres.items():
+            if not traductions.get(code, {}).get(champ):
+                traductions.setdefault(code, {})[champ] = texte
+        modifie = True
+    produit.traductions = traductions
+    return modifie
+
 
 class Command(BaseCommand):
-    help = "Charge les neuf familles du cahier des charges et les produits de référence (sans prix ni image)."
+    help = "Charge les neuf familles du cahier, les produits de référence et ceux de la maquette (sans prix ni image)."
 
     @transaction.atomic
     def handle(self, *args, **options):
@@ -147,16 +237,40 @@ class Command(BaseCommand):
                 famille.save(update_fields=["traductions"])
             familles.append(famille)
 
+        produits_crees = renommes = textes = 0
         for ordre, (reference, index, nom, accroche, traductions, habitat) in enumerate(PRODUITS):
-            if Produit.objects.filter(reference__iexact=reference).exists():
+            produit = Produit.objects.filter(reference__iexact=reference).first()
+            if produit is None:
+                produit = Produit.objects.create(
+                    famille=familles[index], reference=reference, nom=nom, accroche=accroche,
+                    traductions=traductions, pour_maison=habitat, a_la_une=habitat, en_ligne=True, prix=None,
+                    ordre=ordre,
+                )
+                produits_crees += 1
+            else:
+                champs = []
+                if _mettre_a_jour_noms(produit):
+                    renommes += 1
+                    champs += ["nom", "traductions"]
+                if champs:
+                    produit.save(update_fields=champs)
+            if reference == "YD-500" and _completer_textes_yd_500(produit):
+                produit.save(update_fields=["accroche", "description", "traductions"])
+                textes += 1
+
+        maquette_crees = 0
+        for position, (nom, index, usages, une, noms) in enumerate(PRODUITS_MAQUETTE):
+            if Produit.objects.filter(nom__iexact=nom).exists():
                 continue
             Produit.objects.create(
-                famille=familles[index], reference=reference, nom=nom, accroche=accroche, traductions=traductions,
-                pour_maison=habitat, a_la_une=habitat, en_ligne=True, prix=None, ordre=ordre,
+                famille=familles[index], reference="", nom=nom, traductions={c: {"nom": n} for c, n in noms.items()},
+                a_la_une=une, en_ligne=True, prix=None, ordre=len(PRODUITS) + position,
+                **{champ: lettre in usages for lettre, champ in USAGES.items()},
             )
-            produits_crees += 1
+            maquette_crees += 1
 
         self.stdout.write(self.style.SUCCESS(
-            f"Catalogue de référence : {creees} famille(s) et {produits_crees} produit(s) créés "
-            f"({len(FAMILLES)} familles et {len(PRODUITS)} produits attendus)."
+            f"Catalogue de référence : {creees} famille(s), {produits_crees} produit(s) du cahier et "
+            f"{maquette_crees} produit(s) de la maquette créés, {renommes} nom(s) mis à jour, {textes} texte(s) posé(s) "
+            f"({len(FAMILLES)} familles et {len(PRODUITS) + len(PRODUITS_MAQUETTE)} produits attendus)."
         ))

@@ -1400,3 +1400,11 @@ msgstr "動画が拒否されました：%(fichier)s（%(raison)s）何もイン
 #: apps/contenus/management/commands/importer_medias_reference.py
 msgid "Fichier de média trop lourd : %(fichier)s. Rien n'a été importé."
 msgstr "メディアファイルが大きすぎます：%(fichier)s。何もインポートされませんでした。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Produit « %(produit)s » absent du catalogue : image ignorée."
+msgstr "商品「%(produit)s」はカタログにありません：画像は無視されました。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Images de produits : %(ajoutees)s ajoutée(s), %(deja)s produit(s) déjà doté(s) d'une image."
+msgstr "商品画像：%(ajoutees)s 件追加、%(deja)s 件は画像が登録済み。"

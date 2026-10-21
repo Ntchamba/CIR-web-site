@@ -23,6 +23,7 @@ from django.db import transaction
 from django.utils.translation import gettext as _
 from rest_framework.exceptions import ValidationError
 
+from apps.catalogue.models import ImageProduit, Produit
 from apps.contenus.models import ContenuAccueil, PhotoSphere
 from apps.noyau.langues import AUTRES_LANGUES, CODES_LANGUES
 from apps.noyau.images import OCTETS_MAX
@@ -89,9 +90,36 @@ class Command(BaseCommand):
             manifeste = json.loads(_sous_dossier(dossier, "medias.json").read_text(encoding="utf-8"))
             entrees = manifeste["fichiers"]
             assert isinstance(entrees, list) and all(isinstance(e, dict) for e in entrees)
+            produits = manifeste.get("produits", [])
+            assert isinstance(produits, list) and all(isinstance(e, dict) for e in produits)
+            self._produits_manifeste = produits
         except (ValueError, KeyError, TypeError, AssertionError) as erreur:
             raise CommandError(_("Manifeste illisible : %(chemin)s.") % {"chemin": chemin}) from erreur
         return entrees
+
+    def _charger(self, dossier, nom, limite):
+        """Vérifie `nom` (dans le dossier, fichier ordinaire), le lit une seule fois et renvoie son chemin résolu."""
+        if ".." in _segments(nom) or Path(nom).is_absolute() or PureWindowsPath(nom).is_absolute() \
+                or PureWindowsPath(nom).drive or nom.startswith(("/", "\\")):
+            raise CommandError(_("Nom de fichier non autorisé dans le manifeste : %(fichier)s.")
+                               % {"fichier": nom})
+        chemin = dossier / nom
+        resolu = _sous_dossier(dossier, nom)
+        if resolu is None and (chemin.exists() or chemin.is_symlink()):
+            raise CommandError(_("Fichier hors du dossier de médias ou non ordinaire : %(fichier)s.")
+                               % {"fichier": nom})
+        if resolu is None:
+            raise CommandError(_("Fichier de média manquant : %(fichier)s. Rien n'a été importé.")
+                               % {"fichier": chemin})
+        chemin = resolu
+        # Une seule lecture : ces octets servent à la validation puis à l'écriture, le chemin n'est jamais rouvert
+        with chemin.open("rb") as ouvert:
+            octets = ouvert.read(limite + 1)
+        if len(octets) > limite:
+            raise CommandError(_("Fichier de média trop lourd : %(fichier)s. Rien n'a été importé.")
+                               % {"fichier": nom})
+        self._octets[chemin] = (Path(nom).name, octets)
+        return chemin
 
     def _preparer(self, dossier, entrees):
         """Renvoie (video, affiche, photos) ; chaque élément est (entrée, chemin). Lève CommandError au moindre défaut."""
@@ -105,30 +133,11 @@ class Command(BaseCommand):
             nom = entree.get("fichier")
             if not isinstance(nom, str) or not nom:
                 raise CommandError(_("Manifeste illisible : %(chemin)s.") % {"chemin": dossier / "medias.json"})
-            if ".." in _segments(nom) or Path(nom).is_absolute() or PureWindowsPath(nom).is_absolute() \
-                    or PureWindowsPath(nom).drive or nom.startswith(("/", "\\")):
-                raise CommandError(_("Nom de fichier non autorisé dans le manifeste : %(fichier)s.")
-                                   % {"fichier": nom})
-            chemin = dossier / nom
-            resolu = _sous_dossier(dossier, nom)
-            if resolu is None and (chemin.exists() or chemin.is_symlink()):
-                raise CommandError(_("Fichier hors du dossier de médias ou non ordinaire : %(fichier)s.")
-                                   % {"fichier": nom})
-            if resolu is None:
-                raise CommandError(_("Fichier de média manquant : %(fichier)s. Rien n'a été importé.")
-                                   % {"fichier": chemin})
-            chemin = resolu
-            # Une seule lecture : ces octets servent à la validation puis à l'écriture, le chemin n'est jamais rouvert
             limite = VIDEO_OCTETS_MAX if usage == USAGE_VIDEO else OCTETS_MAX
-            with chemin.open("rb") as ouvert:
-                octets = ouvert.read(limite + 1)
-            if len(octets) > limite:
-                raise CommandError(_("Fichier de média trop lourd : %(fichier)s. Rien n'a été importé.")
-                                   % {"fichier": nom})
-            self._octets[chemin] = (Path(nom).name, octets)
+            chemin = self._charger(dossier, nom, limite)
             if usage == USAGE_VIDEO:
                 try:
-                    valider_video(ContentFile(octets, name=Path(nom).name))
+                    valider_video(ContentFile(self._octets[chemin][1], name=Path(nom).name))
                 except ValidationError as erreur:
                     raison = " ".join(str(m) for m in erreur.detail)
                     raise CommandError(_("Vidéo refusée : %(fichier)s (%(raison)s) Rien n'a été importé.")
@@ -147,6 +156,20 @@ class Command(BaseCommand):
                 photos.append((entree, chemin))
         photos.sort(key=lambda p: p[0].get("ordre", 0))
         return video, affiche, photos
+
+    def _preparer_produits(self, dossier, produits):
+        """Renvoie [(entrée, chemin)] pour les images de produits ; lève CommandError au moindre défaut."""
+        retenus = []
+        for entree in produits:
+            nom, fichier, alt = entree.get("produit"), entree.get("fichier"), entree.get("alt")
+            if not all(isinstance(v, str) and v.strip() for v in (nom, fichier)):
+                raise CommandError(_("Manifeste illisible : %(chemin)s.") % {"chemin": dossier / "medias.json"})
+            manquantes = [c for c in CODES_LANGUES if not isinstance(alt, dict) or not str(alt.get(c) or "").strip()]
+            if manquantes:
+                raise CommandError(_("Texte alternatif manquant pour %(fichier)s (langues : %(langues)s). "
+                                     "Rien n'a été importé.") % {"fichier": fichier, "langues": ", ".join(manquantes)})
+            retenus.append((entree, self._charger(dossier, fichier, OCTETS_MAX)))
+        return retenus
 
     # --- Écriture ---
 
@@ -208,15 +231,49 @@ class Command(BaseCommand):
             nouveaux.append((photo.image.storage, photo.image.name))
         return creees, remplacees, inchangees
 
+    def _importer_produits(self, produits, forcer, anciens, nouveaux):
+        """Une image par produit trouvé par son nom exact, seulement s'il n'en a pas (sauf --forcer)."""
+        ajoutees = ignorees = 0
+        for entree, chemin in produits:
+            nom_produit = entree["produit"].strip()
+            trouves = list(Produit.objects.filter(nom=nom_produit))
+            if not trouves:
+                self.stdout.write(_("Produit « %(produit)s » absent du catalogue : image ignorée.")
+                                  % {"produit": nom_produit})
+                continue
+            nom, octets = self._octets[chemin]
+            alt = entree["alt"]
+            for produit in trouves:
+                existantes = list(produit.images.all())
+                if existantes and not forcer:
+                    ignorees += 1
+                    continue
+                for ancienne in existantes:
+                    anciens.append((ancienne.image.storage, ancienne.image.name))
+                    ancienne.delete()
+                image = ImageProduit(produit=produit, alt=alt["fr"].strip(), ordre=0, traductions={
+                    c: {"alt": alt[c].strip()} for c in AUTRES_LANGUES})
+                image.image = ContentFile(octets, name=nom)
+                try:
+                    image.save()
+                except Exception:
+                    self._garder_pour_nettoyage(image.image, nouveaux)
+                    raise
+                nouveaux.append((image.image.storage, image.image.name))
+                ajoutees += 1
+        return ajoutees, ignorees
+
     def handle(self, *args, forcer=False, dossier=None, **options):
         dossier = Path(dossier) if dossier else dossier_par_defaut()
         video, affiche, photos = self._preparer(dossier, self._lire_manifeste(dossier))
+        produits = self._preparer_produits(dossier, self._produits_manifeste)
 
         anciens, nouveaux = [], []
         try:
             with transaction.atomic():
                 accueil = self._importer_accueil(video, affiche, forcer, anciens, nouveaux)
                 creees, remplacees, inchangees = self._importer_photos(photos, forcer, anciens, nouveaux)
+                ajoutees, deja_dotes = self._importer_produits(produits, forcer, anciens, nouveaux)
         except Exception:
             # Rien de partiel : la transaction annule la base, les fichiers écrits par cette exécution sont retirés
             for stockage, nom in nouveaux:
@@ -230,4 +287,8 @@ class Command(BaseCommand):
             _("Médias de référence : %(accueil)s média(s) de l'accueil posé(s), %(creees)s photo(s) de la sphère "
               "créée(s), %(remplacees)s remplacée(s), %(inchangees)s déjà présente(s).")
             % {"accueil": accueil, "creees": creees, "remplacees": remplacees, "inchangees": inchangees}
+        ))
+        self.stdout.write(self.style.SUCCESS(
+            _("Images de produits : %(ajoutees)s ajoutée(s), %(deja)s produit(s) déjà doté(s) d'une image.")
+            % {"ajoutees": ajoutees, "deja": deja_dotes}
         ))

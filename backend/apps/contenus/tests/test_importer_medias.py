@@ -504,3 +504,147 @@ class ImportContournementsTests(ImporterMediasTestCase):
         _video, _affiche, photos = Command()._preparer(dossier, entrees)
         for _entree, chemin in photos:
             self.assertEqual(chemin, chemin.resolve(), chemin)
+
+
+class ImportProduitsTests(ImporterMediasTestCase):
+    """Images de produits : rattachées par le nom exact, seulement aux produits sans image (sauf --forcer)."""
+
+    AVEC = {"Sol autolissant époxy": "hall-turquoise", "Terrazzo époxy": "ecole-terrazzo",
+            "Finition époxy lisse": "entrepot-bleu-jaune", "Finition antidérapante": "parking-vert",
+            "Peinture de sol anti-UV": "gradins", "Finition haute résistance": "entrepot-stockage"}
+    SANS = ["Sable coloré autolissant", "Finition époxy mate", "Finition anticorrosion", "Sol à motifs"]
+
+    def setUp(self):
+        super().setUp()
+        from apps.catalogue.models import Famille, Produit
+        famille = Famille.objects.create(nom="Finitions")
+        self.produits = {}
+        for i, nom in enumerate([*self.AVEC, *self.SANS]):
+            self.produits[nom] = Produit.objects.create(
+                famille=famille, nom=nom, reference=f"T-{i}", accroche="Accroche", description="Description",
+                prix=1234, traductions={"en": {"nom": nom}})
+
+    def etat(self):
+        from apps.catalogue.models import Produit
+        return {p.pk: {c.name: getattr(p, c.name) for c in Produit._meta.concrete_fields if c.name != "modifie_le"}
+                for p in Produit.objects.all()}
+
+    def test_manifeste_liste_les_six_correspondances(self):
+        manifeste = json.loads((DOSSIER / "medias.json").read_text(encoding="utf-8"))
+        self.assertEqual({e["produit"]: Path(e["fichier"]).stem for e in manifeste["produits"]}, self.AVEC)
+        for e in manifeste["produits"]:
+            self.assertEqual(set(e["alt"]), set(CODES_LANGUES))
+
+    def test_premiere_execution(self):
+        from apps.catalogue.models import ImageProduit
+        avant = self.etat()
+        sortie = self.importer()
+        self.assertIn("6 ajoutée(s)", sortie)
+        self.assertEqual(ImageProduit.objects.count(), 6)
+        for nom, fichier in self.AVEC.items():
+            image = self.produits[nom].images.get()
+            self.assertRegex(image.image.name, rf"^catalogue/produits/{fichier}(_\w{{7}})?\.webp$")
+            with Image.open(image.image.path) as ouverte:
+                self.assertEqual(ouverte.format, "WEBP")
+                self.assertLessEqual(ouverte.width, 1280)
+            for langue in CODES_LANGUES:
+                self.assertTrue(image.traduit("alt", langue).strip())
+        for nom in self.SANS:
+            self.assertFalse(self.produits[nom].images.exists(), nom)
+        self.assertEqual(self.etat(), avant)  # aucun autre champ de produit modifié
+
+    def test_seconde_execution_sans_doublon_ni_nouveau_fichier(self):
+        from apps.catalogue.models import ImageProduit
+        self.importer()
+        fichiers, ids = self.fichiers_media(), list(ImageProduit.objects.values_list("id", "image"))
+        sortie = self.importer()
+        self.assertIn("0 ajoutée(s)", sortie)
+        self.assertEqual(self.fichiers_media(), fichiers)
+        self.assertEqual(list(ImageProduit.objects.values_list("id", "image")), ids)
+
+    def test_produit_deja_dote_non_remplace(self):
+        from apps.catalogue.models import ImageProduit
+        produit = self.produits["Terrazzo époxy"]
+        existante = ImageProduit.objects.create(
+            produit=produit, alt="Photo de l'équipe", image="catalogue/produits/equipe.webp")
+        self.importer()
+        self.assertEqual(list(produit.images.values_list("id", "image", "alt")),
+                         [(existante.id, "catalogue/produits/equipe.webp", "Photo de l'équipe")])
+        self.assertEqual(ImageProduit.objects.count(), 6)
+
+    def test_forcer_remplace_sans_doublon_ni_orphelin(self):
+        from apps.catalogue.models import ImageProduit
+        self.importer()
+        avant = self.etat()
+        image = self.produits["Terrazzo époxy"].images.get()
+        image.alt = "Modifié"
+        image.save()
+        sortie = self.importer("--forcer")
+        self.assertIn("6 ajoutée(s)", sortie)
+        self.assertEqual(ImageProduit.objects.count(), 6)
+        self.assertNotEqual(self.produits["Terrazzo époxy"].images.get().alt, "Modifié")
+        self.assertEqual(len([f for f in self.fichiers_media() if f.startswith("catalogue/produits/")]), 6)
+        for photo in ImageProduit.objects.all():
+            self.assertTrue(Path(photo.image.path).is_file())
+        self.assertEqual(self.etat(), avant)
+
+    def test_nom_absent_ignore_avec_message(self):
+        from apps.catalogue.models import ImageProduit
+        self.produits["Finition antidérapante"].delete()
+        sortie = self.importer()
+        self.assertIn("« Finition antidérapante » absent du catalogue", sortie)
+        self.assertEqual(ImageProduit.objects.count(), 5)
+
+    def test_nom_exact_seulement(self):
+        from apps.catalogue.models import ImageProduit, Produit
+        Produit.objects.filter(nom="Terrazzo époxy").update(nom="terrazzo epoxy")
+        self.importer()
+        self.assertEqual(ImageProduit.objects.count(), 5)
+
+    def test_sans_produit_en_base(self):
+        from apps.catalogue.models import Produit
+        Produit.objects.all().delete()
+        sortie = self.importer()
+        self.assertIn("0 ajoutée(s)", sortie)
+        self.assertEqual(PhotoSphere.objects.count(), 9)
+
+    def test_fichier_produit_manquant_rien_de_partiel(self):
+        from apps.catalogue.models import ImageProduit
+        dossier = self.copie_dossier()
+        self.ecrire(dossier, lambda m: m["produits"].append(
+            {"produit": "Terrazzo époxy", "fichier": "images/absent.webp", "alt": m["produits"][0]["alt"]}))
+        with self.assertRaises(CommandError):
+            self.importer(dossier=dossier)
+        self.assertEqual(ImageProduit.objects.count(), 0)
+        self.assertEqual(PhotoSphere.objects.count(), 0)
+        self.assertEqual(self.fichiers_media(), [])
+
+    def test_alt_produit_incomplet_refuse(self):
+        dossier = self.copie_dossier()
+        self.ecrire(dossier, lambda m: m["produits"][0]["alt"].pop("de"))
+        with self.assertRaises(CommandError):
+            self.importer(dossier=dossier)
+        self.assertEqual(self.fichiers_media(), [])
+
+    def test_echec_au_milieu_nettoie_aussi_les_images_de_produits(self):
+        from apps.catalogue.models import ImageProduit
+        original = ImageProduit._do_insert
+        appels = []
+
+        def echoue(self, *a, **k):
+            appels.append(1)
+            if len(appels) == 3:
+                raise RuntimeError("échec simulé")
+            return original(self, *a, **k)
+
+        with mock.patch.object(ImageProduit, "_do_insert", autospec=True, side_effect=echoue):
+            with self.assertRaises(RuntimeError):
+                self.importer()
+        self.assertEqual(ImageProduit.objects.count(), 0)
+        self.assertEqual(self.fichiers_media(), [])
+
+    def ecrire(self, dossier, modifier):
+        chemin = dossier / "medias.json"
+        manifeste = json.loads(chemin.read_text(encoding="utf-8"))
+        modifier(manifeste)
+        chemin.write_text(json.dumps(manifeste), encoding="utf-8")

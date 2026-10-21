@@ -153,5 +153,74 @@
         "ja": "明るくつやのある床の受付ホール。カウンターと、模様の入った大理石の壁がある。"
       }
     }
-  ]
+  ],
+  "produits": [
+    {
+      "produit": "Sol autolissant époxy",
+      "fichier": "images/hall-turquoise.webp",
+      "alt": {
+        "fr": "Vaste salle à piliers blancs, au sol en résine turquoise brillante.",
+        "en": "Vast hall with white pillars and a glossy turquoise resin floor.",
+        "zh": "有白色立柱的宽敞大厅，地面为光亮的青绿色树脂。",
+        "de": "Weitläufige Halle mit weißen Pfeilern und glänzendem türkisfarbenem Harzboden.",
+        "ja": "白い柱が並ぶ広いホール。床はつやのあるターコイズ色の樹脂。"
+      }
+    },
+    {
+      "produit": "Terrazzo époxy",
+      "fichier": "images/ecole-terrazzo.webp",
+      "alt": {
+        "fr": "Hall d'école au sol en terrazzo clair, avec un grand motif central rouge, jaune et bleu.",
+        "en": "School hall with a light terrazzo floor and a large central pattern in red, yellow and blue.",
+        "zh": "学校大厅的浅色水磨石地面，中央有一个红、黄、蓝三色的大图案。",
+        "de": "Schulflur mit hellem Terrazzoboden und einem großen Muster in Rot, Gelb und Blau in der Mitte.",
+        "ja": "明るいテラゾー床の学校のホール。中央に赤・黄・青の大きな模様がある。"
+      }
+    },
+    {
+      "produit": "Finition époxy lisse",
+      "fichier": "images/entrepot-bleu-jaune.webp",
+      "alt": {
+        "fr": "Grand entrepôt au sol en résine bleue et grise, avec des lignes jaunes de marquage.",
+        "en": "Large warehouse with a blue and grey resin floor and yellow marking lines.",
+        "zh": "大型仓库的蓝灰色树脂地面，带有黄色标线。",
+        "de": "Große Lagerhalle mit blau-grauem Harzboden und gelben Markierungslinien.",
+        "ja": "青とグレーの樹脂床に黄色のラインが引かれた広い倉庫。"
+      }
+    },
+    {
+      "produit": "Finition antidérapante",
+      "fichier": "images/parking-vert.webp",
+      "alt": {
+        "fr": "Parking couvert au sol en résine verte, avec des lignes blanches de marquage.",
+        "en": "Covered car park with a green resin floor and white marking lines.",
+        "zh": "室内停车场的绿色树脂地面，带有白色标线。",
+        "de": "Überdachter Parkplatz mit grünem Harzboden und weißen Markierungslinien.",
+        "ja": "緑の樹脂床に白いラインが引かれた屋内駐車場。"
+      }
+    },
+    {
+      "produit": "Peinture de sol anti-UV",
+      "fichier": "images/gradins.webp",
+      "alt": {
+        "fr": "Gradins en bord d'eau aux marches colorées en bleu, jaune et orange, sous un ciel dégagé.",
+        "en": "Waterside stands with steps in blue, yellow and orange, under a clear sky.",
+        "zh": "水边的看台，台阶为蓝、黄、橙三色，天空晴朗。",
+        "de": "Tribüne am Wasser mit blauen, gelben und orangefarbenen Stufen unter klarem Himmel.",
+        "ja": "晴れた空の下、水辺にある観覧席。段が青・黄・オレンジに塗り分けられている。"
+      }
+    },
+    {
+      "produit": "Finition haute résistance",
+      "fichier": "images/entrepot-stockage.webp",
+      "alt": {
+        "fr": "Entrepôt de stockage au sol en résine bleu clair, devant des rayonnages chargés de palettes.",
+        "en": "Storage warehouse with a light blue resin floor, in front of racks loaded with pallets.",
+        "zh": "存储仓库的浅蓝色树脂地面，前方是堆满托盘的货架。",
+        "de": "Lagerhalle mit hellblauem Harzboden vor Regalen, die mit Paletten beladen sind.",
+        "ja": "水色の樹脂床の保管用倉庫。手前にパレットを積んだ棚が並んでいる。"
+      }
+    }
+  ],
+  "description_produits": "Images de produits (correspondance établie par la maquette du propriétaire), rattachées par le nom exact du produit, seulement aux produits qui n'ont pas encore d'image. Un nom absent du catalogue est ignoré. Aucun autre produit n'a d'image."
 }
