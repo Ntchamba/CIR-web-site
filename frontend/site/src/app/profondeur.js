@@ -13,6 +13,8 @@ import { profondeurActive, transitionPossible, useMouvementReduit } from './pref
 export function appliquerProfondeur(racine = document.documentElement) {
   const plat = !profondeurActive();
   racine.toggleAttribute('data-plat', plat);
+  // Zoom entre pages : API View Transitions si elle existe, sinon un fondu rapide (repli CSS).
+  racine.dataset.transition = transitionPossible() ? 'vt' : 'fondu';
   return !plat;
 }
 
@@ -21,7 +23,10 @@ export function useProfondeur() {
   const reduit = useMouvementReduit();
   useEffect(() => {
     appliquerProfondeur();
-    return () => document.documentElement.removeAttribute('data-plat');
+    return () => {
+      document.documentElement.removeAttribute('data-plat');
+      delete document.documentElement.dataset.transition;
+    };
   }, [reduit]);
 }
 

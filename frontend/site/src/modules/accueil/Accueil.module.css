@@ -6,17 +6,24 @@
 .bandeaux li { display: flex; align-items: center; min-height: var(--cible-tactile); text-align: center; }
 .bandeaux a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 
-/* Haut de page */
-.hero {
-  position: relative; overflow: hidden; isolation: isolate;
-  background: radial-gradient(120% 120% at 80% 20%, #1b4d66 0%, var(--encre) 60%);
-  color: var(--blanc);
+/* Haut de page : en entrée 3D, une « scène » épinglée (sticky) pendant que la scène de fond zoome vers les fenêtres
+   puis que la lumière blanche remplit l'écran (styles/profondeur.css). À plat : un haut de page normal. */
+.entree { position: relative; margin-top: calc(var(--hauteur-entete) * -1); }
+@media (max-width: 900px) { .entree { margin-top: calc(var(--hauteur-entete-mobile) * -1); } }
+.cadre { position: relative; overflow: hidden; isolation: isolate; color: var(--blanc); }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    :global(html:not([data-plat])) .entree { height: calc(100svh + var(--entree-h)); }
+    :global(html:not([data-plat])) .cadre { position: sticky; top: 0; height: 100svh; display: flex; align-items: center; }
+  }
 }
-.fond { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
-.voile { position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(14, 42, 56, 0.88) 0%, rgba(14, 42, 56, 0.55) 55%, rgba(14, 42, 56, 0.25) 100%); }
+.fondHero { position: absolute; inset: 0; z-index: -1; opacity: 1; transition: opacity 0.6s ease; }
+.fondFini { opacity: 0; }
+.fond { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.voile { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(14, 42, 56, 0.88) 0%, rgba(14, 42, 56, 0.55) 55%, rgba(14, 42, 56, 0.25) 100%); }
 .heroContenu {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 24px;
-  min-height: min(calc(100svh - var(--hauteur-entete)), 780px); padding-block: 64px 88px;
+  width: 100%; min-height: min(100svh, 820px); padding-block: calc(var(--hauteur-entete) + 40px) 88px;
 }
 .heroSeul { grid-template-columns: minmax(0, 1fr); }
 .heroSeul .heroTexte { max-width: 720px; }
@@ -109,7 +116,7 @@
   .usages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 900px) {
-  .heroContenu { grid-template-columns: 1fr; min-height: 0; padding-block: 48px 32px; }
+  .heroContenu { grid-template-columns: 1fr; min-height: 0; padding-block: calc(var(--hauteur-entete-mobile) + 32px) 72px; }
   .sphere { --echelle: 0.5; }
 }
 @media (max-width: 520px) {

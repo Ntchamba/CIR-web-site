@@ -6,26 +6,6 @@
   .contenu { padding-top: var(--hauteur-entete-mobile); }
 }
 
-/* Scène de fond : photo de la maison, assombrie par l'encre. Élément fixe (aucune image de fond « fixed »,
-   coûteuse à repeindre). La couleur de l'encre s'affiche tout de suite, la photo vient ensuite. */
-.scene {
-  position: fixed; inset: 0; z-index: -1; pointer-events: none;
-  background-color: var(--encre);
-  background-image:
-    linear-gradient(180deg, rgba(14, 42, 56, 0.78) 0%, rgba(14, 42, 56, 0.9) 100%),
-    url('/media/accueil/fond-maison-desktop.webp');
-  background-size: cover;
-  background-position: center;
-  transform-origin: 50% 40%;
-}
-@media (max-width: 700px) {
-  .scene {
-    background-image:
-      linear-gradient(180deg, rgba(14, 42, 56, 0.8) 0%, rgba(14, 42, 56, 0.92) 100%),
-      url('/media/accueil/fond-maison-mobile.webp');
-  }
-}
-
 .evitement {
   position: absolute; left: 16px; top: -80px; z-index: 100;
   padding: 10px 16px; border-radius: var(--rayon-s); background: var(--encre); color: var(--blanc);

@@ -6,7 +6,7 @@ import { economieDonnees, useMouvementReduit } from '@/app/preferences.js';
 
 import styles from '../Accueil.module.css';
 
-export default function VideoFond({ video, affiche }) {
+export default function VideoFond({ video, affiche, surFin }) {
   const reduit = useMouvementReduit();
   const jouer = Boolean(video) && !reduit && !economieDonnees();
   const ref = useRef(null);
@@ -25,7 +25,7 @@ export default function VideoFond({ video, affiche }) {
   if (jouer) {
     return (
       <video ref={ref} className={styles.fond} src={video} poster={affiche?.url || undefined}
-        autoPlay muted playsInline preload="auto" aria-hidden="true" tabIndex={-1} data-testid="video-fond" />
+        autoPlay muted playsInline preload="auto" aria-hidden="true" tabIndex={-1} data-testid="video-fond" onEnded={surFin} />
     );
   }
   if (affiche?.url) {

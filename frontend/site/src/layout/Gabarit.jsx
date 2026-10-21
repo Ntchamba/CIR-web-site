@@ -18,6 +18,16 @@ import styles from './Gabarit.module.css';
 // L'assistant est dans un chunk séparé, demandé seulement quand le navigateur est au repos : il ne retarde pas la page.
 const BulleAssistant = lazy(() => import('@/modules/assistant/BulleAssistant.jsx'));
 
+/** Cadrage de la scène selon la page (voir styles/profondeur.css). */
+export function cameraDe(chemin) {
+  if (chemin === '/') return 'accueil';
+  if (chemin === '/catalogue' || chemin.startsWith('/catalogue/')) return 'catalogue';
+  if (chemin === '/realisations') return 'realisations';
+  if (chemin === '/commandes' || chemin.startsWith('/commandes/')) return 'commandes';
+  if (['/connexion', '/inscription', '/compte'].includes(chemin)) return 'compte';
+  return 'interne';
+}
+
 export default function Gabarit() {
   const { t } = useTraduction();
   const { pathname } = useLocation();
@@ -44,16 +54,23 @@ export default function Gabarit() {
   }, []);
 
   return (
-    <div className={styles.page}>
-      {/* Scène : la photo de la maison, assombrie par l'encre, derrière toutes les pages (décorative). */}
-      <div className={styles.scene} data-scene data-vt="scene" aria-hidden="true" />
+    <div className={styles.page} data-cam={cameraDe(pathname)}>
+      {/* Scène : le salon (dernière image de la vidéo), un seul élément pour toute l'application, derrière toutes les
+          pages (décoratif). Sa « caméra » change selon la page (variables --cam-*, styles/profondeur.css). */}
+      <div className="scene" aria-hidden="true">
+        <div className="scene-image" />
+        <div className="scene-voile" />
+        <div className="scene-lumiere" />
+      </div>
       <a href="#contenu" className={styles.evitement}>{t('nav.allerAuContenu')}</a>
       <Entete />
       <main id="contenu" className={styles.contenu} tabIndex={-1}>
         <BandeauDirect />
         {/* Page chargée à la demande : l'en-tête et le pied de page restent affichés pendant le chargement. */}
         <Suspense fallback={<Chargement plein />}>
-          {sansFeuille ? <Outlet /> : <div className="verre"><Outlet /></div>}
+          <div key={pathname} className="page-entree">
+            {sansFeuille ? <Outlet /> : <div className="verre"><Outlet /></div>}
+          </div>
         </Suspense>
       </main>
       <PiedDePage />
