@@ -321,3 +321,90 @@ class ReplisEtGraviteTests(SimpleTestCase):
         sortie = controle("J'ai confirmé votre commande pour 12 500 FCFA.")
         self.assertEqual(sortie.bloque, g.ENGAGEMENT)
         self.assertNotIn("12", sortie.texte)
+
+
+class SecondPassageContournementsTests(SimpleTestCase):
+    """Deuxième série de contournements (regard neuf) : prix unitaires, devises familières, engagements de
+    suppression/mise à jour, séparateurs de téléphone, domaines peu courants."""
+
+    def verifier(self, textes, code):
+        for texte in textes:
+            with self.subTest(texte=texte):
+                sortie = controle(texte)
+                self.assertEqual(sortie.bloque, code, f"{texte!r} -> {sortie.texte!r}")
+
+    def test_prix_unitaires_sans_devise(self):
+        self.verifier(["25 000 per square metre", "25 000 per square meter", "25 000 pro Quadratmeter", "25 000 / sqm",
+                       "每平方米25000", "1平方米25000", "25000 le kg", "25 000 le seau", "25 000 le kit", "25 000 par seau",
+                       "25 000 l'unité", "25 000 per kg", "25 000 pro kg", "25 000 /kg", "25000 / ml"], g.PRIX)
+
+    def test_devises_et_ecritures_peu_courantes(self):
+        self.verifier(["douze mille cinq cents F CFA", "12 500 de francs", "12 Tsd. Franken", "12 Tsd. €", "12,5 Tsd. Euro",
+                       "35 US dollars", "35 bucks", "fünfunddreißig Euro", "一万二千五百 FCFA", "12.5 milles francs"], g.PRIX)
+
+    def test_remises_sans_mot_de_remise_a_cote(self):
+        self.verifier(["20 pour cent de remise", "15 % de moins", "15 % moins cher", "moins 15 %", "-20 %", "−20 %"], g.PRIX)
+
+    def test_engagements_de_suppression_et_de_mise_a_jour(self):
+        self.verifier([
+            "J'ai supprimé votre commande.", "Votre commande a été supprimée.", "J'ai mis à jour votre commande.",
+            "Votre commande a été mise à jour.", "J'ai changé votre adresse.", "Votre adresse a été modifiée.",
+            "J'ai commandé le YD-500 pour vous.", "J'ai ajouté le produit à votre commande.", "Votre acompte a été versé.",
+            "I have ordered it for you.", "I have deleted your order.", "Your account has been updated.",
+            "Ihre Bestellung wurde gelöscht.", "订单已删除", "已修改您的地址", "我已更新订单", "注文を削除しました",
+            "注文を更新しました", "署名が完了しました", "入金を確認しました",
+        ], g.ENGAGEMENT)
+
+    def test_telephones_avec_separateurs_inhabituels(self):
+        for texte in ["Appelez le 677/12/34/56", "Appelez le 677 – 123 – 456", "Appelez le 677·123·456"]:
+            with self.subTest(texte=texte):
+                sortie = controle(texte)
+                self.assertEqual(sortie.bloque, g.COORDONNEES, sortie.texte)
+                self.assertNotIn("677", sortie.texte)
+
+    def test_domaines_courants_en_afrique_et_raccourcisseurs(self):
+        for texte in ["Voir evil.ng", "Voir evil.sn", "Voir evil.africa", "Voir evil.cloud", "Voir evil.link",
+                      "Voir evil.click", "Voir evil.page", "Voir goo.gl/x", "Voir youtu.be/x", "Voir evil.tk"]:
+            with self.subTest(texte=texte):
+                self.assertNotIn("evil", controle(texte).texte)
+                self.assertNotIn("goo.gl", controle(texte).texte)
+                self.assertNotIn("youtu", controle(texte).texte)
+
+
+class SurBlocageTests(SimpleTestCase):
+    """Un bon conseil ne doit jamais être remplacé par le repli."""
+
+    def test_textes_legitimes_passent_intacts(self):
+        textes = [
+            "Séchage : 24 heures à 25 °C, circulation piétonne après 48 heures.", "Prévoyez 20 kg pour 10 m².",
+            "Le kit de 20 kg couvre environ 8 m².", "Épaisseur 2 mm, 3 couches.", "Dimensions : 1 200 x 800 mm.",
+            "Température entre 5 °C et 35 °C.", "Humidité inférieure à 80 %.",
+            "Le produit YD-500 (réf. YD-500) est un sol autolissant.",
+            "Votre commande CIR-2026-0001 est à l'étape « Travaux en cours ».", "Commande créée le 21 octobre 2026.",
+            "Le 21/10/2026 à 14 h 30.", "Durée : 3 jours, puis 7 jours de cure.", "Prix sur devis.", "Price on request.",
+            "Preis auf Anfrage.", "价格需报价。", "お見積もりとなります。", "Prix indicatif publié : 18 500 FCFA.",
+            "Surface minimale 50 m², hauteur 3 m.", "Résistance à la compression de 80 MPa.", "Dureté Shore D 80.",
+            "Appliquez 2 couches de 0,5 kg/m².", "Pour 100 m2, comptez 2 jours de travaux.", "Le chantier fait 1 500 m².",
+            "Nous sommes ouverts de 8 h à 17 h.", "Le reste à payer est de 300 000 FCFA.", "Il y a 12 designs et 4 familles.",
+            "Étape 3 sur 5", "12 produits trouvés", "Gamme de 20 à 40 m²", "Compter 4 à 6 heures de séchage.",
+            "Disponible en 25 kg ou 5 kg.", "Séchage 24 h.", "Délai de séchage de 48 heures avant circulation.",
+            "Drying takes 24 hours at 25 °C.", "Trocknungszeit 24 Stunden bei 25 °C.", "干燥时间为24小时，温度25摄氏度。",
+            "乾燥時間は24時間、温度は25℃です。", "面积100平方米，厚度2毫米。", "面積は100平方メートル、厚さ2ミリです。",
+            "Fläche 100 m², Dicke 2 mm.", "Pour 100 m² il faut 2 seaux de 20 kg.", "Le prix dépend de la surface.",
+            "The cost depends on the area.", "Der Preis hängt von der Fläche ab.", "费用取决于面积。",
+            "価格は面積によって異なります。", "Prix : sur devis (merci de préciser 120 m²).",
+            "Le budget dépend de vos 120 m².", "Le prix de 100 m² dépend du chantier", "Le coût de 2 couches est sur devis.",
+            "Preis für 2 Schichten auf Anfrage", "价格取决于3个因素", "費用は3つの要素で決まります",
+            "Le prix varie selon 3 critères : surface, support, délai.", "J'ai trouvé 12 produits pour l'industrie.",
+            "Je confirme que le YD-500 est publié.", "Gamma de 3 à 5 mm pour 2 couches.",
+        ]
+        for texte in textes:
+            with self.subTest(texte=texte):
+                sortie = controle(texte, montants={18500, 300000})
+                self.assertEqual((sortie.bloque, sortie.texte), ("", texte))
+
+    def test_conseils_de_produit_avec_reference_et_numero_de_commande(self):
+        sortie = controle("Pour 120 m² d'atelier, le YD-500 convient : 2 couches, séchage de 24 heures à 25 °C. "
+                          "Votre commande CIR-2026-0042 du 2026-10-21 est en « Négociation ».", liens=LIENS)
+        self.assertEqual(sortie.bloque, "")
+        self.assertEqual([lien["chemin"] for lien in sortie.liens], ["/catalogue/sol-autolissant"])
