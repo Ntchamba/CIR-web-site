@@ -442,3 +442,53 @@ class PassageFinalSurBlocageTests(SimpleTestCase):
         sortie = controle("Visitez revelation-sarl.com pour plus d'informations.")
         self.assertIn("revelation-sarl.com", sortie.texte)
         self.assertNotIn("evil", controle("Voir revelation-sarl.com.evil.com").texte)
+
+
+class NonRegressionAssouplissementsTests(SimpleTestCase):
+    """Les assouplissements (humidité, quantités par contenant, domaine officiel) n'ouvrent aucun contournement."""
+
+    def test_pourcentage_pres_d_un_mot_de_prix_reste_bloque(self):
+        for texte in ["Le prix est moins 15 %", "Remise : moins de 15 %", "Nous faisons moins 10 % sur le prix",
+                      "moins de 15 % sur le tarif", "Tarif : moins 15 %", "15 % moins cher"]:
+            with self.subTest(texte=texte):
+                self.assertEqual(controle(texte).bloque, g.PRIX, texte)
+
+    def test_humidite_et_prix_dans_la_meme_phrase(self):
+        self.assertEqual(controle("Moins de 4 % d'humidité, et une remise de 10 % pour vous.").bloque, g.PRIX)
+
+    def test_prix_par_contenant_a_plusieurs_chiffres_reste_bloque(self):
+        for texte in ["25 000 par seau", "25000 par seau", "2500 par seau", "2 500 par seau", "25 000 le seau",
+                      "25000 le kit", "5000 每桶", "一桶5000", "每桶5000元", "一桶5000块", "5公斤5000元",
+                      "价格：一桶5000", "Le seau de 5 kg coûte 25000"]:
+            with self.subTest(texte=texte):
+                self.assertEqual(controle(texte).bloque, g.PRIX, texte)
+
+    def test_petites_quantites_par_contenant_restent_autorisees(self):
+        for texte in ["Il y en a 2 par seau.", "Un seau de 5 kg couvre 2 m².", "一桶5公斤，约覆盖2平方米。",
+                      "Comptez 5 kg par seau et 3 seaux pour 20 m²."]:
+            with self.subTest(texte=texte):
+                self.assertEqual(controle(texte).bloque, "", texte)
+
+    def test_domaine_officiel_seul_est_conserve(self):
+        self.assertIn("revelation-sarl.com", controle("Visitez revelation-sarl.com.").texte)
+        self.assertIn("REVELATION-SARL.COM", controle("Visitez REVELATION-SARL.COM.").texte)
+
+    def test_domaines_pieges_derriere_le_nom_officiel_retires(self):
+        for texte in ["Voir revelation-sarl.com.evil.com", "Voir revelation-sarl.com.evil.ng",
+                      "Voir https://revelation-sarl.com.evil.com/x", "Voir evil.com/revelation-sarl.com",
+                      "Voir sub.revelation-sarl.com", "Voir xrevelation-sarl.com", "Voir evil-revelation-sarl.com",
+                      "Voir revelation-sarl.com.cn", "Voir revelation-sarl.comevil.com", "Voir revelation-sarl.co",
+                      "Voir http://evil.com#revelation-sarl.com", "Voir www.revelation-sarl.com.evil.com"]:
+            with self.subTest(texte=texte):
+                self.assertNotIn("evil", controle(texte).texte)
+                self.assertNotIn("sub.revelation", controle(texte).texte)
+                self.assertNotIn("xrevelation", controle(texte).texte)
+
+    def test_arobase_apres_le_domaine_officiel_retiree(self):
+        sortie = controle("Voir revelation-sarl.com@evil.com")
+        self.assertNotIn("evil", sortie.texte)
+
+    def test_lien_markdown_vers_un_site_externe_etiquete_du_domaine_officiel(self):
+        sortie = controle("Voir [revelation-sarl.com](https://evil.com)")
+        self.assertNotIn("evil", sortie.texte)
+        self.assertEqual(sortie.liens, [])
