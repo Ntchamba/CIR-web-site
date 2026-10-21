@@ -1,5 +1,5 @@
 // Gabarit commun : lien d'évitement, en-tête, contenu de la page, pied de page, barre d'onglets mobile.
-import { Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router';
 
 import Chargement from '@partage/ui/Chargement.jsx';
@@ -13,6 +13,9 @@ import Entete from './Entete.jsx';
 import PiedDePage from './PiedDePage.jsx';
 import styles from './Gabarit.module.css';
 
+// L'assistant est dans un chunk séparé, demandé seulement quand le navigateur est au repos : il ne retarde pas la page.
+const BulleAssistant = lazy(() => import('@/modules/assistant/BulleAssistant.jsx'));
+
 export default function Gabarit() {
   const { t } = useTraduction();
   const { pathname } = useLocation();
@@ -21,6 +24,16 @@ export default function Gabarit() {
   useEffect(() => {
     if (typeof window.scrollTo === 'function') window.scrollTo(0, 0);
   }, [pathname]);
+
+  const [assistantPret, setAssistantPret] = useState(false);
+  useEffect(() => {
+    const demander = window.requestIdleCallback
+      ? (rappel) => window.requestIdleCallback(rappel, { timeout: 2000 })
+      : (rappel) => window.setTimeout(rappel, 200);
+    const annuler = window.cancelIdleCallback || window.clearTimeout;
+    const id = demander(() => setAssistantPret(true));
+    return () => annuler(id);
+  }, []);
 
   return (
     <div className={styles.page}>
@@ -36,6 +49,11 @@ export default function Gabarit() {
       <PiedDePage />
       <BarreOnglets />
       <SalleAppel />
+      {assistantPret && (
+        <Suspense fallback={null}>
+          <BulleAssistant />
+        </Suspense>
+      )}
     </div>
   );
 }

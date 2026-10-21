@@ -4,6 +4,7 @@ La clé vient de GEMINI_API_KEY ; elle est envoyée dans l'en-tête `x-goog-api-
 dans l'adresse, ni dans les erreurs, ni dans les journaux. Le texte de l'utilisateur non plus.
 Un appel de fonction renvoyé par le modèle est une demande : cette intégration n'exécute rien.
 """
+import json
 import logging
 import os
 import re
@@ -138,15 +139,23 @@ def generer(*, modele, instruction, messages, outils=(), temperature=0.2, jetons
     """Envoie la conversation à Gemini et renvoie la réponse (texte et/ou appels de fonctions demandés)."""
     if not configure():
         raise GeminiNonConfigure("L'assistant IA (Gemini) n'est pas configuré.")
-    if not isinstance(modele, str) or not _MODELE.match(modele):
+    if not isinstance(modele, str) or not _MODELE.fullmatch(modele):
         raise GeminiErreurDefinitive("Nom de modèle Gemini invalide.")
-    corps = _corps(instruction, messages, outils, temperature, jetons_max)
+    if isinstance(delai, bool) or not isinstance(delai, (int, float)) or delai <= 0:
+        raise GeminiErreurDefinitive("Délai d'attente invalide.")
+    try:
+        corps = _corps(instruction, messages, outils, temperature, jetons_max)
+        json.dumps(corps)  # contenu non sérialisable (Decimal, date…) : refusé proprement
+    except (TypeError, ValueError):
+        raise GeminiErreurDefinitive("Contenu de requête non sérialisable.") from None
     try:
         reponse = requests.post(f"{BASE}/{modele}:generateContent", json=corps, timeout=delai,
                                 headers={"x-goog-api-key": os.environ["GEMINI_API_KEY"].strip(),
                                          "Content-Type": "application/json"})
     except requests.RequestException:
         raise GeminiErreurTemporaire("Service Gemini injoignable.") from None
+    except UnicodeError:  # clé avec caractères hors latin-1 : configuration à corriger
+        raise GeminiErreurDefinitive("Clé Gemini inutilisable : vérifier la configuration.") from None
     code = reponse.status_code
     if code == 429 or code >= 500:
         raise GeminiErreurTemporaire(f"Service Gemini indisponible (code {code}).")

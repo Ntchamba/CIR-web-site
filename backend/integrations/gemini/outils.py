@@ -17,7 +17,7 @@ def declarer(nom, description, parametres=None) -> dict:
     `parametres` : `{nom_param: {"type": "string"|"integer"|"boolean", "description": "…", "enum"?: [...]}}`.
     Tous les paramètres déclarés sont obligatoires (`required`).
     """
-    if not isinstance(nom, str) or not _NOM_FONCTION.match(nom):
+    if not isinstance(nom, str) or not _NOM_FONCTION.fullmatch(nom):
         raise GeminiErreurDefinitive("Nom de fonction invalide.")
     if not isinstance(description, str) or not description.strip():
         raise GeminiErreurDefinitive("Description de fonction manquante.")
@@ -25,7 +25,7 @@ def declarer(nom, description, parametres=None) -> dict:
         raise GeminiErreurDefinitive("Schéma de paramètres invalide.")
     proprietes = {}
     for cle, schema in (parametres or {}).items():
-        if not isinstance(cle, str) or not _NOM_PARAMETRE.match(cle):
+        if not isinstance(cle, str) or not _NOM_PARAMETRE.fullmatch(cle):
             raise GeminiErreurDefinitive("Nom de paramètre invalide.")
         if not isinstance(schema, dict) or schema.get("type") not in _TYPES:
             raise GeminiErreurDefinitive(f"Type du paramètre « {cle} » invalide.")

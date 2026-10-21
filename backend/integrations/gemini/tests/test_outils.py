@@ -25,7 +25,7 @@ class DeclarerTests(TestCase):
         self.assertNotIn("parameters", d)
 
     def test_noms_refuses(self):
-        for nom in ("Ab", "ab", "1abc", "a-bc", "Abc", "a" * 42, "", None, "abc def"):
+        for nom in ("Ab", "ab", "1abc", "a-bc", "Abc", "a" * 42, "", None, "abc def", "abc\n"):
             with self.assertRaises(GeminiErreurDefinitive, msg=repr(nom)):
                 declarer(nom, "d", {})
 

@@ -120,7 +120,7 @@ class RequeteTests(Base):
 
     def test_modele_invalide(self):
         self.poster(rep())
-        for modele in ("../x", "GEMINI", "a", "gemini 2", "gemini/2.5", "", None, "m" * 70):
+        for modele in ("../x", "GEMINI", "a", "gemini 2", "gemini/2.5", "gemini-2.5-flash\n", "", None, "m" * 70):
             with self.assertRaises(GeminiErreurDefinitive, msg=repr(modele)):
                 self.generer(modele=modele)
         self.post.assert_not_called()
@@ -265,3 +265,35 @@ class SecretsTests(Base):
         with self.assertNoLogs("integrations.gemini", level="DEBUG"):
             with self.assertRaises(GeminiErreurTemporaire):
                 self.generer()
+
+
+class RobustesseTests(Base):
+    def test_delai_invalide(self):
+        self.poster(rep())
+        for delai in (None, 0, -1, "30", True):
+            with self.assertRaises(GeminiErreurDefinitive, msg=repr(delai)):
+                self.generer(delai=delai)
+        self.post.assert_not_called()
+
+    def test_contenu_non_serialisable(self):
+        from decimal import Decimal
+        self.poster(rep())
+        with self.assertRaises(GeminiErreurDefinitive):
+            self.generer(messages=[{"role": "function", "resultat": {"nom": "abc", "contenu": Decimal("1")}}])
+        with self.assertRaises(GeminiErreurDefinitive):
+            self.generer(messages=[{"role": "model", "appel": {"nom": "abc", "arguments": "xyz"}}])
+        self.post.assert_not_called()
+
+    def test_cle_non_latin1_sans_fuite(self):
+        cle = "clé-secrète-\u4e2d"
+        with mock.patch.dict("os.environ", {"GEMINI_API_KEY": cle}, clear=True), \
+                mock.patch("integrations.gemini.client.requests.post",
+                           side_effect=UnicodeEncodeError("latin-1", cle, 0, 1, "x")):
+            with self.assertRaises(GeminiErreurDefinitive) as ctx:
+                self.generer()
+        self.assertNotIn("secrète", f"{ctx.exception} {ctx.exception!r}")
+
+    def test_pas_de_redirection_acceptee(self):
+        self.poster(rep(302))
+        with self.assertRaises(GeminiErreurDefinitive):
+            self.generer()

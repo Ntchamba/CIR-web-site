@@ -9,6 +9,7 @@ import MessageErreur from '@partage/ui/MessageErreur.jsx';
 import usePageMeta from '@partage/utils/usePageMeta.js';
 
 import { useTraduction } from '@/i18n/index.js';
+import { useContexteAssistant } from '@/modules/assistant/contexte.js';
 import { estUsage } from '@/modules/catalogue/usages.js';
 
 import FicheTechnique from './composants/FicheTechnique.jsx';
@@ -23,6 +24,7 @@ export default function ProduitPage() {
   const { t } = useTraduction();
   const { produit, chargement, erreur, introuvable, recharger } = useProduit(slug);
   usePageMeta(produit?.nom || (introuvable ? t('produit.introuvable.titre') : t('catalogue.titre')), produit?.accroche);
+  useContexteAssistant('produit', produit?.reference); // contexte transmis à l'assistant (indice vérifié par le serveur)
 
   if (introuvable) {
     return (

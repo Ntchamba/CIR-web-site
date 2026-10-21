@@ -11,6 +11,7 @@ import { date, fcfa, surface } from '@partage/utils/format.js';
 import usePageMeta from '@partage/utils/usePageMeta.js';
 
 import { useTraduction } from '@/i18n/index.js';
+import { useContexteAssistant } from '@/modules/assistant/contexte.js';
 import BoutonAppel from '@/modules/appels/composants/BoutonAppel.jsx';
 import ApercuDevis from '@/modules/devis/composants/ApercuDevis.jsx';
 import BlocPaiement from '@/modules/paiements/composants/BlocPaiement.jsx';
@@ -31,6 +32,7 @@ export default function DetailCommande() {
   const { t } = useTraduction();
   const { commande, chargement, erreur, recharger, appliquer, actualiser, apresAction } = useCommande(id);
   usePageMeta(commande ? t('commandes.detail.meta', { reference: commande.reference }) : t('commandes.titre'));
+  useContexteAssistant('commande', commande?.reference); // contexte transmis à l'assistant (indice vérifié par le serveur)
 
   const retour = (
     <Link to="/commandes" className={styles.retour}><Icone nom="retour" taille={18} />{t('commandes.detail.retour')}</Link>
