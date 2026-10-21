@@ -77,5 +77,13 @@ export function useCamera(chemin) {
     premier.current = false;
     deplacerCamera(scene, cadrageDe(chemin, estTelephone()), { animer, vue: nomDeVue(chemin) });
   }, [chemin]);
+  // Démontage : le trajet en cours est annulé (pas de trajet orphelin ni de fuite). Effet à part : un nettoyage lié
+  // au chemin annulerait le trajet avant que le suivant ne lise la position courante de la caméra.
+  useLayoutEffect(() => {
+    const scene = refScene.current; // retenu maintenant : la référence est vidée au démontage
+    return () => {
+      scene?.querySelector('.scene-image')?.getAnimations?.().filter((a) => a.id === 'camera').forEach((a) => a.cancel());
+    };
+  }, []);
   return refScene;
 }

@@ -14,7 +14,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 import { demarrerI18n } from '@/i18n/index.js';
 
 import App from './App.jsx';
-import { activerZoomEntrePages } from './profondeur.js';
+import { activerZoomEntrePages, appliquerProfondeur } from './profondeur.js';
+
+// `data-plat` est posé avant tout rendu : une page qui doit rester à plat (économie de données, appareil faible)
+// n'affiche jamais, même un instant, les effets de profondeur.
+appliquerProfondeur();
 
 // Routeur de données : il permet le zoom avant entre les pages (View Transitions). Les routes sont décrites
 // dans app/routes.jsx (<Routes>) : une seule route « * » rend toute l'application.

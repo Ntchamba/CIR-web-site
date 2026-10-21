@@ -1,10 +1,11 @@
 // Gabarit commun : lien d'évitement, en-tête, contenu de la page, pied de page, barre d'onglets mobile.
-import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation } from 'react-router';
 
 import Chargement from '@partage/ui/Chargement.jsx';
 
 import { useCamera } from '@/app/camera.js';
+import { useChangementDePage } from '@/app/changementDePage.js';
 import { useProfondeur } from '@/app/profondeur.js';
 import { PAGES_A_BANDEAU } from '@/composants/bandeau.js';
 import { useTraduction } from '@/i18n/index.js';
@@ -30,10 +31,9 @@ export default function Gabarit() {
   useProfondeur();
   // Caméra : se déplace vers le cadrage de la page (app/cameras.js, app/camera.js). Après le retour en haut de page.
 
-  // Haut de page à chaque changement de page (avant l'affichage : le zoom entre pages montre déjà le haut).
-  useLayoutEffect(() => {
-    if (typeof window.scrollTo === 'function') window.scrollTo(0, 0);
-  }, [pathname]);
+  // Haut de page (ou position retrouvée au retour arrière), focus sur le contenu et annonce du titre de la page.
+  const refPrincipal = useRef(null);
+  const annonce = useChangementDePage(refPrincipal);
 
   const refScene = useCamera(pathname);
 
@@ -58,7 +58,7 @@ export default function Gabarit() {
       </div>
       <a href="#contenu" className={styles.evitement}>{t('nav.allerAuContenu')}</a>
       <Entete />
-      <main id="contenu" className={styles.contenu} tabIndex={-1}>
+      <main id="contenu" className={styles.contenu} tabIndex={-1} ref={refPrincipal}>
         <BandeauDirect />
         {/* Page chargée à la demande : l'en-tête et le pied de page restent affichés pendant le chargement. */}
         <Suspense fallback={<Chargement plein />}>
@@ -67,6 +67,7 @@ export default function Gabarit() {
           </div>
         </Suspense>
       </main>
+      <div role="status" aria-live="polite" aria-atomic="true" className="visuellement-cache" data-testid="annonce-page">{annonce}</div>
       <PiedDePage />
       <BarreOnglets />
       <SalleAppel />

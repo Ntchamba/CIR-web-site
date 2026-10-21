@@ -51,3 +51,11 @@ L'effet se joue **surtout sur l'arrière-plan**, pas sur les blocs de contenu :
 - La sphère de l'accueil montre les photos fournies (`im.zip`), pas celles des maquettes.
 - Les garde-fous restent ceux de la décision : défilement natif, amélioration progressive, `prefers-reduced-motion`,
   `transform` et `opacity` seulement, contenu toujours lisible (voile sombre d'encre sur le salon pour les pages internes).
+
+## Correction du propriétaire (21 octobre 2026) : garder le design des maquettes, ajouter seulement la 3D
+
+Le design (mise en page, textes, style) des maquettes desktop et téléphone doit être **conservé à l'identique** ; la 3D n'est
+que du mouvement ajouté. Détail page par page dans `docs/reference/design-fidele.md`. En particulier : catalogue avec grand bandeau
+du salon, filtres à gauche et grille de grandes images carrées ; **fiche produit avec le produit au premier plan et son image floutée
+en arrière-plan**, et un zoom de la vignette vers le grand carré au clic. Les ambiances « panneaux sombres sur verre » de la première
+version sont abandonnées.

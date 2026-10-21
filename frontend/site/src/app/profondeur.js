@@ -5,7 +5,7 @@
 //  - poser l'attribut `data-plat` sur <html> quand la page doit rester à plat (navigateur sans prise en charge,
 //    mouvement réduit, économie de données, appareil faible) : le CSS ne s'applique alors pas ;
 //  - demander l'API View Transitions pour les changements de page (zoom avant), quand elle existe.
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 
 import { profondeurActive, transitionPossible, useMouvementReduit } from './preferences.js';
 
@@ -21,7 +21,9 @@ export function appliquerProfondeur(racine = document.documentElement) {
 /** Crochet du gabarit : garde `data-plat` à jour. */
 export function useProfondeur() {
   const reduit = useMouvementReduit();
-  useEffect(() => {
+  // Avant l'affichage (useLayoutEffect) : pas de « flash » de la profondeur sur une page qui doit rester à plat.
+  // Le premier réglage est déjà posé par main.jsx avant le premier rendu.
+  useLayoutEffect(() => {
     appliquerProfondeur();
     return () => {
       document.documentElement.removeAttribute('data-plat');
