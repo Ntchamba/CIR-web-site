@@ -1356,3 +1356,27 @@ msgstr "翻訳の内容はオブジェクト {langue: texte} です。"
 #: apps/assistant/services.py:517
 msgid "Le texte modifié est obligatoire."
 msgstr "修正後のテキストは必須です。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Dossier de médias introuvable : %(chemin)s."
+msgstr "メディアフォルダが見つかりません：%(chemin)s。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Manifeste introuvable : %(chemin)s."
+msgstr "マニフェストが見つかりません：%(chemin)s。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Manifeste illisible : %(chemin)s."
+msgstr "マニフェストを読み込めません：%(chemin)s。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Fichier de média manquant : %(fichier)s. Rien n'a été importé."
+msgstr "メディアファイルがありません：%(fichier)s。何もインポートされませんでした。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Texte alternatif manquant pour %(fichier)s (langues : %(langues)s). Rien n'a été importé."
+msgstr "%(fichier)s の代替テキストがありません（言語：%(langues)s）。何もインポートされませんでした。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Médias de référence : %(accueil)s média(s) de l'accueil posé(s), %(creees)s photo(s) de la sphère créée(s), %(remplacees)s remplacée(s), %(inchangees)s déjà présente(s)."
+msgstr "参照メディア：トップページのメディア %(accueil)s 件を設定、球体の写真を %(creees)s 枚作成、%(remplacees)s 枚を置換、%(inchangees)s 枚は登録済み。"

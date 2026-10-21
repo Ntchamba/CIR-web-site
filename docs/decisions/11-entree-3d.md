@@ -35,3 +35,19 @@ n'est pas retenu : l'ambiance est immersive (photo de la maison tirée de la vid
   préférences) et l'absence de régression ; l'animation elle-même est vérifiée dans un vrai navigateur (captures à plusieurs
   positions de défilement).
 - Aucun contenu n'est inventé pour cette direction : les images viennent de `im.zip` (fournies) et de la vidéo.
+
+## Précision du propriétaire (21 octobre 2026) : l'arrière-plan fait l'effet d'entrée
+
+L'effet se joue **surtout sur l'arrière-plan**, pas sur les blocs de contenu :
+
+- **Accueil** : le défilement ne fait pas remonter le contenu. La scène (la dernière image de la vidéo : le salon aux
+  escaliers et aux grandes fenêtres) est épinglée et **zoome en avant** vers la lumière des fenêtres, au rythme du
+  défilement. À l'arrivée de la vidéo (qui s'arrête sur cette image), la **lumière blanche des fenêtres** s'élargit,
+  remplit l'écran, puis s'ouvre sur le contenu : c'est cette lumière qui devient l'arrière-plan d'où le contenu apparaît.
+- **Changement de page** (ex. clic sur « Catalogue ») : zoom avant de l'arrière-plan vers une autre zone du salon
+  (les escaliers), puis la page s'affiche. **Chaque page garde le salon et ses escaliers en arrière-plan**, avec un cadrage
+  (« caméra ») propre : accueil = large puis fenêtres, catalogue = escaliers, réalisations, commandes et compte = autres
+  zones du même salon.
+- La sphère de l'accueil montre les photos fournies (`im.zip`), pas celles des maquettes.
+- Les garde-fous restent ceux de la décision : défilement natif, amélioration progressive, `prefers-reduced-motion`,
+  `transform` et `opacity` seulement, contenu toujours lisible (voile sombre d'encre sur le salon pour les pages internes).

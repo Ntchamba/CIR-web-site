@@ -11,12 +11,12 @@ export default function SectionActualites() {
   const { actualites } = useDernieresActualites(3);
   if (!actualites.length) return null;
   return (
-    <section className="section" aria-labelledby="titre-actualites-accueil">
+    <section className="salle" aria-labelledby="titre-actualites-accueil">
       <div className="conteneur">
         <EnteteSection id="titre-actualites-accueil" surtitre={t('actualites.surtitre')} titre={t('actualites.accueil.titre')}
           lien="/actualites" texteLien={t('actualites.accueil.toutes')} />
         <ul className={styles.grille}>
-          {actualites.map((a) => <li key={a.id}><CarteActualite actualite={a} niveauTitre={3} /></li>)}
+          {actualites.map((a) => <li key={a.id} className="p3d"><CarteActualite actualite={a} niveauTitre={3} /></li>)}
         </ul>
       </div>
     </section>

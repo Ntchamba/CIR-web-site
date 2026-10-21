@@ -1,0 +1,96 @@
+/* Entrée en profondeur (décision 11) : le défilement natif fait avancer la « caméra ».
+   CSS pur : `animation-timeline: view()` / `scroll()`, seulement `transform` et `opacity` (GPU, aucun recalcul de
+   mise en page, aucun JavaScript au défilement).
+
+   Amélioration progressive : rien de tout cela ne s'applique sans prise en charge de `animation-timeline`, avec
+   `prefers-reduced-motion`, en économie de données ou sur un appareil faible (`html[data-plat]`, voir
+   app/profondeur.js). La page est alors une page normale, à plat, dans l'ordre du document.
+
+   Classes à poser sur des blocs de taille raisonnable (jamais sur un parent d'un élément en position fixe) :
+   - .p3d        : arrive de la profondeur, puis passe devant le visiteur en sortant par le haut ;
+   - .p3d-grand  : arrive seulement (grand bloc : formulaire, détail) ;
+   - .p3d-sortie : passe devant le visiteur en sortant (haut de l'accueil). */
+
+:root {
+  --p3d-persp: 900px;   /* distance de la caméra */
+  --p3d-z: -260px;      /* profondeur de départ d'un bloc */
+  --p3d-y: 36px;
+  --p3d-echelle: 0.97;
+  --p3d-zsortie: 150px; /* un bloc qui sort passe devant le visiteur */
+  --p3d-ysortie: -24px;
+}
+/* Téléphone : profondeur réduite (moins de mouvement, écrans plus petits). */
+@media (max-width: 700px) {
+  :root { --p3d-z: -90px; --p3d-y: 22px; --p3d-echelle: 0.985; --p3d-zsortie: 60px; --p3d-ysortie: -12px; }
+}
+
+@keyframes p3d-arrivee {
+  from {
+    opacity: 0;
+    transform: perspective(var(--p3d-persp)) translate3d(var(--p3d-x, 0px), var(--p3d-y), var(--p3d-z)) scale(var(--p3d-echelle));
+  }
+  to { opacity: 1; transform: perspective(var(--p3d-persp)) translate3d(0, 0, 0) scale(1); }
+}
+@keyframes p3d-sortie {
+  from { opacity: 1; animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.6); transform: perspective(var(--p3d-persp)) translate3d(0, 0, 0) scale(1); }
+  to {
+    opacity: 0;
+    transform: perspective(var(--p3d-persp)) translate3d(0, var(--p3d-ysortie), var(--p3d-zsortie)) scale(1);
+  }
+}
+/* La scène de fond avance lentement tout au long de la page : on s'enfonce dans la maison. */
+@keyframes scene-avance {
+  from { transform: scale(1); }
+  to { transform: scale(1.22); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /* Le gabarit fixe une plage commune : arrivée sur les 220 premiers pixels de défilement du bloc
+       (aucun bloc ne reste atténué au pied d'une page courte), sortie quand le bloc quitte l'écran. */
+    html:not([data-plat]) .p3d,
+    html:not([data-plat]) .p3d-grand {
+      animation: p3d-arrivee cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+      animation-timeline: view();
+      animation-range: cover 0px cover 220px;
+    }
+    html:not([data-plat]) .p3d {
+      animation: p3d-arrivee cubic-bezier(0.2, 0.7, 0.3, 1) backwards, p3d-sortie linear forwards;
+      animation-timeline: view(), view();
+      animation-range: cover 0px cover 220px, exit 0% exit 100%;
+    }
+    html:not([data-plat]) .p3d-sortie {
+      animation: p3d-sortie linear forwards;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%;
+    }
+    /* Une alternance gauche / droite donne de la largeur à l'arrivée des cartes d'une grille. */
+    html:not([data-plat]) li.p3d:nth-child(odd) { --p3d-x: -48px; }
+    html:not([data-plat]) li.p3d:nth-child(even) { --p3d-x: 48px; }
+
+    /* Focus clavier : le bloc qui contient l'élément focalisé est ramené à plat, net et lisible. */
+    html:not([data-plat]) .p3d:focus-within,
+    html:not([data-plat]) .p3d-grand:focus-within,
+    html:not([data-plat]) .p3d-sortie:focus-within {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    html:not([data-plat]) [data-scene] {
+      animation: scene-avance linear both;
+      animation-timeline: scroll(root block);
+      will-change: transform;
+    }
+  }
+
+  /* Zoom avant entre les pages (API View Transitions, quand elle existe) : l'en-tête, la barre d'onglets et la
+     scène restent en place, seul le contenu avance vers le visiteur. */
+  [data-vt='entete'] { view-transition-name: entete; }
+  [data-vt='onglets'] { view-transition-name: onglets; }
+  [data-vt='scene'] { view-transition-name: scene; }
+  ::view-transition-old(root) { animation: vt-sortie 240ms cubic-bezier(0.4, 0, 1, 1) both; }
+  ::view-transition-new(root) { animation: vt-entree 380ms cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+  @keyframes vt-sortie { to { opacity: 0; transform: scale(1.06); } }
+  @keyframes vt-entree { from { opacity: 0; transform: scale(0.95); } }
+}

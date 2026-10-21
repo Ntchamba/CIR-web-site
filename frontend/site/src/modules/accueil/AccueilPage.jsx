@@ -13,6 +13,7 @@ import Partenaire from './composants/Partenaire.jsx';
 import ProduitsALaUne from './composants/ProduitsALaUne.jsx';
 import Usages from './composants/Usages.jsx';
 import useAccueil from './useAccueil.js';
+import styles from './Accueil.module.css';
 
 export default function AccueilPage() {
   const { t } = useTraduction();
@@ -22,12 +23,16 @@ export default function AccueilPage() {
     <>
       <Bandeaux bandeaux={contenu.bandeaux} />
       <Hero contenu={contenu} pret={contenuPret} />
-      <Usages />
-      <ProduitsALaUne produits={aLaUne} />
-      <SectionActualites />
-      <ApercuRealisations realisations={realisations} />
-      <Partenaire texte={contenu.texte_partenaire} />
-      <SectionContact />
+      {/* Une suite de « salles » en profondeur (décision 11), dans l'ordre de la maquette : sélection, réalisations,
+          puis usages, actualités, partenaire et, en bas, le contact. */}
+      <div id="salles" className={styles.salles}>
+        <ProduitsALaUne produits={aLaUne} />
+        <ApercuRealisations realisations={realisations} />
+        <Usages />
+        <SectionActualites />
+        <Partenaire texte={contenu.texte_partenaire} />
+        <SectionContact salle />
+      </div>
     </>
   );
 }

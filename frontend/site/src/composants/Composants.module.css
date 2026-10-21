@@ -24,3 +24,19 @@
 .confirmationDanger { border-color: var(--danger); background: var(--danger-fond); }
 .confirmation:focus-visible { outline: 3px solid var(--corail); outline-offset: 2px; }
 .confirmationActions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* Bandeau photo sous la barre de navigation */
+.bandeauPhoto {
+  position: relative; isolation: isolate; overflow: hidden;
+  margin-top: calc(var(--hauteur-entete) * -1); padding-top: var(--hauteur-entete);
+  min-height: clamp(220px, 28vw, 320px); display: flex; align-items: flex-end;
+  background: var(--encre); color: var(--blanc);
+}
+.bandeauPhoto picture, .bandeauPhoto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.voileBandeau { position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(14, 42, 56, 0.9) 0%, rgba(14, 42, 56, 0.62) 55%, rgba(14, 42, 56, 0.35) 100%), linear-gradient(0deg, rgba(14, 42, 56, 0.55), transparent 55%); }
+.texteBandeau { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px; padding-block: 28px 32px; }
+.texteBandeau h1 { font-size: clamp(34px, 5.5vw, 56px); font-style: italic; color: var(--blanc); }
+.texteBandeau p { margin-top: 8px; max-width: 60ch; font-size: clamp(16px, 2vw, 19px); color: rgba(255, 255, 255, 0.92); }
+@media (max-width: 900px) {
+  .bandeauPhoto { margin-top: calc(var(--hauteur-entete-mobile) * -1); padding-top: var(--hauteur-entete-mobile); }
+}

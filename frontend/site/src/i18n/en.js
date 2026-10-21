@@ -140,6 +140,7 @@ export default {
       accroche: 'For homes, industry and businesses: CIR advises you, supplies the resins and lays your floors.',
       catalogue: 'View the catalogue',
       realisations: 'Our projects',
+      decouvrir: 'Discover',
     },
     sphere: {
       titre: 'Photos of epoxy resin floors',

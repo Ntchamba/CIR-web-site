@@ -16,7 +16,7 @@
 .voile { position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(14, 42, 56, 0.88) 0%, rgba(14, 42, 56, 0.55) 55%, rgba(14, 42, 56, 0.25) 100%); }
 .heroContenu {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 24px;
-  min-height: min(82vh, 760px); padding-block: 64px;
+  min-height: min(calc(100svh - var(--hauteur-entete)), 780px); padding-block: 64px 88px;
 }
 .heroSeul { grid-template-columns: minmax(0, 1fr); }
 .heroSeul .heroTexte { max-width: 720px; }
@@ -70,7 +70,6 @@
 .grilleSphere img { width: 100%; aspect-ratio: 6 / 5; object-fit: cover; }
 
 /* Sections */
-.sectionClaire { background: var(--blanc); }
 .grille { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; }
 .grille > li { display: flex; }
 
@@ -84,8 +83,19 @@
 .usage strong { font-family: var(--police-titre); font-size: 22px; font-weight: 500; color: var(--bleu); }
 .usage span { color: var(--encre-2); font-size: 15px; }
 
+/* Salles : panneaux de verre posés en profondeur sous le haut de page (voir styles/global.css, section.salle) */
+.salles { padding-top: clamp(20px, 3vw, 36px); }
+.decouvrir {
+  position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 8px; min-height: var(--cible-tactile); padding: 0 18px;
+  border-radius: var(--pastille); background: rgba(14, 42, 56, 0.55); color: var(--blanc);
+  font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
+}
+.decouvrir:hover { color: var(--blanc); background: rgba(14, 42, 56, 0.8); }
+.decouvrir svg { transform: rotate(90deg); }
+
 /* Partenaire */
-.partenaire { background: var(--encre); color: var(--blanc); }
+.partenaire { color: var(--blanc); }
 .partenaireContenu { display: flex; align-items: center; gap: 40px; }
 .partenaireContenu img { flex-shrink: 0; width: 96px; height: auto; background: var(--blanc); border-radius: var(--rayon); padding: 12px; }
 .partenaireContenu h2 { font-size: clamp(26px, 3.6vw, 34px); margin-bottom: 10px; }

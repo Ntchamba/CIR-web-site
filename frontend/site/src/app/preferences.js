@@ -26,3 +26,28 @@ export const economieDonnees = () => Boolean(globalThis.navigator?.connection?.s
 export function useMouvementReduit() {
   return useSyncExternalStore(abonnerMouvement, mouvementReduit, () => false);
 }
+
+/** Vrai si le navigateur sait lier une animation CSS à la position de défilement (`animation-timeline`). */
+export const defilementLiePossible = () =>
+  typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports('animation-timeline: view()');
+
+/** Vrai sur un appareil peu puissant (mémoire de 1 Go ou moins, ou un seul cœur). */
+export const appareilFaible = () => {
+  const n = globalThis.navigator;
+  if (!n) return false;
+  return (typeof n.deviceMemory === 'number' && n.deviceMemory <= 1)
+    || (typeof n.hardwareConcurrency === 'number' && n.hardwareConcurrency <= 1);
+};
+
+/**
+ * Entrée en profondeur (décision 11) : active seulement si le navigateur sait lier l'animation au défilement
+ * et si le visiteur n'a demandé ni moins d'animations, ni l'économie de données, sur un appareil assez puissant.
+ * Sinon la page reste à plat, entière et dans l'ordre du document.
+ */
+export const profondeurActive = () =>
+  defilementLiePossible() && !mouvementReduit() && !economieDonnees() && !appareilFaible();
+
+/** Vrai si un zoom avant entre deux pages (API View Transitions) est possible et souhaité. */
+export const transitionPossible = () =>
+  typeof document !== 'undefined' && typeof document.startViewTransition === 'function'
+  && !mouvementReduit() && !economieDonnees() && !appareilFaible();

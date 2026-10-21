@@ -140,6 +140,7 @@ export default {
       accroche: 'Für Wohnräume, Industrie und Gewerbe: CIR berät Sie, liefert die Harze und verlegt Ihre Böden.',
       catalogue: 'Zum Katalog',
       realisations: 'Unsere Referenzen',
+      decouvrir: 'Entdecken',
     },
     sphere: {
       titre: 'Fotos von Epoxidharzböden',

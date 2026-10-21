@@ -22,7 +22,7 @@ export default function BarreOnglets() {
   const { t } = useTraduction();
   const { nonLusMessages } = useDirect();
   return (
-    <nav className={styles.barre} aria-label={t('nav.mobile')}>
+    <nav className={styles.barre} aria-label={t('nav.mobile')} data-vt="onglets">
       {ONGLETS.map((o) => (
         <NavLink key={o.vers} to={o.vers} end={o.fin}
           className={({ isActive }) => `${styles.onglet} ${isActive ? styles.actif : ''} ${o.compte ? styles.compte : ''}`}>

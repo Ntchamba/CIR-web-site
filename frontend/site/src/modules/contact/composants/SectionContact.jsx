@@ -9,6 +9,7 @@ import Champ from '@partage/ui/Champ.jsx';
 import MessageErreur from '@partage/ui/MessageErreur.jsx';
 
 import { useTraduction } from '@/i18n/index.js';
+import { useCoordonnees } from '@/layout/contenus.js';
 import { useAuth } from '@/modules/compte/AuthContext.jsx';
 
 import { envoyer } from '../api.js';
@@ -18,8 +19,9 @@ import styles from '../Contact.module.css';
 const VIDE = { nom: '', email: '', telephone: '', type: 'question', creneau: 'peu_importe', message: '', site_web: '' };
 
 /** `produit` : id du produit concerné (facultatif) ; `niveau` : niveau du titre (2 par défaut). */
-export default function SectionContact({ produit = null, niveau = 2, className = '' }) {
+export default function SectionContact({ produit = null, niveau = 2, className = '', salle = false }) {
   const { t } = useTraduction();
+  const { telephones, whatsapp, adresse } = useCoordonnees();
   const { utilisateur } = useAuth();
   const id = useId();
   const Titre = `h${niveau}`;
@@ -60,14 +62,22 @@ export default function SectionContact({ produit = null, niveau = 2, className =
   }
 
   return (
-    <section className={`${styles.section} ${className}`} aria-labelledby={`${id}-titre`}>
+    <section id={salle ? 'contact' : undefined} className={`${styles.section} ${salle ? `salle salle-nuit ${styles.nuit}` : ''} ${className}`}
+      aria-labelledby={`${id}-titre`}>
       <div className={`conteneur ${styles.contenu}`}>
-        <div className={styles.texte}>
+        <div className={`${styles.texte} ${salle ? 'p3d' : ''}`}>
           <Titre id={`${id}-titre`}>{t('contact.titre')}</Titre>
           <p>{t('contact.intro')}</p>
+          {salle && (
+            <div className={styles.coordonnees}>
+              {adresse && <span>{adresse}</span>}
+              {telephones.map((tel) => <a key={tel.lien} href={tel.lien}>{t('pied.telephone', { numero: tel.affichage })}</a>)}
+              <a href={whatsapp.lien} target="_blank" rel="noopener noreferrer">{t('pied.whatsapp', { numero: whatsapp.affichage })}</a>
+            </div>
+          )}
         </div>
 
-        <form className={styles.formulaire} onSubmit={soumettre} noValidate>
+        <form className={`${styles.formulaire} ${salle ? 'p3d-grand' : ''}`} onSubmit={soumettre} noValidate>
           <div role="status" aria-live="polite">
             {etat.reference && (
               <div className={styles.succes}>

@@ -20,7 +20,7 @@ export default function Hero({ contenu = {}, pret = true }) {
     <section className={styles.hero} aria-labelledby="titre-accueil">
       <VideoFond video={contenu.video_fond} affiche={contenu.image_affiche} />
       <div className={styles.voile} aria-hidden="true" />
-      <div className={`conteneur ${styles.heroContenu} ${sphere.length ? '' : styles.heroSeul}`}>
+      <div className={`conteneur p3d-sortie ${styles.heroContenu} ${sphere.length ? '' : styles.heroSeul}`}>
         <div className={styles.heroTexte}>
           <span className={styles.surtitreHero}>{t('accueil.hero.surtitre')}</span>
           <h1 id="titre-accueil" className={pret ? '' : styles.enAttente}>{contenu.titre || t('accueil.hero.titre')}</h1>
@@ -35,6 +35,10 @@ export default function Hero({ contenu = {}, pret = true }) {
         </div>
         <Sphere photos={sphere} />
       </div>
+      <a href="#salles" className={styles.decouvrir}>
+        {t('accueil.hero.decouvrir')}
+        <Icone nom="fleche" taille={16} />
+      </a>
     </section>
   );
 }

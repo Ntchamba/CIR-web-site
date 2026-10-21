@@ -141,6 +141,7 @@ export default {
       accroche: "Pour la maison, l'industrie et l'entreprise : le CIR vous conseille, fournit les résines et réalise vos sols.",
       catalogue: 'Voir le catalogue',
       realisations: 'Nos réalisations',
+      decouvrir: 'Découvrir',
     },
     sphere: {
       titre: 'Photos de sols en résine époxy',

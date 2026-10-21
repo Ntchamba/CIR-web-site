@@ -1,0 +1,157 @@
+{
+  "description": "Manifeste des médias de référence fournis par le propriétaire. Lu par la commande importer_medias_reference. Les textes alt décrivent seulement ce que montre chaque photo : aucun nom propre, lieu, client ou chiffre. Les images semblent générées : aucune réalisation, aucun témoignage ni aucune image de produit n'en est tiré.",
+  "fichiers": [
+    {
+      "fichier": "video/fond.mp4",
+      "usage": "accueil_video_fond",
+      "note": "Vidéo de fond de l'accueil (10 s, 1280 x 720) : du béton brut au salon avec sol en résine marbrée et bidons. Importée dans ContenuAccueil.video_fond."
+    },
+    {
+      "fichier": "video/fond.webm",
+      "usage": "site_video_fond_webm",
+      "note": "Même vidéo au format WebM, servie directement par le site (non importée en base)."
+    },
+    {
+      "fichier": "images/affiche-1280.webp",
+      "usage": "accueil_image_affiche",
+      "note": "Première image de la vidéo (béton brut). Importée dans ContenuAccueil.image_affiche."
+    },
+    {
+      "fichier": "images/affiche-768.webp",
+      "usage": "site_affiche_mobile",
+      "note": "Affiche de la vidéo pour téléphone (non importée en base)."
+    },
+    {
+      "fichier": "images/salon-pose.webp",
+      "usage": "sphere",
+      "ordre": 0,
+      "alt": {
+        "fr": "Deux ouvriers appliquent une résine bleue sur le sol d'un grand salon lumineux avec escalier et lustre.",
+        "en": "Two workers applying blue resin to the floor of a large, bright living room with a staircase and a chandelier.",
+        "zh": "两名工人在带楼梯和吊灯的明亮大客厅地面上涂刷蓝色树脂。",
+        "de": "Zwei Arbeiter tragen blaues Harz auf den Boden eines großen, hellen Wohnzimmers mit Treppe und Kronleuchter auf.",
+        "ja": "階段とシャンデリアのある明るい広いリビングの床に、2人の作業員が青い樹脂を塗っている。"
+      }
+    },
+    {
+      "fichier": "images/ecole-terrazzo.webp",
+      "usage": "sphere",
+      "ordre": 1,
+      "alt": {
+        "fr": "Hall d'école au sol en terrazzo clair, avec un grand motif central rouge, jaune et bleu.",
+        "en": "School hall with a light terrazzo floor and a large central pattern in red, yellow and blue.",
+        "zh": "学校大厅的浅色水磨石地面，中央有一个红、黄、蓝三色的大图案。",
+        "de": "Schulflur mit hellem Terrazzoboden und einem großen Muster in Rot, Gelb und Blau in der Mitte.",
+        "ja": "明るいテラゾー床の学校のホール。中央に赤・黄・青の大きな模様がある。"
+      }
+    },
+    {
+      "fichier": "images/entrepot-bleu-jaune.webp",
+      "usage": "sphere",
+      "ordre": 2,
+      "alt": {
+        "fr": "Grand entrepôt au sol en résine bleue et grise, avec des lignes jaunes de marquage.",
+        "en": "Large warehouse with a blue and grey resin floor and yellow marking lines.",
+        "zh": "大型仓库的蓝灰色树脂地面，带有黄色标线。",
+        "de": "Große Lagerhalle mit blau-grauem Harzboden und gelben Markierungslinien.",
+        "ja": "青とグレーの樹脂床に黄色のラインが引かれた広い倉庫。"
+      }
+    },
+    {
+      "fichier": "images/entrepot-stockage.webp",
+      "usage": "sphere",
+      "ordre": 3,
+      "alt": {
+        "fr": "Entrepôt de stockage au sol en résine bleu clair, devant des rayonnages chargés de palettes.",
+        "en": "Storage warehouse with a light blue resin floor, in front of racks loaded with pallets.",
+        "zh": "存储仓库的浅蓝色树脂地面，前方是堆满托盘的货架。",
+        "de": "Lagerhalle mit hellblauem Harzboden vor Regalen, die mit Paletten beladen sind.",
+        "ja": "水色の樹脂床の保管用倉庫。手前にパレットを積んだ棚が並んでいる。"
+      }
+    },
+    {
+      "fichier": "images/parking-vert.webp",
+      "usage": "sphere",
+      "ordre": 4,
+      "alt": {
+        "fr": "Parking couvert au sol en résine verte, avec des lignes blanches de marquage.",
+        "en": "Covered car park with a green resin floor and white marking lines.",
+        "zh": "室内停车场的绿色树脂地面，带有白色标线。",
+        "de": "Überdachter Parkplatz mit grünem Harzboden und weißen Markierungslinien.",
+        "ja": "緑の樹脂床に白いラインが引かれた屋内駐車場。"
+      }
+    },
+    {
+      "fichier": "images/hall-turquoise.webp",
+      "usage": "sphere",
+      "ordre": 5,
+      "alt": {
+        "fr": "Vaste salle à piliers blancs, au sol en résine turquoise brillante.",
+        "en": "Vast hall with white pillars and a glossy turquoise resin floor.",
+        "zh": "有白色立柱的宽敞大厅，地面为光亮的青绿色树脂。",
+        "de": "Weitläufige Halle mit weißen Pfeilern und glänzendem türkisfarbenem Harzboden.",
+        "ja": "白い柱が並ぶ広いホール。床はつやのあるターコイズ色の樹脂。"
+      }
+    },
+    {
+      "fichier": "images/gradins.webp",
+      "usage": "sphere",
+      "ordre": 6,
+      "alt": {
+        "fr": "Gradins en bord d'eau aux marches colorées en bleu, jaune et orange, sous un ciel dégagé.",
+        "en": "Waterside stands with steps in blue, yellow and orange, under a clear sky.",
+        "zh": "水边的看台，台阶为蓝、黄、橙三色，天空晴朗。",
+        "de": "Tribüne am Wasser mit blauen, gelben und orangefarbenen Stufen unter klarem Himmel.",
+        "ja": "晴れた空の下、水辺にある観覧席。段が青・黄・オレンジに塗り分けられている。"
+      }
+    },
+    {
+      "fichier": "images/salon-bidons.webp",
+      "usage": "sphere",
+      "ordre": 7,
+      "alt": {
+        "fr": "Deux bidons de peinture posés sur un sol marbré bleu et blanc, dans un grand salon.",
+        "en": "Two paint cans standing on a blue and white marbled floor in a large living room.",
+        "zh": "大客厅里，两个油漆桶放在蓝白大理石纹地面上。",
+        "de": "Zwei Farbeimer auf einem blau-weiß marmorierten Boden in einem großen Wohnzimmer.",
+        "ja": "広いリビングの青と白の大理石調の床に、塗料缶が2つ置かれている。"
+      }
+    },
+    {
+      "fichier": "images/atelier-pose.webp",
+      "usage": "sphere",
+      "ordre": 8,
+      "alt": {
+        "fr": "Trois ouvriers appliquent une résine bleue sur le sol d'un grand atelier lumineux.",
+        "en": "Three workers applying blue resin to the floor of a large, bright workshop.",
+        "zh": "三名工人在明亮的大车间地面上涂刷蓝色树脂。",
+        "de": "Drei Arbeiter tragen blaues Harz auf den Boden einer großen, hellen Werkhalle auf.",
+        "ja": "明るい広い作業場の床に、3人の作業員が青い樹脂を塗っている。"
+      }
+    },
+    {
+      "fichier": "images/hall-femme.webp",
+      "usage": "reserve",
+      "note": "Réservée à une autre section du site : non importée dans la sphère. Jamais présentée comme une cliente ni comme un témoignage.",
+      "alt": {
+        "fr": "Femme souriante en tenue blanche dans un hall au sol brillant et aux murs de marbre.",
+        "en": "Smiling woman in a white outfit in a hall with a glossy floor and marble walls.",
+        "zh": "身穿白色服装的微笑女子，站在地面光亮、墙面为大理石的大厅里。",
+        "de": "Lächelnde Frau in weißer Kleidung in einer Halle mit glänzendem Boden und Marmorwänden.",
+        "ja": "つやのある床と大理石の壁のホールに立つ、白い服を着た笑顔の女性。"
+      }
+    },
+    {
+      "fichier": "images/hall-marbre.webp",
+      "usage": "reserve",
+      "note": "Réservée à une autre section du site : non importée dans la sphère.",
+      "alt": {
+        "fr": "Hall d'accueil au sol clair et brillant, avec un comptoir et un mur en marbre veiné.",
+        "en": "Reception hall with a light, glossy floor, a counter and a veined marble wall.",
+        "zh": "浅色光亮地面的接待大厅，设有柜台，墙面为带纹理的大理石。",
+        "de": "Empfangshalle mit hellem, glänzendem Boden, einem Tresen und einer Wand aus geädertem Marmor.",
+        "ja": "明るくつやのある床の受付ホール。カウンターと、模様の入った大理石の壁がある。"
+      }
+    }
+  ]
+}

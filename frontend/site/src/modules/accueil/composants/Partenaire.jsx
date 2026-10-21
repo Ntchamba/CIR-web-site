@@ -8,8 +8,8 @@ import styles from '../Accueil.module.css';
 export default function Partenaire({ texte }) {
   const { t } = useTraduction();
   return (
-    <section className={`section ${styles.partenaire}`} aria-labelledby="titre-partenaire">
-      <div className={`conteneur ${styles.partenaireContenu}`}>
+    <section className={`salle salle-nuit ${styles.partenaire}`} aria-labelledby="titre-partenaire">
+      <div className={`conteneur p3d ${styles.partenaireContenu}`}>
         <img src="/media/marque/logo-jiuye.webp" alt="Jiuye" width="96" height="150" loading="lazy" decoding="async" />
         <div>
           <span className={styles.surtitreClair}>{t('accueil.partenaire.surtitre')}</span>

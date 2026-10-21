@@ -140,6 +140,7 @@ export default {
       accroche: '面向住宅、工业和企业：CIR 为您提供咨询、供应树脂并完成地坪施工。',
       catalogue: '查看产品目录',
       realisations: '工程案例',
+      decouvrir: '开始探索',
     },
     sphere: {
       titre: '环氧树脂地坪照片',

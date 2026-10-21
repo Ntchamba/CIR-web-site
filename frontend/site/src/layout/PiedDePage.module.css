@@ -1,6 +1,8 @@
+/* Pied de page : verre sombre (encre) posé sur la scène. */
 .pied {
-  background: var(--blanc);
-  border-top: 1px solid var(--filet);
+  background: rgba(14, 42, 56, 0.93);
+  color: var(--blanc);
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
   font-size: 15px;
 }
 .grille {
@@ -12,22 +14,22 @@
 .marque { display: flex; gap: 14px; align-items: flex-start; }
 .marque img { width: 44px; height: 44px; border-radius: 11px; object-fit: cover; flex-shrink: 0; }
 .marque strong { font-family: var(--police-titre); font-weight: 500; font-size: 18px; display: block; margin-bottom: 6px; }
-.marque p { color: var(--encre-2); max-width: 340px; }
+.marque p { color: rgba(255, 255, 255, 0.86); max-width: 340px; }
 .etiquette {
   margin-bottom: 4px;
   font-family: var(--police-texte);
   font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--encre-2);
+  color: rgba(255, 255, 255, 0.78);
 }
 .colonne { display: flex; flex-direction: column; gap: 2px; }
-.colonne a { display: inline-flex; align-items: center; min-height: var(--cible-tactile); color: var(--encre); text-decoration: none; }
-.colonne a:hover { color: var(--bleu); text-decoration: underline; }
+.colonne a { display: inline-flex; align-items: center; min-height: var(--cible-tactile); color: var(--blanc); text-decoration: none; }
+.colonne a:hover { color: #9fd6f0; text-decoration: underline; }
 .partenaire { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
-.partenaire img { width: 56px; height: auto; }
-.partenaire p { font-size: 14px; color: var(--encre-2); }
+.partenaire img { width: 56px; height: auto; padding: 6px; border-radius: var(--rayon-s); background: var(--blanc); }
+.partenaire p { font-size: 14px; color: rgba(255, 255, 255, 0.86); }
 .bas {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px;
-  padding-block: 16px 24px; border-top: 1px solid var(--filet-2); font-size: 13px; color: var(--encre-2);
+  padding-block: 16px 24px; border-top: 1px solid rgba(255, 255, 255, 0.14); font-size: 13px; color: rgba(255, 255, 255, 0.78);
 }
 
 @media (max-width: 900px) {

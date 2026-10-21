@@ -140,6 +140,7 @@ export default {
       accroche: '住宅・工場・オフィス向けに、CIR がご相談から樹脂の供給、床の施工まで承ります。',
       catalogue: 'カタログを見る',
       realisations: '施工事例',
+      decouvrir: '見てみる',
     },
     sphere: {
       titre: 'エポキシ樹脂床の写真',

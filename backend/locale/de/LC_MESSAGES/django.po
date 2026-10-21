@@ -1356,3 +1356,27 @@ msgstr "Der Inhalt einer Übersetzung ist ein Objekt {langue: texte}."
 #: apps/assistant/services.py:517
 msgid "Le texte modifié est obligatoire."
 msgstr "Der geänderte Text ist erforderlich."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Dossier de médias introuvable : %(chemin)s."
+msgstr "Medienordner nicht gefunden: %(chemin)s."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Manifeste introuvable : %(chemin)s."
+msgstr "Manifest nicht gefunden: %(chemin)s."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Manifeste illisible : %(chemin)s."
+msgstr "Manifest nicht lesbar: %(chemin)s."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Fichier de média manquant : %(fichier)s. Rien n'a été importé."
+msgstr "Mediendatei fehlt: %(fichier)s. Es wurde nichts importiert."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Texte alternatif manquant pour %(fichier)s (langues : %(langues)s). Rien n'a été importé."
+msgstr "Alternativtext fehlt für %(fichier)s (Sprachen: %(langues)s). Es wurde nichts importiert."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Médias de référence : %(accueil)s média(s) de l'accueil posé(s), %(creees)s photo(s) de la sphère créée(s), %(remplacees)s remplacée(s), %(inchangees)s déjà présente(s)."
+msgstr "Referenzmedien: %(accueil)s Medien der Startseite gesetzt, %(creees)s Kugelfoto(s) erstellt, %(remplacees)s ersetzt, %(inchangees)s bereits vorhanden."

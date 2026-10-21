@@ -1356,3 +1356,27 @@ msgstr "The content of a translation is an object {langue: texte}."
 #: apps/assistant/services.py:517
 msgid "Le texte modifié est obligatoire."
 msgstr "The edited text is required."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Dossier de médias introuvable : %(chemin)s."
+msgstr "Media folder not found: %(chemin)s."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Manifeste introuvable : %(chemin)s."
+msgstr "Manifest not found: %(chemin)s."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Manifeste illisible : %(chemin)s."
+msgstr "Manifest unreadable: %(chemin)s."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Fichier de média manquant : %(fichier)s. Rien n'a été importé."
+msgstr "Media file missing: %(fichier)s. Nothing was imported."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Texte alternatif manquant pour %(fichier)s (langues : %(langues)s). Rien n'a été importé."
+msgstr "Alternative text missing for %(fichier)s (languages: %(langues)s). Nothing was imported."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Médias de référence : %(accueil)s média(s) de l'accueil posé(s), %(creees)s photo(s) de la sphère créée(s), %(remplacees)s remplacée(s), %(inchangees)s déjà présente(s)."
+msgstr "Reference media: %(accueil)s home page media set, %(creees)s sphere photo(s) created, %(remplacees)s replaced, %(inchangees)s already present."

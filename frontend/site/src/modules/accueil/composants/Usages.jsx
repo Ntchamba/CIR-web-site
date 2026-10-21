@@ -10,12 +10,12 @@ import styles from '../Accueil.module.css';
 export default function Usages() {
   const { t } = useTraduction();
   return (
-    <section className="section" aria-labelledby="titre-usages">
+    <section className="salle" aria-labelledby="titre-usages">
       <div className="conteneur">
         <EnteteSection id="titre-usages" surtitre={t('accueil.usages.surtitre')} titre={t('accueil.usages.titre')} />
         <ul className={styles.usages}>
           {USAGES.map((u) => (
-            <li key={u}>
+            <li key={u} className="p3d">
               <Link to={`/catalogue?usage=${u}`} className={styles.usage}>
                 <strong>{t(`usages.${u}`)}</strong>
                 <span>{t(`accueil.usages.textes.${u}`)}</span>

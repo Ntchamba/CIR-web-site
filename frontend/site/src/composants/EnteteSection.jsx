@@ -7,7 +7,7 @@ import styles from './Composants.module.css';
 
 export default function EnteteSection({ id, surtitre, titre, lien, texteLien }) {
   return (
-    <div className={styles.enteteSection}>
+    <div className={`${styles.enteteSection} p3d`}>
       <div>
         {surtitre && <span className={styles.surtitre}>{surtitre}</span>}
         <h2 id={id}>{titre}</h2>

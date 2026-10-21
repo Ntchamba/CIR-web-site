@@ -5,6 +5,7 @@ import EtatVide from '@partage/ui/EtatVide.jsx';
 import MessageErreur from '@partage/ui/MessageErreur.jsx';
 import usePageMeta from '@partage/utils/usePageMeta.js';
 
+import BandeauPhoto from '@/composants/BandeauPhoto.jsx';
 import VoirPlus from '@/composants/VoirPlus.jsx';
 import { useTraduction } from '@/i18n/index.js';
 
@@ -21,12 +22,10 @@ export default function CataloguePage() {
   const familleChoisie = (familles.donnees || []).find((f) => f.slug === criteres.famille);
 
   return (
+    <>
+    <BandeauPhoto titre={t('catalogue.titre')} intro={t('catalogue.intro')} />
+    <div className="verre">
     <div className="conteneur section">
-      <header className={styles.entete}>
-        <h1 className="titre-page">{t('catalogue.titre')}</h1>
-        <p className={styles.intro}>{t('catalogue.intro')}</p>
-      </header>
-
       <div className={styles.disposition}>
         <aside aria-label={t('catalogue.filtres.titre')}>
           <Filtres criteres={criteres} familles={familles.donnees || []}
@@ -46,12 +45,14 @@ export default function CataloguePage() {
           )}
           {produits.elements.length > 0 && (
             <ul className={styles.grille}>
-              {produits.elements.map((p) => <li key={p.id}><CarteProduit produit={p} /></li>)}
+              {produits.elements.map((p) => <li key={p.id} className="p3d"><CarteProduit produit={p} /></li>)}
             </ul>
           )}
           <VoirPlus liste={produits} />
         </section>
       </div>
     </div>
+    </div>
+    </>
   );
 }

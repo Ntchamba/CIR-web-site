@@ -19,7 +19,7 @@ export const LIENS_PRINCIPAUX = [
   { vers: '/', cle: 'nav.accueil', fin: true },
   { vers: '/catalogue', cle: 'nav.catalogue' },
   { vers: '/realisations', cle: 'nav.realisations' },
-  { vers: '/actualites', cle: 'nav.actualites' },
+  { vers: '/contact', cle: 'nav.contact' },
   { vers: '/commandes', cle: 'nav.mesCommandes' },
 ];
 
@@ -31,7 +31,7 @@ export default function Entete() {
   const { nonLusMessages } = useDirect();
 
   return (
-    <header className={styles.entete}>
+    <header className={styles.entete} data-vt="entete">
       <div className={styles.barre}>
         <Link to="/" className={styles.logo} aria-label={t('entete.retourAccueil')}>
           <img src="/media/marque/logo-cir.webp" alt="" width="44" height="44" />

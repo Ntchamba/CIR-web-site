@@ -1356,3 +1356,27 @@ msgstr "翻译内容应为对象 {langue: texte}。"
 #: apps/assistant/services.py:517
 msgid "Le texte modifié est obligatoire."
 msgstr "必须提供修改后的文本。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Dossier de médias introuvable : %(chemin)s."
+msgstr "找不到媒体文件夹：%(chemin)s。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Manifeste introuvable : %(chemin)s."
+msgstr "找不到清单文件：%(chemin)s。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Manifeste illisible : %(chemin)s."
+msgstr "无法读取清单文件：%(chemin)s。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Fichier de média manquant : %(fichier)s. Rien n'a été importé."
+msgstr "缺少媒体文件：%(fichier)s。未导入任何内容。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Texte alternatif manquant pour %(fichier)s (langues : %(langues)s). Rien n'a été importé."
+msgstr "%(fichier)s 缺少替代文本（语言：%(langues)s）。未导入任何内容。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Médias de référence : %(accueil)s média(s) de l'accueil posé(s), %(creees)s photo(s) de la sphère créée(s), %(remplacees)s remplacée(s), %(inchangees)s déjà présente(s)."
+msgstr "参考媒体：已设置首页媒体 %(accueil)s 个，新建球体照片 %(creees)s 张，替换 %(remplacees)s 张，已存在 %(inchangees)s 张。"

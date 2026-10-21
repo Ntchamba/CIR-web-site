@@ -9,7 +9,7 @@
 .filtres {
   position: sticky; top: calc(var(--hauteur-entete) + 16px);
   display: flex; flex-direction: column; gap: 20px;
-  padding: 20px; border-radius: var(--rayon-l); background: var(--blanc); border: 1px solid var(--filet);
+  padding: 18px; border-radius: var(--rayon-l); background: rgba(255, 255, 255, 0.7); border: 1px solid var(--filet);
 }
 .recherche { display: flex; flex-direction: column; gap: 10px; }
 .etiquette { display: block; margin-bottom: 8px; font-size: 15px; font-weight: 500; }
@@ -27,7 +27,7 @@
 /* Grille et cartes */
 .grille {
   list-style: none; margin: 0; padding: 0;
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px 20px;
 }
 .grille > li { display: flex; }
 .carte {
@@ -37,7 +37,7 @@
   transition: box-shadow var(--transition), transform var(--transition);
 }
 .carte:hover, .carte:focus-within { box-shadow: var(--ombre); transform: translateY(-2px); }
-.vignette { position: relative; aspect-ratio: 4 / 3; background: var(--fond-2); }
+.vignette { position: relative; aspect-ratio: 1 / 1; background: var(--fond-2); } /* vignette carrée (maquette) */
 .vignette img { width: 100%; height: 100%; object-fit: cover; }
 .sansImage {
   display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;
@@ -54,12 +54,12 @@
 .corps { flex: 1; display: flex; flex-direction: column; gap: 8px; padding: 18px; }
 .famille { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--encre-2); }
 .reference { color: var(--bleu); }
-.nomProduit { font-size: 20px; }
+.nomProduit { font-size: 19px; font-weight: 400; }
 .lienCarte { color: var(--encre); text-decoration: none; }
 .lienCarte::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
 .lienCarte:focus-visible { outline: none; }
 .carte:has(.lienCarte:focus-visible) { outline: 3px solid var(--corail); outline-offset: 2px; }
-.accroche { color: var(--encre-2); font-size: 15px; }
+.accroche { color: var(--encre-2); font-size: 15px; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .usages { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .usages li { padding: 2px 10px; border-radius: var(--pastille); background: var(--fond-2); font-size: 13px; }
 .prix { margin-top: auto; padding-top: 8px; font-weight: 700; color: var(--encre); }
