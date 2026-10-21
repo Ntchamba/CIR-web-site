@@ -1396,3 +1396,7 @@ msgstr "Thefoldermustnotcontaina\"..\"segment:%(chemin)s."
 #: apps/contenus/management/commands/importer_medias_reference.py
 msgid "Vidéo refusée : %(fichier)s (%(raison)s) Rien n'a été importé."
 msgstr "Video rejected: %(fichier)s (%(raison)s) Nothing was imported."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Fichier de média trop lourd : %(fichier)s. Rien n'a été importé."
+msgstr "Media file too large: %(fichier)s. Nothing was imported."

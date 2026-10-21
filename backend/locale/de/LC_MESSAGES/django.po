@@ -1396,3 +1396,7 @@ msgstr "Der Ordner darf kein Segment „..“ enthalten: %(chemin)s."
 #: apps/contenus/management/commands/importer_medias_reference.py
 msgid "Vidéo refusée : %(fichier)s (%(raison)s) Rien n'a été importé."
 msgstr "Video abgelehnt: %(fichier)s (%(raison)s) Es wurde nichts importiert."
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Fichier de média trop lourd : %(fichier)s. Rien n'a été importé."
+msgstr "Mediendatei zu groß: %(fichier)s. Es wurde nichts importiert."

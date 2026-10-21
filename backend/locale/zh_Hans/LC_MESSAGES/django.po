@@ -1396,3 +1396,7 @@ msgstr "文件夹路径不得包含“..”段：%(chemin)s。"
 #: apps/contenus/management/commands/importer_medias_reference.py
 msgid "Vidéo refusée : %(fichier)s (%(raison)s) Rien n'a été importé."
 msgstr "视频被拒绝：%(fichier)s（%(raison)s）未导入任何内容。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Fichier de média trop lourd : %(fichier)s. Rien n'a été importé."
+msgstr "媒体文件过大：%(fichier)s。未导入任何内容。"

@@ -1396,3 +1396,7 @@ msgstr "フォルダに「..」を含めることはできません：%(chemin)s
 #: apps/contenus/management/commands/importer_medias_reference.py
 msgid "Vidéo refusée : %(fichier)s (%(raison)s) Rien n'a été importé."
 msgstr "動画が拒否されました：%(fichier)s（%(raison)s）何もインポートされませんでした。"
+
+#: apps/contenus/management/commands/importer_medias_reference.py
+msgid "Fichier de média trop lourd : %(fichier)s. Rien n'a été importé."
+msgstr "メディアファイルが大きすぎます：%(fichier)s。何もインポートされませんでした。"

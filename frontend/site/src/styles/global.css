@@ -4,7 +4,7 @@
    layout/Gabarit.module.css), la couleur de l'encre. Le contenu repose sur du « verre » clair et léger : le texte
    foncé garde un contraste AA (encre sur verre à 90 %, soit plus de 12 : 1). */
 :root {
-  --verre: rgba(243, 247, 249, 0.9);
+  --verre: rgba(243, 247, 249, 0.87);
   --verre-fort: rgba(243, 247, 249, 0.95);
   --verre-bord: rgba(255, 255, 255, 0.5);
   --verre-nuit: rgba(14, 42, 56, 0.86);

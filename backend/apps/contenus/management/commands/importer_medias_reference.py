@@ -14,11 +14,10 @@ Tout est vérifié avant la première écriture : un fichier manquant ne laisse 
 """
 import json
 import re
-from contextlib import ExitStack
 from pathlib import Path, PureWindowsPath
 
 from django.conf import settings
-from django.core.files import File
+from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.utils.translation import gettext as _
@@ -26,7 +25,8 @@ from rest_framework.exceptions import ValidationError
 
 from apps.contenus.models import ContenuAccueil, PhotoSphere
 from apps.noyau.langues import AUTRES_LANGUES, CODES_LANGUES
-from apps.noyau.medias import valider_video
+from apps.noyau.images import OCTETS_MAX
+from apps.noyau.medias import VIDEO_OCTETS_MAX, valider_video
 
 USAGE_VIDEO = "accueil_video_fond"
 USAGE_AFFICHE = "accueil_image_affiche"
@@ -55,11 +55,12 @@ def _sous_dossier(dossier, nom):
         return None
     chemin = dossier / nom
     try:
-        if not chemin.resolve().is_relative_to(dossier.resolve()) or not chemin.is_file():
+        resolu = chemin.resolve()
+        if not resolu.is_relative_to(dossier.resolve()) or not resolu.is_file():
             return None
     except (OSError, RuntimeError, ValueError):
         return None
-    return chemin
+    return resolu
 
 
 class Command(BaseCommand):
@@ -85,7 +86,7 @@ class Command(BaseCommand):
             raise CommandError(_("Fichier hors du dossier de médias ou non ordinaire : %(fichier)s.")
                                % {"fichier": chemin})
         try:
-            manifeste = json.loads(chemin.read_text(encoding="utf-8"))
+            manifeste = json.loads(_sous_dossier(dossier, "medias.json").read_text(encoding="utf-8"))
             entrees = manifeste["fichiers"]
             assert isinstance(entrees, list) and all(isinstance(e, dict) for e in entrees)
         except (ValueError, KeyError, TypeError, AssertionError) as erreur:
@@ -96,6 +97,7 @@ class Command(BaseCommand):
         """Renvoie (video, affiche, photos) ; chaque élément est (entrée, chemin). Lève CommandError au moindre défaut."""
         video = affiche = None
         photos = []
+        self._octets = {}
         for entree in entrees:
             usage = entree.get("usage")
             if usage not in (USAGE_VIDEO, USAGE_AFFICHE, USAGE_SPHERE):
@@ -108,20 +110,29 @@ class Command(BaseCommand):
                 raise CommandError(_("Nom de fichier non autorisé dans le manifeste : %(fichier)s.")
                                    % {"fichier": nom})
             chemin = dossier / nom
-            if (chemin.exists() or chemin.is_symlink()) and _sous_dossier(dossier, nom) is None:
+            resolu = _sous_dossier(dossier, nom)
+            if resolu is None and (chemin.exists() or chemin.is_symlink()):
                 raise CommandError(_("Fichier hors du dossier de médias ou non ordinaire : %(fichier)s.")
                                    % {"fichier": nom})
-            if not chemin.is_file():
+            if resolu is None:
                 raise CommandError(_("Fichier de média manquant : %(fichier)s. Rien n'a été importé.")
                                    % {"fichier": chemin})
+            chemin = resolu
+            # Une seule lecture : ces octets servent à la validation puis à l'écriture, le chemin n'est jamais rouvert
+            limite = VIDEO_OCTETS_MAX if usage == USAGE_VIDEO else OCTETS_MAX
+            with chemin.open("rb") as ouvert:
+                octets = ouvert.read(limite + 1)
+            if len(octets) > limite:
+                raise CommandError(_("Fichier de média trop lourd : %(fichier)s. Rien n'a été importé.")
+                                   % {"fichier": nom})
+            self._octets[chemin] = (Path(nom).name, octets)
             if usage == USAGE_VIDEO:
-                with chemin.open("rb") as ouvert:
-                    try:
-                        valider_video(File(ouvert, name=chemin.name))
-                    except ValidationError as erreur:
-                        raison = " ".join(str(m) for m in erreur.detail)
-                        raise CommandError(_("Vidéo refusée : %(fichier)s (%(raison)s) Rien n'a été importé.")
-                                           % {"fichier": nom, "raison": raison}) from erreur
+                try:
+                    valider_video(ContentFile(octets, name=Path(nom).name))
+                except ValidationError as erreur:
+                    raison = " ".join(str(m) for m in erreur.detail)
+                    raise CommandError(_("Vidéo refusée : %(fichier)s (%(raison)s) Rien n'a été importé.")
+                                       % {"fichier": nom, "raison": raison}) from erreur
                 video = (entree, chemin)
             elif usage == USAGE_AFFICHE:
                 affiche = (entree, chemin)
@@ -145,7 +156,7 @@ class Command(BaseCommand):
         if champ and getattr(champ, "_committed", False) and champ.name:
             nouveaux.append((champ.storage, champ.name))
 
-    def _importer_accueil(self, pile, video, affiche, forcer, anciens, nouveaux):
+    def _importer_accueil(self, video, affiche, forcer, anciens, nouveaux):
         contenu = ContenuAccueil.charger()
         champs = []
         for champ, element in (("video_fond", video), ("image_affiche", affiche)):
@@ -153,9 +164,9 @@ class Command(BaseCommand):
                 continue
             if getattr(contenu, champ):
                 anciens.append((getattr(contenu, champ).storage, getattr(contenu, champ).name))
-            fichier = pile.enter_context(element[1].open("rb"))
+            nom, octets = self._octets[element[1]]
             # L'affectation d'un fichier non enregistré laisse le modèle le convertir en WebP à la sauvegarde
-            setattr(contenu, champ, File(fichier, name=element[1].name))
+            setattr(contenu, champ, ContentFile(octets, name=nom))
             champs.append(champ)
         if champs:
             try:
@@ -167,11 +178,12 @@ class Command(BaseCommand):
             nouveaux.extend((getattr(contenu, c).storage, getattr(contenu, c).name) for c in champs)
         return len(champs)
 
-    def _importer_photos(self, pile, photos, forcer, anciens, nouveaux):
+    def _importer_photos(self, photos, forcer, anciens, nouveaux):
         existantes = list(PhotoSphere.objects.all())
         creees = remplacees = inchangees = 0
         for entree, chemin in photos:
-            motif = _nom_importe(chemin.name)
+            nom, octets = self._octets[chemin]
+            motif = _nom_importe(nom)
             photo = next((p for p in existantes if motif.match(p.image.name or "")), None)
             if photo is not None and not forcer:
                 inchangees += 1
@@ -187,8 +199,7 @@ class Command(BaseCommand):
             photo.alt = alt["fr"].strip()
             photo.traductions = {**(photo.traductions or {}), **traductions}
             photo.ordre = entree.get("ordre", 0)
-            fichier = pile.enter_context(chemin.open("rb"))
-            photo.image = File(fichier, name=chemin.name)
+            photo.image = ContentFile(octets, name=nom)
             try:
                 photo.save()
             except Exception:
@@ -203,9 +214,9 @@ class Command(BaseCommand):
 
         anciens, nouveaux = [], []
         try:
-            with ExitStack() as pile, transaction.atomic():
-                accueil = self._importer_accueil(pile, video, affiche, forcer, anciens, nouveaux)
-                creees, remplacees, inchangees = self._importer_photos(pile, photos, forcer, anciens, nouveaux)
+            with transaction.atomic():
+                accueil = self._importer_accueil(video, affiche, forcer, anciens, nouveaux)
+                creees, remplacees, inchangees = self._importer_photos(photos, forcer, anciens, nouveaux)
         except Exception:
             # Rien de partiel : la transaction annule la base, les fichiers écrits par cette exécution sont retirés
             for stockage, nom in nouveaux:
