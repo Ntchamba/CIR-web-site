@@ -67,7 +67,8 @@ class ConversationAdminViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
     search_fields = []
 
     def get_queryset(self):
-        return ConversationAssistant.objects.annotate(nombre_messages=Count("messages"))
+        return (ConversationAssistant.objects.annotate(nombre_messages=Count("messages"))
+                .order_by("-derniere_activite_le", "-id"))
 
     def get_serializer_class(self):
         return ConversationDetailAdminSerializer if self.action == "retrieve" else ConversationAdminSerializer

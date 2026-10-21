@@ -1,14 +1,23 @@
 """Sérialiseurs de l'assistant : mise en forme et contrôle de forme. Les règles sont dans services.py."""
+from django.core.validators import ProhibitNullCharactersValidator
 from rest_framework import serializers
 
 from .models import Brouillon, ConversationAssistant, JournalAssistant, MessageAssistant
+
+
+class TexteLibre(serializers.CharField):
+    """Texte dont les caractères de contrôle (y compris nul) sont supprimés par services.py plutôt que refusés."""
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.validators = [v for v in self.validators if not isinstance(v, ProhibitNullCharactersValidator)]
 
 
 class MessageEntreeSerializer(serializers.Serializer):
     """Forme du message envoyé ; longueur, langue et contexte sont contrôlés dans services.py."""
 
     cle = serializers.UUIDField(required=False, allow_null=True, default=None)
-    texte = serializers.CharField(trim_whitespace=False, allow_blank=True, max_length=20000)
+    texte = TexteLibre(trim_whitespace=False, allow_blank=True, max_length=20000)
     langue = serializers.CharField(required=False, allow_blank=True, allow_null=True, default="", max_length=20)
     contexte = serializers.JSONField(required=False, default=dict)
 

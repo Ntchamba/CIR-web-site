@@ -138,10 +138,15 @@ Fichiers : `backend/integrations/gemini/{__init__.py, client.py, outils.py, erre
   `contexte.reference` n'est qu'un indice **vérifié par l'outil**, jamais une donnée de confiance.
 - `GET conversations/<cle>/` → `{cle, messages: [<MessageAssistant>]}` (propriétaire seulement : même `cle` pour un visiteur,
   même compte pour un connecté). `DELETE conversations/<cle>/` → 204 (supprime la conversation et ses messages).
-- `POST messages/<id>/avis/` `{utile: bool}` → 204 (une fois, propriétaire seulement).
+- `POST messages/<id>/avis/` `{utile: bool, cle?: <uuid>}` → 204 (une fois ; 409 `avis_deja_donne` ensuite). Propriétaire seulement : pour un message d'un compte,
+  le même compte ; pour un message de visiteur, **la `cle` de la conversation est obligatoire** (dans le corps, ou dans l'en-tête `X-Assistant-Cle`),
+  sinon 404. Réponses de l'assistant seulement (404 pour un message de l'utilisateur).
 
-`<MessageAssistant>` (réponse) : `{id, role, texte, liens: [{libelle, chemin}], bloque: bool, cree_le}` ; `bloque` est un
-simple booléen côté public (jamais le code interne ni le texte d'origine).
+`<MessageAssistant>` (réponse) : `{id, role, texte, liens: [{libelle, chemin}], bloque: bool, utile: null | true | false, cree_le}` ; `bloque` est un
+simple booléen côté public (jamais le code interne ni le texte d'origine) ; `utile` est l'avis déjà donné sur ce message (null : aucun).
+
+**Erreurs** : toutes les erreurs de l'assistant ont la forme `{"detail": "…", "code": "…"}` à la racine (`assistant_trop_de_messages` 429,
+`assistant_limite_atteinte`, `assistant_non_configure`, `assistant_indisponible` 503, `avis_deja_donne` 409, `brouillon_deja_traite` 409).
 
 ### API équipe `/api/admin/assistant/` (`EstEquipe`)
 
@@ -151,17 +156,20 @@ simple booléen côté public (jamais le code interne ni le texte d'origine).
   201 `<Brouillon>`. Appel synchrone à `GEMINI_MODELE_FOND` (délai 45 s). **Jamais envoyé ni publié automatiquement** : c'est
   une proposition que l'équipe relit. Minimisation : seul le texte utile est transmis (le message du client, jamais son nom,
   son e-mail ni son téléphone ; le client est désigné « le client »). Garde-fous de sortie appliqués (montants, engagements,
-  coordonnées). Les traductions conservent les noms propres. Limite : 30 brouillons par heure et par membre
+  coordonnées). Les traductions conservent les noms propres. Limite : 60 brouillons par heure et par membre
   (429 `assistant_trop_de_messages`).
 - `GET brouillons/` paginé `?type=&etat=&cible_type=&cible_id=` ; `GET brouillons/<id>/`.
 - `PATCH brouillons/<id>/` `{etat: "accepte"|"modifie"|"rejete", contenu?}` (le texte édité par l'équipe est conservé ;
   l'application du texte au contenu réel — réponse, message, traductions — reste **une action humaine** dans l'écran concerné).
-- `GET journal/` paginé `?agent=&resultat=` (EstEquipe) : lignes du journal (sans texte). `GET journal/resume/` → comptes par résultat sur 30 jours.
-- `GET conversations/` paginé et `GET conversations/<cle>/` (**`EstSuperAdmin`** seulement) : lecture des échanges, pour l'amélioration
-  de l'assistant ; l'accès est lui-même journalisé (`resultat: "consultation"`).
+- `GET journal/` paginé `?agent=&resultat=` (EstEquipe) : lignes du journal (sans texte). `GET journal/resume/` → `{"ok": n, "bloque": n, "erreur_temporaire": n, "erreur": n, "limite": n, "consultation": n}` sur 30 jours (0 par défaut).
+- `GET conversations/` paginé (`{cle, utilisateur: bool (true si compte), langue, contexte, nombre_messages, cree_le, derniere_activite_le}`, aucun nom, e-mail ni téléphone)
+  et `GET conversations/<cle>/` (ajoute `messages: [{id, role, texte, liens, bloque (code), outils, utile, jetons_entree, jetons_sortie, duree_ms, cree_le}]`) (**`EstSuperAdmin`** seulement) : lecture des échanges, pour l'amélioration
+  de l'assistant ; l'accès est lui-même journalisé (`resultat: "consultation"`, `code` : `liste` ou `detail`).
 
 `<Brouillon>` : `{id, type, cible_type, cible_id, langue, contenu, etat, bloque (code), cree_par: {id, nom_complet}, traite_par, cree_le,
-traite_le}`.
+traite_le}`. `cible_type` : `demande_contact`, `conversation_messagerie` ou `texte` (traduction, `cible_id` null). `contenu` : `{"texte": "…"}` pour une réponse ;
+`{"en": "…", "zh": "…", "de": "…", "ja": "…"}` pour une traduction (`langues` absent = les 4 langues). `PATCH` : même forme (une chaîne simple est acceptée pour une réponse).
+Un brouillon dont le modèle est bloqué par Gemini est créé avec `bloque: "contenu"` et un contenu vide.
 
 ### Évaluations (`agents/evaluations/`)
 

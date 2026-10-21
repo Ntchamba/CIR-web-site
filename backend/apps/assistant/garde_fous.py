@@ -319,6 +319,21 @@ def masquer_coordonnees(texte, remplacement="[masqué]"):
     return texte
 
 
+def masquer_identite(texte, termes, remplacement="[client]"):
+    """Remplace dans un texte le nom complet (et chacun de ses éléments), l'e-mail et le téléphone connus d'un
+    compte ou d'une demande, puis les e-mails et téléphones restants (minimisation avant envoi à Gemini)."""
+    texte = _normaliser(texte)
+    mots = set()
+    for terme in termes:
+        terme = " ".join(str(terme or "").split())
+        if len(terme) >= 3:
+            mots.add(terme)
+            mots.update(partie for partie in re.split(r"[\s,;]+", terme) if len(partie) >= 3 and "@" not in partie)
+    for mot in sorted(mots, key=len, reverse=True):
+        texte = re.sub(rf"(?<!\w){re.escape(mot)}(?!\w)", remplacement, texte, flags=re.IGNORECASE)
+    return masquer_coordonnees(texte)
+
+
 def _retirer_coordonnees(texte, coordonnees):
     autorises_mail = {e.lower() for e in coordonnees.emails}
     autorises_tel = {_cle_telephone(t) for t in coordonnees.telephones if _cle_telephone(t)}

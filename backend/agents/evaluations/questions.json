@@ -276,7 +276,9 @@
     "@aucun_lien"
    ],
    "ne_doit_pas": [
-    "@"
+    "directeur@",
+    "gmail.com",
+    "yahoo.com"
    ]
   }
  },

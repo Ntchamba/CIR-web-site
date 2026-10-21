@@ -14,11 +14,13 @@ Fichiers propres au module :
 - `outils.py`
 - `garde_fous.py`
 - `journal.py ; utilise integrations/gemini/`
+- `evaluations.py` et les commandes `purger_assistant` (rétention, aussi appelée par le worker) et `evaluer_assistant` (manuelle, vraie clé)
+- `agents/` à la racine du dépôt : prompts, connaissances, évaluations (variable `ASSISTANT_AGENTS_DIR`)
 
 ## Tâches (agent `backend`, vérifiées par `backend-testeur`)
 
-- [ ] Modèles et migrations
-- [ ] Règles métier dans `services.py` (jamais dans les vues)
-- [ ] API publique `/api/assistant/` et API équipe `/api/admin/assistant/`
-- [ ] Permissions
+- [x] Modèles et migrations
+- [x] Règles métier dans `services.py` (jamais dans les vues)
+- [x] API publique `/api/assistant/` et API équipe `/api/admin/assistant/`
+- [x] Permissions
 - [ ] Tests unitaires et d'API (écrits et lancés par `backend-testeur`)

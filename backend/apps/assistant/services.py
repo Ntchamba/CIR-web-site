@@ -359,7 +359,10 @@ def _consigne_reponse(type_, langue, texte, produit=""):
 
 
 def _texte_demande(demande):
-    texte = garde_fous.masquer_coordonnees(demande.message)
+    termes = [demande.nom, demande.email, demande.telephone]
+    if demande.auteur_id:
+        termes += [demande.auteur.nom_complet, demande.auteur.email, demande.auteur.telephone]
+    texte = garde_fous.masquer_identite(demande.message, termes)
     produit = ""
     if demande.produit_id:
         produit = " ".join(p for p in (demande.produit.reference, demande.produit.nom) if p)
@@ -367,11 +370,13 @@ def _texte_demande(demande):
 
 
 def _texte_conversation(conversation):
+    client = conversation.client
+    termes = [client.nom_complet, client.email, client.telephone]
     lignes = []
     for message in conversation.messages.order_by("-id")[:10][::-1]:
         auteur = "le client" if message.auteur_role == "client" else "l'équipe"
         if message.texte:
-            lignes.append(f"{auteur} : {garde_fous.masquer_coordonnees(message.texte)}")
+            lignes.append(f"{auteur} : {garde_fous.masquer_identite(message.texte, termes)}")
     return "\n".join(lignes)
 
 
@@ -429,7 +434,7 @@ def creer_brouillon(membre, donnees):
         raise _erreur_indisponible("assistant_non_configure")
     langue = LANGUE_PAR_DEFAUT
     if type_ == TypeBrouillon.REPONSE_CONTACT:
-        cible = DemandeContact.objects.select_related("produit").filter(pk=demande["cible_id"]).first()
+        cible = DemandeContact.objects.select_related("produit", "auteur").filter(pk=demande["cible_id"]).first()
         if cible is None:
             raise NotFound()
         langue = langue_valide(cible.langue) if cible.langue else LANGUE_PAR_DEFAUT
