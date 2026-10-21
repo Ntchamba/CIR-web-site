@@ -10,6 +10,7 @@ l'historique de la conversation et les résultats des outils. Jamais nom, e-mail
 """
 import functools
 import logging
+import re
 import time
 from dataclasses import dataclass, field
 from datetime import date
@@ -119,7 +120,9 @@ def indice_contexte(contexte):
     if not isinstance(contexte, dict):
         return ""
     type_ = contexte.get("type")
-    reference = " ".join(str(contexte.get("reference") or "").split())[:40]
+    reference = str(contexte.get("reference") or "").strip()
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._\-]{0,39}", reference):
+        reference = ""  # une référence n'est jamais une phrase : sinon elle serait un vecteur de consigne
     if type_ == "produit" and reference:
         return (f"Le client consulte la fiche du produit de référence « {reference} » (indice à vérifier avec "
                 f"l'outil fiche_produit).")

@@ -88,7 +88,7 @@ def contexte_valide(valeur):
     type_ = valeur.get("type") if valeur.get("type") in ("produit", "commande", "page") else "page"
     contexte = {"type": type_}
     reference = valeur.get("reference")
-    if type_ != "page" and isinstance(reference, str) and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9 ._\-]{0,39}",
+    if type_ != "page" and isinstance(reference, str) and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._\-]{0,39}",
                                                                        reference.strip()):
         contexte["reference"] = reference.strip()
     return contexte

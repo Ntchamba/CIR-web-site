@@ -163,3 +163,21 @@ class RepliTests(SimpleTestCase):
         with translation.override("fr"):
             self.assertEqual(controle("Cela coûte 5 000 FCFA", langue="de").texte, textes["de"][g.PRIX])
             self.assertEqual(controle("我已为您下单", langue="zh").texte, textes["zh"][g.ENGAGEMENT])
+
+
+class NonBlocageTests(SimpleTestCase):
+    """Le sur-blocage des textes légitimes reste limité."""
+
+    def test_textes_legitimes_passent_intacts(self):
+        for texte in ["Le YD-500 convient pour 100 m² de sol.", "Surface : 20 ㎡ minimum.", "Dosage 1,5 kg/m² en deux couches.",
+                      "Commande CIR-2026-0001 créée le 21/10/2026.", "Votre commande est à l'étape « Contrat signé ».",
+                      "À partir de 100 m², une visite est conseillée.", "Séchage à 25 °C en 24 heures.",
+                      "Le prix d'un produit n'est pas toujours publié : prix sur devis.", "价格以报价为准。", "価格はお見積りでご案内します。",
+                      "Dès 25 °C, le séchage est plus rapide.", "Ab 25 °C trocknet es schneller.",
+                      "Écrivez à contact@exemple-cir.cm ou appelez le +237 699 00 11 22."]:
+            with self.subTest(texte=texte):
+                sortie = controle(texte, coordonnees=COORD)
+                self.assertEqual((sortie.bloque, sortie.texte), ("", texte))
+
+    def test_le_texte_montre_garde_ses_caracteres(self):
+        self.assertEqual(controle("100 m² et 20 ㎡ à 25 °C").texte, "100 m² et 20 ㎡ à 25 °C")
