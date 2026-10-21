@@ -10,12 +10,13 @@ Fusion avec le catalogue de la maquette du propriétaire (décision du propriét
 - les produits existants (par référence) dont le nom est encore EXACTEMENT l'ancien nom par défaut prennent le nom de
   la maquette (YD-500 « Sol autolissant » -> « Sol autolissant époxy », YD-306 « Sable coloré » -> « Sable coloré
   autolissant ») ; un nom déjà modifié par l'équipe n'est jamais touché ;
-- sept produits de la maquette sont ajoutés SANS référence (détection par nom, sans tenir compte de la casse), en
+- sept produits de la maquette sont ajoutés SANS référence (détection par nom nettoyé, sans tenir compte de la casse ni des espaces), en
   ligne, sans prix ni image ni texte ;
 - seul texte repris de la maquette : accroche et description de YD-500, posées seulement si ces champs sont vides.
 
 ATTENTION : la famille et les usages (maison, industrie, entreprise, extérieur) de ces sept produits sont des valeurs
-de départ, reprises de la démonstration du prototype 1 et rattachées aux familles du cahier : À VALIDER par l'équipe.
+de départ, reprises de la démonstration du prototype 1 et rattachées aux familles du cahier (anti-UV, anticorrosion et haute résistance sont rangés dans « Finitions » par le
+cahier des charges) : À VALIDER par l'équipe.
 """
 from django.core.management.base import BaseCommand
 from django.db import transaction
@@ -170,11 +171,11 @@ PRODUITS_MAQUETTE = [
                                              "de": "Matte Epoxid-Deckschicht", "ja": "エポキシつや消し仕上げ"}),
     ("Finition antidérapante", 2, "IX", False, {"en": "Anti-slip finish", "zh": "防滑面层",
                                                 "de": "Rutschfeste Deckschicht", "ja": "防滑仕上げ"}),
-    ("Peinture de sol anti-UV", 4, "X", False, {"en": "Anti-UV floor paint", "zh": "抗紫外线地坪漆",
+    ("Peinture de sol anti-UV", 2, "X", False, {"en": "Anti-UV floor paint", "zh": "抗紫外线地坪漆",
                                                 "de": "UV-beständige Bodenfarbe", "ja": "耐紫外線床用塗料"}),
-    ("Finition haute résistance", 3, "I", True, {"en": "High-resistance finish", "zh": "高耐磨面层",
+    ("Finition haute résistance", 2, "I", True, {"en": "High-resistance finish", "zh": "高耐磨面层",
                                                  "de": "Hochbelastbare Deckschicht", "ja": "高耐久仕上げ"}),
-    ("Finition anticorrosion", 0, "I", False, {"en": "Anti-corrosion finish", "zh": "防腐面层",
+    ("Finition anticorrosion", 2, "I", False, {"en": "Anti-corrosion finish", "zh": "防腐面层",
                                                "de": "Korrosionsschutz-Deckschicht", "ja": "防食仕上げ"}),
     ("Sol à motifs", 7, "ME", False, {"en": "Patterned floor", "zh": "图案地坪",
                                       "de": "Gemusterter Boden", "ja": "模様入り床"}),
@@ -186,6 +187,11 @@ PRODUITS_PAR_REFERENCE = {
     "YD-500": {"fr": "Sol autolissant époxy", **NOMS["autolissant"]},
     "YD-306": {"fr": "Sable coloré autolissant", **NOMS["sable"]},
 }
+
+
+def _normaliser(nom):
+    """Nom nettoyé pour la comparaison : espaces autour retirés, espaces multiples réduits, casse ignorée."""
+    return " ".join(str(nom).split()).casefold()
 
 
 def _mettre_a_jour_noms(produit):
@@ -260,7 +266,7 @@ class Command(BaseCommand):
 
         maquette_crees = 0
         for position, (nom, index, usages, une, noms) in enumerate(PRODUITS_MAQUETTE):
-            if Produit.objects.filter(nom__iexact=nom).exists():
+            if any(_normaliser(existant) == _normaliser(nom) for existant in Produit.objects.values_list("nom", flat=True)):
                 continue
             Produit.objects.create(
                 famille=familles[index], reference="", nom=nom, traductions={c: {"nom": n} for c, n in noms.items()},

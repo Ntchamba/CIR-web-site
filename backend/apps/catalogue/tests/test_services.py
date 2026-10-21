@@ -94,9 +94,9 @@ class FusionCatalogueMaquetteTests(TestCase):
         attendus = {
             "Finition époxy lisse": ("Finitions", "MI", False), "Finition époxy mate": ("Finitions", "ME", False),
             "Finition antidérapante": ("Finitions", "IX", False),
-            "Peinture de sol anti-UV": ("Gamme à base d'eau", "X", False),
-            "Finition haute résistance": ("Époxy sans solvant", "I", True),
-            "Finition anticorrosion": ("Primaires époxy", "I", False), "Sol à motifs": ("Sols spéciaux", "ME", False),
+            "Peinture de sol anti-UV": ("Finitions", "X", False),
+            "Finition haute résistance": ("Finitions", "I", True),
+            "Finition anticorrosion": ("Finitions", "I", False), "Sol à motifs": ("Sols spéciaux", "ME", False),
         }
         for nom, (famille, usages, une) in attendus.items():
             p = Produit.objects.get(nom=nom)
@@ -148,3 +148,10 @@ class FusionCatalogueMaquetteTests(TestCase):
         Produit.objects.filter(reference="YD-500").update(nom="Nom de l'équipe")
         self.charger()
         self.assertEqual(Produit.objects.get(reference="YD-500").nom, "Nom de l'équipe")
+
+    def test_nom_avec_espaces_ou_casse_differente_pas_de_doublon(self):
+        self.charger()
+        Produit.objects.filter(nom="Sol à motifs").update(nom="  sol  à   MOTIFS ")
+        self.charger()
+        self.assertEqual(Produit.objects.count(), 16)
+        self.assertEqual(Produit.objects.filter(nom__icontains="motifs").count(), 1)

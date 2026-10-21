@@ -10,7 +10,7 @@ export default function Proposition({ proposition: p, mise = false }) {
   const auteur = t(`commandes.negociation.auteur.${p.auteur_role === 'equipe' ? 'equipe' : 'client'}`);
   const prixM2 = p.prix_m2 ?? null;
   return (
-    <article className={`${styles.proposition} ${mise ? styles.propositionEnCours : ''}`} id={`proposition-${p.id}`}>
+    <article className={`${styles.proposition} ${mise ? styles.propositionEnCours : ''} ${p.auteur_role === 'equipe' ? styles.deLEquipe : styles.duClient}`} id={`proposition-${p.id}`}>
       <header>
         <strong>{auteur}</strong>
         <span className={styles.badgeNeutre}>{t(`commandes.negociation.etats.${p.etat}`)}</span>

@@ -20,7 +20,6 @@ const ProfilPage = lazy(() => import('@/modules/compte/ProfilPage.jsx'));
 const SelectionPage = lazy(() => import('@/modules/selection/SelectionPage.jsx'));
 const CommandesPage = lazy(() => import('@/modules/commandes/CommandesPage.jsx'));
 const NouvelleCommandePage = lazy(() => import('@/modules/commandes/NouvelleCommandePage.jsx'));
-const DetailCommande = lazy(() => import('@/modules/commandes/DetailCommande.jsx'));
 const PaiementPage = lazy(() => import('@/modules/paiements/PaiementPage.jsx'));
 const RecuPage = lazy(() => import('@/modules/paiements/RecuPage.jsx'));
 const DemandeRenduPage = lazy(() => import('@/modules/devis/DemandeRenduPage.jsx'));
@@ -48,7 +47,7 @@ export default function RoutesSite() {
             <Route path="selection" element={<SelectionPage />} />
             <Route path="commandes" element={<CommandesPage />} />
             <Route path="commandes/nouvelle" element={<NouvelleCommandePage />} />
-            <Route path="commandes/:id" element={<DetailCommande />} />
+            <Route path="commandes/:id" element={<CommandesPage />} />
             <Route path="commandes/:id/payer" element={<PaiementPage />} />
             <Route path="paiements/:id/recu" element={<RecuPage />} />
             <Route path="devis/demande" element={<DemandeRenduPage />} />

@@ -1406,5 +1406,5 @@ msgid "Produit « %(produit)s » absent du catalogue : image ignorée."
 msgstr "商品「%(produit)s」はカタログにありません：画像は無視されました。"
 
 #: apps/contenus/management/commands/importer_medias_reference.py
-msgid "Images de produits : %(ajoutees)s ajoutée(s), %(deja)s produit(s) déjà doté(s) d'une image."
-msgstr "商品画像：%(ajoutees)s 件追加、%(deja)s 件は画像が登録済み。"
+msgid "Images de produits : %(ajoutees)s ajoutée(s), %(remplacees)s image(s) importée(s) remplacée(s) (les photos de l'équipe sont conservées), %(deja)s produit(s) déjà doté(s) d'une image."
+msgstr "商品画像：%(ajoutees)s 件追加、取り込み済み画像 %(remplacees)s 件を置換（チームの写真は保持）、%(deja)s 件は画像が登録済み。"

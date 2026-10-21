@@ -123,8 +123,8 @@ class DonneesEquipeTests(ProduitsBase):
         p.refresh_from_db()
         self.assertEqual({c: getattr(p, c) for c in champs}, avant)
 
-    def test_forcer_remplace_toutes_les_images_du_produit_concerne(self):
-        """Effet documenté de --forcer : TOUTES les images du produit concerné sont supprimées (équipe incluse)."""
+    def test_forcer_ne_remplace_que_les_images_importees_du_produit_concerne(self):
+        """--forcer supprime les images venues de l'import ; une photo de l'équipe est conservée."""
         self.charger()
         self.importer()
         p = Produit.objects.get(nom="Terrazzo époxy")
@@ -136,10 +136,10 @@ class DonneesEquipeTests(ProduitsBase):
         propre.image.save("mienne.png", ContentFile(self.png()), save=False)
         propre.save()
         self.importer("--forcer")
-        self.assertEqual(p.images.count(), 1)
-        self.assertNotEqual(p.images.get().alt, "Photo équipe")
+        self.assertEqual(p.images.count(), 2)
+        self.assertTrue(p.images.filter(alt="Photo équipe").exists())
         self.assertEqual(autre.images.count(), 1)
-        self.assertEqual(len(self.fichiers_produits()), 7)  # 6 importées + 1 de l'équipe sur un autre produit
+        self.assertEqual(len(self.fichiers_produits()), 8)  # 6 importées + 2 de l'équipe
 
     def test_forcer_documente_la_suppression_des_images_de_produit(self):
         """L'aide de l'option doit prévenir que les images existantes des produits concernés sont supprimées."""

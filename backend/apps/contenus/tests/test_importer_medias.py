@@ -665,3 +665,32 @@ class CatalogueDeReferenceEtImagesTests(ImporterMediasTestCase):
             self.assertFalse(Produit.objects.get(nom=nom).images.exists(), nom)
         self.importer()
         self.assertEqual(ImageProduit.objects.count(), 6)
+
+
+class ImportProduitsNomNettoyeTests(ImporterMediasTestCase):
+    def test_nom_avec_espaces_et_casse_differente_retrouve(self):
+        from apps.catalogue.models import Famille, ImageProduit, Produit
+        famille = Famille.objects.create(nom="Finitions")
+        p = Produit.objects.create(famille=famille, nom="  terrazzo   ÉPOXY ")
+        self.importer()
+        self.assertEqual(list(ImageProduit.objects.values_list("produit_id", flat=True)), [p.id])
+
+    def test_forcer_conserve_les_photos_de_l_equipe_et_remplace_les_importees(self):
+        from io import BytesIO
+        from django.core.files.base import ContentFile
+        from apps.catalogue.models import Famille, ImageProduit, Produit
+        p = Produit.objects.create(famille=Famille.objects.create(nom="Finitions"), nom="Terrazzo époxy")
+        self.importer()
+        importee = p.images.get()
+        tampon = BytesIO()
+        Image.new("RGB", (30, 30), "red").save(tampon, "PNG")
+        equipe = ImageProduit(produit=p, alt="Équipe", ordre=5)
+        equipe.image.save("equipe.png", ContentFile(tampon.getvalue()), save=False)
+        equipe.save()
+        sortie = self.importer("--forcer")
+        self.assertIn("1 image(s) importée(s) remplacée(s)", sortie)
+        self.assertTrue(p.images.filter(pk=equipe.pk).exists())
+        self.assertTrue(Path(equipe.image.path).is_file())
+        self.assertFalse(p.images.filter(pk=importee.pk).exists())
+        self.assertEqual(p.images.count(), 2)
+        self.assertGreater(p.images.exclude(pk=equipe.pk).get().ordre, 5)

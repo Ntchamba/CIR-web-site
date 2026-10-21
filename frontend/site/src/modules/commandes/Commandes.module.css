@@ -16,97 +16,81 @@
 .badge { display: inline-block; padding: 4px 12px; border-radius: var(--pastille); font-size: 13px; font-weight: 700; white-space: nowrap; }
 .badgeNeutre { display: inline-block; padding: 2px 10px; border-radius: var(--pastille); background: var(--fond-2); font-size: 12px; font-weight: 600; color: var(--encre-2); }
 
-/* Filtre par étape */
-.filtreEtapes { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
-.filtreEtapes button {
-  min-height: var(--cible-tactile); padding: 0 16px; border: 1px solid var(--champ); border-radius: var(--pastille);
-  background: var(--blanc); font-weight: 600; font-size: 14px;
-}
-.filtreEtapes button[aria-pressed='true'] { background: var(--encre); border-color: var(--encre); color: var(--blanc); }
-
-/* Liste */
-.carteCommande {
-  display: flex; flex-direction: column; gap: 6px; padding: 18px;
-  border: 1px solid var(--filet); border-radius: var(--rayon); background: var(--blanc);
-}
-.carteAttente { border-color: var(--corail); box-shadow: 0 0 0 1px var(--corail); }
-.carteHaut { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
-.carteHaut h2 { font-size: 22px; }
-.carteHaut a { display: inline-flex; align-items: center; min-height: var(--cible-tactile); color: var(--encre); text-decoration: none; }
-.carteHaut a:hover { text-decoration: underline; }
-.montantCarte { font-weight: 700; margin: 0; }
-
 /* Nouvelle commande */
 .formCommande { display: flex; flex-direction: column; gap: 24px; max-width: 720px; margin-top: 24px; }
 .ligneSimple { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
 .adresseChantier { display: flex; flex-direction: column; gap: 2px; padding: 14px; border-radius: var(--rayon-s); background: var(--fond-2); }
 
-/* Détail */
-.bloc {
-  display: flex; flex-direction: column; gap: 14px; padding: clamp(16px, 3vw, 24px);
-  border: 1px solid var(--filet); border-radius: var(--rayon-l); background: var(--blanc);
-}
-.bloc h2 { font-size: 22px; }
-.bloc h3 { font-size: 18px; }
-.enteteBloc { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
-.enteteDetail { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px 24px; }
+/* Liste (maquette) */
+.filtreEtape { display: block; margin-bottom: 14px; }
+.filtreEtape select { width: 100%; min-height: 44px; padding: 0 14px; border: 1px solid var(--filet); border-radius: 22px; background: var(--blanc); font: inherit; color: var(--encre); }
+.carteAttente { border-color: var(--corail); }
+.attente { margin: 0; font-size: 13px; font-weight: 700; color: var(--corail-fonce); }
+.nouvelle { margin: 18px 0 0; text-align: center; }
+
+/* Détail (maquette) : une seule feuille blanche ; les blocs y sont de simples sections */
+.sousTitre { display: block; color: var(--encre-2); }
 .etatDetail { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
-.grilleDetail { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 24px; align-items: start; }
-.colonne { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
-.convenu { border-color: var(--succes); background: var(--succes-fond); }
-.montant { font-family: var(--police-titre); font-size: 30px; font-weight: 600; margin: 0; }
+.etapeAnnulee::before { background: var(--st-annulee-t) !important; }
+.bloc, .convenu, .echanger { display: flex; flex-direction: column; gap: 12px; margin-top: 28px; }
+.bloc h3, .convenu h3, .echanger h3 { font-size: 22px; font-weight: 400; }
+.bloc h4 { font-size: 17px; }
+.convenu { padding: 20px 24px; border-radius: 14px; background: var(--succes-fond); }
+.montant { font-family: var(--police-titre); font-size: 30px; font-weight: 500; margin: 0; }
 .ligne { display: flex; align-items: center; gap: 14px; }
 .miniature {
-  flex-shrink: 0; width: 64px; height: 48px; border-radius: var(--rayon-s); background: var(--fond-2); overflow: hidden;
+  flex-shrink: 0; width: 64px; height: 64px; border-radius: 6px; background: var(--filet); overflow: hidden;
   display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--bleu);
 }
 .miniature img { width: 100%; height: 100%; object-fit: cover; }
 .ligneTexte { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .ligneTexte a { font-weight: 600; }
 .pastilleCouleur { display: inline-block; width: 14px; height: 14px; margin-right: 6px; vertical-align: -2px; border-radius: 50%; border: 1px solid var(--filet); }
-
-/* Frise des étapes */
-.frise { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px 8px; counter-reset: etape; }
-.etape { flex: 1 1 130px; display: flex; align-items: flex-start; gap: 10px; color: var(--encre-3); }
-.puce {
-  flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--filet);
-  display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; background: var(--blanc);
-}
-.etapeTexte { display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
-.etapeTexte strong { color: var(--encre-2); font-size: 15px; }
-.etapeTexte time { font-size: 13px; }
-.etapeFaite .puce { background: var(--succes); border-color: var(--succes); color: var(--blanc); }
-.etapeFaite .etapeTexte strong { color: var(--encre); }
-.etapeCourante .puce { background: var(--corail); border-color: var(--corail); color: var(--encre); }
-.etapeCourante .etapeTexte strong { color: var(--encre); }
-.friseAnnulee .etapeCourante .puce { background: var(--st-annulee-t); border-color: var(--st-annulee-t); color: var(--blanc); }
+.historique { margin-top: 8px; }
 .historique summary { min-height: var(--cible-tactile); display: flex; align-items: center; cursor: pointer; font-weight: 600; }
 .historique ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: var(--encre-2); }
+.echanges { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 
-/* Négociation */
-.enCours { display: flex; flex-direction: column; gap: 12px; }
-.proposition { padding: 14px 16px; border: 1px solid var(--filet); border-radius: var(--rayon); display: flex; flex-direction: column; gap: 8px; }
-.propositionEnCours { border: 2px solid var(--bleu); background: #f6fbfe; }
+/* Négociation : dernière proposition (bloc clair, boutons à droite) puis échanges en bulles */
+.enCours {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px 20px; margin: 30px 0 0;
+  padding: 26px 28px; border-radius: 14px; background: var(--fond);
+}
+.enCours h3 { flex: 1 1 100%; margin: 0; font-family: var(--mono); font-size: 12px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: var(--encre-2); }
+.enCours > p { flex: 1 1 100%; margin: 0; }
+.rangee { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.proposition { display: flex; flex-direction: column; gap: 6px; }
+.propositionEnCours { flex: 1 1 260px; }
+.propositionEnCours header { order: 3; font-size: 13px; color: var(--encre-2); gap: 6px 10px; }
+.propositionEnCours .chiffres { order: 1; }
+.propositionEnCours .chiffres div:first-child dd { font-family: var(--police-titre); font-size: 32px; font-weight: 500; }
+.propositionEnCours .chiffres div:first-child dt { display: none; }
 .proposition header { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
-.proposition time { font-size: 13px; color: var(--encre-2); margin-left: auto; }
-.chiffres { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px 20px; }
+.proposition time { font-size: 12px; color: var(--encre-2); margin-left: auto; }
+.chiffres { margin: 0; display: flex; flex-wrap: wrap; gap: 6px 24px; }
 .chiffres div { display: flex; flex-direction: column; gap: 2px; }
-.chiffres dt { font-size: 13px; color: var(--encre-2); }
-.chiffres dd { margin: 0; font-weight: 700; }
-.formProposition { display: flex; flex-direction: column; gap: 16px; padding: 18px; border: 1px solid var(--filet); border-radius: var(--rayon); background: var(--fond); }
-.historiquePropositions { display: flex; flex-direction: column; gap: 12px; }
+.chiffres dt { font-size: 12px; color: var(--encre-2); }
+.chiffres dd { margin: 0; font-weight: 600; }
+.historiquePropositions { display: flex; flex-direction: column; gap: 14px; margin: 30px 0 0; }
+.historiquePropositions h3 { margin: 0; }
+.historiquePropositions .liste { gap: 14px; }
+.historiquePropositions .proposition { max-width: 72%; padding: 14px 18px; border-radius: 14px; background: var(--fond); }
+.historiquePropositions .duClient { margin-left: auto; background: #e3f1f9; }
+.formProposition { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; padding: 24px; border-radius: 14px; background: var(--fond); }
 
 /* Devis et contrat */
 .feuille { padding: 20px; border: 1px dashed var(--champ); border-radius: var(--rayon); display: flex; flex-direction: column; gap: 12px; }
 .feuille ul { margin: 0; padding-left: 20px; }
 
 @media (max-width: 900px) {
-  .grilleDetail { grid-template-columns: 1fr; }
   .etatDetail { align-items: flex-start; }
+  .enCours { flex-direction: column; align-items: stretch; padding: 18px; margin-top: 22px; }
+  .enCours .rangee { flex-direction: column; align-items: stretch; }
+  .propositionEnCours .chiffres div:first-child dd { font-size: 26px; }
+  .historiquePropositions .proposition { max-width: 86%; border-radius: 16px 16px 16px 4px; }
+  .historiquePropositions .duClient { background: var(--encre); color: var(--blanc); border-radius: 16px 16px 4px 16px; }
+  .historiquePropositions .duClient time { color: #c9d6dd; }
 }
 @media (max-width: 520px) {
   .deuxColonnes { grid-template-columns: 1fr; }
-  .frise { flex-direction: column; }
 }
-
-.echanges { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px; }

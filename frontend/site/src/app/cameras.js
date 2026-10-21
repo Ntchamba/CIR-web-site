@@ -30,8 +30,8 @@ export const CAMERAS = [
   { motif: '/messages', nom: 'messagerie', bureau: { x: 78, y: 36, zoom: 2.8 }, tel: { x: 64, y: 36, zoom: 1.9 } },
   { motif: '/notifications', nom: 'notifications', bureau: { x: 66, y: 26, zoom: 2.4 }, tel: { x: 52, y: 26, zoom: 1.7 } },
   { motif: '/mes-demandes', nom: 'demandes', bureau: { x: 68, y: 38, zoom: 2.2 }, tel: { x: 54, y: 38, zoom: 1.6 } },
-  { motif: '/connexion', nom: 'connexion', bureau: { x: 88, y: 50, zoom: 2.4 }, tel: { x: 88, y: 42, zoom: 1.7 } },
-  { motif: '/inscription', nom: 'inscription', bureau: { x: 92, y: 56, zoom: 2.6 }, tel: { x: 92, y: 48, zoom: 1.8 } },
+  { motif: '/connexion', nom: 'connexion', bureau: { x: 58, y: 62, zoom: 1.3 }, tel: { x: 88, y: 42, zoom: 1.7 } },
+  { motif: '/inscription', nom: 'inscription', bureau: { x: 66, y: 66, zoom: 1.45 }, tel: { x: 92, y: 48, zoom: 1.8 } },
   { motif: '/compte', nom: 'compte', bureau: { x: 83, y: 46, zoom: 2.2 }, tel: { x: 83, y: 38, zoom: 1.6 } },
 ];
 

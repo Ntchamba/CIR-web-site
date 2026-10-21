@@ -75,14 +75,14 @@ export default function Negociation({ commande, onDetail, onActualiser }) {
 
   return (
     <section id="negociation" aria-labelledby="titre-negociation" className={styles.bloc}>
-      <h2 id="titre-negociation">{t('commandes.negociation.titre')}</h2>
+      <h2 id="titre-negociation" className="visuellement-cache">{t('commandes.negociation.titre')}</h2>
       <p role="status" aria-live="polite" className={resultat ? styles.succes : 'visuellement-cache'}>{resultat}</p>
 
       {propositions.length === 0 && <p className={styles.meta}>{t('commandes.negociation.aucune')}</p>}
 
       {enAttente && (
         <div className={styles.enCours}>
-          <h3>{t('commandes.negociation.enCours')}</h3>
+          <h3>{t(enAttente.auteur_role === 'equipe' ? 'commandes.negociation.enCours' : 'commandes.negociation.enCoursClient')}</h3>
           <Proposition proposition={enAttente} mise />
           {!peutRepondre && enAttente.auteur_role === 'client' && (
             <p className={styles.meta}>{t('commandes.negociation.attenteEquipe')}</p>

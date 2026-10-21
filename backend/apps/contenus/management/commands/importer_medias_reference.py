@@ -1,4 +1,4 @@
-"""Charge en base les médias de référence (vidéo et affiche de l'accueil, photos de la sphère).
+"""Charge en base les médias de référence (vidéo et affiche de l'accueil, photos de la sphère, images de produits).
 
     python manage.py importer_medias_reference                 # dossier par défaut : backend/medias_reference
     python manage.py importer_medias_reference --forcer        # remplace les médias déjà en base
@@ -8,7 +8,12 @@ Le manifeste `medias.json` du dossier décrit chaque fichier (usage, texte alter
 
 Idempotente : sans `--forcer`, la vidéo et l'affiche ne sont posées que si elles sont vides, et une photo de
 sphère déjà importée (reconnue au nom du fichier d'origine) n'est pas recréée. Aucun texte, titre, téléphone
-ni coordonnée de l'accueil n'est touché. Aucun produit, réalisation ou témoignage n'est créé. Aucun appel
+ni coordonnée de l'accueil n'est touché. Aucun produit, réalisation ou témoignage n'est créé.
+
+Images de produits (champ `produits` du manifeste) : une image est attachée à un produit trouvé par son nom (espaces
+et casse ignorés), seulement s'il n'a aucune image ; un nom absent du catalogue est ignoré avec un message. Avec
+`--forcer`, seules les images venues de cet import (nom de fichier stocké « catalogue/produits/<nom du manifeste> »)
+sont supprimées puis recréées : une photo ajoutée par l'équipe n'est jamais supprimée. Aucun appel
 réseau. Les fichiers passent par les modèles (conversion WebP et limites de poids), jamais par une simple copie.
 Tout est vérifié avant la première écriture : un fichier manquant ne laisse rien de partiel.
 """
@@ -33,6 +38,7 @@ USAGE_VIDEO = "accueil_video_fond"
 USAGE_AFFICHE = "accueil_image_affiche"
 USAGE_SPHERE = "sphere"
 DOSSIER_SPHERE = "contenus/sphere/"
+DOSSIER_PRODUITS = "catalogue/produits/"
 
 
 def dossier_par_defaut():
@@ -42,6 +48,11 @@ def dossier_par_defaut():
 def _nom_importe(nom_fichier):
     """Motif du nom enregistré par le stockage pour un fichier d'origine (suffixe aléatoire éventuel)."""
     return re.compile(rf"^{re.escape(DOSSIER_SPHERE)}{re.escape(Path(nom_fichier).stem)}(_[A-Za-z0-9]{{7}})?\.webp$")
+
+
+def _normaliser(nom):
+    """Nom nettoyé pour la comparaison : espaces autour retirés, espaces multiples réduits, casse ignorée."""
+    return " ".join(str(nom).split()).casefold()
 
 
 def _segments(nom):
@@ -68,7 +79,8 @@ class Command(BaseCommand):
     help = "Importe les médias de référence (accueil et sphère) décrits par medias.json, sans rien inventer."
 
     def add_arguments(self, parser):
-        parser.add_argument("--forcer", action="store_true", help="Remplacer les médias déjà présents en base.")
+        parser.add_argument("--forcer", action="store_true", help="Remplacer les médias déjà présents en base : supprime et remplace les images importées des "
+                                 "produits concernés (les photos ajoutées par l'équipe sont conservées)."))
         parser.add_argument("--dossier", default=None,
                             help="Dossier des médias et du manifeste medias.json (par défaut : medias_reference).")
 
@@ -232,11 +244,18 @@ class Command(BaseCommand):
         return creees, remplacees, inchangees
 
     def _importer_produits(self, produits, forcer, anciens, nouveaux):
-        """Une image par produit trouvé par son nom exact, seulement s'il n'en a pas (sauf --forcer)."""
-        ajoutees = ignorees = 0
+        """Une image par produit trouvé par son nom (nettoyé, sans tenir compte de la casse), s'il n'en a pas.
+
+        Avec --forcer, seules les images venues de cet import (nom de fichier stocké « catalogue/produits/<nom du
+        manifeste> ») sont remplacées : une photo ajoutée par l'équipe n'est jamais supprimée.
+        """
+        ajoutees = ignorees = remplacees = 0
+        motifs = [re.compile(rf"^{re.escape(DOSSIER_PRODUITS)}{re.escape(Path(e['fichier']).stem)}"
+                             rf"(_[A-Za-z0-9]{{7}})?\.webp$") for e, _chemin in produits]
+        tous = list(Produit.objects.all())
         for entree, chemin in produits:
             nom_produit = entree["produit"].strip()
-            trouves = list(Produit.objects.filter(nom=nom_produit))
+            trouves = [p for p in tous if _normaliser(p.nom) == _normaliser(nom_produit)]
             if not trouves:
                 self.stdout.write(_("Produit « %(produit)s » absent du catalogue : image ignorée.")
                                   % {"produit": nom_produit})
@@ -248,11 +267,15 @@ class Command(BaseCommand):
                 if existantes and not forcer:
                     ignorees += 1
                     continue
-                for ancienne in existantes:
+                importees = [i for i in existantes if any(m.match(i.image.name or "") for m in motifs)]
+                for ancienne in importees:
                     anciens.append((ancienne.image.storage, ancienne.image.name))
                     ancienne.delete()
-                image = ImageProduit(produit=produit, alt=alt["fr"].strip(), ordre=0, traductions={
-                    c: {"alt": alt[c].strip()} for c in AUTRES_LANGUES})
+                    remplacees += 1
+                restantes = [i.ordre for i in existantes if i not in importees]
+                image = ImageProduit(produit=produit, alt=alt["fr"].strip(),
+                                     ordre=max(restantes) + 1 if restantes else 0, traductions={
+                                         c: {"alt": alt[c].strip()} for c in AUTRES_LANGUES})
                 image.image = ContentFile(octets, name=nom)
                 try:
                     image.save()
@@ -261,7 +284,7 @@ class Command(BaseCommand):
                     raise
                 nouveaux.append((image.image.storage, image.image.name))
                 ajoutees += 1
-        return ajoutees, ignorees
+        return ajoutees, ignorees, remplacees
 
     def handle(self, *args, forcer=False, dossier=None, **options):
         dossier = Path(dossier) if dossier else dossier_par_defaut()
@@ -273,7 +296,7 @@ class Command(BaseCommand):
             with transaction.atomic():
                 accueil = self._importer_accueil(video, affiche, forcer, anciens, nouveaux)
                 creees, remplacees, inchangees = self._importer_photos(photos, forcer, anciens, nouveaux)
-                ajoutees, deja_dotes = self._importer_produits(produits, forcer, anciens, nouveaux)
+                ajoutees, deja_dotes, remplacees_produits = self._importer_produits(produits, forcer, anciens, nouveaux)
         except Exception:
             # Rien de partiel : la transaction annule la base, les fichiers écrits par cette exécution sont retirés
             for stockage, nom in nouveaux:
@@ -289,6 +312,7 @@ class Command(BaseCommand):
             % {"accueil": accueil, "creees": creees, "remplacees": remplacees, "inchangees": inchangees}
         ))
         self.stdout.write(self.style.SUCCESS(
-            _("Images de produits : %(ajoutees)s ajoutée(s), %(deja)s produit(s) déjà doté(s) d'une image.")
-            % {"ajoutees": ajoutees, "deja": deja_dotes}
+            _("Images de produits : %(ajoutees)s ajoutée(s), %(remplacees)s image(s) importée(s) remplacée(s) "
+              "(les photos de l'équipe sont conservées), %(deja)s produit(s) déjà doté(s) d'une image.")
+            % {"ajoutees": ajoutees, "remplacees": remplacees_produits, "deja": deja_dotes}
         ))
