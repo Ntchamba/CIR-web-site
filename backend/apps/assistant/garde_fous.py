@@ -114,10 +114,10 @@ _DEVISE = (r"(?:F\.?\s?CFA|FCFA|CFA|XAF|XOF|francs?(?:\s+CFA)?|Fr\.?|F|€|EUR|e
 _DEVISE_AVANT = r"(?:FCFA|F\.?\s?CFA|CFA|XAF|XOF|€|EUR|\$|US\$|USD|£|GBP|¥|CNY|RMB|JPY|Euro|Dollar)"
 
 _APRES = re.compile(
-    rf"(?<![\w.,\-])(?P<n>{_NB})(?P<u>\s*(?:{_MULT_LATIN}(?![A-Za-zÀ-ÿ])(?:\s*(?:de\s+|d')?{_DEVISE}(?![A-Za-zÀ-ÿ]))?"
-    rf"|{_MULT_CJK}?\s*{_DEVISE}(?![A-Za-zÀ-ÿ])))")
-_AVANT = re.compile(rf"(?<![A-Za-z]){_DEVISE_AVANT}\s*(?P<n>{_NB})(?!\d)")
-_PAR_M2 = re.compile(rf"(?<![\w.,\-])(?P<n>{_NB})\s*(?:/|par\s+|per\s+|pro\s+|je\s+|每|あたり)\s*"
+    rf"(?<![0-9A-Za-z.,\-])(?P<n>{_NB})(?P<u>\s*(?:{_MULT_LATIN}(?![A-Za-zÀ-ÿ])(?:\s*(?:de\s+|d')?{_DEVISE}(?![A-Za-zÀ-ÿ]))?"
+    rf"|{_MULT_CJK}?\s*{_DEVISE}(?![A-Za-zÀ-ÿ])))", re.IGNORECASE)
+_AVANT = re.compile(rf"(?<![A-Za-z]){_DEVISE_AVANT}\s*(?P<n>{_NB})(?!\d)", re.IGNORECASE)
+_PAR_M2 = re.compile(rf"(?<![0-9A-Za-z.,\-])(?P<n>{_NB})\s*(?:/|par\s+|per\s+|pro\s+|je\s+|每|あたり)\s*"
                      r"(?:m²|m2|m\^2|㎡|mètre|metre|meter|metre|平方米|平米)", re.IGNORECASE)
 
 _MOTS_NOMBRES = (
@@ -146,22 +146,16 @@ _MULTIPLICATEURS = {"k": 10**3, "mille": 10**3, "millier": 10**3, "milliers": 10
                     "milliarde": 10**9, "百万": 10**6, "万": 10**4, "千": 10**3, "億": 10**8, "亿": 10**8}
 
 
+_GROUPE = re.compile(r"^(\d{1,3}(?:[ .,']\d{3})+)(?:[.,](\d+))?$")
+
+
 def _decimal(jeton):
     """Valeur d'un nombre écrit avec séparateurs de milliers (espace, point, virgule, apostrophe) ou décimale."""
-    brut = jeton.strip().replace(" ", " ").replace(" ", " ").replace("’", "'")
-    separateurs = re.findall(r"[ .,']", brut)
-    if not separateurs:
-        return Decimal(brut)
-    dernier = max(brut.rfind(s) for s in set(separateurs))
-    apres = brut[dernier + 1:]
-    groupes_milliers = len(separateurs) > 1 and len(set(separateurs)) == 1 and brut[dernier] != "."
-    if len(apres) == 3 and (len(set(separateurs)) == 1 or brut[dernier] in " '"):
-        groupes_milliers = True
-    if len(apres) == 3 or groupes_milliers:
-        entier = re.sub(r"[ .,']", "", brut)
-        return Decimal(entier)
-    partie_entiere = re.sub(r"[ .,']", "", brut[:dernier])
-    return Decimal(f"{partie_entiere}.{apres}")
+    brut = jeton.strip().replace("\u00a0", " ").replace("\u202f", " ").replace("’", "'")
+    groupe = _GROUPE.match(brut)
+    if groupe:
+        return Decimal(f"{re.sub(r'[ .,]', '', groupe.group(1)).replace(chr(39), '')}.{groupe.group(2) or '0'}")
+    return Decimal(brut.replace(",", "."))
 
 
 def _multiplicateur(suffixe):
@@ -186,10 +180,11 @@ def montants_du_texte(texte):
                 continue
             if "u" in m.groupdict():
                 valeur *= _multiplicateur(m.group("u"))
-            trouves.append((m.start(), m.end(), int(valeur)))
+            trouves.append((m.start(), m.end(), int(valeur) if valeur == int(valeur) else None))
     for m in _AVANT.finditer(texte):
         try:
-            trouves.append((m.start(), m.end(), int(_decimal(m.group("n")))))
+            valeur = _decimal(m.group("n"))
+            trouves.append((m.start(), m.end(), int(valeur) if valeur == int(valeur) else None))
         except (InvalidOperation, ValueError):
             trouves.append((m.start(), m.end(), None))
     for motif in (_EN_LETTRES, _EN_LETTRES_CJK, _REMISE):
@@ -217,7 +212,7 @@ _PARTICIPES_FR = (r"(?:pass[ée]e?s?|cr[ée]{2}e?s?|confirm[ée]e?s?|valid[ée]e
                   r"re[çc]ue?s?|trait[ée]e?s?|conclue?s?|d[ée]clench[ée]e?s?|pris(?:e|es)? en compte|envoy[ée]e?s?)")
 _ENGAGEMENTS = {
     "fr": [
-        rf"\bj[’']ai\s+(?:bien\s+|d[ée]j[àa]\s+|donc\s+|(?:pu\s+)?)*{_PARTICIPES_FR}\b",
+        rf"\bj[’']ai\s+(?:bien\s+|d[ée]j[àa]\s+|donc\s+)*{_PARTICIPES_FR}\b",
         rf"\bje\s+viens\s+(?:donc\s+)?de\s+(?:passer|cr[ée]er|confirmer|valider|signer|enregistrer|annuler|payer|"
         rf"r[ée]gler|modifier|d[ée]clencher|accepter)\b",
         rf"\bje\s+(?:vais\s+)?(?:confirme|valide|signe|annule|enregistre|r[èe]gle|paie|paye|passe|cr[ée]e|modifie|"
@@ -253,8 +248,10 @@ _ENGAGEMENTS = {
         r"akzeptiert)\b",
     ],
     "zh": [
-        r"我(?:已|已经|刚|刚刚|将|会)?(?:为您|帮您|替您|为你|帮你)?(?:成功)?(?:下单|下了单|提交|创建|确认|签署|签订|"
-        r"签了|取消|修改|支付|付款|付了|办理|完成|预订|接受)",
+        r"我(?:已|已经|刚|刚刚|将|会)?(?:为您|帮您|替您|为你|帮你)?(?:成功)?(?:下单|下了单|签署|签订|签了|付了|"
+        r"支付了|付款了)",
+        r"我(?:已|已经|刚|刚刚|将|会)?(?:为您|帮您|替您|为你|帮你)?(?:成功)?(?:提交|创建|确认|取消|修改|支付|付款|"
+        r"办理|预订|接受|完成).{0,6}(?:订单|合同|付款|支付|款项|报价|预订|定金|您的|你的)",
         r"已(?:经)?(?:成功)?(?:为您|帮您|替您|为你|帮你)(?:成功)?(?:下单|提交|创建|确认|签署|签订|取消|修改|支付|办理|预订)",
         r"(?:您的|你的|该|此)?(?:订单|付款|支付|合同|报价|订购|预订|定金|款项)(?:已|已经|已被|已成功|现已|均已)"
         r"(?:成功)?(?:下|提交|创建|生成|确认|签署|签订|生效|取消|修改|支付|付款|完成|接受|通过|到账|收到|登记|处理)",
@@ -358,9 +355,13 @@ def _traiter_liens(texte, autorises):
     texte = _IMAGE_MD.sub("", texte)
     texte = _LIEN_MD.sub(remplacer, texte)
     texte = _SCHEMAS.sub("", texte)
-    texte = _URL.sub("", texte)
-    texte = _DOMAINE.sub(lambda m: m.group(0) if "@" in texte[max(0, m.start() - 1):m.start()] else "", texte)
-    return texte, cites
+    morceaux, fin = [], 0
+    for m in _EMAIL.finditer(texte):  # les e-mails sont jugés plus loin (coordonnées) : on ne touche pas à leur domaine
+        morceaux.append(_DOMAINE.sub("", _URL.sub("", texte[fin:m.start()])))
+        morceaux.append(m.group(0))
+        fin = m.end()
+    morceaux.append(_DOMAINE.sub("", _URL.sub("", texte[fin:])))
+    return "".join(morceaux), cites
 
 
 def _liens_cites(texte, autorises, deja):

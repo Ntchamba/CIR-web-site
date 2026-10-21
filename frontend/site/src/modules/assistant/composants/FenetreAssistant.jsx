@@ -56,7 +56,8 @@ export default function FenetreAssistant({ assistant, surFermeture }) {
   };
 
   return (
-    <div className={styles.voile}>
+    // Le voile couvre toute la page et intercepte les clics (cohérent avec aria-modal) ; un clic hors de la fenêtre ferme.
+    <div className={styles.voile} onMouseDown={(e) => { if (e.target === e.currentTarget) surFermeture(); }}>
       <div
         ref={racine} className={styles.fenetre} role="dialog" aria-modal="true" aria-labelledby="assistant-titre"
         onKeyDown={touche}

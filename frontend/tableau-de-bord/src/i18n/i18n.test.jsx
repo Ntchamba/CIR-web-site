@@ -61,7 +61,8 @@ describe('changement de langue', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Hallo Jean' })).toBeInTheDocument();
     const menu = screen.getByRole('navigation', { name: 'Dashboard-Menü' });
     expect(within(menu).getByRole('link', { name: /Kunden/ })).toHaveAttribute('href', '/clients');
-    expect(within(menu).getAllByText('Demnächst verfügbar').length).toBeGreaterThan(0);
+    expect(within(menu).getByRole('link', { name: /KI-Assistent/ })).toHaveAttribute('href', '/assistant');
+    expect(within(menu).queryByText('Demnächst verfügbar')).not.toBeInTheDocument();
     expect(screen.getByText('Teammitglied')).toBeInTheDocument();
     await waitFor(() => expect(document.title).toBe('Startseite | CIR-Dashboard'));
     await waitFor(() => {

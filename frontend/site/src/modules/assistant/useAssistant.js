@@ -30,6 +30,7 @@ const normaliser = (m) => ({
   texte: typeof m.texte === 'string' ? m.texte : '',
   liens: Array.isArray(m.liens) ? m.liens : [],
   bloque: m.bloque === true,
+  utile: typeof m.utile === 'boolean' ? m.utile : null, // avis déjà donné (absent chez un serveur plus ancien : null)
 });
 
 export default function useAssistant({ ouvert }) {
@@ -110,7 +111,7 @@ export default function useAssistant({ ouvert }) {
     setErreur(null);
     setProposerContact(false);
     compteur.current += 1;
-    const local = { id: `local-${compteur.current}`, role: 'utilisateur', texte: brut, liens: [], bloque: false };
+    const local = { id: `local-${compteur.current}`, role: 'utilisateur', texte: brut, liens: [], bloque: false, utile: null };
     setMessages((m) => [...m, local]);
     setTexte('');
     const corps = { texte: brut, langue, contexte: lireContexte() };

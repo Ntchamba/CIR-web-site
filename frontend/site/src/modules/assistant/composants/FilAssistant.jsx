@@ -51,7 +51,7 @@ export default function FilAssistant({ messages, envoi, avis, donnerAvis, surLie
                 ))}
               </ul>
             )}
-            {!moi && typeof m.id === 'number' && <Avis message={m} valeur={avis[m.id]} donnerAvis={donnerAvis} />}
+            {!moi && typeof m.id === 'number' && <Avis message={m} valeur={avis[m.id] ?? (typeof m.utile === 'boolean' ? m.utile : undefined)} donnerAvis={donnerAvis} />}
           </article>
         );
       })}

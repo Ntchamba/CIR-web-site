@@ -447,6 +447,76 @@ describe('règles pures', () => {
   });
 });
 
+describe('revue testeur : avis déjà donné, clé périmée, modalité', () => {
+  const historiqueAvis = (messages) => ({
+    [`GET /api/assistant/conversations/${CLE}/`]: reponse(200, { cle: CLE, messages }),
+  });
+
+  it('historique : l\'avis n\'est pas reproposé si utile n\'est pas null ; proposé si null ou absent', async () => {
+    localStorage.setItem('cir-site.assistant', JSON.stringify({ cle: CLE, connecte: false }));
+    installer(historiqueAvis([
+      message(1, 'Déjà utile', { utile: true }),
+      message(2, 'Déjà inutile', { utile: false }),
+      message(3, 'Sans avis', { utile: null }),
+      message(4, 'Ancien serveur'),
+    ]));
+    rendreApp('/contact');
+    await ouvrir();
+    await screen.findByText('Ancien serveur');
+    expect(screen.getAllByText('Merci pour votre avis.')).toHaveLength(2);
+    expect(screen.getAllByRole('button', { name: 'Réponse utile' })).toHaveLength(2);
+  });
+
+  it('clé périmée à l\'envoi (404) : un seul rejeu sans clé, pas de boucle', async () => {
+    localStorage.setItem('cir-site.assistant', JSON.stringify({ cle: CLE, connecte: false }));
+    let n = 0;
+    const fetch = installer({
+      ...historiqueAvis([message(1, 'Ancienne')]),
+      'POST /api/assistant/messages/': (corps) => {
+        n += 1;
+        return corps.cle ? reponse(404, { detail: 'Introuvable.' }) : reponse(200, { cle: 'nouvelle', message: message(7, 'Neuf'), proposer_contact: false, restant: null });
+      },
+    });
+    rendreApp('/contact');
+    await ouvrir();
+    await screen.findByText('Ancienne');
+    await userEvent.type(champ(), 'salut{Enter}');
+    await screen.findByText('Neuf');
+    expect(n).toBe(2);
+    expect(appels(fetch, 'POST', '/api/assistant/messages/')[1][0].cle).toBeUndefined();
+    expect(JSON.parse(localStorage.getItem('cir-site.assistant')).cle).toBe('nouvelle');
+  });
+
+  it('404 persistant même sans clé : une seule requête de rejeu, erreur traduite, texte conservé', async () => {
+    localStorage.setItem('cir-site.assistant', JSON.stringify({ cle: CLE, connecte: false }));
+    const fetch = installer({ ...historiqueAvis([]), 'POST /api/assistant/messages/': reponse(404, {}) });
+    rendreApp('/contact');
+    await ouvrir();
+    await userEvent.type(champ(), 'salut{Enter}');
+    expect(await screen.findByRole('alert')).toBeInTheDocument();
+    expect(appels(fetch, 'POST', '/api/assistant/messages/')).toHaveLength(2);
+    expect(champ()).toHaveValue('salut');
+  });
+
+  it('modalité : le voile intercepte les clics (pas de pointer-events: none) et un clic dessus ferme', async () => {
+    const css = readFileSync('src/modules/assistant/Assistant.module.css', 'utf8');
+    expect(css.match(/^\.voile \{[^}]*\}/m)[0]).not.toMatch(/pointer-events:\s*none/);
+    installer();
+    rendreApp('/contact');
+    const dialogue = await ouvrir();
+    expect(dialogue).toHaveAttribute('aria-modal', 'true');
+    await userEvent.click(dialogue);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    await userEvent.click(dialogue.parentElement);
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
+  it('aucun dangerouslySetInnerHTML ni innerHTML dans le module', () => {
+    ['composants/FilAssistant.jsx', 'composants/FenetreAssistant.jsx', 'composants/Saisie.jsx', 'BulleAssistant.jsx', 'useAssistant.js']
+      .forEach((f) => expect(readFileSync(`src/modules/assistant/${f}`, 'utf8')).not.toMatch(/dangerouslySetInnerHTML|innerHTML/));
+  });
+});
+
 describe('autres langues', () => {
   it('le chinois traduit le dialogue', async () => {
     simulerMouvementReduit(true);

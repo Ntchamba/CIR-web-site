@@ -51,7 +51,8 @@ describe('Tableau de bord (fumée)', () => {
     expect(String(simule.mock.calls[0][0])).toContain('/api/admin/comptes/connexion/');
     const menu = screen.getByRole('navigation', { name: 'Menu du tableau de bord' });
     expect(menu).toHaveTextContent('Équipe');
-    expect(menu).toHaveTextContent('Bientôt disponible');
+    expect(menu).toHaveTextContent('Assistant IA');
+    expect(menu).not.toHaveTextContent('Bientôt disponible');
     expect(screen.getByRole('button', { name: /Se déconnecter/ })).toBeInTheDocument();
     expect(screen.getByText('Super-administrateur')).toBeInTheDocument();
   });
