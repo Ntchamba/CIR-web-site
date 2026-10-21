@@ -1407,7 +1407,7 @@ export default {
       creePar: "Angefordert von",
       creeLe: "Erstellt am",
       traitePar: "Bearbeitet von",
-      contenu: "Vorgeschlagener Text",
+      contenu: "Inhalt des Entwurfs",
       texte: "Vorgeschlagener Text",
       texteEn: "Vorgeschlagener Text auf {langue}",
       aide: "Annehmen veröffentlicht und sendet nichts: Der Text muss noch in den betreffenden Bildschirm kopiert werden (Kontaktanfrage, Nachrichten, Übersetzungs-Tab).",

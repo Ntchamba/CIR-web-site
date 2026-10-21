@@ -1407,7 +1407,7 @@ export default {
       creePar: "依頼者",
       creeLe: "作成日",
       traitePar: "処理者",
-      contenu: "提案されたテキスト",
+      contenu: "下書きの内容",
       texte: "提案されたテキスト",
       texteEn: "提案されたテキスト（{langue}）",
       aide: "承認しても何も公開・送信されません。テキストは該当の画面（お問い合わせ、メッセージ、翻訳タブ）にコピーする必要があります。",

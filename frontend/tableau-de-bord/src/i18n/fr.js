@@ -1408,7 +1408,7 @@ export default {
       creePar: "Demandé par",
       creeLe: "Créé le",
       traitePar: "Traité par",
-      contenu: "Texte proposé",
+      contenu: "Contenu du brouillon",
       texte: "Texte proposé",
       texteEn: "Texte proposé en {langue}",
       aide: "Accepter ne publie et n'envoie rien : le texte reste à copier dans l'écran concerné (demande de contact, messagerie, onglet de traductions).",

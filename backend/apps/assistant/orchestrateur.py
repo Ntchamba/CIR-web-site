@@ -231,9 +231,9 @@ def tour_conseiller(*, texte, messages_precedents, langue, utilisateur, contexte
                 duree_ms=int((time.monotonic() - debut) * 1000))
 
 
-def tour_fond(*, consigne, langue, utilisateur, suivi, avec_outils=True, montants_source=(), jetons_max=1500,
-              coordonnees_source=()):
-    """Un tour de l'agent de fond (brouillon). Renvoie (texte brut contrôlé -> `Sortie`, jetons)."""
+def tour_fond(*, consigne, langue, utilisateur, suivi, avec_outils=True, jetons_max=1500):
+    """Un tour de l'agent de fond (brouillon, sans donnée personnelle). Renvoie la dernière `Reponse` ; le contrôle
+    de sortie est fait par l'appelant (`controler`)."""
     contexte = outils.Contexte(utilisateur=None, langue=langue)
     instruction = _instruction("fond", langue, False)
     messages = [{"role": "user", "texte": consigne}]

@@ -7,6 +7,7 @@ import { useState } from 'react';
 
 import OngletsLangues from '@/composants/OngletsLangues.jsx';
 import { changerLangue } from '@/i18n/index.js';
+import { reinitialiserStatutAssistant } from './api.js';
 import { installerDirect } from '@/test/direct-simule.js';
 import { appels, MEMBRE, page, reponse, rendre, simulerApi } from '@/test/api-simulee.jsx';
 
@@ -384,7 +385,7 @@ describe('BoutonBrouillonIA : onglets de traductions', () => {
     expect(screen.getByLabelText('Nom (Deutsch)')).toHaveValue('Epoxidboden');
   });
 
-  it('sans texte français, le bouton est inactif ; masqué si non configuré', async () => {
+  it('actif tant qu’un champ français est rempli ; masqué si non configuré', async () => {
     localStorage.setItem('cir-tdb.jetons', JSON.stringify({ acces: 'a', rafraichissement: 'r' }));
     simulerApi([statut()]);
     const { unmount } = render(<Harnais francais="" />);
@@ -392,6 +393,7 @@ describe('BoutonBrouillonIA : onglets de traductions', () => {
     await userEvent.setup().click(screen.getByRole('tab', { name: /English/ }));
     expect(await screen.findByRole('button', { name: 'Proposer des traductions' })).toBeEnabled();
     unmount();
+    reinitialiserStatutAssistant();
     simulerApi([statut({ configure: false })]);
     render(<Harnais />);
     await userEvent.setup().click(screen.getByRole('tab', { name: /English/ }));

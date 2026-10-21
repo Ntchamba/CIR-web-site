@@ -25,8 +25,7 @@ function DetailConversation({ cle, surFermeture }) {
   const { donnees, chargement, erreur, recharger } = useChargement((signal) => obtenirConversation(cle, { signal }), [cle]);
   const messages = Array.isArray(donnees?.messages) ? donnees.messages : [];
   return (
-    <Tiroir ouvert large titre={t('assistant.conversations.titre')} sousTitre={t('assistant.conversations.consultation')}
-      surFermeture={surFermeture}>
+    <Tiroir ouvert large titre={t('assistant.conversations.titre')} surFermeture={surFermeture}>
       <p className={styles.avertissement}>{t('assistant.conversations.consultation')}</p>
       {chargement ? <Chargement texte={t('assistant.conversations.chargement')} />
         : erreur ? <MessageErreur erreur={messageErreurAssistant(erreur)} reessayer={recharger} />

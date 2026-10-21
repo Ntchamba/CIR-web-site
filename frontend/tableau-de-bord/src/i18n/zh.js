@@ -1407,7 +1407,7 @@ export default {
       creePar: "申请人",
       creeLe: "创建于",
       traitePar: "处理人",
-      contenu: "建议文本",
+      contenu: "草稿内容",
       texte: "建议文本",
       texteEn: "建议文本（{langue}）",
       aide: "接受并不会发布或发送任何内容：文本仍需复制到相应页面（联系请求、消息、翻译标签页）。",

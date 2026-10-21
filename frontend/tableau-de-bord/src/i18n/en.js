@@ -1407,7 +1407,7 @@ export default {
       creePar: "Requested by",
       creeLe: "Created on",
       traitePar: "Handled by",
-      contenu: "Suggested text",
+      contenu: "Draft content",
       texte: "Suggested text",
       texteEn: "Suggested text in {langue}",
       aide: "Accepting does not publish or send anything: the text still has to be copied into the relevant screen (contact request, messaging, translations tab).",
