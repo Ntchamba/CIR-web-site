@@ -416,7 +416,7 @@ def valider_demande_brouillon(donnees):
 
 
 def _reserver_brouillon(membre, type_, cible_type, cible_id, langue):
-    """Quota de 30 par heure et par membre : la ligne est créée sous verrou, avant l'appel à Gemini."""
+    """Quota de 60 par heure et par membre : la ligne est créée sous verrou, avant l'appel à Gemini."""
     with transaction.atomic():
         verrouiller_compte(membre)
         recents = Brouillon.objects.filter(cree_par=membre, cree_le__gte=timezone.now() - timedelta(hours=1)).count()

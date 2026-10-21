@@ -1,10 +1,10 @@
-"""Rejoue les cas de `agents/evaluations/questions.json` contre le vrai Gemini et écrit un rapport.
+"""Rejoue les cas de `backend/agents/evaluations/questions.json` contre le vrai Gemini et écrit un rapport.
 
     python manage.py evaluer_assistant [--cas ev-12] [--langue en]
 
 MANUELLE : nécessite une vraie GEMINI_API_KEY et consomme du quota. Jamais lancée par les tests.
 Les cas sont rejoués comme un visiteur sans compte (aucune donnée de client). Le rapport (JSON) est écrit
-dans `agents/evaluations/rapports/` ; une relecture humaine reste nécessaire.
+dans `backend/agents/evaluations/rapports/` ; une relecture humaine reste nécessaire.
 """
 import json
 from datetime import datetime
@@ -23,7 +23,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, cas=None, langue=None, **options):
         if not orchestrateur.configure():
-            raise CommandError("GEMINI_API_KEY (ou les prompts de agents/prompts/) manque : évaluation impossible.")
+            raise CommandError("GEMINI_API_KEY (ou les prompts de backend/agents/prompts/) manque : évaluation impossible.")
         questions = evaluations.charger()
         if cas:
             questions = [q for q in questions if q["id"] == cas]

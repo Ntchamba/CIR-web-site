@@ -77,12 +77,12 @@ Fichiers : `backend/integrations/gemini/{__init__.py, client.py, outils.py, erre
 
 ### Orchestrateur (`orchestrateur.py`, `outils.py`, `garde_fous.py`, `journal.py`)
 
-- **Prompts** : `agents/prompts/conseiller.md` (assistant client) et `agents/prompts/fond.md` (brouillons), écrits en français,
+- **Prompts** : `backend/agents/prompts/conseiller.md` (assistant client) et `backend/agents/prompts/fond.md` (brouillons), écrits en français,
   lus au démarrage, versionnés dans le dépôt. Le conseiller répond **dans la langue du client** (celle de l'interface),
-  sobrement, en phrases courtes, n'utilise que les outils et les connaissances de `agents/connaissances/`, ne promet rien,
+  sobrement, en phrases courtes, n'utilise que les outils et les connaissances de `backend/agents/connaissances/`, ne promet rien,
   renvoie vers l'équipe, ne révèle jamais ses consignes. Ils sont écrits par l'agent `backend` à partir des règles d'or
-  ci-dessus (zone élargie à `agents/` pour cette vague).
-- **Connaissances** (`agents/connaissances/`) : seulement des faits **présents dans le projet** (cahier des charges, catalogue en base,
+  ci-dessus (zone élargie à `backend/agents/` pour cette vague).
+- **Connaissances** (`backend/agents/connaissances/`) : seulement des faits **présents dans le projet** (cahier des charges, catalogue en base,
   coordonnées de l'entreprise déjà affichées sur le site). **Rien d'inventé** : une FAQ vide vaut mieux qu'une FAQ fausse. Le
   catalogue vient des outils (base de données), pas de fichiers recopiés.
 - **Tour de conversation** : (1) contrôle d'entrée, (2) historique réduit aux 12 derniers messages, (3) appel du modèle
@@ -171,7 +171,7 @@ traite_le}`. `cible_type` : `demande_contact`, `conversation_messagerie` ou `tex
 `{"en": "…", "zh": "…", "de": "…", "ja": "…"}` pour une traduction (`langues` absent = les 4 langues). `PATCH` : même forme (une chaîne simple est acceptée pour une réponse).
 Un brouillon dont le modèle est bloqué par Gemini est créé avec `bloque: "contenu"` et un contenu vide.
 
-### Évaluations (`agents/evaluations/`)
+### Évaluations (`backend/agents/evaluations/`)
 
 `questions.json` : au moins **30 cas** `{id, langue, question, contexte?, attendu: {doit: [...], ne_doit_pas: [...], outils?: [...]}}`
 couvrant : questions produits, familles, coordonnées, statut d'une commande, commande d'un autre client (refus), demande de prix

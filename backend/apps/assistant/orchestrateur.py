@@ -44,7 +44,7 @@ def _lire(chemin, mtime):
 
 
 def lire_prompt(nom):
-    """Contenu de `agents/prompts/<nom>.md` ; chaîne vide si le fichier est absent."""
+    """Contenu de `backend/agents/prompts/<nom>.md` ; chaîne vide si le fichier est absent."""
     chemin = dossier_agents() / "prompts" / f"{nom}.md"
     try:
         return _lire(chemin, chemin.stat().st_mtime_ns)
@@ -53,7 +53,7 @@ def lire_prompt(nom):
 
 
 def lire_connaissances():
-    """Fiches de `agents/connaissances/` (hors README) : seule source de vérité, avec les outils."""
+    """Fiches de `backend/agents/connaissances/` (hors README) : seule source de vérité, avec les outils."""
     dossier = dossier_agents() / "connaissances"
     fiches = []
     try:

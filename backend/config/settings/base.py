@@ -225,9 +225,8 @@ GEMINI_MODELE_FOND = env("GEMINI_MODELE_FOND", "gemini-2.5-flash") or "gemini-2.
 ASSISTANT_LIMITE_JOUR = int(env("ASSISTANT_LIMITE_JOUR", "1000") or "1000")
 # Conservation des conversations (jours)
 ASSISTANT_RETENTION_JOURS = int(env("ASSISTANT_RETENTION_JOURS", "90") or "90")
-# Dossier des prompts et des connaissances (racine du dépôt par défaut ; sur Railway, la racine du service
-# est backend/ : copier agents/ dans backend/agents/ ou renseigner ASSISTANT_AGENTS_DIR)
-ASSISTANT_AGENTS_DIR = Path(env("ASSISTANT_AGENTS_DIR") or BASE_DIR.parent / "agents")
+# Dossier des prompts, connaissances et évaluations (backend/agents/, dans la racine du service Railway)
+ASSISTANT_AGENTS_DIR = Path(env("ASSISTANT_AGENTS_DIR") or BASE_DIR / "agents")
 
 LOGGING = {
     "version": 1,

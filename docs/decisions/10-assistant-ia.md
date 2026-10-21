@@ -14,7 +14,7 @@ Date : 21 octobre 2026. Statut : retenue. Détails : `docs/taches/vague-5-contra
 - **Coûts maîtrisés** : limites par visiteur, par client et plafond global quotidien ; service absent = bulle masquée.
 - **Traçabilité** : journal sans texte ni donnée personnelle ; lecture des conversations réservée au super-administrateur et journalisée ;
   conservation limitée (90 jours).
-- **Évaluations** rejouables à la main avant chaque mise en ligne (`agents/evaluations/`), jamais lancées par les tests.
+- **Évaluations** rejouables à la main avant chaque mise en ligne (`backend/agents/evaluations/`), jamais lancées par les tests.
 
 ## Conséquences
 

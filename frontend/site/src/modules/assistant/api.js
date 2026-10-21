@@ -18,5 +18,9 @@ export const conversation = (cle, { signal } = {}) => api.get(`/api/assistant/co
 /** → 204 : supprime la conversation et ses messages. */
 export const effacer = (cle) => api.supprimer(`/api/assistant/conversations/${encodeURIComponent(cle)}/`);
 
-/** {utile: bool} → 204 (une seule fois par message). */
-export const donnerAvis = (id, utile) => api.post(`/api/assistant/messages/${encodeURIComponent(id)}/avis/`, { utile });
+/** {utile, cle?} → 204 (une seule fois par message ; 409 `avis_deja_donne`). La clé est exigée d'un visiteur (sinon 404). */
+export const donnerAvis = (id, utile, cle) => api.post(
+  `/api/assistant/messages/${encodeURIComponent(id)}/avis/`,
+  cle ? { utile, cle } : { utile },
+  cle ? { entetes: { 'X-Assistant-Cle': cle } } : undefined,
+);

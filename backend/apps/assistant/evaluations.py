@@ -1,4 +1,4 @@
-"""Évaluations de l'assistant (`agents/evaluations/questions.json`).
+"""Évaluations de l'assistant (`backend/agents/evaluations/questions.json`).
 
 Les tests vérifient seulement la validité du fichier et la logique de vérification (`verifier`) ; le rejeu contre le vrai
 Gemini (`rejouer`) est réservé à la commande manuelle `evaluer_assistant`.

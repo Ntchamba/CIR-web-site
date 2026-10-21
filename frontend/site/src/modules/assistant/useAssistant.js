@@ -165,9 +165,10 @@ export default function useAssistant({ ouvert }) {
     if (avis[id] !== undefined) return;
     setAvis((a) => ({ ...a, [id]: utile }));
     try {
-      await api.donnerAvis(id, utile);
-    } catch {
+      await api.donnerAvis(id, utile, cle.current);
+    } catch (e) {
       if (!actif.current) return;
+      if (e?.statut === 409) return; // avis déjà donné : remerciement, pas d'erreur
       setAvis((a) => {
         const { [id]: _retire, ...reste } = a;
         return reste;

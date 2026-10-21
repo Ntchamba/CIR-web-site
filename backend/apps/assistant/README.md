@@ -15,7 +15,7 @@ Fichiers propres au module :
 - `garde_fous.py`
 - `journal.py ; utilise integrations/gemini/`
 - `evaluations.py` et les commandes `purger_assistant` (rétention, aussi appelée par le worker) et `evaluer_assistant` (manuelle, vraie clé)
-- `agents/` à la racine du dépôt : prompts, connaissances, évaluations (variable `ASSISTANT_AGENTS_DIR`)
+- `backend/agents/` : prompts, connaissances, évaluations (variable `ASSISTANT_AGENTS_DIR`)
 
 ## Tâches (agent `backend`, vérifiées par `backend-testeur`)
 

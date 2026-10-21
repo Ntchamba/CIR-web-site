@@ -366,10 +366,27 @@ describe('avis et équipe', () => {
     expect(screen.queryByRole('button', { name: 'Réponse peu utile' })).toBeNull();
   });
 
+  it('avis : la clé de conversation est envoyée (corps et en-tête) ; 409 avis_deja_donne = remerciement sans erreur', async () => {
+    const fetch = installer({
+      'POST /api/assistant/messages/': reponse(200, { cle: CLE, message: message(9, 'Réponse'), proposer_contact: false, restant: null }),
+      'POST /api/assistant/messages/9/avis/': reponse(409, { code: 'avis_deja_donne' }),
+    });
+    rendreApp('/contact');
+    await ouvrir();
+    await userEvent.type(champ(), 'x{Enter}');
+    await screen.findByText('Réponse');
+    await userEvent.click(screen.getByRole('button', { name: 'Réponse utile' }));
+    expect(await screen.findByText('Merci pour votre avis.')).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).toBeNull();
+    const [[corps, init]] = appels(fetch, 'POST', '/api/assistant/messages/9/avis/');
+    expect(corps).toEqual({ utile: true, cle: CLE });
+    expect(init.headers['X-Assistant-Cle']).toBe(CLE);
+  });
+
   it('avis refusé par le serveur : message d\'erreur, avis de nouveau possible', async () => {
     installer({
       'POST /api/assistant/messages/': reponse(200, { cle: CLE, message: message(9, 'Réponse'), proposer_contact: false, restant: null }),
-      'POST /api/assistant/messages/9/avis/': reponse(409, {}),
+      'POST /api/assistant/messages/9/avis/': reponse(500, {}),
     });
     rendreApp('/contact');
     await ouvrir();
