@@ -88,6 +88,8 @@ _EXTENSIONS = (r"pdf|jpe?g|png|webp|gif|svg|docx?|xlsx?|pptx?|csv|txt|zip|rar|mp
 _DOMAINE = re.compile(
     rf"(?<![\w@.\-])(?!(?i:jiu\.ye)\b)(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+(?!(?:{_EXTENSIONS})\b)(?:[a-z]{{2,}}|[A-Z]{{2,}})\b"
     r"(?:/[^\s)>\]\"']*)?")
+# Domaine officiel de l'entreprise (CLAUDE.md) : coordonnée publique, pas un lien externe (liste blanche exacte)
+DOMAINES_OFFICIELS = frozenset({"revelation-sarl.com", "www.revelation-sarl.com"})
 _EMAIL = re.compile(r"[\w.+\-]+@[\w\-]+(?:\.[\w\-]+)+")
 # E-mail écrit pour tromper : « evil @ example . com », « evil (at) example (dot) com », « evil [at] example.com »
 _EMAIL_OBFUSQUE = re.compile(
@@ -167,7 +169,16 @@ _UNITES_VENTE = (r"(?:m²|m2|m\^2|㎡|sqm|sq\.?\s?m|square\s+met(?:re|er)s?|m[è
                  r"sacs?|unit[ée]s?|units?|pi[èe]ces?|st[üu]cks?|ml|laufmeter|linear\s+met(?:re|er)|公斤|千克|升|桶|件|个|個|"
                  r"キロ|リットル|バケツ|セット)")
 _PAR_M2 = re.compile(rf"(?<![0-9A-Za-z.,\-])(?P<n>{_NB})\s*(?:/|par\s+|per\s+|pro\s+|je\s+|le\s+|la\s+|au\s+|the\s+|"
-                     rf"l[’']|每|あたり)\s*{_UNITES_VENTE}(?![A-Za-zÀ-ÿ²])", re.IGNORECASE)
+                     rf"l[’']|每|あたり)\s*(?P<unite>{_UNITES_VENTE})(?![A-Za-zÀ-ÿ²])", re.IGNORECASE)
+_SURFACE = re.compile(r"m²|m2|m\^2|㎡|sqm|sq|square|carr|quadrat|qm|平方|平米|メートル", re.IGNORECASE)
+
+
+def _ressemble_a_un_prix(nombre, avant):
+    """Une quantité par contenant (2 par seau, 5 kg) n'est pas un prix : il faut au moins 4 chiffres, un séparateur de
+    milliers, ou un mot de prix juste avant."""
+    chiffres = re.sub(r"\D", "", nombre)
+    return (len(chiffres) >= 4 or bool(re.search(r"[ .,'’\u00a0\u202f]\d{3}", nombre))
+            or bool(re.search(_MOT_PRIX + r"[^\d\n]{0,30}$", avant, re.IGNORECASE)))
 _UNITE_PUIS_PRIX = re.compile(rf"(?:每|毎|1|一)\s?(?:平方米|平米|公斤|千克|升|桶|件|个|平方メートル|キロ|個)\s*(?P<n>{_NB})")
 
 _MOTS_NOMBRES = (
@@ -203,8 +214,12 @@ _MOT_REMISE = (r"(?:remises?|r[ée]ductions?|rabais|ristourne|discounts?|off|Rab
 _POURCENT = (rf"(?:\d+(?:[.,]\d+)?\s?(?:%|pour\s?cent|per\s?cent|percent|prozent)|\d+\s?割|(?:{_MOTS_NOMBRES})(?:[\s\-]+(?:{_MOTS_NOMBRES}))*\s+"
              r"(?:pour\s?cent|per\s?cent|percent|prozent))")
 _REMISE = re.compile(rf"{_MOT_REMISE}[^\n]{{0,30}}?{_POURCENT}|{_POURCENT}[^\n]{{0,30}}?{_MOT_REMISE}", re.IGNORECASE)
-_REMISE_SEULE = re.compile(r"\d+(?:[.,]\d+)?\s?%\s*(?:de\s+)?(?:moins|less|weniger|cheaper|billiger|off)\b|"
-                          r"\b(?:moins|less|minus|weniger)\s+(?:de\s+)?\d+(?:[.,]\d+)?\s?%|(?<![\d\w])[-−–]\s?\d+(?:[.,]\d+)?\s?%|"
+_MOT_PRIX_PROCHE = r"(?:prix|tarifs?|co[uû]ts?|price|cost|Preis|价格|価格|費用|费用)"
+_REMISE_SEULE = re.compile(r"\d+(?:[.,]\d+)?\s?%\s*de\s+moins\s*(?:[.!?,;\n]|$)|\d+(?:[.,]\d+)?\s?%\s*(?:moins\s+cher|cheaper|billiger|less)\b|"
+                          r"\b(?:moins|less|minus|weniger)\s+\d+(?:[.,]\d+)?\s?%|"
+                          rf"\bmoins\s+de\s+\d+(?:[.,]\d+)?\s?%[^.\n]{{0,25}}{_MOT_PRIX_PROCHE}|"
+                          rf"{_MOT_PRIX_PROCHE}[^.\n]{{0,25}}\bmoins\s+de\s+\d+(?:[.,]\d+)?\s?%|"
+                          r"(?<![\d\w])[-−–]\s?\d+(?:[.,]\d+)?\s?%|"
                           r"\b(?:gratuit(?:e|es|s)?|offert(?:e|es|s)?|free\s+of\s+charge|kostenlos|gratis|prix\s+co[uû]tant|"
                           r"half[\s-]price|moiti[ée]\s+prix|halber\s+preis)\b|免费|免費|無料|\d+\s?割|[一二三四五六七八九十]折|[0-9]折|打[一二三四五六七八九十0-9]折")
 
@@ -241,6 +256,9 @@ def montants_du_texte(texte):
     trouves = []
     for motif in (_APRES, _PAR_M2, _UNITE_PUIS_PRIX):
         for m in motif.finditer(texte):
+            if motif is _UNITE_PUIS_PRIX or (motif is _PAR_M2 and not _SURFACE.search(m.group("unite"))):
+                if not _ressemble_a_un_prix(m.group("n"), texte[:m.start("n")][-40:]):
+                    continue
             try:
                 valeur = _decimal(m.group("n"))
             except (InvalidOperation, ValueError):
@@ -474,9 +492,12 @@ def _traiter_liens(texte, autorises):
     texte = _LIEN_MD.sub(remplacer, texte)
     vue = _Vue(texte)
     mails = [(d, f) for d, f, _v in emails_du_texte(vue.norm)]  # jugés plus loin : leur domaine reste
-    zones = [(m.start(), m.end()) for motif in (_SCHEMAS, _URL) for m in motif.finditer(vue.norm)]
+    zones = [(m.start(), m.end()) for motif in (_SCHEMAS, _URL) for m in motif.finditer(vue.norm)
+             if re.sub(r"^https://|^www\.(?=revelation)", "", m.group(0).lower()).split("/")[0] not in DOMAINES_OFFICIELS
+             or m.group(0).lower().startswith(("http://", "ftp"))]
     zones += [(m.start(), m.end()) for m in _DOMAINE.finditer(vue.norm)
-              if not any(d <= m.start() and m.end() <= f for d, f in mails)]
+              if not any(d <= m.start() and m.end() <= f for d, f in mails)
+              and m.group(0).split("/")[0].lower() not in DOMAINES_OFFICIELS]
     return vue.remplacer(zones), cites
 
 
