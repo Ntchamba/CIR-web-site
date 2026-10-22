@@ -78,7 +78,7 @@ describe('CataloguePage', () => {
 
     await waitFor(() => {
       const derniers = parametresDes(fetch, '/api/catalogue/produits/').at(-1);
-      expect(Object.fromEntries(derniers)).toEqual({ usage: 'industrie', famille: 'primaires', search: 'YD-500', taille: '12' });
+      expect(Object.fromEntries(derniers)).toEqual({ usage: 'industrie', famille: 'primaires', search: 'YD-500', taille: '10' });
     });
   });
 
@@ -89,11 +89,11 @@ describe('CataloguePage', () => {
     });
     rendre('/catalogue?famille=sols-autolissants&usage=piscine');
     await screen.findByRole('link', { name: /Produit 1/ });
-    expect(Object.fromEntries(parametresDes(fetch, '/api/catalogue/produits/')[0])).toEqual({ famille: 'sols-autolissants', taille: '12' });
+    expect(Object.fromEntries(parametresDes(fetch, '/api/catalogue/produits/')[0])).toEqual({ famille: 'sols-autolissants', taille: '10' });
     expect(await screen.findByText('Sols lisses et continus.')).toBeInTheDocument();
   });
 
-  it('pagination numérotée de la maquette : 12 produits par page, « Suivant → », adresse ?page=', async () => {
+  it('pagination numérotée de la maquette : 10 produits par page, « Suivant → », adresse ?page=', async () => {
     const fetch = simulerApi({
       'GET /api/catalogue/familles/': reponse(200, FAMILLES),
       'GET /api/catalogue/produits/': (corps, init, url) => (url.searchParams.get('page') === '2'
@@ -102,7 +102,7 @@ describe('CataloguePage', () => {
     });
     rendre();
     await screen.findByRole('link', { name: /Produit 2/ });
-    expect(Object.fromEntries(parametresDes(fetch, '/api/catalogue/produits/')[0])).toEqual({ taille: '12' });
+    expect(Object.fromEntries(parametresDes(fetch, '/api/catalogue/produits/')[0])).toEqual({ taille: '10' });
     const pagination = screen.getByRole('navigation', { name: 'Pages du catalogue' });
     expect(within(pagination).getByRole('link', { name: 'Page 1' })).toHaveAttribute('aria-current', 'page');
     expect(within(pagination).getAllByRole('link').map((l) => l.textContent)).toEqual(['1', '2', 'Suivant →']);

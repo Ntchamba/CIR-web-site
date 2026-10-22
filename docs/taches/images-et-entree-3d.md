@@ -22,8 +22,8 @@ Branche `images` (depuis `prototype-2`). Décisions : `docs/decisions/11-entree-
 
 ## Tâches
 
-- [ ] Back-end (`backend` + `backend-testeur`) : commande `importer_medias_reference` (voir ci-dessous).
-- [ ] Site (`site` + `site-testeur`) : habillage d'après les maquettes et entrée 3D au défilement.
+- [x] Back-end (`backend` + `backend-testeur`) : commande `importer_medias_reference` (voir ci-dessous) ; catalogue fusionné (16 produits) et 6 images de produits. VALIDÉ.
+- [x] Site (`site` + `site-testeur`) : design fidèle aux maquettes (pages, textes) et entrée 3D au défilement. VALIDÉ.
 
 ### Commande `python manage.py importer_medias_reference`
 
@@ -52,3 +52,13 @@ disposition uniquement) et de `docs/contexte-projet.md` de la branche `prototype
 - Bandeaux photo `bandeau-maison-*` passant sous la barre de navigation (catalogue, réalisations, commandes).
 - Les textes entre crochets des maquettes restent des emplacements : sans donnée, le site affiche « Prix sur devis » ou
   masque le bloc, jamais une valeur inventée.
+
+## État au 22 octobre 2026
+
+- Tests : back-end 1445 (PostgreSQL 16), site 687, tableau de bord 506.
+- Pour charger les médias et le catalogue sur une base neuve : `python manage.py charger_catalogue_reference` puis
+  `python manage.py importer_medias_reference` (idempotents). En production : à lancer une fois sur Railway.
+- **Écarts connus avec les maquettes** : connexion par e-mail seulement (la maquette dit « Téléphone ou e-mail ») et pas de
+  « Mot de passe oublié ? » (aucune route de réinitialisation) ; sections « Témoignages » et cartes de chantier de l'accueil
+  absentes faute de données réelles ; 4 produits sans image (sable coloré, mate, anticorrosion, sol à motifs) ; familles et usages
+  des 7 produits de la maquette à valider par l'équipe.

@@ -180,3 +180,12 @@
   }
 }
 @keyframes bandeau-zoom { from { transform: scale(1); } to { transform: scale(1.06); } }
+
+/* Impression et enregistrement en PDF : aucun bloc ne reste caché par une animation liée au défilement. */
+@media print {
+  html .p3d, html .p3d-grand, html .p3d-sortie, html .m-bandeau-fond {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

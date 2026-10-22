@@ -90,7 +90,7 @@ describe('Catalogue : langue et requêtes', () => {
     await waitFor(() => expect(emplacement()).toBe('/catalogue?lang=fr&usage=exterieur&q=terrazzo'));
     await waitFor(() => {
       const p = parametresDes(fetch, '/api/catalogue/produits/').at(-1);
-      expect(Object.fromEntries(p)).toEqual({ usage: 'exterieur', search: 'terrazzo', taille: '12' });
+      expect(Object.fromEntries(p)).toEqual({ usage: 'exterieur', search: 'terrazzo', taille: '10' });
     });
     // « Tous les sols » retire le critère de l'adresse
     await u.click(within(screen.getByRole('group', { name: 'Pour quel sol ?' })).getByRole('button', { name: 'Tous les sols' }));

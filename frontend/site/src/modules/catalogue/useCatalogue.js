@@ -10,7 +10,7 @@ import useDonnees from '@/app/useDonnees.js';
 import * as catalogue from './api.js';
 import { estUsage } from './usages.js';
 
-export const TAILLE_PAGE = 12; // 3 colonnes de grandes images carrées
+export const TAILLE_PAGE = 10; // 3 colonnes de grandes images carrées
 
 /** Critères de l'adresse, nettoyés (un usage inconnu est ignoré, une page invalide vaut 1). */
 export function lireCriteres(parametres) {
