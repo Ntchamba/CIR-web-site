@@ -75,6 +75,17 @@ class ReglagesProductionTests(SimpleTestCase):
         import json
         return json.loads(r.stdout)
 
+    def test_la_sonde_de_sante_de_railway_est_toujours_acceptee(self):
+        # Sans « healthcheck.railway.app », Railway reçoit une erreur 400 et le déploiement échoue.
+        hotes = self.lire_prod("p.ALLOWED_HOSTS", DJANGO_ALLOWED_HOSTS="api.revelation-sarl.com")
+        self.assertIn("healthcheck.railway.app", hotes)
+        self.assertIn("api.revelation-sarl.com", hotes)
+        self.assertEqual(hotes.count("healthcheck.railway.app"), 1)
+        hotes = self.lire_prod("p.ALLOWED_HOSTS", DJANGO_ALLOWED_HOSTS="api.revelation-sarl.com,healthcheck.railway.app")
+        self.assertEqual(hotes.count("healthcheck.railway.app"), 1)
+        # Aucun joker ajouté : seuls les hôtes demandés et la sonde sont acceptés.
+        self.assertNotIn("*", hotes)
+
     def test_origines_cors_et_csrf_par_defaut(self):
         cors, csrf = self.lire_prod("[p.CORS_ALLOWED_ORIGINS, p.CSRF_TRUSTED_ORIGINS]")
         attendues = {"https://revelation-sarl.com", "https://www.revelation-sarl.com",

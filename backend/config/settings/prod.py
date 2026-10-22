@@ -14,6 +14,12 @@ if not env("DATABASE_URL"):
     raise ImproperlyConfigured("La production utilise PostgreSQL : renseigner DATABASE_URL.")
 DATABASES = {"default": dj_database_url.parse(env("DATABASE_URL"), conn_max_age=60, conn_health_checks=True)}
 
+# Les tests de santé de Railway arrivent avec le nom d'hôte « healthcheck.railway.app » : sans lui dans ALLOWED_HOSTS,
+# Django répond 400 et le déploiement échoue. Il est donc toujours accepté (la sonde ne lit que /api/sante/).
+HOTE_SONDE_RAILWAY = "healthcheck.railway.app"
+if HOTE_SONDE_RAILWAY not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS = [*ALLOWED_HOSTS, HOTE_SONDE_RAILWAY]
+
 # Origines autorisées : site public et tableau de bord (admin.revelation-sarl.com). Remplaçables par
 # les variables CORS_ALLOWED_ORIGINS et DJANGO_CSRF_TRUSTED_ORIGINS.
 ORIGINES_CIR = "https://revelation-sarl.com,https://www.revelation-sarl.com,https://admin.revelation-sarl.com"
