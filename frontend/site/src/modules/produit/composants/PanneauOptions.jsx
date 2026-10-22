@@ -18,7 +18,8 @@ import BoutonSelection from '@/modules/selection/composants/BoutonSelection.jsx'
 
 const FOCALISABLES = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-export default function PanneauOptions({ produit, ouvert, onFermer }) {
+/** `designId` / `onDesign` : couleur choisie, partagée avec le bouton « Sélectionner ce produit » de la fiche. */
+export default function PanneauOptions({ produit, ouvert, onFermer, designId = '', onDesign = () => {} }) {
   const { t } = useTraduction();
   const telephone = useEcranTelephone();
   const naviguer = useNavigate();
@@ -27,7 +28,6 @@ export default function PanneauOptions({ produit, ouvert, onFermer }) {
   const idTitre = useId();
   const racine = useRef(null);
   const designs = produit.designs || [];
-  const [designId, setDesignId] = useState('');
   const [surface, setSurface] = useState('');
   const [type, setType] = useState('maison');
   const design = designs.find((d) => String(d.id) === designId) || null;
@@ -48,7 +48,7 @@ export default function PanneauOptions({ produit, ouvert, onFermer }) {
     const surTouche = (e) => {
       if (e.key === 'Escape') { e.stopPropagation(); onFermer(); return; }
       if (e.key !== 'Tab' || !racine.current) return;
-      const liste = [...racine.current.querySelectorAll(FOCALISABLES)].filter((x) => x.offsetParent !== null || x === document.activeElement);
+      const liste = [...racine.current.querySelectorAll(FOCALISABLES)].filter((x) => !x.closest('[hidden]'));
       if (!liste.length) return;
       const premier = liste[0];
       const dernier = liste[liste.length - 1];
@@ -100,7 +100,7 @@ export default function PanneauOptions({ produit, ouvert, onFermer }) {
           {designs.length > 0 && (
             <label className="m-etiquette">
               {t('produit.panneau.couleur')}
-              <select name="design" value={designId} onChange={(e) => setDesignId(e.target.value)}>
+              <select name="design" value={designId} onChange={(e) => onDesign(e.target.value)}>
                 <option value="">{t('produit.panneau.choisir')}</option>
                 {designs.map((d) => <option key={d.id} value={d.id}>{d.nom}</option>)}
               </select>

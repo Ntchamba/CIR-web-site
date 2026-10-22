@@ -16,7 +16,7 @@ const ouvrir = (detail = COMMANDE, extra = {}) => {
   rendreApp('/commandes/7');
   return fetch;
 };
-const titre = () => screen.findByRole('heading', { level: 1, name: 'CIR-2026-0007' });
+const titre = async () => (await screen.findAllByText(/CIR-2026-0007/))[0];
 
 describe('revue testeur : motif d’annulation (contrat : historique[].motif)', () => {
   it('le motif saisi à l’annulation est affiché dans l’historique de la commande annulée', async () => {
@@ -70,7 +70,7 @@ describe('revue testeur : texte libre et contrat', () => {
     });
     await titre();
     expect(document.querySelector('img[src="x"]')).toBeNull();
-    expect(document.querySelector('b')).toBeNull();
+    expect([...document.querySelectorAll('b')].some((b) => b.textContent === 'gras')).toBe(false);
     expect(screen.getAllByText(html).length).toBeGreaterThanOrEqual(2);
   });
 

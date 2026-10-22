@@ -114,7 +114,7 @@
   position: relative; height: 440px; display: grid; place-items: center; text-align: center; color: var(--blanc);
   overflow: hidden; margin-top: calc(var(--hauteur-entete) * -1);
 }
-.m-bandeau::after { content: ''; position: absolute; inset: 0; background: rgba(14, 42, 56, 0.32); }
+.m-bandeau::after { content: ''; position: absolute; inset: 0; background: rgba(14, 42, 56, 0.1); }
 .m-bandeau > div { position: relative; z-index: 1; padding-top: 60px; }
 .m-bandeau h1 { font-size: 72px; font-style: italic; text-shadow: 0 2px 24px rgba(8, 24, 32, 0.5); }
 .m-bandeau p { margin: 12px auto 0; max-width: 620px; font-family: var(--police-titre); font-size: 22px; text-shadow: 0 1px 14px rgba(8, 24, 32, 0.6); }

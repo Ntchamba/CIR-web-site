@@ -47,7 +47,7 @@ describe('ProduitPage', () => {
     expect(screen.getByText('Sols autolissants · Produit du moment')).toBeInTheDocument();
     expect(screen.getByText('Réf. YD-500 · Un sol lisse et continu.')).toBeInTheDocument();
     expect(screen.getByText('Prix sur devis')).toBeInTheDocument(); // jamais de prix inventé
-    expect(screen.getByText('Premier paragraphe.')).toBeInTheDocument();
+    expect(container.querySelector('.desc')).toHaveTextContent('Premier paragraphe.'); // première ligne de la description
     // Le produit au premier plan : grande image carrée nommée pour le zoom depuis la vignette
     const grande = screen.getByRole('img', { name: 'Vue A' });
     expect(grande).toHaveClass('grand');
@@ -57,7 +57,7 @@ describe('ProduitPage', () => {
     expect(fond).toHaveAttribute('aria-hidden', 'true');
     expect(fond.querySelector('img')).toHaveAttribute('src', 'https://api.test/media/a.webp');
     expect(screen.getByRole('button', { name: /Commander ou personnaliser/ })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Sélectionner ce produit/ })).toHaveAttribute('href', expect.stringContaining('/connexion'));
+    expect(await screen.findByRole('link', { name: /Sélectionner ce produit/ })).toHaveAttribute('href', expect.stringContaining('/connexion'));
   });
 
   it('produit sans « à la une » : pas de « produit du moment » ; sans image : carré neutre avec la référence', async () => {
@@ -119,7 +119,7 @@ describe('ProduitPage', () => {
     const panneau = screen.getByRole('dialog');
     const whatsapp = () => within(panneau).getByRole('link', { name: 'Nous contacter sur WhatsApp' });
     expect(decodeURIComponent(whatsapp().getAttribute('href'))).toContain('produit YD-500 Sol autolissant.');
-    await u.selectOptions(within(panneau).getByLabelText('Couleur'), 'Gris perle');
+    await u.selectOptions(within(panneau).getByLabelText('Couleur'), '10');
     expect(decodeURIComponent(whatsapp().getAttribute('href'))).toContain('design « Gris perle »');
     expect(whatsapp().getAttribute('href')).toMatch(/^https:\/\/wa\.me\/237622191931\?text=/);
     expect(whatsapp()).toHaveAttribute('rel', 'noopener noreferrer');
@@ -132,7 +132,7 @@ describe('ProduitPage', () => {
     const u = userEvent.setup();
     await u.click(await screen.findByRole('button', { name: /Commander ou personnaliser/ }));
     const panneau = screen.getByRole('dialog');
-    await u.selectOptions(within(panneau).getByLabelText('Couleur'), 'Gris perle');
+    await u.selectOptions(within(panneau).getByLabelText('Couleur'), '10');
     await u.type(within(panneau).getByLabelText('Surface (m²)'), '45');
     await u.click(within(panneau).getByRole('button', { name: 'Industrie' }));
     expect(within(panneau).getByRole('button', { name: 'Industrie' })).toHaveAttribute('aria-pressed', 'true');

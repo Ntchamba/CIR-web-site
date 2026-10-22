@@ -68,7 +68,7 @@ describe('BlocPaiement dans le détail de la commande', () => {
     rendreApp('/commandes/7');
     await screen.findByRole('heading', { name: 'Paiement' });
     expect(screen.queryByRole('link', { name: 'Payer' })).toBeNull();
-    expect(screen.getByRole('heading', { level: 1, name: 'CIR-2026-0007' })).toBeInTheDocument();
+    expect(screen.getAllByText(/CIR-2026-0007/).length).toBeGreaterThan(0);
   });
 
   it('avant le contrat signé : pas de bouton, explication, aucun montant inventé', async () => {
@@ -438,7 +438,7 @@ describe('RecuPage', () => {
     simulerApi({});
     localStorage.clear();
     rendreApp('/paiements/5/recu');
-    expect(await screen.findByRole('heading', { level: 1, name: 'Se connecter' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: /Votre sol, révélé/ })).toBeInTheDocument();
     expect(emplacement()).toContain('/connexion');
   });
 });

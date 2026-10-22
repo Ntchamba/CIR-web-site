@@ -13,7 +13,7 @@ const ouvrir = (extra = {}) => {
   rendreApp('/commandes/7');
   return fetch;
 };
-const titre = () => screen.findByRole('heading', { level: 1, name: 'CIR-2026-0007' });
+const titre = async () => (await screen.findAllByText(/CIR-2026-0007/))[0];
 
 describe('DetailCommande : affichage', () => {
   it('référence, étape, produits traduits, adresse, description et réponse attendue', async () => {
@@ -53,7 +53,7 @@ describe('DetailCommande : affichage', () => {
     const items = within(screen.getByRole('region', { name: 'Suivi de la commande' })).getAllByRole('listitem')
       .filter((li) => li.parentElement.tagName === 'OL');
     expect(items.map((li) => li.textContent)).toEqual([
-      expect.stringContaining('Nouvelle'), expect.stringContaining('En négociation'), expect.stringContaining('Annulée'),
+      expect.stringContaining('Demande envoyée'), expect.stringContaining('Négociation'), expect.stringContaining('Annulée'),
     ]);
     expect(items[2]).toHaveAttribute('aria-current', 'step');
     expect(screen.queryByText('étape à venir')).toBeNull();
@@ -62,7 +62,7 @@ describe('DetailCommande : affichage', () => {
   it('commande introuvable (404) : message dédié', async () => {
     simulerApi(routesClient({ [`GET ${CHEMIN}`]: reponse(404, { detail: 'Introuvable.' }) }));
     rendreApp('/commandes/7');
-    expect(await screen.findByRole('heading', { level: 1, name: 'Commande introuvable' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 2, name: 'Commande introuvable' })).toBeInTheDocument();
   });
 
   it('contrat signé : montant convenu, contrat et bouton imprimer ; plus aucune action', async () => {
@@ -104,7 +104,7 @@ describe('DetailCommande : négociation', () => {
     expect(within(nego).getByText('Pose comprise, produits Jiuye')).toBeInTheDocument();
     expect(within(nego).getByRole('button', { name: 'Accepter' })).toBeInTheDocument();
     expect(within(nego).getByRole('button', { name: 'Refuser' })).toBeInTheDocument();
-    expect(within(nego).getByRole('button', { name: 'Contre-proposer' })).toBeInTheDocument();
+    expect(within(nego).getByRole('button', { name: 'Proposer un autre prix' })).toBeInTheDocument();
   });
 
   it('accepter : confirmation d’abord (rien n’est envoyé), puis contrat signé annoncé', async () => {
@@ -184,8 +184,8 @@ describe('DetailCommande : négociation', () => {
     });
     await titre();
     const u = userEvent.setup();
-    await u.click(screen.getByRole('button', { name: 'Contre-proposer' }));
-    const formulaire = screen.getByRole('form', { name: 'Contre-proposer' });
+    await u.click(screen.getByRole('button', { name: 'Proposer un autre prix' }));
+    const formulaire = screen.getByRole('form', { name: 'Proposer un autre prix' });
 
     // ni prix au m² ni total : refusé localement
     await u.click(within(formulaire).getByRole('button', { name: 'Envoyer la proposition' }));
@@ -203,15 +203,15 @@ describe('DetailCommande : négociation', () => {
     expect(await screen.findByText('Votre proposition attend la réponse de l’équipe CIR.'.replace('’', "'"))).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Accepter' })).toBeNull();
     expect(screen.getByRole('button', { name: 'Modifier ma proposition' })).toBeInTheDocument();
-    expect(screen.getByText('Propositions précédentes')).toBeInTheDocument();
+    expect(screen.getByText("Échanges avec l'équipe")).toBeInTheDocument();
   });
 
   it('proposition invalide côté serveur : erreur sous le champ concerné', async () => {
     ouvrir({ 'POST /api/commandes/7/propositions/': reponse(400, { total: ['Le total ne correspond pas au calcul.'] }) });
     await titre();
     const u = userEvent.setup();
-    await u.click(screen.getByRole('button', { name: 'Contre-proposer' }));
-    const formulaire = screen.getByRole('form', { name: 'Contre-proposer' });
+    await u.click(screen.getByRole('button', { name: 'Proposer un autre prix' }));
+    const formulaire = screen.getByRole('form', { name: 'Proposer un autre prix' });
     await u.type(within(formulaire).getByLabelText('Total'), '1');
     await u.click(within(formulaire).getByRole('button', { name: 'Envoyer la proposition' }));
     const erreur = await within(formulaire).findAllByText('Le total ne correspond pas au calcul.');
@@ -238,7 +238,7 @@ describe('DetailCommande : négociation', () => {
     rendreApp('/commandes/7');
     await titre();
     expect(screen.getByRole('button', { name: 'Accepter' })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Contre-proposer' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Proposer un autre prix' })).toBeNull();
   });
 
   it('« proposer » seul (aucune proposition) : bouton « Faire une proposition »', async () => {

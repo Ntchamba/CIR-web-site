@@ -35,7 +35,7 @@ function CarteTemoignage({ temoignage: tm }) {
   return (
     <blockquote lang={attributLang(tm.langue)} className={styles.citationMaquette}>
       <Etoiles note={tm.note} />
-      <p>« {tm.texte} »</p>
+      <p>« <span>{tm.texte}</span> »</p>
       <cite>
         {details.join(' · ')}
         {tm.date && <> · <time dateTime={tm.date}>{date(tm.date)}</time></>}

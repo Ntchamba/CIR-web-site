@@ -38,7 +38,7 @@ export default function BoutonSelection({ produit, design = null, nom = '', lien
   if (!utilisateur) {
     const suite = encodeURIComponent(`${pathname}${search}`);
     if (maquette) {
-      return <Link to={`/connexion?suite=${suite}`} className={classeMaquette} aria-label={libelleAccessible}>{contenu}</Link>;
+      return <Link to={`/connexion?suite=${suite}`} className={classeMaquette} aria-label={undefined}>{contenu}</Link>;
     }
     return (
       <Bouton as={Link} to={`/connexion?suite=${suite}`} variante={variante} taille={taille} aria-label={libelleAccessible}>
@@ -69,7 +69,7 @@ export default function BoutonSelection({ produit, design = null, nom = '', lien
     <div className={`${styles.boutonSelection} ${apparence === 'fiche' ? styles.surFond : ''}`}>
       {maquette ? (
         <button type="button" className={classeMaquette} onClick={ajouter} disabled={etat.envoi} aria-busy={etat.envoi || undefined}
-          aria-label={libelleAccessible}>{contenu}</button>
+          >{contenu}</button>
       ) : (
         <Bouton variante={variante} taille={taille} onClick={ajouter} chargement={etat.envoi} aria-label={libelleAccessible}>
           {contenu}

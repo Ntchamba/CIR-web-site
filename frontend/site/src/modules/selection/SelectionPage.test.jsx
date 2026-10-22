@@ -20,7 +20,7 @@ describe('SelectionPage', () => {
   it('visiteur : renvoyé vers la connexion', async () => {
     simulerApi();
     rendreApp('/selection');
-    await waitFor(() => expect(screen.getByRole('heading', { level: 1, name: 'Se connecter' })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('heading', { level: 1, name: /Votre sol, révélé/ })).toBeInTheDocument());
   });
 
   it('liste : prix absent = « Prix sur devis », design, lien vers la commande', async () => {
@@ -99,7 +99,7 @@ describe('BoutonSelection (fiche produit)', () => {
   it('visiteur : le bouton mène à la connexion avec ?suite= sur la fiche', async () => {
     simulerApi({ 'GET /api/catalogue/produits/p-3/': reponse(200, FICHE) });
     rendreApp('/catalogue/p-3');
-    const lien = await screen.findByRole('link', { name: 'Ajouter Sable coloré à ma sélection' });
+    const lien = await screen.findByRole('link', { name: 'Sélectionner ce produit' });
     expect(lien).toHaveAttribute('href', '/connexion?suite=%2Fcatalogue%2Fp-3');
   });
 
@@ -110,12 +110,17 @@ describe('BoutonSelection (fiche produit)', () => {
     }));
     rendreApp('/catalogue/p-3');
     const u = userEvent.setup();
-    await u.click(await screen.findByRole('radio', { name: /Gris/ }));
-    await u.click(screen.getByRole('button', { name: 'Ajouter Sable coloré à ma sélection' }));
+    // La couleur se choisit dans le panneau « Commander ou personnaliser » ; « Sélectionner ce produit » la reprend.
+    await u.click(await screen.findByRole('button', { name: /Commander ou personnaliser/ }));
+    await u.selectOptions(screen.getByLabelText('Couleur'), '2');
+    await u.keyboard('{Escape}');
+    await u.click(screen.getByRole('button', { name: 'Sélectionner ce produit' }));
     expect(await screen.findByText('Ajouté à votre sélection.')).toBeInTheDocument();
     expect(appels(fetch, 'POST', '/api/selection/')[0][0]).toEqual({ produit: 3, design: 2 });
-    expect(screen.getByRole('link', { name: 'Commander' }))
-      .toHaveAttribute('href', '/commandes/nouvelle?produit=p-3&design=2');
+    // « Lancer la commande » (panneau) ouvre la commande avec la couleur choisie
+    await u.click(screen.getByRole('button', { name: /Commander ou personnaliser/ }));
+    await u.click(screen.getByRole('button', { name: 'Lancer la commande' }));
+    await waitFor(() => expect(emplacement()).toContain('/commandes/nouvelle?produit=p-3&design=2'));
   });
 
   it('refus du serveur (400, 50 éléments) : message affiché', async () => {
@@ -124,7 +129,7 @@ describe('BoutonSelection (fiche produit)', () => {
       'POST /api/selection/': reponse(400, { detail: 'Sélection pleine (50 éléments).' }),
     }));
     rendreApp('/catalogue/p-3');
-    await userEvent.click(await screen.findByRole('button', { name: 'Ajouter Sable coloré à ma sélection' }));
+    await userEvent.click(await screen.findByRole('button', { name: 'Sélectionner ce produit' }));
     expect(await screen.findByText('Sélection pleine (50 éléments).')).toBeInTheDocument();
   });
 
@@ -135,19 +140,21 @@ describe('BoutonSelection (fiche produit)', () => {
     rendreApp('/catalogue/p-3');
     await screen.findByRole('heading', { level: 1, name: 'Sable coloré' });
     await waitFor(() => expect(screen.queryByRole('link', { name: 'Se connecter' })).toBeNull());
-    expect(screen.queryByRole('button', { name: /ma sélection/ })).toBeNull();
-    expect(screen.queryByRole('link', { name: 'Commander' })).toBeNull();
+    expect(screen.queryByRole('button', { name: /Sélectionner ce produit/ })).toBeNull();
+    await userEvent.click(screen.getByRole('button', { name: /Commander ou personnaliser/ }));
+    expect(screen.queryByRole('button', { name: 'Lancer la commande' })).toBeNull();
   });
 });
 
-describe('BoutonSelection (carte du catalogue)', () => {
-  it('produit déjà sélectionné : lien « Dans ma sélection »', async () => {
+describe('Carte du catalogue (maquette)', () => {
+  it('pas de bouton « ajouter à ma sélection » sur la carte : la sélection se fait depuis la fiche produit', async () => {
     simulerApi(routesClient({
       'GET /api/catalogue/produits/': reponse(200, { count: 1, next: null, previous: null, results: [produit(3, 'Sable coloré', { usages: [], accroche: '' })] }),
       'GET /api/catalogue/familles/': reponse(200, []),
     }, { produits: [3] }));
     rendreApp('/catalogue');
-    expect(await screen.findByRole('link', { name: 'Dans ma sélection' })).toHaveAttribute('href', '/selection');
+    expect(await screen.findByRole('link', { name: /Sable coloré/ })).toHaveAttribute('href', '/catalogue/p-3');
+    expect(screen.queryByRole('button', { name: /sélection/ })).toBeNull();
     expect(emplacement()).toBe('/catalogue');
   });
 });

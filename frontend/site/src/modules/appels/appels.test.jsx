@@ -120,7 +120,7 @@ describe('BoutonAppel', () => {
     });
     simulerJitsi();
     rendreApp('/commandes/12');
-    await screen.findByRole('heading', { level: 1, name: 'CIR-2026-0012' });
+    await screen.findByRole('heading', { level: 2, name: 'CIR-2026-0012' });
     const lien = screen.getByRole('link', { name: /Écrire un message/ });
     expect(lien).toHaveAttribute('href', '/messages?commande=12');
     await lancerAppel();

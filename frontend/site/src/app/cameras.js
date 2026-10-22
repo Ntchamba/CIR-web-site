@@ -14,10 +14,10 @@ export const PLAN_LARGE = { x: 50, y: 50, zoom: 1 };
 // exactement le même cadrage (décalage de 4 à 5 % au moins).
 export const CAMERAS = [
   { motif: '/', nom: 'accueil', bureau: { x: 74, y: 33, zoom: 1 }, tel: { x: 58, y: 31, zoom: 1 } }, // large, puis zoom (défilement) sur les fenêtres
-  { motif: '/catalogue', nom: 'catalogue', bureau: { x: 26, y: 42, zoom: 1.7 }, tel: { x: 27, y: 42, zoom: 1.5 } },
+  { motif: '/catalogue', nom: 'catalogue', bureau: { x: 46, y: 36, zoom: 1.1 }, tel: { x: 40, y: 40, zoom: 1.15 } },
   { motif: '/selection', nom: 'selection', bureau: { x: 31, y: 46, zoom: 1.9 }, tel: { x: 31, y: 47, zoom: 1.5 } },
   { motif: '/catalogue/:slug', nom: 'produit', bureau: { x: 20, y: 33, zoom: 3 }, tel: { x: 14, y: 52, zoom: 1.8 } },
-  { motif: '/realisations', nom: 'realisations', bureau: { x: 70, y: 55, zoom: 1.7 }, tel: { x: 46, y: 55, zoom: 1.6 } },
+  { motif: '/realisations', nom: 'realisations', bureau: { x: 58, y: 40, zoom: 1.25 }, tel: { x: 55, y: 45, zoom: 1.25 } },
   { motif: '/actualites', nom: 'actualites', bureau: { x: 69, y: 9, zoom: 2.4 }, tel: { x: 80, y: 9, zoom: 1.7 } },
   { motif: '/actualites/:slug', nom: 'actualite', bureau: { x: 64, y: 12, zoom: 2.7 }, tel: { x: 74, y: 12, zoom: 1.8 } },
   { motif: '/commandes', nom: 'commandes', bureau: { x: 52, y: 66, zoom: 1.6 }, tel: { x: 57, y: 82, zoom: 1.6 } },

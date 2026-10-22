@@ -57,7 +57,7 @@ describe('FondDirect', () => {
     simulerApi();
     const direct = simulerDirect();
     rendreApp('/');
-    await screen.findByRole('heading', { level: 1, name: /sols en résine/ });
+    await screen.findByRole('heading', { level: 1, name: /Révélation/ });
     expect(direct.sockets).toHaveLength(0);
     expect(screen.queryByRole('button', { name: /Notifications/ })).not.toBeInTheDocument();
   });
@@ -72,18 +72,20 @@ describe('FondDirect', () => {
     await waitFor(() => expect(direct.socket.fermee).toBe(true));
   });
 
-  it('onglet Messages de la barre mobile avec sa pastille', async () => {
+  it('messagerie : accessible par le menu de l’en-tête avec sa pastille de non lus', async () => {
     installer();
     const direct = simulerDirect();
     rendreApp('/');
     await direct.attendreConnexion();
     direct.connecter({ non_lus: 4 });
+    // Messagerie : absente des cinq onglets de la maquette, elle reste dans le menu de l'en-tête (avec le nombre de non lus)
     const barre = await screen.findByRole('navigation', { name: 'Navigation mobile' });
-    const onglet = within(barre).getByRole('link', { name: /Messages/ });
-    expect(onglet).toHaveAttribute('href', '/messages');
-    expect(await within(barre).findByText('Messages, 4 non lus')).toBeInTheDocument();
     expect(within(barre).getAllByRole('link').map((l) => l.getAttribute('href')))
-      .toEqual(['/', '/catalogue', '/realisations', '/commandes', '/messages', '/compte']);
+      .toEqual(['/', '/catalogue', '/realisations', '/commandes', '/compte']);
+    const menu = await screen.findByRole('button', { name: 'Menu, Messages, 4 non lus' });
+    await userEvent.click(menu);
+    const lien = within(document.getElementById(menu.getAttribute('aria-controls'))).getByRole('link', { name: 'Messages, 4 non lus' });
+    expect(lien).toHaveAttribute('href', '/messages');
   });
 
   describe('connexion coupée', () => {

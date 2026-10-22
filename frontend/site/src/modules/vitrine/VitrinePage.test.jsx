@@ -72,7 +72,7 @@ describe('VitrinePage : réalisations', () => {
     rendre();
     await screen.findByRole('heading', { level: 3, name: 'Garage à Bonapriso' });
     const filtres = screen.getByRole('group', { name: 'Type de chantier' });
-    await userEvent.click(within(filtres).getByRole('button', { name: 'Industrie' }));
+    await userEvent.click(within(filtres).getByRole('button', { name: 'Industries' }));
     await waitFor(() => expect(emplacement()).toBe('/realisations?type=industrie'));
     await waitFor(() => expect(parametresDes(fetch, '/api/vitrine/realisations/').at(-1).get('type')).toBe('industrie'));
   });
@@ -81,7 +81,7 @@ describe('VitrinePage : réalisations', () => {
     api({ realisations: [], demos: [], temoignages: [] });
     rendre();
     expect(await screen.findByRole('heading', { name: 'Aucun chantier publié pour le moment' })).toBeInTheDocument();
-    expect(await screen.findByRole('heading', { name: 'Aucune démonstration pour le moment' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Démonstrations' })).toBeNull(); // pas de section vide : la vidéo de la transformation suffit
     expect(await screen.findByRole('heading', { name: 'Aucun témoignage publié pour le moment' })).toBeInTheDocument();
     expect(screen.queryByRole('blockquote')).toBeNull();
   });
@@ -118,7 +118,7 @@ describe('VitrinePage : témoignages', () => {
     const texte = await screen.findByText('Very clean work, the floor is perfect.');
     expect(texte.closest('blockquote')).toHaveAttribute('lang', 'en');
     expect(screen.getByRole('img', { name: '4 étoiles sur 5' })).toBeInTheDocument();
-    expect(screen.getByText('Client Test')).toBeInTheDocument();
+    expect(screen.getByText(/Client Test · Entreprise · Douala/)).toBeInTheDocument();
   });
 
   it('visiteur : lien vers la connexion avec retour sur la page', async () => {

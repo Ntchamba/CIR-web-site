@@ -35,6 +35,7 @@ function Fiche({ produit, detail, voisins }) {
   const telephone = useEcranTelephone();
   const [index, setIndex] = useState(0);
   const [panneau, setPanneau] = useState(false);
+  const [designId, setDesignId] = useState(''); // couleur choisie dans le panneau, reprise par « Sélectionner ce produit »
   const declencheur = useRef(null);
   const images = detail?.images?.length ? detail.images : (produit.image?.url ? [produit.image] : []);
   const courante = images[Math.min(index, images.length - 1)];
@@ -92,7 +93,7 @@ function Fiche({ produit, detail, voisins }) {
             </div>
           </div>
         </section>
-        <PanneauOptions produit={actualisation} ouvert={panneau} onFermer={fermer} />
+        <PanneauOptions produit={actualisation} ouvert={panneau} onFermer={fermer} designId={designId} onDesign={setDesignId} />
         {detail && aFicheTechnique(detail) && (
           <section id="fiche-technique" className={`m-fiche-suite m-fond-flou ${styles.suite}`}>
             <div className="m-conteneur"><FicheTechnique produit={detail} /><PlanCoupe couches={detail.couches} /></div>
@@ -120,7 +121,7 @@ function Fiche({ produit, detail, voisins }) {
               <button type="button" className="m-btn clair" onClick={ouvrir} aria-haspopup="dialog">
                 {t('produit.commanderOuPersonnaliser')} <span aria-hidden="true">+</span>
               </button>
-              <BoutonSelection produit={produit.id} nom={produit.nom} apparence="fiche" lienSiAjoute={false} />
+              <BoutonSelection produit={produit.id} design={designId ? Number(designId) : null} nom={produit.nom} apparence="fiche" lienSiAjoute={false} />
             </div>
           </div>
           <div className="visuel">
@@ -144,7 +145,7 @@ function Fiche({ produit, detail, voisins }) {
           </div>
         </div>
       </section>
-      <PanneauOptions produit={actualisation} ouvert={panneau} onFermer={fermer} />
+      <PanneauOptions produit={actualisation} ouvert={panneau} onFermer={fermer} designId={designId} onDesign={setDesignId} />
       {detail && aFicheTechnique(detail) && (
         <section id="fiche-technique" className={`m-fiche-suite m-fond-flou ${styles.suite}`}>
           <div className="m-conteneur"><FicheTechnique produit={detail} /><PlanCoupe couches={detail.couches} /></div>

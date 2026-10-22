@@ -99,9 +99,11 @@ export default function Entete() {
           <Link to="/contact" className={`${styles.icone} ${styles.contactTel}`} aria-label={t('nav.contact')}>
             <Icone nom="tel" taille={22} />
           </Link>
-          <button type="button" className={`${styles.icone} ${styles.menu}`} aria-label={t('entete.menu')} aria-expanded={menuOuvert}
-            aria-controls={idMenu} onClick={() => setMenuOuvert((o) => !o)}>
+          <button type="button" className={`${styles.icone} ${styles.menu}`} aria-expanded={menuOuvert} aria-controls={idMenu}
+            aria-label={utilisateur && nonLusMessages > 0 ? `${t('entete.menu')}, ${t('entete.messagesNonLus', { n: nonLusMessages })}` : t('entete.menu')}
+            onClick={() => setMenuOuvert((o) => !o)}>
             <Icone nom="menu" taille={24} epaisseur={2} />
+            {utilisateur && nonLusMessages > 0 && <span className={styles.compteur} aria-hidden="true">{nonLusMessages > 99 ? '99+' : nonLusMessages}</span>}
           </button>
         </div>
       </div>

@@ -53,17 +53,17 @@ describe('ProduitPage (compléments)', () => {
     expect(screen.getByRole('img', { name: 'Sable coloré' })).toHaveAttribute('src', 'https://api.test/media/2.webp');
   });
 
-  it('designs : flèches du clavier, message WhatsApp encodé, coordonnées venant des contenus', async () => {
+  it('couleur : liste des designs du panneau, message WhatsApp encodé, coordonnées venant des contenus', async () => {
     simulerApi({
       'GET /api/catalogue/produits/yd-306/': reponse(200, BASE),
       'GET /api/contenus/accueil/': reponse(200, { coordonnees: { telephones: ['+237 611 111 111'], whatsapp: '+237 622 222 222', email: '', adresse: '' } }),
     });
     rendre();
     const u = userEvent.setup();
-    const gris = await screen.findByRole('radio', { name: 'Gris' });
-    await u.click(gris);
-    await u.keyboard('{ArrowRight}');
-    expect(screen.getByRole('radio', { name: 'Rouge & or' })).toBeChecked();
+    await u.click(await screen.findByRole('button', { name: /Commander ou personnaliser/ }));
+    const couleur = screen.getByLabelText('Couleur');
+    expect(within(couleur).getAllByRole('option').map((o) => o.textContent)).toEqual(['Choisir', 'Gris', 'Rouge & or']);
+    await u.selectOptions(couleur, '2');
     const whatsapp = screen.getByRole('link', { name: /WhatsApp/ });
     await waitFor(() => expect(whatsapp.getAttribute('href')).toMatch(/^https:\/\/wa\.me\/237622222222\?text=/));
     const texte = decodeURIComponent(whatsapp.getAttribute('href').split('?text=')[1]);
@@ -71,6 +71,18 @@ describe('ProduitPage (compléments)', () => {
     expect(texte).toContain('Rouge & or');
     expect(whatsapp).toHaveAttribute('rel', 'noopener noreferrer');
     expect(screen.getByRole('link', { name: /Appeler/ })).toHaveAttribute('href', 'tel:+237611111111');
+  });
+
+  it('focus : l\'ouverture place le focus dans le panneau, Tab y reste (Maj+Tab depuis le premier va au dernier)', async () => {
+    simulerApi({ 'GET /api/catalogue/produits/yd-306/': reponse(200, BASE) });
+    rendre();
+    const u = userEvent.setup();
+    await u.click(await screen.findByRole('button', { name: /Commander ou personnaliser/ }));
+    const panneau = screen.getByRole('dialog');
+    expect(panneau).toContainElement(document.activeElement);
+    await u.keyboard('{Shift>}{Tab}{/Shift}');
+    expect(panneau).toContainElement(document.activeElement);
+    expect(document.activeElement).not.toBe(screen.getByRole('button', { name: 'Fermer' }));
   });
 
   it('client connecté : fiche demandée sans jeton', async () => {
