@@ -17,7 +17,7 @@ export default function CarteProduit({ produit, niveauTitre = 3 }) {
       <div className="img">
         {produit.image?.url
           ? <ImageMedia image={produit.image} alt="" largeur={640} hauteur={640} style={nom} />
-          : <span className="ref-neutre" aria-hidden="true">{produit.reference || produit.nom?.slice(0, 2)}</span>}
+          : <span className="ref-neutre" aria-hidden="true">{produit.nom || produit.reference}</span>}
       </div>
       <Titre>{produit.nom}</Titre>
       <p>{prix(produit.prix, produit.unite_prix)}</p>

@@ -343,6 +343,10 @@
   .m-compte-formes { display: block; padding: 12px 20px 40px; background: var(--fond); }
   .m-compte-boite { width: 100%; }
   .m-langue-compte { top: 14px; right: 12px; }
+  .m-marque-claire { gap: 8px; }
+  .m-marque-claire img { width: 40px; height: 40px; }
+  .m-marque-claire small { display: none; } /* le sous-titre chevauchait le sélecteur de langue */
+  .m-langue-compte button, .m-langue-compte select { padding-left: 10px; padding-right: 10px; }
   .m-retour-lien { display: none; }
   .m-retour-accueil-tel { display: inline-flex; align-items: center; min-height: 44px; margin-bottom: 8px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; }
   .m-deux { grid-template-columns: 1fr; }
@@ -385,3 +389,4 @@
   [data-vue='produit'] [data-vt='entete'], [data-vue='produit'] [data-vt='onglets'], [data-vue='produit'] [data-pied] { display: none; }
   body:has([data-vue='produit']) { padding-bottom: 0; }
 }
+@media (max-width: 360px) { .m-bascule { gap: 14px; } .m-bascule a { font-size: 16px; white-space: nowrap; } }

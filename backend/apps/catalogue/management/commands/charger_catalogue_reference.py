@@ -12,6 +12,8 @@ Fusion avec le catalogue de la maquette du propriétaire (décision du propriét
   autolissant ») ; un nom déjà modifié par l'équipe n'est jamais touché ;
 - sept produits de la maquette sont ajoutés SANS référence (détection par nom nettoyé, sans tenir compte de la casse ni des espaces), en
   ligne, sans prix ni image ni texte ;
+- l'ordre d'affichage (`ordre` de 1 à 16) place d'abord les 10 produits de la maquette ; sur une base déjà chargée,
+  l'ordre d'un produit n'est changé que s'il a encore sa valeur d'origine ;
 - seul texte repris de la maquette : accroche et description de YD-500, posées seulement si ces champs sont vides.
 
 ATTENTION : la famille et les usages (maison, industrie, entreprise, extérieur) de ces sept produits sont des valeurs
@@ -180,6 +182,10 @@ PRODUITS_MAQUETTE = [
     ("Sol à motifs", 7, "ME", False, {"en": "Patterned floor", "zh": "图案地坪",
                                       "de": "Gemusterter Boden", "ja": "模様入り床"}),
 ]
+# Ordre d'affichage (champ `ordre`, de 1 à 16) : d'abord les produits de la maquette, puis les autres produits du cahier.
+# Clé : référence (produits du cahier) ou nom (produits de la maquette sans référence).
+ORDRE_AFFICHAGE = ["YD-500", "YD-306", "YD-518", *(nom for nom, *_ in PRODUITS_MAQUETTE),
+                   "YD-103", "YD-104", "YD-205", "YD-106W", "YD-206W", "YD-306W"]
 USAGES = {"M": "pour_maison", "I": "pour_industrie", "E": "pour_entreprise", "X": "pour_exterieur"}
 
 
@@ -245,6 +251,8 @@ class Command(BaseCommand):
 
         produits_crees = renommes = textes = 0
         for ordre, (reference, index, nom, accroche, traductions, habitat) in enumerate(PRODUITS):
+            ordre_defaut = ordre  # valeur d'origine (avant la mise en ordre de la maquette)
+            ordre = ORDRE_AFFICHAGE.index(reference) + 1
             produit = Produit.objects.filter(reference__iexact=reference).first()
             if produit is None:
                 produit = Produit.objects.create(
@@ -255,6 +263,9 @@ class Command(BaseCommand):
                 produits_crees += 1
             else:
                 champs = []
+                if produit.ordre == ordre_defaut and ordre_defaut != ordre:  # jamais un ordre changé par l'équipe
+                    produit.ordre = ordre
+                    champs.append("ordre")
                 if _mettre_a_jour_noms(produit):
                     renommes += 1
                     champs += ["nom", "traductions"]
@@ -266,11 +277,20 @@ class Command(BaseCommand):
 
         maquette_crees = 0
         for position, (nom, index, usages, une, noms) in enumerate(PRODUITS_MAQUETTE):
-            if any(_normaliser(existant) == _normaliser(nom) for existant in Produit.objects.values_list("nom", flat=True)):
+            existants = list(Produit.objects.filter(reference="").values_list("pk", "nom", "ordre"))
+            ordre = ORDRE_AFFICHAGE.index(nom) + 1
+            trouve = [(pk, o) for pk, n, o in existants if _normaliser(n) == _normaliser(nom)]
+            if not trouve and any(_normaliser(n) == _normaliser(nom)
+                                  for n in Produit.objects.values_list("nom", flat=True)):
+                continue
+            if trouve:  # déjà chargé : ordre d'origine remplacé seulement s'il est intact
+                pk, courant = trouve[0]
+                if courant == len(PRODUITS) + position and courant != ordre:
+                    Produit.objects.filter(pk=pk).update(ordre=ordre)
                 continue
             Produit.objects.create(
                 famille=familles[index], reference="", nom=nom, traductions={c: {"nom": n} for c, n in noms.items()},
-                a_la_une=une, en_ligne=True, prix=None, ordre=len(PRODUITS) + position,
+                a_la_une=une, en_ligne=True, prix=None, ordre=ordre,
                 **{champ: lettre in usages for lettre, champ in USAGES.items()},
             )
             maquette_crees += 1

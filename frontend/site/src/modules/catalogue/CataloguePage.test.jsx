@@ -50,8 +50,7 @@ describe('CataloguePage', () => {
     expect(image).toHaveAttribute('src', 'https://api.test/media/p1.webp');
     const seconde = screen.getByRole('link', { name: /Produit 2/ });
     expect(within(seconde).getByText(/12\s500 FCFA \/ m²/)).toBeInTheDocument();
-    expect(seconde.querySelector('img')).toBeNull(); // sans image : carré neutre portant la référence
-    expect(within(seconde).getByText('YD-2')).toBeInTheDocument();
+    expect(seconde.querySelector('.ref-neutre')).toHaveTextContent('Produit 2'); // carré neutre portant le nom
     // Familles : liste (comme la maquette), noms sans nombre de produits
     expect(screen.getByRole('button', { name: 'Sols autolissants' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Toutes les familles' })).toHaveAttribute('aria-pressed', 'true');

@@ -155,3 +155,48 @@ class FusionCatalogueMaquetteTests(TestCase):
         self.charger()
         self.assertEqual(Produit.objects.count(), 16)
         self.assertEqual(Produit.objects.filter(nom__icontains="motifs").count(), 1)
+
+
+class OrdreAffichageCatalogueTests(TestCase):
+    ATTENDU = ["Sol autolissant époxy", "Sable coloré autolissant", "Terrazzo époxy", "Finition époxy lisse",
+               "Finition époxy mate", "Finition antidérapante", "Peinture de sol anti-UV",
+               "Finition haute résistance", "Finition anticorrosion", "Sol à motifs"]
+    CAHIER = ["YD-103", "YD-104", "YD-205", "YD-106W", "YD-206W", "YD-306W"]
+
+    def charger(self):
+        call_command("charger_catalogue_reference", stdout=StringIO())
+
+    def test_ordre_a_la_creation_et_api_publique(self):
+        self.charger()
+        self.assertEqual(sorted(Produit.objects.values_list("ordre", flat=True)), list(range(1, 17)))
+        noms = list(Produit.objects.values_list("nom", flat=True))
+        self.assertEqual(noms[:10], self.ATTENDU)
+        self.assertEqual([p.reference for p in Produit.objects.all()[10:]], self.CAHIER)
+        donnees = self.client.get("/api/catalogue/produits/", {"taille": 10}).data
+        self.assertEqual([p["nom"] for p in donnees["results"]], self.ATTENDU)
+        self.assertEqual(donnees["count"], 16)
+
+    def test_base_deja_chargee_ordre_d_origine_remplace_ordre_d_equipe_conserve(self):
+        self.charger()
+        # ancien ordre par défaut (cahier : index 0 à 8, maquette : 9 à 15)
+        anciens = {"YD-103": 0, "YD-104": 1, "YD-205": 2, "YD-500": 3, "YD-306": 4, "YD-518": 5, "YD-106W": 6,
+                   "YD-206W": 7, "YD-306W": 8}
+        for reference, ordre in anciens.items():
+            Produit.objects.filter(reference=reference).update(ordre=ordre)
+        for position, nom in enumerate(["Finition époxy lisse", "Finition époxy mate", "Finition antidérapante",
+                                        "Peinture de sol anti-UV", "Finition haute résistance",
+                                        "Finition anticorrosion", "Sol à motifs"]):
+            Produit.objects.filter(nom=nom).update(ordre=9 + position)
+        Produit.objects.filter(reference="YD-518").update(ordre=99)  # ordre choisi par l'équipe
+        Produit.objects.filter(nom="Sol à motifs").update(ordre=42)
+        self.charger()
+        noms = list(Produit.objects.values_list("nom", flat=True))
+        self.assertEqual(Produit.objects.get(reference="YD-500").ordre, 1)
+        self.assertEqual(Produit.objects.get(reference="YD-518").ordre, 99)
+        self.assertEqual(Produit.objects.get(nom="Sol à motifs").ordre, 42)
+        self.assertEqual(Produit.objects.get(reference="YD-103").ordre, 11)
+        self.assertEqual(Produit.objects.get(nom="Finition anticorrosion").ordre, 9)
+        self.charger()  # idempotent
+        self.assertEqual(Produit.objects.get(reference="YD-518").ordre, 99)
+        self.assertEqual(Produit.objects.count(), 16)
+        self.assertTrue(noms)
