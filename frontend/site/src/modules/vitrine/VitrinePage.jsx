@@ -1,6 +1,7 @@
 // BF-02, BF-03, BF-04 : réalisations, d'après les maquettes. Bandeau (fenêtre sur la scène du salon), avant / après,
 // « La transformation en vidéo », onglets de type de chantier et grille des chantiers réels, témoignages (et formulaire
 // de témoignage du client connecté, absent des maquettes).
+import FondBandeau from '@/composants/FondBandeau.jsx';
 import usePageMeta from '@partage/utils/usePageMeta.js';
 
 import { useEcranTelephone } from '@/app/preferences.js';
@@ -25,6 +26,7 @@ export default function VitrinePage() {
   return (
     <>
       <section className="m-bandeau">
+        <FondBandeau />
         <div>
           <h1>{t('vitrine.titre')}</h1>
           <p>{t('vitrine.intro')}</p>

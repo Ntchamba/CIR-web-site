@@ -1,6 +1,7 @@
 // BF-10, BF-13 : mes commandes, d'après la maquette. Bandeau (fenêtre sur la scène du salon), à gauche la liste des commandes
 // (vignette, état, signalement des réponses attendues, « Nouvelle commande → »), à droite le détail de la commande choisie
 // (par défaut la première). /commandes/:id ouvre directement le détail d'une commande. Filtre par étape : ?etat=.
+import FondBandeau from '@/composants/FondBandeau.jsx';
 import { Link, useParams, useSearchParams } from 'react-router';
 
 import Chargement from '@partage/ui/Chargement.jsx';
@@ -39,6 +40,7 @@ export default function CommandesPage() {
   return (
     <>
       <section className="m-bandeau">
+        <FondBandeau />
         <div>
           <h1>{t('commandes.titre')}</h1>
           <p>{t('commandes.intro')}</p>

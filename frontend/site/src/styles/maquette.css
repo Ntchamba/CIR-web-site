@@ -114,7 +114,8 @@
   position: relative; height: 440px; display: grid; place-items: center; text-align: center; color: var(--blanc);
   overflow: hidden; margin-top: calc(var(--hauteur-entete) * -1);
 }
-.m-bandeau::after { content: ''; position: absolute; inset: 0; background: rgba(14, 42, 56, 0.1); }
+.m-bandeau::after { content: ''; position: absolute; inset: 0; background: rgba(14, 42, 56, 0.32); }
+.m-bandeau-fond { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .m-bandeau > div { position: relative; z-index: 1; padding-top: 60px; }
 .m-bandeau h1 { font-size: 72px; font-style: italic; text-shadow: 0 2px 24px rgba(8, 24, 32, 0.5); }
 .m-bandeau p { margin: 12px auto 0; max-width: 620px; font-family: var(--police-titre); font-size: 22px; text-shadow: 0 1px 14px rgba(8, 24, 32, 0.6); }
@@ -311,7 +312,7 @@
   .m-formulaire input:not([type='radio']):not([type='checkbox']), .m-formulaire select, .m-formulaire textarea,
   .m-champs input:not([type='radio']):not([type='checkbox']), .m-champs select, .m-champs textarea { border-color: var(--champ); background: var(--blanc); }
   .m-bandeau { display: block; height: auto; margin-top: 0; }
-  .m-bandeau::after { display: none; }
+  .m-bandeau::after, .m-bandeau-fond { display: none; }
   .m-bandeau { background: var(--fond); }
   .m-bandeau > div { padding: 24px 20px 20px; text-align: center; }
   .m-fond-flou { background: var(--fond); }

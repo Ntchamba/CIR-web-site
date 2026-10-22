@@ -170,3 +170,13 @@
 /* Accueil, à plat : voile sombre à gauche (lecture du titre), comme sur la vidéo. */
 [data-cam='accueil'] .scene-voile { background: linear-gradient(90deg, rgba(8, 24, 32, 0.55) 0%, rgba(8, 24, 32, 0.18) 50%, rgba(8, 24, 32, 0) 75%), linear-gradient(180deg, rgba(8, 24, 32, 0.35) 0%, rgba(8, 24, 32, 0) 22%); opacity: 1; }
 
+
+/* Bandeau photo des pages intérieures : très léger zoom lié au défilement (transform seulement). */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not([data-plat]) .m-bandeau-fond {
+      animation: bandeau-zoom linear both; animation-timeline: scroll(root); animation-range: 0 60vh;
+    }
+  }
+}
+@keyframes bandeau-zoom { from { transform: scale(1); } to { transform: scale(1.06); } }

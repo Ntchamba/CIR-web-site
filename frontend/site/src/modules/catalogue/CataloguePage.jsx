@@ -1,5 +1,6 @@
 // BF-01 : catalogue de la maquette. Grand bandeau (fenêtre sur la scène du salon : titre italique blanc centré), puis
 // colonne de filtres à gauche et grille de grandes images carrées à droite, pagination numérotée.
+import FondBandeau from '@/composants/FondBandeau.jsx';
 import Bouton from '@partage/ui/Bouton.jsx';
 import Chargement from '@partage/ui/Chargement.jsx';
 import EtatVide from '@partage/ui/EtatVide.jsx';
@@ -25,6 +26,7 @@ export default function CataloguePage() {
   return (
     <>
       <section className="m-bandeau">
+        <FondBandeau />
         <div>
           <h1>{t('catalogue.titre')}</h1>
           {!telephone && <p>{t('catalogue.intro')}</p>}
