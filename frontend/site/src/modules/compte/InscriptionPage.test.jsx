@@ -19,13 +19,16 @@ async function remplir(valeurs) {
     email: /E-mail/,
     telephone: /Téléphone/,
     mot_de_passe: /Mot de passe/,
+    confirmation: /Confirmer le mot de passe/,
     ville: /Ville/,
     quartier: /Quartier/,
     rue_ou_repere: /Rue ou repère/,
   };
   for (const [champ, valeur] of Object.entries(valeurs)) {
-    if (valeur) await u.type(screen.getByLabelText(libelles[champ]), valeur);
+    if (valeur && libelles[champ]) await u.type(screen.getByLabelText(libelles[champ]), valeur);
   }
+  // Consentement de la maquette (« J'accepte que mes données servent au traitement de mes commandes. »)
+  if (valeurs.consentement !== false) await u.click(screen.getByRole('checkbox'));
   await u.click(screen.getByRole('button', { name: 'Créer mon compte' }));
 }
 
@@ -34,6 +37,7 @@ const COMPLET = {
   email: 'awa@exemple.cm',
   telephone: '+237 699 00 00 00',
   mot_de_passe: 'motdepasse1',
+  confirmation: 'motdepasse1',
   ville: 'Douala',
   quartier: 'Bonapriso',
   rue_ou_repere: 'Près de la pharmacie',
@@ -43,8 +47,11 @@ describe('InscriptionPage', () => {
   it('affiche les champs, l’adresse étant obligatoire', async () => {
     simulerApi();
     rendre();
-    expect(await screen.findByRole('heading', { level: 1, name: 'Créer un compte' })).toBeInTheDocument();
-    expect(screen.getByRole('group', { name: 'Votre adresse' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: /Votre sol, révélé/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Créer un compte' })).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('group', { name: 'Adresse, nécessaire pour commander' })).toBeInTheDocument();
+    expect(screen.getByLabelText(/Confirmer le mot de passe/)).toHaveAttribute('autocomplete', 'new-password');
+    expect(screen.getByRole('checkbox', { name: /J'accepte que mes données servent au traitement de mes commandes/ })).not.toBeChecked();
     ['Ville', 'Quartier', 'Rue ou repère'].forEach((l) => expect(screen.getByLabelText(new RegExp(l))).toBeRequired());
     expect(screen.getByLabelText(/Téléphone/)).not.toBeRequired();
     expect(screen.getByLabelText(/Mot de passe/)).toHaveAttribute('autocomplete', 'new-password');
@@ -59,6 +66,15 @@ describe('InscriptionPage', () => {
     expect(screen.getByText('Indiquez votre quartier.')).toBeInTheDocument();
     expect(screen.getByText('Indiquez une rue ou un repère connu.')).toBeInTheDocument();
     expect(screen.getByLabelText(/Ville/)).toHaveAttribute('aria-invalid', 'true');
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('refuse un mot de passe de confirmation différent ou l\'absence de consentement : aucun appel au serveur', async () => {
+    const fetch = simulerApi();
+    rendre();
+    await remplir({ ...COMPLET, confirmation: 'autre-chose', consentement: false });
+    expect(screen.getByText('Les deux mots de passe ne sont pas identiques.')).toBeInTheDocument();
+    expect(screen.getByText('Cochez la case pour créer votre compte.')).toBeInTheDocument();
     expect(fetch).not.toHaveBeenCalled();
   });
 

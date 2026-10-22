@@ -174,7 +174,7 @@ describe('CataloguePage', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('Le serveur rencontre un problème');
     echec = false;
     await userEvent.click(screen.getByRole('button', { name: 'Réessayer' }));
-    expect(await screen.findByRole('link', { name: 'Produit 1' })).toBeInTheDocument();
+    expect(await screen.findByRole('link', { name: /Produit 1/ })).toBeInTheDocument();
   });
 
   it('requêtes publiques : sans jeton, avec la langue de l’interface', async () => {

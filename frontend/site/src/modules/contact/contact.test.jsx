@@ -4,14 +4,14 @@ import userEvent from '@testing-library/user-event';
 
 import { appels, page, reponse, rendreApp, routesClient, simulerApi } from '@/test/outils.jsx';
 
-const envoyer = (u) => u.click(screen.getByRole('button', { name: 'Envoyer' }));
+const envoyer = (u) => u.click(screen.getByRole('button', { name: 'Envoyer le message' }));
 
 describe('SectionContact', () => {
   it('visiteur : en bas de l’accueil, nom et coordonnées exigés avant tout envoi', async () => {
     const fetch = simulerApi();
     rendreApp('/');
     const u = userEvent.setup();
-    expect(await screen.findByRole('heading', { name: 'Une question ? Un rappel ?' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Parlons de votre sol' })).toBeInTheDocument();
     await u.type(screen.getByLabelText(/Votre message/), 'Bonjour, un devis svp');
     await envoyer(u);
     expect(await screen.findByText('Indiquez votre nom.')).toBeInTheDocument();
@@ -31,7 +31,8 @@ describe('SectionContact', () => {
     expect(screen.getByText(/Référence : CTC-2026-0001/)).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Suivre mes demandes' })).toBeNull(); // pas de suivi sans compte
     const [[corps]] = appels(fetch, 'POST', '/api/contact/demandes/');
-    expect(corps).toEqual({ type: 'question', message: 'Bonjour, un devis svp', site_web: '', nom: 'Jean Mbarga', email: 'jean@exemple.cm' });
+    // « Votre projet concerne » (maquette) est ajouté en tête du message
+    expect(corps).toEqual({ type: 'question', message: 'Projet : Une maison.\nBonjour, un devis svp', site_web: '', nom: 'Jean Mbarga', email: 'jean@exemple.cm' });
     expect(screen.getByLabelText(/Votre message/)).toHaveValue('');
   });
 
@@ -116,7 +117,7 @@ describe('MesDemandesPage', () => {
   it('visiteur : renvoyé vers la connexion', async () => {
     simulerApi();
     rendreApp('/mes-demandes');
-    await waitFor(() => expect(screen.getByRole('heading', { level: 1, name: 'Se connecter' })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('heading', { level: 1, name: /Votre sol, révélé/ })).toBeInTheDocument());
   });
 
   it('demandes de rendu et de contact avec la réponse de l’équipe (texte tel quel), liens vers les devis', async () => {

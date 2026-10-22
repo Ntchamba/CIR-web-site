@@ -24,7 +24,10 @@ describe('ConnexionPage', () => {
   it('affiche le formulaire accessible', async () => {
     simulerApi();
     rendre();
-    expect(await screen.findByRole('heading', { level: 1, name: 'Se connecter' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: /Votre sol, révélé/ })).toBeInTheDocument();
+    // onglets de la maquette : « Se connecter » (courant) et « Créer un compte »
+    expect(screen.getByRole('link', { name: 'Se connecter' })).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('link', { name: 'Créer un compte' })).toHaveAttribute('href', '/inscription');
     expect(screen.getByLabelText(/E-mail/)).toHaveAttribute('autocomplete', 'email');
     expect(screen.getByLabelText(/Mot de passe/)).toHaveAttribute('type', 'password');
     expect(document.title).toMatch(/^Se connecter/);
