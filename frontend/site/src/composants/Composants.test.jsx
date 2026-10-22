@@ -73,7 +73,7 @@ describe('VoirPlus', () => {
   it('dernière page : pas de bouton ; liste vide : rien', () => {
     const { container, rerender } = render(<VoirPlus liste={liste({ suivant: false, elements: [{ id: 1 }], total: 1 })} />);
     expect(screen.queryByRole('button')).toBeNull();
-    expect(screen.getByText('1 élément affiché sur 1')).toBeInTheDocument();
+    expect(screen.queryByText('1 élément affiché sur 1')).toBeNull(); // le compte n'est affiché que tant qu'il reste des éléments
     rerender(<VoirPlus liste={liste({ elements: [] })} />);
     expect(container).toBeEmptyDOMElement();
   });

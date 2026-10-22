@@ -21,7 +21,7 @@ import styles from './Gabarit.module.css';
 const BulleAssistant = lazy(() => import('@/modules/assistant/BulleAssistant.jsx'));
 
 // Vues qui reproduisent une page des maquettes (accueil, catalogue, fiche produit, réalisations, compte, commandes).
-const VUES_DE_MAQUETTE = ['accueil', 'catalogue', 'produit', 'realisations', 'connexion', 'inscription', 'commandes', 'commande'];
+const VUES_DE_MAQUETTE = ['accueil', 'catalogue', 'produit', 'realisations', 'connexion', 'inscription', 'commandes', 'commande', 'contact'];
 
 export default function Gabarit() {
   const { t } = useTraduction();

@@ -24,6 +24,8 @@ function rendre(chemin = '/') {
 }
 
 const choixEntete = () => within(screen.getByRole('banner')).getByRole('combobox');
+// Écran de connexion : ni en-tête ni pied de page (maquette), le choix de la langue est sur le visuel de gauche.
+const choixLangue = () => screen.getAllByRole('combobox').find((s) => s.querySelector('option[value="ja"]'));
 
 describe('fichiers de textes du site', () => {
   it.each([['en', en], ['zh', zh], ['de', de], ['ja', ja]])('%s : mêmes clés et variables que le français', (code, textes) => {
@@ -35,12 +37,12 @@ describe('changement de langue', () => {
   it('visiteur : toute la page passe en anglais, titre de l’onglet compris, contenus rechargés en anglais', async () => {
     const fetch = simulerApi();
     rendre('/');
-    expect(await screen.findByRole('heading', { level: 1, name: 'Des sols en résine époxy faits pour durer' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: 'Révélation.' })).toBeInTheDocument();
     await userEvent.selectOptions(choixEntete(), 'en');
-    expect(await screen.findByRole('heading', { level: 1, name: 'Epoxy resin floors built to last' })).toBeInTheDocument();
+    expect(await screen.findByText(/Where lasting floors are born/)).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: 'Main navigation' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Sign in' })).toHaveAttribute('href', '/connexion');
-    expect(screen.getByText('Our resins are made by our partner Jiuye.')).toBeInTheDocument();
+    expect(screen.getByText('Jiuye, epoxy resin manufacturer')).toBeInTheDocument();
     await waitFor(() => expect(document.title).toBe('CIR: epoxy resin floor coatings in Douala'));
     expect(document.documentElement.lang).toBe('en');
     // Le contenu de l'API est redemandé dans la nouvelle langue ; aucun appel au compte pour un visiteur.
@@ -54,13 +56,14 @@ describe('changement de langue', () => {
   it('japonais et chinois : textes et formulaires traduits', async () => {
     simulerApi();
     rendre('/connexion');
-    await screen.findByRole('heading', { level: 1, name: 'Se connecter' });
-    await userEvent.selectOptions(choixEntete(), 'ja');
+    await screen.findByRole('heading', { level: 1, name: /Votre sol, révélé/ });
+    await userEvent.selectOptions(choixLangue(), 'ja');
     expect(await screen.findByLabelText(/メールアドレス/)).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: 'ログイン' }));
     expect(await screen.findByText('メールアドレスを入力してください。')).toBeInTheDocument();
-    await userEvent.selectOptions(choixEntete(), 'zh');
-    expect(await screen.findByRole('heading', { level: 1, name: '登录' })).toBeInTheDocument();
+    await userEvent.selectOptions(choixLangue(), 'zh');
+    expect(await screen.findByRole('heading', { level: 1, name: /您的地坪，焕然一新/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: '登录' })).toHaveAttribute('aria-current', 'page');
     expect(document.documentElement.lang).toBe('zh-Hans');
   });
 

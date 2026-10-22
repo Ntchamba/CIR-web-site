@@ -4,11 +4,15 @@
 // Téléphone : bandeau de 210 px en haut (avec la flèche « < »), formulaire dessous.
 import { Link } from 'react-router';
 
+import ChoixLangue from '@partage/ui/ChoixLangue.jsx';
+
 import { useTraduction } from '@/i18n/index.js';
 import BoutonRetour from '@/layout/BoutonRetour.jsx';
+import { useAuth } from '@/modules/compte/AuthContext.jsx';
 
 export default function EcranCompte({ onglet, suite = '', children }) {
   const { t } = useTraduction();
+  const { retenirLangue } = useAuth();
   const requete = suite ? `?suite=${encodeURIComponent(suite)}` : '';
   return (
     <div className="m-compte">
@@ -21,6 +25,7 @@ export default function EcranCompte({ onglet, suite = '', children }) {
             <span><b>CIR</b><small>{t('marque.nom')}</small></span>
           </Link>
         </div>
+        <ChoixLangue className="m-langue-compte" surChangement={retenirLangue} />
         <div>
           <h1>{t('compte.visuel')}<i>.</i></h1>
           <p className="m-retour-lien"><Link to="/"><span aria-hidden="true">←</span> {t('introuvable.retour')}</Link></p>

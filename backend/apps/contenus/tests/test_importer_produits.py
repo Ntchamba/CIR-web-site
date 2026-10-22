@@ -289,3 +289,49 @@ def _png_octets():
 
 
 ProduitsBase.png_octets = staticmethod(_png_octets)
+
+
+class ForcerStrictTests(ProduitsBase):
+    def ajouter_equipe(self, produit, ordre, nom):
+        image = ImageProduit(produit=produit, alt=f"Équipe {nom}", ordre=ordre)
+        image.image.save(f"{nom}.png", ContentFile(ProduitsBase.png_octets()), save=False)
+        image.save()
+        return image
+
+    def test_forcer_conserve_fichier_et_ligne_de_l_equipe_et_ordre_coherent(self):
+        self.charger()
+        self.importer()
+        p = Produit.objects.get(nom="Terrazzo époxy")
+        equipe = self.ajouter_equipe(p, 3, "photo-equipe")
+        chemin_equipe, id_equipe = Path(equipe.image.path), equipe.pk
+        for _ in range(2):  # idempotent : ni doublon ni perte
+            self.importer("--forcer")
+        self.assertTrue(chemin_equipe.is_file())
+        self.assertTrue(p.images.filter(pk=id_equipe, ordre=3, alt="Équipe photo-equipe").exists())
+        self.assertEqual(p.images.count(), 2)
+        importee = p.images.exclude(pk=id_equipe).get()
+        self.assertGreater(importee.ordre, 3)  # jamais devant la photo de l'équipe
+        self.assertEqual(len(self.fichiers_produits()), 7)  # 6 importées + 1 équipe
+
+    def test_forcer_produit_avec_seulement_des_images_de_l_equipe(self):
+        self.charger()
+        p = Produit.objects.get(nom="Finition époxy lisse")
+        equipe = self.ajouter_equipe(p, 0, "seule")
+        self.importer("--forcer")
+        self.assertTrue(Path(equipe.image.path).is_file())
+        self.assertEqual(p.images.count(), 2)
+        self.assertEqual(p.images.order_by("ordre").first().pk, equipe.pk)
+
+    def test_forcer_echec_n_efface_ni_ligne_ni_fichier_de_l_equipe(self):
+        self.charger()
+        self.importer()
+        p = Produit.objects.get(nom="Peinture de sol anti-UV")
+        equipe = self.ajouter_equipe(p, 4, "equipe-echec")
+        avant = self.fichiers_produits()
+        dossier = self.copie_dossier()
+        (dossier / "images/entrepot-stockage.webp").write_bytes(b"pas une image")  # dernier produit traité
+        with self.assertRaises(Exception):
+            self.importer("--forcer", dossier=dossier)
+        self.assertEqual(self.fichiers_produits(), avant)
+        self.assertTrue(Path(equipe.image.path).is_file())
+        self.assertEqual(p.images.count(), 2)

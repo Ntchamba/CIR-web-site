@@ -235,6 +235,7 @@
 .m-marque-claire img { width: 46px; height: 46px; border-radius: 10px; object-fit: cover; }
 .m-marque-claire b { display: block; font-family: var(--police-titre); font-size: 20px; line-height: 1; font-weight: 600; }
 .m-marque-claire small { display: block; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; }
+.m-langue-compte { position: absolute !important; top: 42px; right: 40px; color: var(--blanc); z-index: 2; }
 .m-retour-lien { margin: 22px 0 0; }
 .m-retour-lien a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; text-decoration: underline; }
 .m-retour-accueil-tel { display: none; }
@@ -341,6 +342,7 @@
   .m-compte-visuel h1, .m-compte-visuel p.titre { font-size: 32px; line-height: 1.1; font-weight: 500; }
   .m-compte-formes { display: block; padding: 12px 20px 40px; background: var(--fond); }
   .m-compte-boite { width: 100%; }
+  .m-langue-compte { top: 14px; right: 12px; }
   .m-retour-lien { display: none; }
   .m-retour-accueil-tel { display: inline-flex; align-items: center; min-height: 44px; margin-bottom: 8px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; }
   .m-deux { grid-template-columns: 1fr; }
